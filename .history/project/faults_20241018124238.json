@@ -1,0 +1,12 @@
+[
+    {
+        "mttf_type": "LogNormal",
+        "mttf_scale": 1.0,
+        "mttf_shape": 1.0,
+        "mttr_type": "LogNormal",
+        "mttr_scale": 5.0,
+        "mttr_shape": 5.0,
+        "aim": "host1",
+        "name": "fault1"
+    }
+]

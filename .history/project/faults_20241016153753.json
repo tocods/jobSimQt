@@ -1,0 +1,12 @@
+[
+    {
+        "name": "fault1",
+        "mttf_type": "Normal",
+        "mttf_scale": 5.0,
+        "mttf_shape": 10.0,
+        "aim": "udp_cpu",
+        "mttr_type": "Normal",
+        "mttr_shape": 10.0,
+        "mttr_scale": 5.0
+    }
+]

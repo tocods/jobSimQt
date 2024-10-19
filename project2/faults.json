@@ -1,0 +1,12 @@
+[
+    {
+        "mttf_type": "\u6b63\u6001\u5206\u5e03",
+        "mttf_scale": 0,
+        "mttf_shape": 0,
+        "mttr_type": "\u6b63\u6001\u5206\u5e03",
+        "mttr_scale": 0,
+        "mttr_shape": 0,
+        "name": "fault_5712",
+        "aim": "host_3904"
+    }
+]

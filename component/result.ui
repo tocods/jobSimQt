@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>906</width>
+    <height>685</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>110</y>
+     <width>614</width>
+     <height>265</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,1,1">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="4,1">
+      <item>
+       <widget class="QTabWidget" name="jobTabs">
+        <property name="currentIndex">
+         <number>-1</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="jobResultAnalysis" native="true">
+        <widget class="QLabel" name="label">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>121</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>任务运行结果分析</string>
+         </property>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_4" stretch="2,1">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,1">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1">
+          <item>
+           <widget class="QWidget" name="showCPU" native="true"/>
+          </item>
+          <item>
+           <widget class="QWidget" name="showCPU_2" native="true"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1">
+          <item>
+           <widget class="QWidget" name="showGPU" native="true"/>
+          </item>
+          <item>
+           <widget class="QWidget" name="show" native="true"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTabWidget" name="hostTabs"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="4,1">
+      <item>
+       <widget class="QTabWidget" name="faultTabs">
+        <property name="currentIndex">
+         <number>-1</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="faultResultAnalysis" native="true">
+        <widget class="QLabel" name="label_2">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>111</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>错误注入结果分析</string>
+         </property>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

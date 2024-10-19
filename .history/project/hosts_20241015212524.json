@@ -1,0 +1,13 @@
+[
+    {
+        "name": "udp_cpu",
+        "video_card_infos": [],
+        "cpu_infos": [
+            {
+                "cores": 2,
+                "mips": 100
+            }
+        ],
+        "ram": 1024
+    }
+]

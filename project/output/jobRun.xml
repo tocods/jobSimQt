@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jobRun>
+  <Job name="job">
+    <RunningRecord status="Success" host="udp_cpu" start="0" end="6" duration="6" />
+    <RunningRecord status="Canceled" host="udp_cpu" start="10" end="20" duration="10" />
+    <RunningRecord status="Success" host="udp_cpu" start="20" end="26" duration="6" />
+    <RunningRecord status="Canceled" host="udp_cpu" start="30" end="40" duration="10" />
+    <RunningRecord status="Canceled" host="udp_cpu" start="40" end="50" duration="10" />
+    <RunningRecord status="Success" host="udp_cpu" start="50" end="56" duration="6" />
+    <RunningRecord status="Success" host="udp_cpu" start="60" end="66" duration="6" />
+    <RunningRecord status="Success" host="udp_cpu" start="70" end="76" duration="6" />
+    <RunningRecord status="Success" host="udp_cpu" start="80" end="86" duration="6" />
+    <RunningRecord status="Success" host="udp_cpu" start="90" end="96" duration="6" />
+  </Job>
+</jobRun>
