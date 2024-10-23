@@ -683,13 +683,8 @@ class JobSimQt(QMainWindow):
             self.faultInfoPage.aim.setCurrentText("")
             self.faultInfoPage.type.setCurrentText("")
             self.faultInfoPage.time1.setText("")
-            regular_ex = QRegularExpression("[0-9]+")
-            validator = QRegularExpressionValidator(regular_ex, self.faultInfoPage.time1)
-            self.faultInfoPage.time1.setValidator(validator)
+            re
             self.faultInfoPage.time2.setText("")
-            regular_ex = QRegularExpression("[0-9]+")
-            validator = QRegularExpressionValidator(regular_ex, self.faultInfoPage.time2)
-            self.faultInfoPage.time2.setValidator(validator)
             self._ui.homeui.tabWidget.setCurrentIndex(2)
             self.faultInfoPage.show.setChart(QChart())
 
