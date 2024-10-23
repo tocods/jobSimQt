@@ -40,7 +40,7 @@ class Ui_Result(object):
         self.label = QtWidgets.QLabel(parent=self.jobResult)
         self.label.setGeometry(QtCore.QRect(0, 0, 121, 16))
         self.label.setObjectName("label")
-        self.verticalLayout.addWidget(self.jobResult)
+        self.verticalLayout.addWidget(self.jobResultAnalysis)
         self.verticalLayout.setStretch(0, 4)
         self.verticalLayout.setStretch(1, 1)
         self.horizontalLayout_3.addLayout(self.verticalLayout)

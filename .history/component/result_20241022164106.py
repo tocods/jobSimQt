@@ -33,14 +33,13 @@ class Ui_Result(object):
         self.jobResultAnalysis.setObjectName("jobResultAnalysis")
         self.jobResultAnalysis2 = QChartView(parent=self.jobResult)
         self.jobResultAnalysis2.setObjectName("jobResultAnalysis2")
-        self.horizontalLayout_5.addWidget(self.jobResultAnalysis2)
+        
         self.horizontalLayout_5.addWidget(self.jobResultAnalysis)
-        self.horizontalLayout_5.setStretch(0, 1)
-        self.horizontalLayout_5.setStretch(1, 1)
+
         self.label = QtWidgets.QLabel(parent=self.jobResult)
         self.label.setGeometry(QtCore.QRect(0, 0, 121, 16))
         self.label.setObjectName("label")
-        self.verticalLayout.addWidget(self.jobResult)
+        self.verticalLayout.addWidget(self.jobResultAnalysis)
         self.verticalLayout.setStretch(0, 4)
         self.verticalLayout.setStretch(1, 1)
         self.horizontalLayout_3.addLayout(self.verticalLayout)

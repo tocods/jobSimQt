@@ -13,7 +13,7 @@ import random
 from functools import partial
 import project
 import qdarktheme
-from qdarktheme.qtpy.QtCore import QDir, Qt, Slot, QRegularExpression
+from qdarktheme.qtpy.QtCore import QDir, Qt, Slot
 from qdarktheme.qtpy.QtGui import *
 from qdarktheme.qtpy.QtWidgets import *
 import PySide6.QtWidgets
@@ -26,7 +26,7 @@ from component.jobinfo import Ui_JobInfo
 from component.faultinfo import Ui_FaultInfo
 from PySide6.QtCharts import QChart,QChartView,QLineSeries,QDateTimeAxis,QValueAxis, QPieSeries
 from jobSimPainter import Painter, XmlParser
-from util.table import NumericDelegate
+from u
 
 class JobSimQt(QMainWindow):
     def __init__(self, path) -> None:
@@ -326,6 +326,7 @@ class JobSimQt(QMainWindow):
         if self.nowHost is None:
             return
         name_before = self.nowHost.name
+        
         self.nowHost.name = self.hostInfoPage.hostName.text()
         self.nowHost.ram = self.hostInfoPage.ram.value()
         cpunum = self.hostInfoPage.cpunum.value()
@@ -420,9 +421,6 @@ class JobSimQt(QMainWindow):
         self.hostInfoPage.corenum.setValue(cpucore)
         self.hostInfoPage.cpunum.setValue(cpunum)
         self.hostInfoPage.cpuflops.setText(str(host.cpu_infos[0].mips))
-        reg_ex =  QRegularExpression("[0-9]+")
-        validator = QRegularExpressionValidator(reg_ex, self.hostInfoPage.cpuflops)
-        self.hostInfoPage.cpuflops.setValidator(validator)
         self._ui.homeui.tabWidget.setCurrentIndex(0)
         if host.video_card_infos != []:
             gpu_num = len(host.video_card_infos[0].gpu_infos)
@@ -437,8 +435,6 @@ class JobSimQt(QMainWindow):
             self.initGpuTable(0, [])
                 
     def initGpuTable(self, gpu_num, gpu_infos):    
-        delegate = NumericDelegate(self.hostInfoPage.gputable)
-        self.hostInfoPage.gputable.setItemDelegate(delegate)
         self.hostInfoPage.gputable.setColumnCount(7)
         self.hostInfoPage.gputable.setRowCount(gpu_num + 1)
         # 设置不可见
@@ -538,18 +534,9 @@ class JobSimQt(QMainWindow):
             self.nowJob = None
         self.jobInfoPage.jobName.setText(job.name)
         self.jobInfoPage.ram.setText(str(job.cpu_task.ram))
-        reg_ex =  QRegularExpression("[0-9]+")
-        validator = QRegularExpressionValidator(reg_ex, self.jobInfoPage.ram)
-        self.jobInfoPage.ram.setValidator(validator)
         self.jobInfoPage.period.setText(str(job.period))
-        reg_ex =  QRegularExpression("[0-9]+")
-        validator = QRegularExpressionValidator(reg_ex, self.jobInfoPage.period)
-        self.jobInfoPage.period.setValidator(validator)
         self.jobInfoPage.corenum.setValue(job.cpu_task.pes_number)
         self.jobInfoPage.cpuflops.setText(str(job.cpu_task.length))
-        reg_ex =  QRegularExpression("[0-9]+")
-        validator = QRegularExpressionValidator(reg_ex, self.jobInfoPage.cpuflops)
-        self.jobInfoPage.cpuflops.setValidator(validator)
         if job.gpu_task is not None:
             self.kernel_num = len(job.gpu_task.kernels)
             self._initKernelTable(len(job.gpu_task.kernels), job.gpu_task)
@@ -559,8 +546,6 @@ class JobSimQt(QMainWindow):
         self._ui.homeui.tabWidget.setCurrentIndex(1)
 
     def _initKernelTable(self, kernel_num, gpu_task):
-        delegate = NumericDelegate(self.jobInfoPage.gputable)
-        self.jobInfoPage.gputable.setItemDelegate(delegate)
         self.jobInfoPage.gputable.setColumnCount(8)
         self.jobInfoPage.gputable.setRowCount(kernel_num + 1)
         # 设置不可见
@@ -666,13 +651,7 @@ class JobSimQt(QMainWindow):
             self.faultInfoPage.type.setCurrentText(tranFromE2C(fault.mttf_type))
             print(tranFromE2C(fault.mttf_type))
             self.faultInfoPage.time1.setText(str(fault.mttf_scale))
-            regular_ex = QRegularExpression("[0-9]+")
-            validator = QRegularExpressionValidator(regular_ex, self.faultInfoPage.time1)
-            self.faultInfoPage.time1.setValidator(validator)
             self.faultInfoPage.time2.setText(str(fault.mttr_scale))
-            regular_ex = QRegularExpression("[0-9]+")
-            validator = QRegularExpressionValidator(regular_ex, self.faultInfoPage.time2)
-            self.faultInfoPage.time2.setValidator(validator)
             self._ui.homeui.tabWidget.setCurrentIndex(2)
             self._getNormalLine(fault.mttf_scale, fault.mttr_scale)
         else:
@@ -683,13 +662,7 @@ class JobSimQt(QMainWindow):
             self.faultInfoPage.aim.setCurrentText("")
             self.faultInfoPage.type.setCurrentText("")
             self.faultInfoPage.time1.setText("")
-            regular_ex = QRegularExpression("[0-9]+")
-            validator = QRegularExpressionValidator(regular_ex, self.faultInfoPage.time1)
-            self.faultInfoPage.time1.setValidator(validator)
             self.faultInfoPage.time2.setText("")
-            regular_ex = QRegularExpression("[0-9]+")
-            validator = QRegularExpressionValidator(regular_ex, self.faultInfoPage.time2)
-            self.faultInfoPage.time2.setValidator(validator)
             self._ui.homeui.tabWidget.setCurrentIndex(2)
             self.faultInfoPage.show.setChart(QChart())
 
