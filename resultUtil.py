@@ -20,7 +20,7 @@ def getAverageRunTimeInHost(jobs: List[JobRecord], hostName: str):
                 count += 1
     return time_total / count
 
-
+    
 
 
 
