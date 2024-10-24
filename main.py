@@ -27,6 +27,7 @@ from component.faultinfo import Ui_FaultInfo
 from PySide6.QtCharts import QChart,QChartView,QLineSeries,QDateTimeAxis,QValueAxis, QPieSeries
 from jobSimPainter import Painter, XmlParser
 from util.table import NumericDelegate
+from resultUtil import getAverageRunTime, getAverageRunTimeInHost
 
 class JobSimQt(QMainWindow):
     def __init__(self, path) -> None:
@@ -846,6 +847,13 @@ class JobSimQt(QMainWindow):
         self.jobSeries.append("任务平均利用率:" + str(percent_total * 100) + "%", percent_total * 100)
         self.jobSeries.append(":" + str((1 - percent_total) * 100) + "%", (1 - percent_total) * 100)
         self.jobSeries.setPieSize(0.5)
+
+        self.avergaeRunTime = 0.0
+        for job in self.job_results:
+            self.avergaeRunTime += getAverageRunTime(job)
+        self.avergaeRunTime /= len(self.job_results)
+        self.avergaeRunTime = round(self.avergaeRunTime, 2)
+        
     
 
         chart = QChart()

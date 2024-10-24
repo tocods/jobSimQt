@@ -1,4 +1,4 @@
-from util.jobSim import GPUInfo
+from util.jobSim import GPUInfo, CPUInfo
 # 这里设置了一些固定的类型，包括显卡和CPU
 
 class GPU:
@@ -20,3 +20,18 @@ def getNVIDIA4080():
 
 def getNVIDIA4090():
     return GPU("NVIDIA RTX 4090", 24, 35, 8192, 64)
+
+def getNVIDIA3060():
+    return GPU("NVIDIA RTX 3060", 12, 12, 3584, 28)
+
+class CPU:
+    def __init__(self, name, cores, threads, flops):
+        self.name = name
+        self.core_num = cores
+        self.flops = flops
+
+    def getCPUInfo(self):
+        return CPUInfo(self.core_num, self.flops)
+
+def getIntelI710700():
+    return CPU("Intel i7-10700", 8, 16, 16)
