@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>HostInfo</class>
+ <widget class="QWidget" name="HostInfo">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>661</width>
+    <width>1215</width>
     <height>671</height>
    </rect>
   </property>
@@ -16,293 +16,300 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>40</x>
      <y>90</y>
-     <width>501</width>
-     <height>511</height>
+     <width>1021</width>
+     <height>531</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_7" stretch="1,20">
+   <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="1,1">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="10,1">
+     <layout class="QVBoxLayout" name="verticalLayout_7" stretch="1,20">
       <item>
-       <widget class="QLabel" name="label_13">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="apply">
-        <property name="text">
-         <string>应用</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout_6" stretch="1,1">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,1">
-        <property name="spacing">
-         <number>20</number>
-        </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="10,1">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,20">
-          <item>
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>基本信息</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QWidget" name="widget" native="true">
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid grey;
-border-radius: 15px; </string>
-            </property>
-            <widget class="QWidget" name="layoutWidget">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>10</y>
-               <width>201</width>
-               <height>161</height>
-              </rect>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout">
-                <item>
-                 <widget class="QLabel" name="label">
-                  <property name="styleSheet">
-                   <string notr="true">border: none</string>
-                  </property>
-                  <property name="text">
-                   <string>主机名:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="hostName">
-                  <property name="styleSheet">
-                   <string notr="true">border: none</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_2">
-                <item>
-                 <widget class="QLabel" name="label_2">
-                  <property name="styleSheet">
-                   <string notr="true">border: none</string>
-                  </property>
-                  <property name="text">
-                   <string>内存:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="ram">
-                  <property name="styleSheet">
-                   <string notr="true">border: none</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="label_3">
-                  <property name="styleSheet">
-                   <string notr="true">border: none</string>
-                  </property>
-                  <property name="text">
-                   <string>GB</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_3">
-                <item>
-                 <widget class="QLabel" name="label_4">
-                  <property name="styleSheet">
-                   <string notr="true">border: none</string>
-                  </property>
-                  <property name="text">
-                   <string>PCIe带宽:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QDoubleSpinBox" name="pcie">
-                  <property name="styleSheet">
-                   <string notr="true">border: none</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="label_5">
-                  <property name="styleSheet">
-                   <string notr="true">border: none</string>
-                  </property>
-                  <property name="text">
-                   <string>GB/s</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_4" stretch="1,30">
-          <item>
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>CPU信息</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QWidget" name="widget_2" native="true">
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid grey;
-border-radius: 15px; </string>
-            </property>
-            <widget class="QWidget" name="layoutWidget">
-             <property name="geometry">
-              <rect>
-               <x>20</x>
-               <y>10</y>
-               <width>201</width>
-               <height>191</height>
-              </rect>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_3">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_6">
-                <item>
-                 <widget class="QLabel" name="label_8">
-                  <property name="styleSheet">
-                   <string notr="true">border: none
-</string>
-                  </property>
-                  <property name="text">
-                   <string>CPU数:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="cpunum">
-                  <property name="styleSheet">
-                   <string notr="true">border:none</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_5">
-                <item>
-                 <widget class="QLabel" name="label_9">
-                  <property name="styleSheet">
-                   <string notr="true">border:  none</string>
-                  </property>
-                  <property name="text">
-                   <string>CPU核数:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="corenum">
-                  <property name="styleSheet">
-                   <string notr="true">border:none</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_4">
-                <item>
-                 <widget class="QLabel" name="label_10">
-                  <property name="styleSheet">
-                   <string notr="true">border: none</string>
-                  </property>
-                  <property name="text">
-                   <string>核FLOPS:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="cpuflops">
-                  <property name="styleSheet">
-                   <string notr="true">border: none</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
-        <item>
-         <widget class="QLabel" name="label_11">
+         <widget class="QLabel" name="label_13">
           <property name="text">
-           <string>GPU信息</string>
+           <string/>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QTableView" name="gputable"/>
+         <widget class="QPushButton" name="apply">
+          <property name="text">
+           <string>应用</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_6" stretch="1,1">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,1">
+          <property name="spacing">
+           <number>20</number>
+          </property>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,20">
+            <item>
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>基本信息</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QWidget" name="widget" native="true">
+              <property name="styleSheet">
+               <string notr="true">border: 1px solid grey;
+border-radius: 15px; </string>
+              </property>
+              <widget class="QWidget" name="layoutWidget">
+               <property name="geometry">
+                <rect>
+                 <x>10</x>
+                 <y>10</y>
+                 <width>201</width>
+                 <height>161</height>
+                </rect>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout">
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout">
+                  <item>
+                   <widget class="QLabel" name="label">
+                    <property name="styleSheet">
+                     <string notr="true">border: none</string>
+                    </property>
+                    <property name="text">
+                     <string>主机名:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="hostName">
+                    <property name="styleSheet">
+                     <string notr="true">border: none</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_2">
+                  <item>
+                   <widget class="QLabel" name="label_2">
+                    <property name="styleSheet">
+                     <string notr="true">border: none</string>
+                    </property>
+                    <property name="text">
+                     <string>内存:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="ram">
+                    <property name="styleSheet">
+                     <string notr="true">border: none</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_3">
+                    <property name="styleSheet">
+                     <string notr="true">border: none</string>
+                    </property>
+                    <property name="text">
+                     <string>GB</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_3">
+                  <item>
+                   <widget class="QLabel" name="label_4">
+                    <property name="styleSheet">
+                     <string notr="true">border: none</string>
+                    </property>
+                    <property name="text">
+                     <string>PCIe带宽:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QDoubleSpinBox" name="pcie">
+                    <property name="styleSheet">
+                     <string notr="true">border: none</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_5">
+                    <property name="styleSheet">
+                     <string notr="true">border: none</string>
+                    </property>
+                    <property name="text">
+                     <string>GB/s</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_4" stretch="1,30">
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>CPU信息</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QWidget" name="widget_2" native="true">
+              <property name="styleSheet">
+               <string notr="true">border: 1px solid grey;
+border-radius: 15px; </string>
+              </property>
+              <widget class="QWidget" name="layoutWidget">
+               <property name="geometry">
+                <rect>
+                 <x>20</x>
+                 <y>10</y>
+                 <width>201</width>
+                 <height>191</height>
+                </rect>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_3">
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_6">
+                  <item>
+                   <widget class="QLabel" name="label_8">
+                    <property name="styleSheet">
+                     <string notr="true">border: none
+</string>
+                    </property>
+                    <property name="text">
+                     <string>CPU数:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="cpunum">
+                    <property name="styleSheet">
+                     <string notr="true">border:none</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_5">
+                  <item>
+                   <widget class="QLabel" name="label_9">
+                    <property name="styleSheet">
+                     <string notr="true">border:  none</string>
+                    </property>
+                    <property name="text">
+                     <string>CPU核数:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="corenum">
+                    <property name="styleSheet">
+                     <string notr="true">border:none</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_4">
+                  <item>
+                   <widget class="QLabel" name="label_10">
+                    <property name="styleSheet">
+                     <string notr="true">border: none</string>
+                    </property>
+                    <property name="text">
+                     <string>核FLOPS:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="cpuflops">
+                    <property name="styleSheet">
+                     <string notr="true">border: none</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="10,1">
+         <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
-           <widget class="QLabel" name="label_12">
+           <widget class="QLabel" name="label_11">
             <property name="text">
-             <string/>
+             <string>GPU信息</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
-            <property name="styleSheet">
-             <string notr="true">border: none
+           <widget class="QTableWidget" name="gputable"/>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="10,1">
+            <item>
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton">
+              <property name="styleSheet">
+               <string notr="true">border: none
 </string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>../img/加.png</normaloff>../img/加.png</iconset>
-            </property>
-           </widget>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../img/加.png</normaloff>../img/加.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
        </layout>
       </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QTabWidget" name="shows"/>
     </item>
    </layout>
   </widget>

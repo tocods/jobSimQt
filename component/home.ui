@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>home</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>140</x>
@@ -93,23 +93,8 @@
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>-1</number>
         </property>
-        <widget class="QWidget" name="hostinfo">
-         <attribute name="title">
-          <string>主机信息</string>
-         </attribute>
-        </widget>
-        <widget class="QWidget" name="jobinfo">
-         <attribute name="title">
-          <string>任务信息</string>
-         </attribute>
-        </widget>
-        <widget class="QWidget" name="faultinfo">
-         <attribute name="title">
-          <string>故障注入信息</string>
-         </attribute>
-        </widget>
        </widget>
       </item>
       <item>
