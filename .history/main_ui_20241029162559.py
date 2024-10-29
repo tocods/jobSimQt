@@ -100,13 +100,12 @@ class UI:
         activitybar.setProperty("type", "activitybar")
 
         # layout
-        stack1 = QTabWidget()
+        stack1 = QTabWidget
         stack_1 = QWidget()
         self.homeui = Ui_home()
         #HomeUI().setup_ui(stack_1)
         self.homeui.setupUi(stack_1)
-        stack1.addTab(stack_1, "系统仿真")
-        self.stack_widget.addWidget(stack1)
+        self.stack_widget.addWidget(stack_1)
         stack_2 = QWidget()
         self.resultui = Ui_Result()
         #ResultUI().setup_ui(stack_2)
