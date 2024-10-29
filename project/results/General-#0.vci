@@ -1,0 +1,935 @@
+file 29928572 1730195492                                        
+version 3
+run General-0-20241029-17:51:28-18868
+attr configname General
+attr datetime 20241029-17:51:28
+attr datetimef 20241029-175128
+attr experiment General
+attr inifile "D:\\jobSimQt\\project/Parameters.ini"
+attr iterationvars ""
+attr iterationvarsd ""
+attr iterationvarsf ""
+attr measurement ""
+attr network TargetNetwork
+attr processid 18868
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+config network TargetNetwork
+config sim-time-limit 1.5s
+config *.udp_cpu.numApps 1
+config *.udp_cpu.app[0].typename UdpSourceApp
+config *.udp_cpu.app[0].source.packetLength 1200B
+config *.udp_cpu.app[0].source.productionInterval exponential(exponential(100us))
+config *.udp_cpu.app[0].io.destAddress "\"udp_cpu2\""
+config *.udp_cpu.app[0].io.destPort 1000
+config *.udp_cpu2.numApps 1
+config *.udp_cpu2.app[0].typename UdpSinkApp
+config *.udp_cpu2.app[0].io.localPort 1000
+config *.udp_switch.ethernet.typename EthernetLayer
+config *.udp_switch.eth[*].typename LayeredEthernetInterface
+config *.udp_switch.eth[*].bitrate 100Mbps
+
+vector 0 TargetNetwork.udp_cpu.udp passedUpPk:vector(count) ETV
+attr interpolationmode none
+attr recordingmode vector(count)
+attr source packetSentToUpper
+attr title "packets passed up, count"
+vector 1 TargetNetwork.udp_cpu.udp droppedPkWrongPort:vector(count) ETV
+attr interpolationmode none
+attr recordingmode vector(count)
+attr source packetDropReasonIsNoPortFound(packetDropped)
+attr title "packets dropped (wrong port), count"
+vector 2 TargetNetwork.udp_cpu.udp droppedPkBadChecksum:vector(count) ETV
+attr interpolationmode none
+attr recordingmode vector(count)
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packets dropped (checksum error), count"
+vector 3 TargetNetwork.udp_cpu2.udp passedUpPk:vector(count) ETV
+attr interpolationmode none
+attr recordingmode vector(count)
+attr source packetSentToUpper
+attr title "packets passed up, count"
+vector 4 TargetNetwork.udp_cpu2.udp droppedPkWrongPort:vector(count) ETV
+attr interpolationmode none
+attr recordingmode vector(count)
+attr source packetDropReasonIsNoPortFound(packetDropped)
+attr title "packets dropped (wrong port), count"
+vector 5 TargetNetwork.udp_cpu2.udp droppedPkBadChecksum:vector(count) ETV
+attr interpolationmode none
+attr recordingmode vector(count)
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packets dropped (checksum error), count"
+vector 6 TargetNetwork.udp_switch.eth[0].phyLayer.interFrameGapInserter interpacketGap:vector ETV
+attr interpolationmode sample-hold
+attr recordingmode vector
+attr source "count(interpacketGapStarted) - count(interpacketGapEnded)"
+attr title "interpacket gap state"
+attr type int
+vector 7 TargetNetwork.udp_switch.eth[0].phyLayer.transmitter transmitting:vector ETV
+attr interpolationmode sample-hold
+attr recordingmode vector
+attr source "count(transmissionStarted) - count(transmissionEnded)"
+attr title "transmitting state"
+attr type int
+vector 8 TargetNetwork.udp_switch.eth[1].phyLayer.interFrameGapInserter interpacketGap:vector ETV
+attr interpolationmode sample-hold
+attr recordingmode vector
+attr source "count(interpacketGapStarted) - count(interpacketGapEnded)"
+attr title "interpacket gap state"
+attr type int
+vector 9 TargetNetwork.udp_switch.eth[1].phyLayer.transmitter transmitting:vector ETV
+attr interpolationmode sample-hold
+attr recordingmode vector
+attr source "count(transmissionStarted) - count(transmissionEnded)"
+attr title "transmitting state"
+attr type int
+vector 10 TargetNetwork.udp_cpu.app[0].source packetLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source packetLength(packetPushed)
+attr title "packet lengths"
+attr unit b
+vector 11 TargetNetwork.udp_cpu.app[0].io packetSent:vector(packetBytes) ETV
+attr interpolationmode none
+attr recordingmode vector(packetBytes)
+attr source packetSent
+attr title "packets sent, packetBytes"
+vector 12 TargetNetwork.udp_cpu.udp packetSent:vector(packetBytes) ETV
+attr interpolationmode none
+attr recordingmode vector(packetBytes)
+attr source packetSent
+attr title "packets sent, packetBytes"
+vector 13 TargetNetwork.udp_cpu.ethernet encapPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr recordingmode vector(packetBytes)
+attr source encapPk
+attr title "packets encapsulated, packetBytes"
+vector 14 TargetNetwork.udp_cpu.eth[0].queue incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source packetLength(packetPushStarted)
+attr title "incoming packet lengths"
+attr unit b
+vector 15 TargetNetwork.udp_cpu.eth[0].queue queueingTime:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source queueingTime(packetPulled)
+attr title "queueing times"
+attr unit s
+vector 16 TargetNetwork.udp_cpu.eth[0].queue outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source packetLength(packetPulled)
+attr title "outgoing packet lengths"
+attr unit b
+vector 17 TargetNetwork.udp_cpu.eth[0].mac packetReceivedFromUpper:vector(packetBytes) ETV
+attr interpolationmode none
+attr recordingmode vector(packetBytes)
+attr source packetReceivedFromUpper
+attr title "packet bytes from higher layer, packetBytes"
+vector 18 TargetNetwork.udp_cpu.eth[0].queue queueLength:vector ETV
+attr autoWarmupFilter false
+attr interpolationmode sample-hold
+attr recordingmode vector
+attr source "warmup(atomic(constant0(packetPushEnded) + count(packetPushStarted) - count(packetPulled) - count(packetRemoved) - count(packetDropped)))"
+attr title "queue length"
+attr unit pk
+vector 19 TargetNetwork.udp_cpu.eth[0].queue queueBitLength:vector ETV
+attr autoWarmupFilter false
+attr interpolationmode sample-hold
+attr recordingmode vector
+attr source "warmup(atomic(constant0(packetPushEnded) + sum(packetLength(packetPushStarted)) - sum(packetLength(packetPulled)) - sum(packetLength(packetRemoved)) - sum(packetLength(packetDropped))))"
+attr title "queue bit length"
+attr unit b
+vector 20 TargetNetwork.udp_switch.eth[0].phyLayer.receiver receptionTime:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source packetDuration(receptionEnded)
+attr title "reception time"
+attr unit s
+vector 21 TargetNetwork.udp_switch.eth[0].phyLayer.inboundEmitter incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 22 TargetNetwork.udp_switch.eth[0].phyLayer.inboundEmitter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 23 TargetNetwork.udp_switch.eth[0].phyLayer.phyHeaderChecker incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 24 TargetNetwork.udp_switch.eth[0].phyLayer.phyHeaderChecker outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 25 TargetNetwork.udp_switch.eth[0].macLayer.inboundEmitter incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 26 TargetNetwork.udp_switch.eth[0].macLayer.inboundEmitter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 27 TargetNetwork.udp_switch.eth[0].macLayer.fcsChecker incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 28 TargetNetwork.udp_switch.eth[0].macLayer.fcsChecker outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 29 TargetNetwork.udp_switch.ethernet.fcsChecker incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 30 TargetNetwork.udp_switch.ethernet.fcsChecker outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 31 TargetNetwork.udp_switch.ethernet.macHeaderChecker incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 32 TargetNetwork.udp_switch.ethernet.macHeaderChecker outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 33 TargetNetwork.udp_cpu.eth[0].mac txPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr recordingmode vector(packetBytes)
+attr source packetSentToLower
+attr title "packets transmitted, packetBytes"
+vector 34 TargetNetwork.udp_switch.ethernet.macHeaderInserter incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 35 TargetNetwork.udp_switch.ethernet.macHeaderInserter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 36 TargetNetwork.udp_switch.ethernet.paddingInserter incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 37 TargetNetwork.udp_switch.ethernet.paddingInserter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 38 TargetNetwork.udp_switch.ethernet.fcsInserter incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 39 TargetNetwork.udp_switch.ethernet.fcsInserter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 40 TargetNetwork.udp_switch.eth[1].macLayer.queue incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source packetLength(packetPushStarted)
+attr title "incoming packet lengths"
+attr unit b
+vector 41 TargetNetwork.udp_switch.eth[1].macLayer.queue queueLength:vector ETV
+attr autoWarmupFilter false
+attr interpolationmode sample-hold
+attr recordingmode vector
+attr source "warmup(atomic(constant0(packetPushEnded) + count(packetPushStarted) - count(packetPulled) - count(packetRemoved) - count(packetDropped)))"
+attr title "queue length"
+attr unit pk
+vector 42 TargetNetwork.udp_switch.eth[1].macLayer.queue queueBitLength:vector ETV
+attr autoWarmupFilter false
+attr interpolationmode sample-hold
+attr recordingmode vector
+attr source "warmup(atomic(constant0(packetPushEnded) + sum(packetLength(packetPushStarted)) - sum(packetLength(packetPulled)) - sum(packetLength(packetRemoved)) - sum(packetLength(packetDropped))))"
+attr title "queue bit length"
+attr unit b
+vector 43 TargetNetwork.udp_switch.eth[1].macLayer.queue queueingTime:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source queueingTime(packetPulled)
+attr title "queueing times"
+attr unit s
+vector 44 TargetNetwork.udp_switch.eth[1].macLayer.queue outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source packetLength(packetPulled)
+attr title "outgoing packet lengths"
+attr unit b
+vector 45 TargetNetwork.udp_switch.eth[1].macLayer.server incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source packetLength(packetPulled)
+attr title "incoming packet lengths"
+attr unit b
+vector 46 TargetNetwork.udp_switch.eth[1].macLayer.server outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source packetLength(packetPushed)
+attr title "outgoing packet lengths"
+attr unit b
+vector 47 TargetNetwork.udp_switch.eth[1].macLayer.outboundEmitter incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 48 TargetNetwork.udp_switch.eth[1].macLayer.outboundEmitter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 49 TargetNetwork.udp_switch.eth[1].phyLayer.phyHeaderInserter incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 50 TargetNetwork.udp_switch.eth[1].phyLayer.phyHeaderInserter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 51 TargetNetwork.udp_switch.eth[1].phyLayer.outboundEmitter incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 52 TargetNetwork.udp_switch.eth[1].phyLayer.outboundEmitter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 53 TargetNetwork.udp_cpu2.eth[0].mac rxPkOk:vector(packetBytes) ETV
+attr interpolationmode none
+attr recordingmode vector(packetBytes)
+attr source rxPkOk
+attr title "packets received OK, packetBytes"
+vector 54 TargetNetwork.udp_cpu2.eth[0].mac passedUpPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr recordingmode vector(packetBytes)
+attr source packetSentToUpper
+attr title "packets passed to higher layer, packetBytes"
+vector 55 TargetNetwork.udp_switch.eth[1].phyLayer.transmitter transmissionTime:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source packetDuration(transmissionEnded)
+attr title "transmission time"
+attr unit s
+vector 56 TargetNetwork.udp_cpu2.ethernet decapPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr recordingmode vector(packetBytes)
+attr source decapPk
+attr title "packets decapsulated, packetBytes"
+vector 57 TargetNetwork.udp_cpu2.udp packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr recordingmode vector(packetBytes)
+attr source packetReceived
+attr title "packets received, packetBytes"
+vector 58 TargetNetwork.udp_cpu2.app[0].io packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr recordingmode vector(packetBytes)
+attr source packetReceived
+attr title "packets received, packetBytes"
+vector 59 TargetNetwork.udp_cpu2.app[0].sink packetLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source packetLength(packetPushed)
+attr title "packet lengths"
+attr unit b
+vector 60 TargetNetwork.udp_cpu2.app[0].sink droppedPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source packetLength(packetDropped)
+attr title "dropped packet lengths"
+attr unit b
+vector 61 TargetNetwork.udp_cpu2.app[0].sink meanBitLifeTimePerPacket:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source weightedMeanPerGroup(groupRegionsPerPacket(lifeTimePerRegion(packetPushed)))
+attr title "mean bit life time per packet"
+attr unit s
+vector 62 TargetNetwork.udp_cpu2.app[0].sink packetJitter:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source jitter(weightedMeanPerGroup(groupRegionsPerPacket(lifeTimePerRegion(packetPushed))))
+attr title "packet jitter"
+attr unit s
+vector 63 TargetNetwork.udp_cpu2.app[0].sink packetDelayDifferenceToMean:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source differenceToMean(weightedMeanPerGroup(groupRegionsPerPacket(lifeTimePerRegion(packetPushed))))
+attr title "packet delay difference to mean"
+attr unit s
+vector 64 TargetNetwork.udp_cpu2.app[0].sink packetDelayVariation:vector ETV
+attr recordingmode vector
+attr source stddev(weightedMeanPerGroup(groupRegionsPerPacket(lifeTimePerRegion(packetPushed))))
+attr title "packet delay variation"
+attr unit s
+vector 65 TargetNetwork.udp_cpu.app[0].source dataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPushed)
+attr title "data rate"
+attr unit bps
+vector 66 TargetNetwork.udp_cpu.eth[0].queue incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPushStarted)
+attr title "incoming datarate"
+attr unit bps
+vector 67 TargetNetwork.udp_cpu.eth[0].queue outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPulled)
+attr title "outgoing datarate"
+attr unit bps
+vector 68 TargetNetwork.udp_switch.eth[1].phyLayer.transmitter utilization:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "100 * utilization(count(transmissionStarted) - count(transmissionEnded))"
+attr title utilization
+attr unit %
+vector 69 TargetNetwork.udp_switch.eth[0].phyLayer.receiver throughput:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(receptionEnded)
+attr title throughput
+attr unit bps
+vector 70 TargetNetwork.udp_switch.eth[0].phyLayer.inboundEmitter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 71 TargetNetwork.udp_switch.eth[0].phyLayer.inboundEmitter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 72 TargetNetwork.udp_switch.eth[0].phyLayer.phyHeaderChecker incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 73 TargetNetwork.udp_switch.eth[0].phyLayer.phyHeaderChecker outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 74 TargetNetwork.udp_switch.eth[0].macLayer.inboundEmitter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 75 TargetNetwork.udp_switch.eth[0].macLayer.inboundEmitter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 76 TargetNetwork.udp_switch.eth[0].macLayer.fcsChecker incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 77 TargetNetwork.udp_switch.eth[0].macLayer.fcsChecker outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 78 TargetNetwork.udp_switch.ethernet.fcsChecker incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 79 TargetNetwork.udp_switch.ethernet.fcsChecker outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 80 TargetNetwork.udp_switch.ethernet.macHeaderChecker incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 81 TargetNetwork.udp_switch.ethernet.macHeaderChecker outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 82 TargetNetwork.udp_switch.ethernet.macHeaderInserter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 83 TargetNetwork.udp_switch.ethernet.macHeaderInserter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 84 TargetNetwork.udp_switch.ethernet.paddingInserter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 85 TargetNetwork.udp_switch.ethernet.paddingInserter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 86 TargetNetwork.udp_switch.ethernet.fcsInserter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 87 TargetNetwork.udp_switch.ethernet.fcsInserter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 88 TargetNetwork.udp_switch.eth[1].macLayer.queue incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPushStarted)
+attr title "incoming datarate"
+attr unit bps
+vector 89 TargetNetwork.udp_switch.eth[1].macLayer.queue outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPulled)
+attr title "outgoing datarate"
+attr unit bps
+vector 90 TargetNetwork.udp_switch.eth[1].macLayer.server incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPulled)
+attr title "incoming datarate"
+attr unit bps
+vector 91 TargetNetwork.udp_switch.eth[1].macLayer.server outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPushed)
+attr title "outgoing datarate"
+attr unit bps
+vector 92 TargetNetwork.udp_switch.eth[1].macLayer.outboundEmitter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 93 TargetNetwork.udp_switch.eth[1].macLayer.outboundEmitter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 94 TargetNetwork.udp_switch.eth[1].phyLayer.phyHeaderInserter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 95 TargetNetwork.udp_switch.eth[1].phyLayer.phyHeaderInserter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 96 TargetNetwork.udp_switch.eth[1].phyLayer.outboundEmitter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 97 TargetNetwork.udp_switch.eth[1].phyLayer.outboundEmitter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 98 TargetNetwork.udp_switch.eth[1].phyLayer.transmitter throughput:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(transmissionEnded)
+attr title throughput
+attr unit bps
+vector 99 TargetNetwork.udp_cpu2.app[0].sink dataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPushed)
+attr title "data rate"
+attr unit bps
+vector 100 TargetNetwork.udp_cpu2.app[0].sink droppedDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetDropped)
+attr title "dropped data rate"
+attr unit bps
+0	27012 9 0 0 0 0 1 0 0 0 0
+1	27021 9 0 0 0 0 1 0 0 0 0
+2	27030 9 0 0 0 0 1 0 0 0 0
+3	27039 236772 0 172540 0 0.835041668455 8106 0 8105 32849565 177508099405
+4	263811 9 0 0 0 0 1 0 0 0 0
+5	263820 9 0 0 0 0 1 0 0 0 0
+6	263829 18 0 0 0 0 2 0 0 0 0
+7	263847 18 0 0 0 0 2 0 0 0 0
+8	263865 427128 0 172551 0 0.835042628455 16212 0 1 8105 8105
+9	690993 427126 0 172537 0 0.835041668455 16212 0 1 8105 8105
+10	1118119 256892 0 172543 0 0.835042270639 8495 9600 9600 81552000 782899200000
+11	1375011 256892 1 172544 0 0.835042270639 8495 1200 1200 10194000 12232800000
+12	1631903 256892 7 172545 0 0.835042270639 8495 1208 1208 10261960 12396447680
+13	1888795 256893 9 172547 0 0.835042270639 8495 1228 1228 10431860 12810324080
+14	2145688 256894 10 172548 0 0.835042270639 8495 9968 9968 84678160 844071898880
+15	2402582 325230 10 172517 0 0.834942308455 8106 0 0.037442370008 114.05977848182 2.8751031357544
+16	2727812 245992 10 172517 0 0.834942308455 8106 9968 9968 80800608 805420460544
+17	2973804 245992 10 172517 0 0.834942308455 8106 1246 1246 10100076 12584694696
+18	3219796 474748 10 172548 0 0.835042270639 16537 0 393 2468141 650115285
+19	3694544 539994 10 172548 0 0.835042270639 16537 0 3917424 24602429488 6.4596120435652e+16
+20	4234538 294639 17 172549 0.00010032 0.835042628455 8106 0.00010032 0.00010032 0.81319392000009 8.1579614054403e-05
+21	4529177 254109 17 172549 0.00010032 0.835042628455 8106 10032 10032 81319392 815796140544
+22	4783286 254109 17 172549 0.00010032 0.835042628455 8106 10032 10032 81319392 815796140544
+23	5037395 254109 17 172549 0.00010032 0.835042628455 8106 10032 10032 81319392 815796140544
+24	5291504 246003 17 172549 0.00010032 0.835042628455 8106 9968 9968 80800608 805420460544
+25	5537507 246003 17 172549 0.00010032 0.835042628455 8106 9968 9968 80800608 805420460544
+26	5783510 246003 17 172549 0.00010032 0.835042628455 8106 9968 9968 80800608 805420460544
+27	6029513 246003 17 172549 0.00010032 0.835042628455 8106 9968 9968 80800608 805420460544
+28	6275516 246003 17 172549 0.00010032 0.835042628455 8106 9968 9968 80800608 805420460544
+29	6521519 246003 17 172549 0.00010032 0.835042628455 8106 9968 9968 80800608 805420460544
+30	6767522 246003 17 172549 0.00010032 0.835042628455 8106 9936 9936 80541216 800257522176
+31	7013525 246003 17 172549 0.00010032 0.835042628455 8106 9936 9936 80541216 800257522176
+32	7259528 246003 17 172549 0.00010032 0.835042628455 8106 9824 9824 79633344 782317971456
+33	7505531 246003 18 172550 0.00010032 0.835042628455 8106 1246 1246 10100076 12584694696
+34	7751534 246004 20 172554 0.00010032 0.835042628455 8106 9824 9824 79633344 782317971456
+35	7997538 246004 20 172554 0.00010032 0.835042628455 8106 9936 9936 80541216 800257522176
+36	8243542 246004 20 172554 0.00010032 0.835042628455 8106 9936 9936 80541216 800257522176
+37	8489546 246004 20 172554 0.00010032 0.835042628455 8106 9936 9936 80541216 800257522176
+38	8735550 246004 20 172554 0.00010032 0.835042628455 8106 9936 9936 80541216 800257522176
+39	8981554 246004 20 172554 0.00010032 0.835042628455 8106 9968 9968 80800608 805420460544
+40	9227558 246004 20 172554 0.00010032 0.835042628455 8106 9968 9968 80800608 805420460544
+41	9473562 443372 20 172555 0.00010032 0.835042628455 16212 0 1 8106 8106
+42	9916934 467690 20 172555 0.00010032 0.835042628455 16212 0 9968 80800608 805420460544
+43	10384624 221686 21 172555 0.00010032 0.835042628455 8106 0 0 0 0
+44	10606310 246004 21 172555 0.00010032 0.835042628455 8106 9968 9968 80800608 805420460544
+45	10852314 246004 21 172555 0.00010032 0.835042628455 8106 9968 9968 80800608 805420460544
+46	11098318 246004 21 172555 0.00010032 0.835042628455 8106 9968 9968 80800608 805420460544
+47	11344322 245973 21 172516 0.00010032 0.834941348455 8105 9968 9968 80790640 805321099520
+48	11590295 245973 21 172516 0.00010032 0.834941348455 8105 9968 9968 80790640 805321099520
+49	11836268 245973 21 172516 0.00010032 0.834941348455 8105 9968 9968 80790640 805321099520
+50	12082241 254078 21 172516 0.00010032 0.834941348455 8105 10032 10032 81309360 815695499520
+51	12336319 254078 21 172516 0.00010032 0.834941348455 8105 10032 10032 81309360 815695499520
+52	12590397 254078 21 172516 0.00010032 0.834941348455 8105 10032 10032 81309360 815695499520
+53	12844475 245974 23 172536 0.00020064 0.835041668455 8105 1246 1246 10098830 12583142180
+54	13090449 245974 23 172536 0.00020064 0.835041668455 8105 1246 1246 10098830 12583142180
+55	13336423 294605 24 172537 0.00020064 0.835041668455 8105 0.00010032 0.00010032 0.81309360000009 8.1569549952003e-05
+56	13631028 245975 25 172538 0.00020064 0.835041668455 8105 1228 1228 9952940 12222210320
+57	13877003 245975 27 172540 0.00020064 0.835041668455 8105 1208 1208 9790840 11827334720
+58	14122978 245975 28 172541 0.00020064 0.835041668455 8105 1200 1200 9726000 11671200000
+59	14368953 245975 29 172542 0.00020064 0.835041668455 8105 9600 9600 77808000 746956800000
+60	14614928 245975 29 172542 0.00020064 0.835041668455 8105 9600 9600 77808000 746956800000
+61	14860903 325812 45 172542 0.00020064 0.834940388455 8104 0.00020064 0.037643010008 115.61193807289 2.9184444410396
+62	15186715 339997 45 172542 0.00020064 0.834940388455 8104 -0.002919013959 0.00020064 0.037146028692 0.00021917277725467
+63	15526712 362686 45 172542 0.00020064 0.834940388455 8104 -0.023878203432786 0.0023950602765219 -72.60260654221 1.2689104207947
+64	15889398 357713 45 172542 0.00020064 0.834940388455 8104 0 0.012514161173686 39.549057105399 0.32240290548555
+65	16247111 3460 1866 170661 0.010290174597 0.826172534415 84 63355522.874652 147648051.3928 8439908966.7196 8.7255434926147e+17
+66	16250571 3455 1871 170666 0.010290174597 0.826172534415 84 65784151.251513 153307893.36286 8763438810.4438 9.4073235284585e+17
+67	16254026 3351 2153 172391 0.011672047108 0.834334628455 81 80139642.581114 98420221.169036 7855471469.8148 7.6325445350346e+17
+68	16257377 3351 2155 172393 0.011771407108 0.834433988455 81 80.654182822405 99.052132701422 7904.3301721051 772818.22163103
+69	16260728 3351 2161 172399 0.011772367108 0.834434948455 81 80654182.822406 99052132.701422 7905175456.9604 7.7296157156953e+17
+70	16264079 3351 2161 172399 0.011772367108 0.834434948455 81 80654182.822406 99052132.701422 7905175456.9604 7.7296157156953e+17
+71	16267430 3351 2161 172399 0.011772367108 0.834434948455 81 80654182.822406 99052132.701422 7905175456.9604 7.7296157156953e+17
+72	16270781 3351 2161 172399 0.011772367108 0.834434948455 81 80654182.822406 99052132.701422 7905175456.9604 7.7296157156953e+17
+73	16274132 3351 2161 172399 0.011772367108 0.834434948455 81 80139642.581114 98420221.169036 7854743715.6082 7.6313068181618e+17
+74	16277483 3351 2161 172399 0.011772367108 0.834434948455 81 80139642.581114 98420221.169036 7854743715.6082 7.6313068181618e+17
+75	16280834 3351 2161 172399 0.011772367108 0.834434948455 81 80139642.581114 98420221.169036 7854743715.6082 7.6313068181618e+17
+76	16284185 3351 2161 172399 0.011772367108 0.834434948455 81 80139642.581114 98420221.169036 7854743715.6082 7.6313068181618e+17
+77	16287536 3351 2161 172399 0.011772367108 0.834434948455 81 80139642.581114 98420221.169036 7854743715.6082 7.6313068181618e+17
+78	16290887 3351 2161 172399 0.011772367108 0.834434948455 81 80139642.581114 98420221.169036 7854743715.6082 7.6313068181618e+17
+79	16294238 3351 2161 172399 0.011772367108 0.834434948455 81 79882372.460469 98104265.402844 7829527844.9321 7.5823883107491e+17
+80	16297589 3351 2161 172399 0.011772367108 0.834434948455 81 79882372.460469 98104265.402844 7829527844.9321 7.5823883107491e+17
+81	16300940 3351 2161 172399 0.011772367108 0.834434948455 81 78981927.038209 96998420.221169 7741272297.5657 7.4124122269135e+17
+82	16304291 3351 2166 172404 0.011772367108 0.834434948455 81 78981927.038209 96998420.221169 7741272297.5657 7.4124122269135e+17
+83	16307642 3351 2166 172404 0.011772367108 0.834434948455 81 79882372.460469 98104265.402844 7829527844.9321 7.5823883107491e+17
+84	16310993 3351 2166 172404 0.011772367108 0.834434948455 81 79882372.460469 98104265.402844 7829527844.9321 7.5823883107491e+17
+85	16314344 3351 2166 172404 0.011772367108 0.834434948455 81 79882372.460469 98104265.402844 7829527844.9321 7.5823883107491e+17
+86	16317695 3351 2166 172404 0.011772367108 0.834434948455 81 79882372.460469 98104265.402844 7829527844.9321 7.5823883107491e+17
+87	16321046 3351 2166 172404 0.011772367108 0.834434948455 81 80139642.581114 98420221.169036 7854743715.6082 7.6313068181618e+17
+88	16324397 3351 2166 172404 0.011772367108 0.834434948455 81 80139642.581114 98420221.169036 7854743715.6082 7.6313068181618e+17
+89	16327748 3351 2167 172405 0.011772367108 0.834434948455 81 80139642.581114 98420221.169036 7854743715.6082 7.6313068181618e+17
+90	16331099 3351 2167 172405 0.011772367108 0.834434948455 81 80139642.581114 98420221.169036 7854743715.6082 7.6313068181618e+17
+91	16334450 3351 2167 172405 0.011772367108 0.834434948455 81 80139642.581114 98420221.169036 7854743715.6082 7.6313068181618e+17
+92	16337801 3351 2167 172405 0.011772367108 0.834434948455 81 80139642.581114 98420221.169036 7854743715.6082 7.6313068181618e+17
+93	16341152 3351 2167 172405 0.011772367108 0.834434948455 81 80139642.581114 98420221.169036 7854743715.6082 7.6313068181618e+17
+94	16344503 3351 2167 172405 0.011772367108 0.834434948455 81 80139642.581114 98420221.169036 7854743715.6082 7.6313068181618e+17
+95	16347854 3351 2167 172405 0.011772367108 0.834434948455 81 80654182.822406 99052132.701422 7905175456.9604 7.7296157156953e+17
+96	16351205 3351 2167 172405 0.011772367108 0.834434948455 81 80654182.822406 99052132.701422 7905175456.9604 7.7296157156953e+17
+97	16354556 3351 2167 172405 0.011772367108 0.834434948455 81 80654182.822406 99052132.701422 7905175456.9604 7.7296157156953e+17
+98	16357907 3351 2170 172414 0.011872687108 0.834535268455 81 80654182.822406 99052132.701422 7904455407.6683 7.7283936986993e+17
+99	16361258 3281 2175 172419 0.011872687108 0.834535268455 81 77181036.193689 94786729.85782 7564072160.4481 7.0771215848532e+17
+100	16364539 3362 2175 172419 0.011872687108 0.834535268455 81 77181036.193689 94786729.85782 7564072160.4481 7.0771215848532e+17
+vector 101 TargetNetwork.udp_cpu2.eth[0].queue outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPulled)
+attr title "outgoing datarate"
+attr unit bps
+vector 102 TargetNetwork.udp_cpu2.eth[0].queue incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPushStarted)
+attr title "incoming datarate"
+attr unit bps
+vector 103 TargetNetwork.udp_switch.ethernet.macHeaderChecker droppedDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetDropped)
+attr title "dropped data rate"
+attr unit bps
+vector 104 TargetNetwork.udp_switch.ethernet.fcsChecker droppedDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetDropped)
+attr title "dropped data rate"
+attr unit bps
+vector 105 TargetNetwork.udp_switch.ieee8021q.qTagHeaderChecker droppedDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetDropped)
+attr title "dropped data rate"
+attr unit bps
+vector 106 TargetNetwork.udp_switch.ieee8021r.rTagHeaderChecker droppedDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetDropped)
+attr title "dropped data rate"
+attr unit bps
+vector 107 TargetNetwork.udp_switch.eth[0].macLayer.queue outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPulled)
+attr title "outgoing datarate"
+attr unit bps
+vector 108 TargetNetwork.udp_switch.eth[0].macLayer.queue incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPushStarted)
+attr title "incoming datarate"
+attr unit bps
+vector 109 TargetNetwork.udp_switch.eth[0].macLayer.server incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPulled)
+attr title "incoming datarate"
+attr unit bps
+vector 110 TargetNetwork.udp_switch.eth[0].macLayer.server outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPushed)
+attr title "outgoing datarate"
+attr unit bps
+vector 111 TargetNetwork.udp_switch.eth[0].macLayer.fcsChecker droppedDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetDropped)
+attr title "dropped data rate"
+attr unit bps
+vector 112 TargetNetwork.udp_switch.eth[0].phyLayer.transmitter throughput:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(transmissionEnded)
+attr title throughput
+attr unit bps
+vector 113 TargetNetwork.udp_switch.eth[0].phyLayer.phyHeaderChecker droppedDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetDropped)
+attr title "dropped data rate"
+attr unit bps
+vector 114 TargetNetwork.udp_switch.eth[1].macLayer.fcsChecker droppedDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetDropped)
+attr title "dropped data rate"
+attr unit bps
+vector 115 TargetNetwork.udp_switch.eth[1].phyLayer.phyHeaderChecker droppedDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetDropped)
+attr title "dropped data rate"
+attr unit bps
+vector 116 TargetNetwork.udp_switch.eth[1].phyLayer.receiver throughput:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(receptionEnded)
+attr title throughput
+attr unit bps
+3	16371603 201621 172579 312487 0.835142948455 1.499944868455 6565 8106 14670 74762220 874971028490
+8	16573224 354510 172576 312492 0.835142948455 1.499945828455 13130 0 1 6565 6565
+9	16927734 354537 172555 312496 0.835042628455 1.499945828455 13131 0 1 6566 6566
+10	17282271 213549 172557 312504 0.83506497781 1.499992662083 6913 9600 9600 66364800 637102080000
+11	17495820 213549 172558 312505 0.83506497781 1.499992662083 6913 1200 1200 8295600 9954720000
+12	17709369 213549 172559 312506 0.83506497781 1.499992662083 6913 1208 1208 8350904 10087892032
+13	17922918 213549 172561 312508 0.83506497781 1.499992662083 6913 1228 1228 8489164 10424693392
+14	18136467 213549 172562 312509 0.83506497781 1.499992662083 6913 9968 9968 68908784 686882758912
+15	18350016 268500 172556 312497 0.835043588455 1.499946788455 6566 0.036257115074 0.078134757979 364.32898445074 20.704889961346
+16	18618516 203546 172556 312497 0.835043588455 1.499946788455 6566 9968 9968 65449888 652404483584
+17	18822062 203546 172556 312497 0.835043588455 1.499946788455 6566 1246 1246 8181236 10193820056
+18	19025608 403616 172556 312509 0.835043588455 1.499992662083 13479 388 794 7816563 4650240671
+19	19429224 457532 172556 312509 0.835043588455 1.499992662083 13479 3867584 7914592 77915499984 4.6205267491701e+17
+20	19886756 242905 172582 312490 0.835143908455 1.499945828455 6565 0.00010032 0.00010032 0.65860080000002 6.6070832255995e-05
+21	20129661 210080 172582 312490 0.835143908455 1.499945828455 6565 10032 10032 65860080 660708322560
+22	20339741 210080 172582 312490 0.835143908455 1.499945828455 6565 10032 10032 65860080 660708322560
+23	20549821 210080 172582 312490 0.835143908455 1.499945828455 6565 10032 10032 65860080 660708322560
+24	20759901 203515 172582 312490 0.835143908455 1.499945828455 6565 9968 9968 65439920 652305122560
+25	20963416 203515 172582 312490 0.835143908455 1.499945828455 6565 9968 9968 65439920 652305122560
+26	21166931 203515 172582 312490 0.835143908455 1.499945828455 6565 9968 9968 65439920 652305122560
+27	21370446 203515 172582 312490 0.835143908455 1.499945828455 6565 9968 9968 65439920 652305122560
+28	21573961 203515 172582 312490 0.835143908455 1.499945828455 6565 9968 9968 65439920 652305122560
+29	21777476 203515 172582 312490 0.835143908455 1.499945828455 6565 9968 9968 65439920 652305122560
+30	21980991 203515 172582 312490 0.835143908455 1.499945828455 6565 9936 9936 65229840 648123690240
+31	22184506 203515 172582 312490 0.835143908455 1.499945828455 6565 9936 9936 65229840 648123690240
+32	22388021 203515 172582 312490 0.835143908455 1.499945828455 6565 9824 9824 64494560 633594557440
+33	22591536 203515 172583 312491 0.835143908455 1.499945828455 6565 1246 1246 8179990 10192267540
+34	22795051 203515 172587 312495 0.835143908455 1.499945828455 6565 9824 9824 64494560 633594557440
+35	22998566 203515 172587 312495 0.835143908455 1.499945828455 6565 9936 9936 65229840 648123690240
+36	23202081 203515 172587 312495 0.835143908455 1.499945828455 6565 9936 9936 65229840 648123690240
+37	23405596 203515 172587 312495 0.835143908455 1.499945828455 6565 9936 9936 65229840 648123690240
+38	23609111 203515 172587 312495 0.835143908455 1.499945828455 6565 9936 9936 65229840 648123690240
+39	23812626 203515 172587 312495 0.835143908455 1.499945828455 6565 9968 9968 65439920 652305122560
+40	24016141 203515 172587 312495 0.835143908455 1.499945828455 6565 9968 9968 65439920 652305122560
+41	24219656 367640 172587 312496 0.835143908455 1.499945828455 13130 0 1 6565 6565
+42	24587296 387335 172587 312496 0.835143908455 1.499945828455 13130 0 9968 65439920 652305122560
+43	24974631 183820 172588 312496 0.835143908455 1.499945828455 6565 0 0 0 0
+44	25158451 203515 172588 312496 0.835143908455 1.499945828455 6565 9968 9968 65439920 652305122560
+45	25361966 203515 172588 312496 0.835143908455 1.499945828455 6565 9968 9968 65439920 652305122560
+46	25565481 203515 172588 312496 0.835143908455 1.499945828455 6565 9968 9968 65439920 652305122560
+47	25768996 203546 172555 312496 0.835042628455 1.499945828455 6566 9968 9968 65449888 652404483584
+48	25972542 203546 172555 312496 0.835042628455 1.499945828455 6566 9968 9968 65449888 652404483584
+49	26176088 203546 172555 312496 0.835042628455 1.499945828455 6566 9968 9968 65449888 652404483584
+50	26379634 210112 172555 312496 0.835042628455 1.499945828455 6566 10032 10032 65870112 660808963584
+51	26589746 210112 172555 312496 0.835042628455 1.499945828455 6566 10032 10032 65870112 660808963584
+52	26799858 210112 172555 312496 0.835042628455 1.499945828455 6566 10032 10032 65870112 660808963584
+53	27009970 203515 172575 312483 0.835142948455 1.499944868455 6565 1246 1246 8179990 10192267540
+54	27213485 203515 172575 312483 0.835142948455 1.499944868455 6565 1246 1246 8179990 10192267540
+55	27417000 242905 172576 312484 0.835142948455 1.499944868455 6565 0.00010032 0.00010032 0.65860080000002 6.6070832255995e-05
+56	27659905 203515 172577 312485 0.835142948455 1.499944868455 6565 1228 1228 8061820 9899914960
+57	27863420 203515 172579 312487 0.835142948455 1.499944868455 6565 1208 1208 7930520 9580068160
+58	28066935 203515 172580 312488 0.835142948455 1.499944868455 6565 1200 1200 7878000 9453600000
+59	28270450 203515 172581 312489 0.835142948455 1.499944868455 6565 9600 9600 63024000 605030400000
+60	28473965 203515 172581 312489 0.835142948455 1.499944868455 6565 9600 9600 63024000 605030400000
+61	28677480 268458 172581 312489 0.835041668455 1.499843588455 6565 0.036457755074 0.078213644679 365.48580736009 20.835728932135
+62	28945938 296521 172581 312489 0.835041668455 1.499843588455 6565 -0.002475273477 0.000101279678 0.041067615987 0.00017952244309218
+63	29242459 294686 172581 312489 0.835041668455 1.499843588455 6565 -0.045416743361052 -0.021870946469001 -207.47881507571 6.7059455471353
+64	29537145 288198 172581 312489 0.835041668455 1.499843588455 6565 0.012515951368778 0.023317556279893 123.65028646247 2.3927266400482
+65	29825343 2952 172596 312510 0.835178552178 1.5 71 69461414.610684 170315991.61116 7344754713.8701 7.8536267974526e+17
+66	29828295 2953 172601 312510 0.835178552178 1.5 71 72124102.17076 176844771.28959 7626303644.5684 8.4672786535235e+17
+67	29831248 2760 174653 312510 0.844462628455 1.5 66 97707242.66338 98420221.169036 6495021618.6507 6.3917180104141e+17
+68	29834008 2730 174655 310837 0.844561988455 1.492753988455 65 99.052132701422 99.052132701422 6438.3886255924 637736.1245255
+69	29836738 2761 174661 312510 0.844562948455 1.5 66 98311515.877559 99052132.701422 6536700141.47 6.4740127867965e+17
+70	29839499 2730 174661 310843 0.844562948455 1.492754948455 65 99052132.701422 99052132.701422 6438388625.5924 6.3773612452551e+17
+71	29842229 2730 174661 310843 0.844562948455 1.492754948455 65 99052132.701422 99052132.701422 6438388625.5924 6.3773612452551e+17
+72	29844959 2730 174661 310843 0.844562948455 1.492754948455 65 99052132.701422 99052132.701422 6438388625.5924 6.3773612452551e+17
+73	29847689 2730 174661 310843 0.844562948455 1.492754948455 65 98420221.169036 98420221.169036 6397314375.9874 6.2962509577253e+17
+74	29850419 2730 174661 310843 0.844562948455 1.492754948455 65 98420221.169036 98420221.169036 6397314375.9874 6.2962509577253e+17
+75	29853149 2730 174661 310843 0.844562948455 1.492754948455 65 98420221.169036 98420221.169036 6397314375.9874 6.2962509577253e+17
+76	29855879 2730 174661 310843 0.844562948455 1.492754948455 65 98420221.169036 98420221.169036 6397314375.9874 6.2962509577253e+17
+77	29858609 2730 174661 310843 0.844562948455 1.492754948455 65 98420221.169036 98420221.169036 6397314375.9874 6.2962509577253e+17
+78	29861339 2730 174661 310843 0.844562948455 1.492754948455 65 98420221.169036 98420221.169036 6397314375.9874 6.2962509577253e+17
+79	29864069 2730 174661 310843 0.844562948455 1.492754948455 65 98104265.402844 98104265.402844 6376777251.1848 6.2558904786505e+17
+80	29866799 2730 174661 310843 0.844562948455 1.492754948455 65 98104265.402844 98104265.402844 6376777251.1848 6.2558904786505e+17
+81	29869529 2730 174661 310843 0.844562948455 1.492754948455 65 96998420.221169 96998420.221169 6304897314.376 6.1156507915116e+17
+82	29872259 2730 174666 310848 0.844562948455 1.492754948455 65 96998420.221169 96998420.221169 6304897314.376 6.1156507915116e+17
+83	29874989 2730 174666 310848 0.844562948455 1.492754948455 65 98104265.402844 98104265.402844 6376777251.1848 6.2558904786505e+17
+84	29877719 2730 174666 310848 0.844562948455 1.492754948455 65 98104265.402844 98104265.402844 6376777251.1848 6.2558904786505e+17
+85	29880449 2730 174666 310848 0.844562948455 1.492754948455 65 98104265.402844 98104265.402844 6376777251.1848 6.2558904786505e+17
+86	29883179 2730 174666 310848 0.844562948455 1.492754948455 65 98104265.402844 98104265.402844 6376777251.1848 6.2558904786505e+17
+87	29885909 2730 174666 310848 0.844562948455 1.492754948455 65 98420221.169036 98420221.169036 6397314375.9874 6.2962509577253e+17
+88	29888639 2761 174666 312510 0.844562948455 1.5 66 97684329.173396 98420221.169036 6494998705.1608 6.3916732393859e+17
+89	29891400 2761 174667 312510 0.844562948455 1.5 66 97684329.173396 98420221.169036 6494998705.1608 6.3916732393859e+17
+90	29894161 2761 174667 312510 0.844562948455 1.5 66 97684329.173396 98420221.169036 6494998705.1608 6.3916732393859e+17
+91	29896922 2761 174667 312510 0.844562948455 1.5 66 97684329.173396 98420221.169036 6494998705.1608 6.3916732393859e+17
+92	29899683 2730 174667 310849 0.844562948455 1.492754948455 65 98420221.169036 98420221.169036 6397314375.9874 6.2962509577253e+17
+93	29902413 2730 174667 310849 0.844562948455 1.492754948455 65 98420221.169036 98420221.169036 6397314375.9874 6.2962509577253e+17
+94	29905143 2730 174667 310849 0.844562948455 1.492754948455 65 98420221.169036 98420221.169036 6397314375.9874 6.2962509577253e+17
+95	29907873 2730 174667 310849 0.844562948455 1.492754948455 65 99052132.701422 99052132.701422 6438388625.5924 6.3773612452551e+17
+96	29910603 2730 174667 310849 0.844562948455 1.492754948455 65 99052132.701422 99052132.701422 6438388625.5924 6.3773612452551e+17
+97	29913333 2730 174667 310849 0.844562948455 1.492754948455 65 99052132.701422 99052132.701422 6438388625.5924 6.3773612452551e+17
+98	29916063 2761 174670 312510 0.844663268455 1.5 66 98287807.677174 99052132.701422 6536676433.2696 6.4739661766349e+17
+99	29918824 2696 174675 312510 0.844663268455 1.5 66 94055318.351363 94786729.85782 6255192759.1097 5.9284047312423e+17
+100	29921520 2762 174675 312510 0.844663268455 1.5 66 94055318.351363 94786729.85782 6255192759.1097 5.9284047312423e+17
+101	29924282 268 312510 312510 0.1 1.5 15 0 0 0 0
+102	29924550 268 312510 312510 0.1 1.5 15 0 0 0 0
+103	29924818 268 312510 312510 0.1 1.5 15 0 0 0 0
+104	29925086 268 312510 312510 0.1 1.5 15 0 0 0 0
+105	29925354 268 312510 312510 0.1 1.5 15 0 0 0 0
+106	29925622 268 312510 312510 0.1 1.5 15 0 0 0 0
+107	29925890 268 312510 312510 0.1 1.5 15 0 0 0 0
+108	29926158 268 312510 312510 0.1 1.5 15 0 0 0 0
+109	29926426 268 312510 312510 0.1 1.5 15 0 0 0 0
+110	29926694 268 312510 312510 0.1 1.5 15 0 0 0 0
+111	29926962 268 312510 312510 0.1 1.5 15 0 0 0 0
+112	29927230 268 312510 312510 0.1 1.5 15 0 0 0 0
+113	29927498 268 312510 312510 0.1 1.5 15 0 0 0 0
+114	29927766 268 312510 312510 0.1 1.5 15 0 0 0 0
+115	29928034 268 312510 312510 0.1 1.5 15 0 0 0 0
+116	29928302 268 312510 312510 0.1 1.5 15 0 0 0 0
+

@@ -17,7 +17,6 @@ from qdarktheme.qtpy.QtCore import QDir, Qt, Slot, QRegularExpression
 from qdarktheme.qtpy.QtGui import *
 from qdarktheme.qtpy.QtWidgets import *
 import PySide6.QtWidgets
-from qdarktheme.util import get_project_root_path
 from main_ui import UI
 from util.jobSim import sysSim, ParseUtil, HostInfo, CPUInfo, GPUInfo, VideoCardInfo, JobInfo, CPUTaskInfo, GPUTaskInfo, FaultGenerator, tranFromC2E, tranFromE2C
 from jobSimPage import JobSimPage
@@ -28,6 +27,7 @@ from PySide6.QtCharts import QChart,QChartView,QLineSeries,QDateTimeAxis,QValueA
 from jobSimPainter import Painter, XmlParser
 from util.table import NumericDelegate
 from resultUtil import getAverageRunTime, getAverageRunTimeInHost, getThroughput
+import globaldata
 
 class JobSimQt(QMainWindow):
     def __init__(self, path) -> None:
@@ -69,6 +69,9 @@ class JobSimQt(QMainWindow):
         self.initTreeView()
         self.setClicked()
         self.center()
+
+        globaldata.currentProjectInfo.setRelativePath(path)
+        self._ui.network_editor.load_network_from_xml()
 
     def center(self):
         screen = QGuiApplication.primaryScreen().availableGeometry()
@@ -123,6 +126,8 @@ class JobSimQt(QMainWindow):
         fault_json = json.dumps([fault.__dict__ for fault in sysSim.faults.values()], indent=4, default=lambda o: o.__dict__)
         with open(project.projectPath + "/faults.json", 'w') as write_f:
             write_f.write(fault_json)
+        
+        globaldata.save_data()
 
     def setDuration(self):
         self.timewidget = QWidget()
@@ -148,6 +153,8 @@ class JobSimQt(QMainWindow):
         file_name = QFileDialog.getExistingDirectory(None, "Open File", "")
         print(file_name)
         project.projectPath = file_name
+        globaldata.currentProjectInfo.setFullname(file_name)
+        self._ui.network_editor.load_network_from_xml()
         self._initJsonFiles()
         self._initAll()
         self.initTreeView()

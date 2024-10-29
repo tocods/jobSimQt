@@ -18,6 +18,7 @@ from qdarktheme.qtpy.QtWidgets import (
 )
 from component.home import Ui_home
 from component.result import Ui_Result
+from Window.NetworkEditorWindow import NetworkEditorWindow
 
 class UI:
     def setup_ui(self, main_win: QMainWindow) -> None:
@@ -106,13 +107,15 @@ class UI:
         #HomeUI().setup_ui(stack_1)
         self.homeui.setupUi(stack_1)
         stack1.addTab(stack_1, "系统仿真")
+        self.network_editor = NetworkEditorWindow()
+        stack1.addTab(self.network_editor, "网络仿真")
         self.stack_widget.addWidget(stack1)
-        stack_2 = QWidget()
+        stack2 = QWidget()
         self.resultui = Ui_Result()
-        #ResultUI().setup_ui(stack_2)
-        self.resultui.setupUi(stack_2)
-        #DockUI().setup_ui(stack_2)
-        self.stack_widget.addWidget(stack_2)
+        #ResultUI().setup_ui(stack2)
+        self.resultui.setupUi(stack2)
+        #DockUI().setup_ui(stack2)
+        self.stack_widget.addWidget(stack2)
 
         self.central_window.setCentralWidget(self.stack_widget)
         self.central_window.addToolBar(toolbar)
