@@ -1,12 +1,24 @@
 [
     {
-        "mttf_type": "\u6b63\u6001\u5206\u5e03",
-        "mttf_scale": 0,
-        "mttf_shape": 0,
-        "mttr_type": "\u6b63\u6001\u5206\u5e03",
-        "mttr_scale": 0,
-        "mttr_shape": 0,
-        "name": "fault_5712",
-        "aim": "host_3904"
+        "mttf_type": "Normal",
+        "mttf_scale": 10.0,
+        "mttf_shape": 10.0,
+        "mttr_type": "Normal",
+        "mttr_scale": 5.0,
+        "mttr_shape": 5.0,
+        "name": "fault_4101",
+        "aim": "host1",
+        "type": "CPU"
+    },
+    {
+        "mttf_type": "Normal",
+        "mttf_scale": 10.0,
+        "mttf_shape": 10.0,
+        "mttr_type": "Normal",
+        "mttr_scale": 5.0,
+        "mttr_shape": 5.0,
+        "name": "fault_4101",
+        "aim": "host1",
+        "type": "RAM"
     }
 ]

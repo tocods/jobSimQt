@@ -21,11 +21,10 @@ from component.result import Ui_Result
 class UI:
     def setup_ui(self, main_win: QMainWindow) -> None:
         # Actions
-        self.action_change_home = QAction(QIcon("img/运行仿真.png"), "运行仿真")
-        self.action_change_dock = QAction(QIcon("img/获取结果.png"), "查看结果")
+        self.action_change_home = QAction(QIcon("D:/analysis/img/网络.png"), "网络仿真结果分析")
+        self.action_change_dock = QAction(QIcon("D:/analysis/img/应用软件集群.png"), "系统管理仿真结果分析")
+        self.action_micro_service = QAction(QIcon("D:/analysis/img/微服务.png"), "微服务指标采集")
         self.action_open_folder = QAction(QIcon("img/打开文件.png"), "打开项目")
-        self.action_open_color_dialog = QAction(QIcon("img/保存文件.png"), "保存项目")
-        self.action_open_font_dialog = QAction(QIcon("img/设置时间.png"), "设置仿真时间")
         # self.action_enable = QAction(QIcon("icons:circle_24dp.svg"), "Enable")
         # self.action_disable = QAction(QIcon("icons:clear_24dp.svg"), "Disable")
         self.actions_theme = [QAction(theme, main_win) for theme in ["黑色", "白色"]]
@@ -47,16 +46,18 @@ class UI:
         # Setup Actions
         self.action_change_home.setCheckable(True)
         self.action_change_dock.setCheckable(True)
+        self.action_micro_service.setCheckable(True)
         self.action_change_home.setChecked(True)
         action_group_toolbar.addAction(self.action_change_home)
         action_group_toolbar.addAction(self.action_change_dock)
+        action_group_toolbar.addAction(self.action_micro_service)
 
         # Setup Widgets
         spacer.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         spacer.setEnabled(False)
 
         activitybar.setMovable(False)
-        activitybar.addActions((self.action_change_home, self.action_change_dock))
+        activitybar.addActions((self.action_change_home, self.action_change_dock, self.action_micro_service))
         activitybar.addWidget(spacer)
         #activitybar.addWidget(tool_btn_settings)
 
@@ -67,7 +68,7 @@ class UI:
         tool_btn_theme.setIcon(QIcon("img/样式设置.png"))
         tool_btn_theme.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
 
-        toolbar.addActions((self.action_open_folder, self.action_open_color_dialog, self.action_open_font_dialog))
+        toolbar.addAction(self.action_open_folder)
         toolbar.addSeparator()
         toolbar.addWidget(tool_btn_theme)
 
@@ -75,7 +76,7 @@ class UI:
         # statusbar.addPermanentWidget(tool_btn_disable)
         # statusbar.showMessage("Enable")
 
-        menu_toggle = menubar.addMenu("系统管理仿真软件")
+        menu_toggle = menubar.addMenu("系统管理评估平台")
         # menu_toggle.addActions((self.action_enable, self.action_disable))
         menu_toggle.addActions((self.action_out,))
         menu_theme = menubar.addMenu("")
@@ -97,9 +98,8 @@ class UI:
 
         # layout
         stack_1 = QWidget()
-        self.homeui = Ui_home()
+        #self.homeui = Ui_home()
         #HomeUI().setup_ui(stack_1)
-        self.homeui.setupUi(stack_1)
         self.stack_widget.addWidget(stack_1)
         stack_2 = QWidget()
         self.resultui = Ui_Result()
@@ -107,6 +107,9 @@ class UI:
         self.resultui.setupUi(stack_2)
         #DockUI().setup_ui(stack_2)
         self.stack_widget.addWidget(stack_2)
+
+        self.stack_3 = QWidget()
+        self.stack_widget.addWidget(self.stack_3)
 
         self.central_window.setCentralWidget(self.stack_widget)
         self.central_window.addToolBar(toolbar)

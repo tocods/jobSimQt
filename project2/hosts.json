@@ -1,11 +1,15 @@
 [
     {
-        "name": "host_3904",
+        "name": "host1",
         "video_card_infos": [],
         "cpu_infos": [
             {
                 "cores": 2,
-                "mips": 1000
+                "mips": "2000"
+            },
+            {
+                "cores": 2,
+                "mips": "2000"
             }
         ],
         "ram": 4
