@@ -18,7 +18,6 @@ from qdarktheme.qtpy.QtGui import *
 from qdarktheme.qtpy.QtWidgets import *
 from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtNetwork import QNetworkCookie
-from qdarktheme.util import get_project_root_path
 from main_ui import UI
 from util.jobSim import sysSim, ParseUtil, HostInfo, CPUInfo, GPUInfo, VideoCardInfo, JobInfo, CPUTaskInfo, GPUTaskInfo, FaultGenerator, tranFromC2E, tranFromE2C
 from jobSimPage import JobSimPage
@@ -29,12 +28,13 @@ from PySide6.QtCharts import QChart,QChartView,QLineSeries,QDateTimeAxis,QValueA
 from jobSimPainter import Painter, XmlParser
 from util.table import NumericDelegate
 from resultUtil import getAverageRunTime, getAverageRunTimeInHost, getThroughput
-
+import globaldata
 class JobSimQt(QMainWindow):
     def __init__(self, path) -> None:
         super().__init__()
         self.duration = 100
         project.projectPath = path
+        globaldata.currentProjectInfo.setRelativePath(path)
         self._initOutputFiles()
         # 取消标题栏
         #self.setWindowFlags(Qt.FramelessWindowHint)
