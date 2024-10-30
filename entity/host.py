@@ -238,7 +238,60 @@ class TsnHost(Host):
 
 class DdsHost(Host):
     def __init__(self, name):
-        super().__init__(name, "StandardHost")
+        super().__init__(name, "DDSStandardHost")
 
     def generateINI(self, f):
-        return super().generateINI(f)
+        f.write(f"*.{self.name}.numApps = {len(self.appArgs)}\n")
+        for index in range(0, len(self.appArgs)):
+            appArg = self.appArgs[index]
+            if appArg["typename"] == "DDSPublishApp":
+                f.write(
+                    f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n'
+                )
+                f.write(f"*.{self.name}.app[{index}].io.receiveBroadcast = true\n")
+                f.write(f"*.{self.name}.ipv4.ip.limitedBroadcast = true\n")
+                f.write(f'*.{self.name}.app[{index}].sink.typename = ""\n')
+                f.write(
+                    f'*.{self.name}.app[{index}].io.publish = "{appArg["publish"]}"\n'
+                )
+                f.write(
+                    f'*.{self.name}.app[{index}].io.destPort = {appArg["destPort"]}\n'
+                )
+                f.write(
+                    f'*.{self.name}.app[{index}].source.packetLength = {appArg["packetLength"]}\n'
+                )
+                f.write(
+                    f'*.{self.name}.app[{index}].source.productionInterval = exponential({appArg["productionInterval"]})\n'
+                )
+
+            if appArg["typename"] == "DDSSubscribeApp":
+                f.write(
+                    f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n'
+                )
+                f.write(
+                    f'*.{self.name}.app[{index}].io.localPort = {appArg["localPort"]}\n'
+                )
+                f.write(
+                    f'*.{self.name}.app[{index}].source.subscribe = "{appArg["subscribeTopic"] + "@" + appArg["subscribePort"]}"\n'
+                )
+                f.write(f"*.{self.name}.app[{index}].source.packetLength = 20B\n")
+                f.write(f"*.{self.name}.ipv4.ip.limitedBroadcast = true \n")
+                f.write(f'*.{self.name}.app[{index}].sink.flowName = "{appArg["flowName"]}"\n')
+            f.write("\n")
+
+    def generateNED(self, f):
+        f.write(f"        {self.name}: {self.type} {{\n")
+        f.write("        }\n")
+
+    def setXMLElement(self, element):
+        element.set("name", self.name)
+        element.set("type", self.type)
+        element.set("ip", self.ip)
+        element.set("numApps", str(self.numApps))
+        element.set("appArgs", json.dumps(self.appArgs))
+        element.set("only_cpu", str(self.only_cpu))
+
+    def readXMLElement(self, element):
+        self.ip = element.get("ip")
+        self.numApps = int(element.get("numApps"))
+        self.appArgs = json.loads(element.get("appArgs"))

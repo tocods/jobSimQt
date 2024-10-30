@@ -10,6 +10,7 @@ from qdarktheme.qtpy.QtGui import QPainter
 from item import GraphicItem, HostGraphicItem, SwitchGraphicItem
 from edge import Edge, GraphicEdge
 from HostInfoForm import HostInfoForm
+from jobSim import jobSim
 from HostInfoForm import HostInfoForm
 from jobSim import sysSim
 from entity.switch import TsnSwitch
@@ -33,6 +34,7 @@ class GraphicView(QGraphicsView):
 
         self.editSwitchNetargsWindowUdp = EditSwitchNetargsWindowUdp(self)
         self.editSwitchNetargsWindowTsn = EditSwitchNetargsWindowTsn(self)
+        self.editSwitchNetargsWindowDds = EditSwitchNetargsWindowDds(self)
         self.editLinkArgsWindow = EditLinkArgsWindow(self)
         self.hostInform = HostInfoForm(self.jobSim)
         self.init_ui()

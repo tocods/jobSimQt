@@ -197,3 +197,29 @@ class HostNetargsAppEditorTcp(HostNetargsAppEditor):
         self.json_data.append(new_object)
         self.current_index = len(self.json_data) - 1  # 跳转到新对象
         self.update_table()
+
+
+class HostNetargsAppEditorDds(HostNetargsAppEditor):
+    def add_source(self):
+        new_object = {
+            "typename": "DDSPublishApp",
+            "publish": "",
+            "destPort": "",
+            "packetLength": "5000B",
+            "productionInterval": "200ms",
+        }
+        self.json_data.append(new_object)
+        self.current_index = len(self.json_data) - 1  # 跳转到新对象
+        self.update_table()
+
+    def add_sink(self):
+        new_object = {
+            "typename": "DDSSubscribeApp",
+            "subscribeTopic": "Topic1",
+            "subscribePort": "1000",
+            "localPort": "1000",
+            "flowName": "default",
+        }
+        self.json_data.append(new_object)
+        self.current_index = len(self.json_data) - 1  # 跳转到新对象
+        self.update_table()

@@ -1,6 +1,7 @@
 from UI.Network.Host.edit_host_netargs_udp_ui import Ui_Udp as udp_ui
 from UI.Network.Host.edit_host_netargs_tsn_ui import Ui_Tsn as tsn_ui
-from Window.HostNetargsAppEditor import HostNetargsAppEditor, HostNetargsAppEditorTcp
+from UI.Network.Host.edit_host_netargs_dds_ui import Ui_Udp as dds_ui
+from Window.HostNetargsAppEditor import *
 from Window.JsonArrayEditor import JsonArrayEditor
 from qdarktheme.qtpy.QtWidgets import QDialog, QTableWidgetItem, QPushButton, QMessageBox
 from qdarktheme.qtpy.QtCore import Qt
@@ -239,21 +240,60 @@ class EditHostNetargsWindowTsn(EditHostNetargsWindow):
 
 
 class EditHostNetargsWindowDds(EditHostNetargsWindow):
-    def __init__(self, parent=None, type="Udp"):
+    def __init__(self, parent=None, type="Dds"):
         super().__init__(parent, type)
-        self.ui = udp_ui()
-
+        self.ui = dds_ui()
         self.ui.setupUi(self)
         self.setWindowTitle("编辑主机网络属性")
 
         self.hostGraphicItem = None
+        self.tmp_numApps = 0
+        self.tmp_appArgs = []
 
         self.ui.applyButton.clicked.connect(self.apply_setting)
         self.hide()
 
-    def setHostGraphicItem(self, hostGraphicItem):
-        self.hostGraphicItem = hostGraphicItem
-        print("dds待实现")
-
     def apply_setting(self):
-        print("dds未实现")
+        """app数量"""
+        item = self.ui.tableWidget_netargs.item(0, 0)
+        # 判断是否为整数
+        if not item.text().isdigit():
+            item.setText("0")
+        print(
+            f"Host {self.hostGraphicItem.hostAttr.name} total_traffic change to {item.text()}"
+        )
+        self.hostGraphicItem.hostAttr.numApps = self.tmp_numApps
+        self.hostGraphicItem.hostAttr.appArgs = self.tmp_appArgs
+        self.hide()
+
+    def setHostGraphicItem(self, hostGraphicItem):
+        print("set hostgraphicitem")
+        self.tmp_appArgs = hostGraphicItem.hostAttr.appArgs.copy()
+        self.hostGraphicItem = hostGraphicItem
+
+        # 将当前主机的属性显示在界面上
+        self.ui.tableWidget_netargs.setItem(
+            0, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.numApps))
+        )
+        button = QPushButton("编辑应用参数")
+        button.clicked.connect(lambda _: self.open_json_object_array_editor())
+        self.ui.tableWidget_netargs.setCellWidget(1, 0, button)
+        self.ui.tableWidget_netargs.item(0, 0).setFlags(
+            Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
+        )
+
+    def open_json_object_array_editor(self):
+        """打开 JSON 对象数组编辑器窗口"""
+        json_data = self.tmp_appArgs.copy()
+        print(json_data)
+
+        # 打开编辑窗口
+        editor = HostNetargsAppEditorDds(json_data)
+        if editor.exec() == QDialog.DialogCode.Accepted:
+            # 更新 JSON 数据
+            self.tmp_appArgs = editor.get_json_data()
+            self.tmp_numApps = len(self.tmp_appArgs)
+            self.ui.tableWidget_netargs.setItem(
+                0, 0, QTableWidgetItem(str(self.tmp_numApps))
+            )
+            QMessageBox.information(self, "Success", "成功修改app参数")

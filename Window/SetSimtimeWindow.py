@@ -32,7 +32,7 @@ class SetSimtimeWindow(QDialog):
         project = globaldata.currentProjectInfo.fullname
         # 修改仿真时间
         # alterSimTime(project+'/Parameters.ini', time)
-        print(f"开始仿真\n \t仿真工程:{project}\n \t仿真时间:{time}")
+        print("开始仿真\n \t仿真工程:{project}\n \t仿真时间:{time}")
         # 生成NED和INI文件
         self.generateNED()
         self.generateINI(time)
@@ -40,6 +40,7 @@ class SetSimtimeWindow(QDialog):
         # 手动填写：omnetpp的src目录所在的绝对路径
         """ TODO:修改为使用生成的Topology.ned进行仿真 """
         os_type = platform.system()
+        print(project)
         if os_type == "Windows":
             omnetpp_src = "D:/study/omnetpp-6.0/samples/inet4.5/src"
             # command = 'omnet_tools\\opp_run.exe -r 0 -m -u Cmdenv -c General -n {'omnet_template'};{omnetpp_src}; -l {omnetpp_src}/INET {'omnet_template'}/omnetpp.ini"
@@ -84,6 +85,14 @@ class SetSimtimeWindow(QDialog):
                 f.write("{\n")
                 f.write("    parameters:\n")
                 f.write("    types:\n")
+            if self.type_combo.currentText() == "Dds":
+                f.write("import inet.networks.base.WiredNetworkBase;\n")
+                f.write("import inet.node.ethernet.Eth100M;\n")
+                f.write("import inet.node.inet.DDSStandardHost;\n")
+                f.write("import inet.node.inet.StandardHost;\n")
+                f.write("import inet.node.ethernet.EthernetSwitch;\n")
+                f.write("network TargetNetwork extends WiredNetworkBase\n")
+                f.write("{\n")
             f.write("    submodules:\n")
             if self.type_combo.currentText() == "Tcp":
                 f.write("configurator: Ipv4NetworkConfigurator {}\n")
@@ -122,11 +131,16 @@ class SetSimtimeWindow(QDialog):
             f.write("\n")
             if self.type_combo.currentText() == "Tcp":
                 self.generateTcpHeader(f)
+            if self.type_combo.currentText() == "Dds":
+                f.write(
+                    "*.configurator.config = xml(\"<config><interface hosts='**' address='192.x.x.x' netmask='255.x.x.x'/></config>\")\n"
+                )
             # TODO: 考虑source向多个destinations发包
             for i, host in enumerate(globaldata.hostList):
                 # hostAttr = host.hostAttr
                 # if hostAttr.destination_host == '':
                 # continue
+                print("generateINI")
                 host.hostAttr.generateINI(f)
 
             for i, switch in enumerate(globaldata.switchList):
