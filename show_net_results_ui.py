@@ -30,3 +30,7 @@ class Ui_Dialog(object):
         self.loss = QtWidgets.QWidget(Dialog)
         self.loss.setObjectName("loss")
         self.tabWidget.addTab(self.loss, "丢包率")
+
+        self.netCal = QtWidgets.QWidget(Dialog)
+        self.netCal.setObjectName("netCal")
+        self.tabWidget.addTab(self.netCal, "网络演算")
