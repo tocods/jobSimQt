@@ -24,7 +24,7 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,1,1">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout" stretch="4,1">
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="5,1">
       <item>
        <widget class="QTabWidget" name="jobTabs">
         <property name="currentIndex">
@@ -33,45 +33,59 @@
        </widget>
       </item>
       <item>
-       <widget class="QWidget" name="jobResultAnalysis" native="true">
-        <widget class="QLabel" name="label">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>121</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>任务运行结果分析</string>
-         </property>
-        </widget>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>平均运行</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTextEdit" name="jobshow1">
+            <property name="styleSheet">
+             <string notr="true">background-color: transparent; 
+</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>吞吐</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTextEdit" name="jobshow2">
+            <property name="styleSheet">
+             <string notr="true">background-color: transparent; </string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="2,1">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,1">
+       <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1">
+         <layout class="QHBoxLayout" name="horizontalLayout" stretch="0">
           <item>
-           <widget class="QWidget" name="showCPU" native="true"/>
-          </item>
-          <item>
-           <widget class="QWidget" name="showCPU_2" native="true"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1">
-          <item>
-           <widget class="QWidget" name="showGPU" native="true"/>
-          </item>
-          <item>
-           <widget class="QWidget" name="show" native="true"/>
+           <widget class="QTabWidget" name="showHost"/>
           </item>
          </layout>
         </item>
@@ -83,7 +97,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="4,1">
+     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="5,1">
       <item>
        <widget class="QTabWidget" name="faultTabs">
         <property name="currentIndex">
@@ -92,21 +106,22 @@
        </widget>
       </item>
       <item>
-       <widget class="QWidget" name="faultResultAnalysis" native="true">
-        <widget class="QLabel" name="label_2">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>111</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>错误注入结果分析</string>
-         </property>
-        </widget>
-       </widget>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>余度可靠性</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTextEdit" name="faultResult">
+          <property name="styleSheet">
+           <string notr="true">background: transparent;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
