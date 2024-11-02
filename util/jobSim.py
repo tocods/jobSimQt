@@ -143,14 +143,17 @@ class FaultGenerator:
 
     def setAim(self, aim):
         self.aim = aim
+    
+    def setHardware(self, hardware):
+        self.type = hardware
 
     def setName(self, name):
         self.name = name
 
     def print(self) -> str:
         table_data = [
-            ["mttf_type", "mttf_scale", "mttf_shape", "mttr_type", "mttr_scale", "mttr_shape"],
-            [self.mttf_type, self.mttf_scale, self.mttf_shape, self.mttr_type, self.mttr_scale, self.mttr_shape]
+            ["mttf_type", "mttf_scale", "mttf_shape", "mttr_type", "mttr_scale", "mttr_shape", "hardware"],
+            [self.mttf_type, self.mttf_scale, self.mttf_shape, self.mttr_type, self.mttr_scale, self.mttr_shape, self.type]
         ]
 
         table = AsciiTable(table_data)
@@ -243,17 +246,23 @@ class ParseUtil:
         return -1
 
     def parse_fault_generator(self, generator):
-        type = generator.attrib.get("type", "")
+        type = generator.attrib.get("mttf_type", "")
         scale = float('inf')
         shape = float('inf')
+        hardware = "CPU"
         for property in generator:
             if property.tag == "scale":
                 scale = float(property.text)
             elif property.tag == "shape":
                 shape = float(property.text)
+            elif property.tag == "type":
+                hardware = property.text
+        print(f"scale: {scale}, shape: {shape}")
         if shape == float('inf') or scale == float('inf'):
             return None
         ret = FaultGenerator(type, scale, shape)
+        print("set hardware")
+        ret.setHardware(hardware)
         return ret
     
     def parse_fault_xml(self, file_path):
@@ -479,6 +488,7 @@ class ParseUtil:
             fault_info = FaultGenerator(type=ttype, scale=scale, shape=shape)
             fault_info.setAim(fault["aim"])
             fault_info.setName(name)
+            fault_info.setHardware(fault["type"])
             faults.append(fault_info)
         return faults
 

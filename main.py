@@ -83,7 +83,7 @@ class JobSimQt(QMainWindow):
         action_name = self.sender().text()
         #self._ui.stack_widget.setCurrentIndex(0 if action_name == "运行仿真" else 1)
         if action_name == "系统管理评估平台":
-            os.system("python D:/analysis/main.py " + project.projectPath)
+            os.popen("python D:/analysis/main.py " + project.projectPath)
         if action_name == "系统管理集成开发平台":
             self._startSoftware()
 
@@ -358,6 +358,7 @@ class JobSimQt(QMainWindow):
             if len(sysSim.hosts) > 0:
                 new_fault.setAim(list(sysSim.hosts.keys())[0])
             new_fault.setName(name)
+            new_fault.setHardware("CPU")
             sysSim.faults[name] = new_fault
             self._initFaultInfo(new_fault)
 
@@ -437,6 +438,12 @@ class JobSimQt(QMainWindow):
         newFault = FaultGenerator(tranFromC2E(self.faultInfoPage.type.currentText()), (float)(self.faultInfoPage.time1.text()), (float)(self.faultInfoPage.time2.text()))
         newFault.setAim(self.faultInfoPage.aim.currentText())
         newFault.setName(self.faultInfoPage.name.text())
+        if self.faultInfoPage.hardware.currentText() == "CPU":
+            newFault.setHardware("CPU")
+        else:
+            newFault.setHardware("ram")
+        print("aaaa")
+        newFault.print()
         sysSim.faults.pop(name_before)
         sysSim.faults[newFault.name] = newFault
         self.nowFault = newFault
@@ -757,6 +764,10 @@ class JobSimQt(QMainWindow):
             elif fault.mttf_type == "Gamma":
                 self.showFaultInject.setChart(self.__getGammaLine(fault.mttf_scale))
                 self.showFaultInject2.setChart(self.__getGammaLine(fault.mttr_scale))
+            if fault.type == "CPU":
+                self.faultInfoPage.hardware.setCurrentIndex(0)
+            elif fault.type == "ram":
+                self.faultInfoPage.hardware.setCurrentIndex(1)
              # 填充故障信息表格
             path = project.projectPath + "/OutputFiles/faultRecords.xml"
             print(path)
@@ -768,14 +779,22 @@ class JobSimQt(QMainWindow):
                 # 设置不可见
                 self.faultRecordTable.verticalHeader().setVisible(False)
                 self.faultRecordTable.horizontalHeader().setVisible(True)
-                self.faultRecordTable.setColumnCount(3)
+                self.faultRecordTable.setColumnCount(5)
                 self.faultRecordTable.setRowCount(fault_num)
-                self.faultRecordTable.setHorizontalHeaderLabels(["时间", "故障对象", "类型"])
+                self.faultRecordTable.setHorizontalHeaderLabels(["时间", "故障对象", "类型", "恢复", "虚警"])
                 i = 0
                 for faultRecord in fault_results:
                     self.faultRecordTable.setItem(i, 0, QTableWidgetItem(faultRecord.time))
                     self.faultRecordTable.setItem(i, 1, QTableWidgetItem(faultRecord.object))
                     self.faultRecordTable.setItem(i, 2, QTableWidgetItem(faultRecord.type))
+                    if(faultRecord.isSuccessRebuild == "True"):
+                        self.faultRecordTable.setItem(i, 3, QTableWidgetItem("成功"))
+                    else:
+                        self.faultRecordTable.setItem(i, 3, QTableWidgetItem("失败"))
+                    if(faultRecord.isFalseAlarm == "True"):
+                        self.faultRecordTable.setItem(i, 4, QTableWidgetItem("是"))
+                    else:
+                        self.faultRecordTable.setItem(i, 4, QTableWidgetItem("否"))
                     i += 1
         else:
             self.nowFault = None
@@ -977,7 +996,7 @@ class JobSimQt(QMainWindow):
             QMessageBox.information(self, "", "未设置任务信息")
             self._ui.central_window.centralWidget().setEnabled(True)
             return
-        execute = "jdk1.8.0_321/bin/java.exe -jar ./jobSim/gpuworkflowsim.jar " + project.projectPath + "/OutputFiles " + project.projectPath + "/hosts.json " + project.projectPath + "/jobs.json " + project.projectPath + "/faults.json " + str(0) + " " + str(self.duration)
+        execute = "java -jar ./jobSim/gpuworkflowsim.jar " + project.projectPath + "/OutputFiles " + project.projectPath + "/hosts.json " + project.projectPath + "/jobs.json " + project.projectPath + "/faults.json " + str(0) + " " + str(self.duration)
         print(execute)
         popen = subprocess.Popen(execute, shell=True, stdout=subprocess.PIPE,  universal_newlines=True, stderr=subprocess.STDOUT)
         out,err = popen.communicate()

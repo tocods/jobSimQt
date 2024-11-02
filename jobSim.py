@@ -121,9 +121,13 @@ class FaultGenerator:
         self.mttf_type = type
         self.mttf_scale = scale
         self.mttf_shape = shape
+        self.hardware = ""
 
     def setAim(self, aim):
         self.aim = aim
+
+    def setHardware(self, htype):
+        self.hardware = htype
 
     def print(self) -> str:
         table_data = [
@@ -205,6 +209,7 @@ class ParseUtil:
         type = generator.attrib.get("type", "")
         scale = float('inf')
         shape = float('inf')
+        htype = "CPU"
         for property in generator:
             if property.tag == "scale":
                 scale = float(property.text)
@@ -213,6 +218,7 @@ class ParseUtil:
         if shape == float('inf') or scale == float('inf'):
             return None
         ret = FaultGenerator(type, scale, shape)
+        ret.setHardware(htype)
         return ret
     
     def parse_fault_xml(self, file_path):
