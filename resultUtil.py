@@ -26,13 +26,26 @@ def getAverageRunTimeInHost(jobs: List[JobRecord], hostName: str):
 def getThroughput(jobs: List[JobRecord]):
     time_total = 0.0
     flops_total = 0.0
+    time_total_tmp = 0.0
     for job in jobs:
         jobInfo = sysSim.jobs[job.jobName]
         flops_total += jobInfo.getFLOPS() * len(job.jobRuns)
         for jobRun in job.jobRuns:
-            time_total += (float)(jobRun.duration)
-    return  flops_total/ time_total
-    
+            time_total_tmp += (float)(jobRun.duration)
+        if time_total_tmp > time_total:
+            time_total = time_total_tmp
+    return  flops_total/ time_total_tmp
 
-
-
+# 计算集群的算力利用率
+def getEfficiency(jobs: List[JobRecord]):
+    time_total = 0.0
+    flops_total = 0.0
+    time_total_tmp = 0.0
+    for job in jobs:
+        jobInfo = sysSim.jobs[job.jobName]
+        flops_total += jobInfo.getFLOPS() * len(job.jobRuns)
+        for jobRun in job.jobRuns:
+            time_total_tmp += (float)(jobRun.duration)
+        if time_total_tmp > time_total:
+            time_total = time_total_tmp
+    return  flops_total/ (time_total * sysSim.getFLOPS())

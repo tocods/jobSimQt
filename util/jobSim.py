@@ -499,6 +499,17 @@ class jobSim:
     # def addFault(self, fault_info: FaultGenerator):
     #     self.faults.append(fault_info)
 
+    def getFLOPS(self) -> float:
+        FLOPS = 0
+        for host in self.hosts:
+            for cpu in host.cpu_infos:
+                FLOPS += cpu.mips * cpu.cores
+            if host.video_card_infos != None:
+                for video_card in host.video_card_infos:
+                    for gpu in video_card.gpu_infos:
+                        FLOPS += gpu.flops_per_core * gpu.cores
+        return FLOPS
+
 
 global sysSim
 sysSim = jobSim()
