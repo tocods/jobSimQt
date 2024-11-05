@@ -440,8 +440,10 @@ class JobSimQt(QMainWindow):
         newFault.setName(self.faultInfoPage.name.text())
         if self.faultInfoPage.hardware.currentText() == "CPU":
             newFault.setHardware("CPU")
-        else:
+        elif self.faultInfoPage.hardware.currentText() == "内存":
             newFault.setHardware("ram")
+        elif self.faultInfoPage.hardware.currentText() == "GPU":
+            newFault.setHardware("gpu")
         print("aaaa")
         newFault.print()
         sysSim.faults.pop(name_before)
@@ -771,6 +773,8 @@ class JobSimQt(QMainWindow):
                 self.faultInfoPage.hardware.setCurrentIndex(0)
             elif fault.type == "ram":
                 self.faultInfoPage.hardware.setCurrentIndex(1)
+            elif fault.type == "gpu":
+                self.faultInfoPage.hardware.setCurrentIndex(2)
              # 填充故障信息表格
             path = project.projectPath + "/OutputFiles/faultRecords.xml"
             print(path)

@@ -23,7 +23,7 @@ class Ui_FaultInfo(object):
     def setupUi(self, FaultInfo):
         if not FaultInfo.objectName():
             FaultInfo.setObjectName(u"FaultInfo")
-        FaultInfo.resize(985, 784)
+        FaultInfo.resize(983, 758)
         self.horizontalLayout_8 = QHBoxLayout(FaultInfo)
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
         self.horizontalLayout_6 = QHBoxLayout()
@@ -66,6 +66,24 @@ class Ui_FaultInfo(object):
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_2)
+
+        self.horizontalLayout_9 = QHBoxLayout()
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.label_8 = QLabel(FaultInfo)
+        self.label_8.setObjectName(u"label_8")
+
+        self.horizontalLayout_9.addWidget(self.label_8)
+
+        self.hardware = QComboBox(FaultInfo)
+        self.hardware.addItem("")
+        self.hardware.addItem("")
+        self.hardware.addItem("")
+        self.hardware.setObjectName(u"hardware")
+
+        self.horizontalLayout_9.addWidget(self.hardware)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout_9)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -182,6 +200,11 @@ class Ui_FaultInfo(object):
         FaultInfo.setWindowTitle(QCoreApplication.translate("FaultInfo", u"Form", None))
         self.label.setText(QCoreApplication.translate("FaultInfo", u"\u6545\u969c\u6a21\u578b\u540d:", None))
         self.label_2.setText(QCoreApplication.translate("FaultInfo", u"\u6ce8\u5165\u5bf9\u8c61:", None))
+        self.label_8.setText(QCoreApplication.translate("FaultInfo", u"\u6545\u969c\u786c\u4ef6:", None))
+        self.hardware.setItemText(0, QCoreApplication.translate("FaultInfo", u"CPU", None))
+        self.hardware.setItemText(1, QCoreApplication.translate("FaultInfo", u"\u5185\u5b58", None))
+        self.hardware.setItemText(2, QCoreApplication.translate("FaultInfo", u"GPU", None))
+
         self.label_3.setText(QCoreApplication.translate("FaultInfo", u"\u5206\u5e03\u7c7b\u578b:", None))
         self.type.setItemText(0, QCoreApplication.translate("FaultInfo", u"\u6b63\u6001\u5206\u5e03", None))
         self.type.setItemText(1, QCoreApplication.translate("FaultInfo", u"\u97e6\u4f2f\u5206\u5e03", None))
