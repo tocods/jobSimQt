@@ -63,8 +63,8 @@ class JobSimQt(QMainWindow):
         screen_size = screen.availableGeometry()
         self._ui.homeui.infoList.setHeaderHidden(True)
         self.setGeometry(0, 0, screen_size.width() * 0.9, screen_size.height() * 0.9)
-        self._ui.homeui.layoutWidget.setGeometry(0, 0, screen_size.width() * 0.8, screen_size.height() * 0.8)
-        self._ui.resultui.layoutWidget.setGeometry(0, 0, screen_size.width() * 0.8, screen_size.height() * 0.8)
+        # self._ui.homeui.layoutWidget.setGeometry(0, 0, screen_size.width() * 0.8, screen_size.height() * 0.8)
+        # self._ui.resultui.layoutWidget.setGeometry(0, 0, screen_size.width() * 0.8, screen_size.height() * 0.8)
         self._initAll()
         self.initTreeView()
         self.setClicked()
@@ -716,10 +716,10 @@ class JobSimQt(QMainWindow):
             item7 = QTableWidgetItem("输出(MB)")
             item7.setBackground(QColor(192, 192, 192))
             self.jobInfoPage.gputable.setItem(0, 6, item7)
-            del_kernel = QPushButton()
-            del_kernel.setText("删除")
-            del_kernel.clicked.connect(self._delKernel)
-            self.jobInfoPage.gputable.setCellWidget(0, 7, del_kernel)
+            # del_kernel = QPushButton()
+            # del_kernel.setText("删除")
+            # del_kernel.clicked.connect(self._delKernel)
+            # self.jobInfoPage.gputable.setCellWidget(0, 7, del_kernel)
 
         self.jobInfoPage.gputable.setItem(i, 0, QTableWidgetItem(str(i)))
         self.jobInfoPage.gputable.setItem(i, 1, QTableWidgetItem("0"))
@@ -728,7 +728,10 @@ class JobSimQt(QMainWindow):
         self.jobInfoPage.gputable.setItem(i, 4, QTableWidgetItem("0"))
         self.jobInfoPage.gputable.setItem(i, 5, QTableWidgetItem("0"))
         self.jobInfoPage.gputable.setItem(i, 6, QTableWidgetItem("0"))
-
+        del_kernel = QPushButton()
+        del_kernel.setText("删除")
+        del_kernel.clicked.connect(self._delKernel)
+        self.jobInfoPage.gputable.setCellWidget(i, 7, del_kernel)
 
     def _initFaultInfo(self, fault: FaultGenerator, ifTrueFault=True):
         self.showFaultInject.setChart(QChart())

@@ -64,7 +64,7 @@
     <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="21">
-    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
+    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="22">
     <Host name="host1" cpuUtilization="0" ramUtilization="0" />
@@ -127,19 +127,19 @@
     <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="42">
-    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
+    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
   </Util>
   <Util time="43">
-    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
+    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
   </Util>
   <Util time="44">
-    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
+    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
   </Util>
   <Util time="45">
-    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
+    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
   </Util>
   <Util time="46">
-    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
+    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
   </Util>
   <Util time="47">
     <Host name="host1" cpuUtilization="0" ramUtilization="0" />
@@ -154,7 +154,7 @@
     <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="51">
-    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
+    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
   </Util>
   <Util time="52">
     <Host name="host1" cpuUtilization="0" ramUtilization="0" />
@@ -217,34 +217,34 @@
     <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="72">
-    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
+    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="73">
-    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
+    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="74">
-    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
+    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="75">
-    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
+    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="76">
-    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
+    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="77">
-    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
+    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="78">
-    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
+    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="79">
-    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
+    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="80">
-    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
+    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
   </Util>
   <Util time="81">
-    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
+    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
   </Util>
   <Util time="82">
     <Host name="host1" cpuUtilization="0" ramUtilization="0" />
@@ -271,10 +271,10 @@
     <Host name="host1" cpuUtilization="0" ramUtilization="0" />
   </Util>
   <Util time="90">
-    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
+    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
   </Util>
   <Util time="91">
-    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
+    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
   </Util>
   <Util time="92">
     <Host name="host1" cpuUtilization="0" ramUtilization="0" />

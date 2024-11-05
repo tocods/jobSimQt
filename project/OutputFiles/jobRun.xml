@@ -3,13 +3,12 @@
   <Job name="job_6742">
     <RunningRecord status="Success" host="host1" start="0" end="3" duration="3" />
     <RunningRecord status="Canceled" host="host1" start="10" end="20" duration="10" />
-    <RunningRecord status="Canceled" host="host1" start="20" end="30" duration="10" />
+    <RunningRecord status="Success" host="host1" start="20" end="23" duration="3" />
     <RunningRecord status="Success" host="host1" start="30" end="33" duration="3" />
-    <RunningRecord status="Canceled" host="host1" start="40" end="50" duration="10" />
-    <RunningRecord status="Success" host="host1" start="50" end="53" duration="3" />
-    <RunningRecord status="Canceled" host="host1" start="60" end="70" duration="10" />
-    <RunningRecord status="Success" host="host1" start="70" end="73" duration="3" />
-    <RunningRecord status="Success" host="host1" start="80" end="83" duration="3" />
-    <RunningRecord status="Success" host="host1" start="90" end="93" duration="3" />
+    <RunningRecord status="Success" host="host1" start="40" end="43" duration="3" />
+    <RunningRecord status="Canceled" host="host1" start="50" end="60" duration="10" />
+    <RunningRecord status="Success" host="host1" start="60" end="63" duration="3" />
+    <RunningRecord status="Canceled" host="host1" start="70" end="80" duration="10" />
+    <RunningRecord status="Canceled" host="host1" start="80" end="90" duration="10" />
   </Job>
 </jobRun>
