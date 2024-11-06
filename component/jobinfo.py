@@ -15,10 +15,12 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QLabel,
-    QLineEdit, QPushButton, QSizePolicy, QSpinBox,
-    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QHBoxLayout, QHeaderView,
+    QLabel, QLineEdit, QPushButton, QSizePolicy,
+    QSpinBox, QTableWidget, QTableWidgetItem, QVBoxLayout,
+    QWidget)
 from PySide6.QtCharts import QChartView
+
 class Ui_JobInfo(object):
     def setupUi(self, JobInfo):
         if not JobInfo.objectName():
@@ -128,6 +130,22 @@ class Ui_JobInfo(object):
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_3)
+
+        self.horizontalLayout_13 = QHBoxLayout()
+        self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
+        self.label_14 = QLabel(self.widget)
+        self.label_14.setObjectName(u"label_14")
+        self.label_14.setStyleSheet(u"border: none")
+
+        self.horizontalLayout_13.addWidget(self.label_14)
+
+        self.host = QComboBox(self.widget)
+        self.host.setObjectName(u"host")
+
+        self.horizontalLayout_13.addWidget(self.host)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout_13)
 
 
         self.horizontalLayout_11.addLayout(self.verticalLayout)
@@ -290,6 +308,7 @@ class Ui_JobInfo(object):
         self.label_3.setText(QCoreApplication.translate("JobInfo", u"GB", None))
         self.label_4.setText(QCoreApplication.translate("JobInfo", u"\u5468\u671f:", None))
         self.label_5.setText(QCoreApplication.translate("JobInfo", u"s", None))
+        self.label_14.setText(QCoreApplication.translate("JobInfo", u"\u4e3b\u673a:", None))
         self.label_7.setText(QCoreApplication.translate("JobInfo", u"CPU\u9700\u6c42", None))
         self.label_9.setText(QCoreApplication.translate("JobInfo", u"\u9700\u6c42\u6838\u6570:", None))
         self.label_10.setText(QCoreApplication.translate("JobInfo", u"FLOP:", None))

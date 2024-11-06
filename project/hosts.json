@@ -13,5 +13,16 @@
             }
         ],
         "ram": 4
+    },
+    {
+        "name": "host_8337",
+        "video_card_infos": [],
+        "cpu_infos": [
+            {
+                "cores": 2,
+                "mips": "1000"
+            }
+        ],
+        "ram": 4
     }
 ]

@@ -408,6 +408,10 @@ class JobSimQt(QMainWindow):
         self.nowJob.cpu_task.pes_number = self.jobInfoPage.corenum.value()
         self.nowJob.cpu_task.length = self.jobInfoPage.cpuflops.text()
         self.nowJob.gpu_task = None
+        if self.jobInfoPage.host.currentText() != "不指定":
+            self.nowJob.host = self.jobInfoPage.host.currentText()
+        else:
+            self.nowJob.host = ""
         if self.kernel_num > 0:
             request_gddram_total = 0
             task_input_size_total = 0
@@ -631,6 +635,14 @@ class JobSimQt(QMainWindow):
             print("no gpu task")
             self.kernel_num = 0
             self._initKernelTable(0, None)
+        self.jobInfoPage.host.clear()
+        self.jobInfoPage.host.addItem("不指定")
+        for(host_name, host) in sysSim.hosts.items():
+            self.jobInfoPage.host.addItem(host_name)
+        if job.host != "":
+            self.jobInfoPage.host.setCurrentText(job.host)
+        else:
+            self.jobInfoPage.host.setCurrentText("不指定")
         self._ui.homeui.tabWidget.setCurrentIndex(1)
 
     def _initKernelTable(self, kernel_num, gpu_task):
@@ -819,7 +831,8 @@ class JobSimQt(QMainWindow):
             validator = QRegularExpressionValidator(regular_ex, self.faultInfoPage.time2)
             self.faultInfoPage.time2.setValidator(validator)
             self._ui.homeui.tabWidget.setCurrentIndex(2)
-            self.faultInfoPage.show.setChart(QChart())
+            self.showFaultInject.setChart(QChart())
+            self.showFaultInject2.setChart(QChart())
 
     def __getNormalLine(self, avg):
         print("get normal line")

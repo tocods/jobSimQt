@@ -140,6 +140,23 @@ border-radius: 15px; </string>
                     </item>
                    </layout>
                   </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_13">
+                    <item>
+                     <widget class="QLabel" name="label_14">
+                      <property name="styleSheet">
+                       <string notr="true">border: none</string>
+                      </property>
+                      <property name="text">
+                       <string>主机:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QComboBox" name="host"/>
+                    </item>
+                   </layout>
+                  </item>
                  </layout>
                 </item>
                </layout>

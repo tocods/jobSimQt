@@ -98,6 +98,7 @@ class JobInfo:
         self.period = period
         self.cpu_task = cpu_task
         self.gpu_task = gpu_task
+        self.host = ""
         
     def getFLOPS(self) -> float:
         FLOPS = 0
@@ -106,6 +107,9 @@ class JobInfo:
         if self.gpu_task is not None:
             FLOPS += self.gpu_task.getFLOPS()
         return FLOPS
+    
+    def setHost(self, host):
+        self.host = host
 
     def print(self) -> str:
         table_data = [
@@ -140,6 +144,7 @@ class FaultGenerator:
         self.mttr_shape = shape
         self.name = ""
         self.aim = ""
+        self.type = "CPU"
 
     def setAim(self, aim):
         self.aim = aim
