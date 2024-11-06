@@ -25,4 +25,5 @@
         <Link name="Link" type="Eth100M" endpoint1="udp_tcp_cpu" endpoint2="switch" link_bandwidth="100"/>
         <Link name="Link2" type="Eth100M" endpoint1="udp_tcp_cpu2" endpoint2="switch" link_bandwidth="100"/>
     </Links>
+    <GlobalSetting content="{&quot;Udp&quot;: {}, &quot;Tcp&quot;: {&quot;forwarding&quot;: &quot;false&quot;, &quot;retryTimeout&quot;: &quot;1s&quot;, &quot;retryCount&quot;: &quot;3&quot;, &quot;cacheTimeout&quot;: &quot;100s&quot;, &quot;queueTypename&quot;: &quot;DropTailQueue&quot;, &quot;queuePacketCapacity&quot;: &quot;100&quot;, &quot;tcpAlgorithmClass&quot;: &quot;TcpReno&quot;}, &quot;Rdma&quot;: {}, &quot;Tsn&quot;: {}, &quot;Dds&quot;: {&quot;queueTypename&quot;: &quot;DropTailQueue&quot;, &quot;queuePacketCapacity&quot;: &quot;20&quot;}}"/>
 </Network>

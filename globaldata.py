@@ -64,7 +64,10 @@ networkGlobalConfig = {
     },
     "Rdma": {},
     "Tsn": {},
-    "Dds": {},
+    "Dds": {
+        "queueTypename": "DropTailQueue",
+        "queuePacketCapacity": "20",
+    },
 }
 
 
@@ -166,6 +169,9 @@ def create_xml():
             link_element.set("endpoint2", link_item.linkAttr.endpoint2.switchAttr.name)
 
         link_element.set("link_bandwidth", str(link_item.linkAttr.link_bandwidth))
+    globalSettingElement = ET.SubElement(root, "GlobalSetting")
+    globalSettingElement.set("content", json.dumps(networkGlobalConfig))
+
 
     # Convert to a pretty XML string
     xml_str = ET.tostring(root, encoding="unicode")

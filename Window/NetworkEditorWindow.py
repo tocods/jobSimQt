@@ -219,14 +219,18 @@ class NetworkEditorWindow(QWidget):
 
         print(globaldata.currentProjectInfo.path)
         if (
-            os.path.exists(os.path.join(globaldata.currentProjectInfo.path, "network_data.xml"))
+            os.path.exists(
+                os.path.join(globaldata.currentProjectInfo.path, "network_data.xml")
+            )
             == False
         ):
             print("Could not find network_data.xml")
             return
 
         # Load the XML from the file
-        tree = ET.parse(os.path.join(globaldata.currentProjectInfo.path, "network_data.xml"))
+        tree = ET.parse(
+            os.path.join(globaldata.currentProjectInfo.path, "network_data.xml")
+        )
         root = tree.getroot()
 
         # Clear existing lists
@@ -374,6 +378,11 @@ class NetworkEditorWindow(QWidget):
         for link_element in links_element.findall("Link"):
             # print(link_element)
             create_link_from_xml(link_element)
+
+        global_setting_element = root.find("GlobalSetting")
+        globaldata.networkGlobalConfig = json.loads(
+            global_setting_element.get("content")
+        )
 
         print("Network loaded from XML!")
 

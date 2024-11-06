@@ -155,7 +155,7 @@ class JobSimQt(QMainWindow):
         file_name = QFileDialog.getExistingDirectory(None, "Open File", "")
         print(file_name)
         project.projectPath = file_name
-        globaldata.currentProjectInfo.setFullname(file_name)
+        globaldata.currentProjectInfo.setFullPath(file_name)
         self._ui.network_editor.load_network_from_xml()
         self._initJsonFiles()
         self._initAll()

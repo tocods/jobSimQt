@@ -337,6 +337,7 @@ class HostNetargsAppEditorDds(HostNetargsAppEditor):
             "subscribeTopic": "Topic1",
             "subscribePort": "1000",
             "localPort": "1000",
+            "nackCountdown": "0.25ms",
             "flowName": "default",
         }
         new_sink = {"Udp": udp_sink, "Tcp": tcp_sink, "Dds": dds_sink}

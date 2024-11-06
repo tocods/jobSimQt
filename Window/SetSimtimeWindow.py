@@ -1,6 +1,12 @@
 import os
 import platform
-from qdarktheme.qtpy.QtWidgets import QFormLayout, QDialog, QLineEdit, QComboBox, QPushButton
+from qdarktheme.qtpy.QtWidgets import (
+    QFormLayout,
+    QDialog,
+    QLineEdit,
+    QComboBox,
+    QPushButton,
+)
 import globaldata
 from item import HostGraphicItem
 
@@ -29,7 +35,7 @@ class SetSimtimeWindow(QDialog):
 
     def apply_time(self):
         time = float(self.time_input.text())
-        project = globaldata.currentProjectInfo.name
+        project = globaldata.currentProjectInfo.path
         # 修改仿真时间
         # alterSimTime(project+'/Parameters.ini', time)
         print("开始仿真\n \t仿真工程:{project}\n \t仿真时间:{time}")
@@ -58,7 +64,9 @@ class SetSimtimeWindow(QDialog):
 
     # 在当前工程（globaldata.currentProjectInfo.path）中生成.ned文件
     def generateNED(self):
-        with open(os.path.join(globaldata.currentProjectInfo.path, "Topology.ned"), "w") as f:
+        with open(
+            os.path.join(globaldata.currentProjectInfo.path, "Topology.ned"), "w"
+        ) as f:
             if self.type_combo.currentText() == "Udp":
                 f.write("import inet.networks.base.WiredNetworkBase;\n")
                 f.write("import inet.node.inet.StandardHost;\n")
@@ -125,17 +133,20 @@ class SetSimtimeWindow(QDialog):
 
     # 在当前工程（globaldata.currentProjectInfo.path）中生成.ini文件
     def generateINI(self, time):
-        with open(os.path.join(globaldata.currentProjectInfo.path, "Parameters.ini"), "w") as f:
+        with open(
+            os.path.join(globaldata.currentProjectInfo.path, "Parameters.ini"), "w"
+        ) as f:
             f.write("[General]\n")
             f.write("network = TargetNetwork\n")
             f.write(f"sim-time-limit = {time}s\n")
             f.write("\n")
+            f.write('*.*.ethernet.typename = "EthernetLayer"\n')
+            f.write('*.*.eth[*].typename = "LayeredEthernetInterface"\n')
+            f.write('*.*.eth[*].bitrate = 100Mbps\n')
             if self.type_combo.currentText() == "Tcp":
                 self.generateTcpHeader(f)
             if self.type_combo.currentText() == "Dds":
-                f.write(
-                    "*.configurator.config = xml(\"<config><interface hosts='**' address='192.x.x.x' netmask='255.x.x.x'/></config>\")\n"
-                )
+                self.generateDdsHeader(f)
             # TODO: 考虑source向多个destinations发包
             for i, host in enumerate(globaldata.hostList):
                 # hostAttr = host.hostAttr
@@ -146,10 +157,6 @@ class SetSimtimeWindow(QDialog):
 
             for i, switch in enumerate(globaldata.switchList):
                 switchAttr = switch.switchAttr
-                f.write(f'*.{switchAttr.name}.ethernet.typename = "EthernetLayer"\n')
-                f.write(
-                    f'*.{switchAttr.name}.eth[*].typename = "LayeredEthernetInterface"\n'
-                )
                 f.write(
                     f"*.{switchAttr.name}.eth[*].bitrate = {switchAttr.transmission_rate}Mbps\n"
                 )
@@ -176,3 +183,11 @@ class SetSimtimeWindow(QDialog):
         f.write("**.tcp.windowScalingSupport = false\n")
         f.write("**.tcp.timestampSupport = false\n")
         f.write("**.tcp.mss = 1452\n")
+
+    def generateDdsHeader(self, f):
+        data = globaldata.networkGlobalConfig["Dds"]
+        f.write(
+            "*.configurator.config = xml(\"<config><interface hosts='**' address='192.x.x.x' netmask='255.x.x.x'/></config>\")\n"
+        )
+        f.write(f'**.macLayer.queue.typename = "{data["queueTypename"]}"\n')
+        f.write(f'**.macLayer.queue.packetCapacity = {data["queuePacketCapacity"]}\n')

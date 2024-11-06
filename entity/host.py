@@ -325,30 +325,34 @@ class DdsHost(Host):
                     f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n'
                 )
                 f.write(f"*.{self.name}.app[{index}].io.receiveBroadcast = true\n")
-                f.write(f"*.{self.name}.ipv4.ip.limitedBroadcast = true\n")
-                f.write(f'*.{self.name}.app[{index}].sink.typename = ""\n')
                 f.write(
                     f'*.{self.name}.app[{index}].io.publish = "{appArg["publish"]}"\n'
                 )
                 f.write(
                     f'*.{self.name}.app[{index}].io.destPort = {appArg["destPort"]}\n'
                 )
+                f.write(f"*.{self.name}.ipv4.ip.limitedBroadcast = true\n")
+                
                 f.write(
                     f'*.{self.name}.app[{index}].source.packetLength = {appArg["packetLength"]}\n'
                 )
                 f.write(
                     f'*.{self.name}.app[{index}].source.productionInterval = exponential({appArg["productionInterval"]})\n'
                 )
+                f.write(f'*.{self.name}.app[{index}].sink.typename = ""\n')
 
             if appArg["typename"] == "DDSSubscribeApp":
                 f.write(
                     f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n'
                 )
                 f.write(
+                    f'*.{self.name}.app[{index}].source.subscribe = "{appArg["subscribeTopic"] + "@" + appArg["subscribePort"]}"\n'
+                )
+                f.write(
                     f'*.{self.name}.app[{index}].io.localPort = {appArg["localPort"]}\n'
                 )
                 f.write(
-                    f'*.{self.name}.app[{index}].source.subscribe = "{appArg["subscribeTopic"] + "@" + appArg["subscribePort"]}"\n'
+                    f'*.{self.name}.app[{index}].io.nackCountdown = {appArg["nackCountdown"]}\n'
                 )
                 f.write(f"*.{self.name}.app[{index}].source.packetLength = 20B\n")
                 f.write(f"*.{self.name}.ipv4.ip.limitedBroadcast = true \n")
