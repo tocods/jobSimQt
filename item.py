@@ -45,7 +45,6 @@ class GraphicItem(QGraphicsPixmapItem):
 class HostGraphicItem(GraphicItem):
     def __init__(self, host_name, host_type, para, width=100, height=100, parent=None, Host_class=globaldata.Host):
         super().__init__(para, width, height, parent=None)
-        self.type = "Host"
         # 主机属性
         # self.hostAttr = Host_class(host_name, host_type)
         # 使用给定的主机类存储数据
@@ -62,7 +61,6 @@ class HostGraphicItem(GraphicItem):
 class SwitchGraphicItem(GraphicItem):
     def __init__(self, switch_name, switch_type, para, width=100, height=100, parent=None, Switch_class=globaldata.Switch):
         super().__init__(para, width, height, parent=None)
-        self.type = "Switch"
         # 交换机属性
         # self.switchAttr = Switch_class(switch_name, switch_type)
         # 使用给定的交换机类存储数据

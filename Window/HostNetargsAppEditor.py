@@ -7,7 +7,9 @@ from qdarktheme.qtpy.QtWidgets import (
     QLabel,
     QHBoxLayout,
     QMessageBox,
+    QMenu,
 )
+from qdarktheme.qtpy.QtGui import QAction
 from qdarktheme.qtpy.QtCore import Qt
 
 
@@ -16,34 +18,35 @@ class HostNetargsAppEditor(QDialog):
         QDialog.__init__(self)
         self.current_index = 0
         self.json_data = json_data
+
+        self.setup_ui()
+        self.add_source_button.clicked.connect(self.add_source)
+        self.add_sink_button.clicked.connect(self.add_sink)
+        self.update_table()
+
+    def setup_ui(self):
         self.setWindowTitle("编辑器")
         self.setGeometry(100, 100, 600, 400)
 
-        # 设置表格
         self.table_widget = QTableWidget()
         self.table_widget.setColumnCount(2)
         self.table_widget.setHorizontalHeaderLabels(["Field", "Value"])
         self.table_widget.itemChanged.connect(self.update_json_data)  # 监听单元格更改
 
-        # 增加翻页和编辑按钮
         self.next_button = QPushButton("下一页")
         self.next_button.clicked.connect(self.next_page)
         self.prev_button = QPushButton("上一页")
         self.prev_button.clicked.connect(self.prev_page)
 
         self.add_source_button = QPushButton("添加发送端")
-        self.add_source_button.clicked.connect(self.add_source)
         self.add_sink_button = QPushButton("添加接收端")
-        self.add_sink_button.clicked.connect(self.add_sink)
         self.delete_button = QPushButton("删除应用配置")
         self.delete_button.clicked.connect(self.delete_object)
         self.applyButton = QPushButton("保存")
         self.applyButton.clicked.connect(self.accept)
 
-        # 提示标签
         self.info_label = QLabel("", alignment=Qt.AlignmentFlag.AlignCenter)
 
-        # 布局
         layout = QVBoxLayout()
         layout.addWidget(self.table_widget)
 
@@ -61,13 +64,7 @@ class HostNetargsAppEditor(QDialog):
         layout.addLayout(edit_layout)
         layout.addWidget(self.info_label)
 
-        # container = QWidget()
-        # container.setLayout(layout)
-        # self.setCentralWidget(container)
         self.setLayout(layout)
-
-        # 显示内容
-        self.update_table()
 
     def update_table(self):
         """更新表格内容，显示当前索引的对象"""
@@ -128,20 +125,14 @@ class HostNetargsAppEditor(QDialog):
 
     def add_source(self):
         """添加一个空的 JSON 对象并跳转到新对象"""
-        new_object = {
-            "typename": "UdpSourceApp",
-            "packetLength": "1000B",
-            "productionInterval": "100us",
-            "destAddress": "",
-            "destPort": "",
-        }
+        new_object = {"typename": "没有类型"}
         self.json_data.append(new_object)
         self.current_index = len(self.json_data) - 1  # 跳转到新对象
         self.update_table()
 
     def add_sink(self):
         """添加一个空的 JSON 对象并跳转到新对象"""
-        new_object = {"typename": "UdpSinkApp", "localPort": ""}
+        new_object = {"typename": "没有类型"}
         self.json_data.append(new_object)
         self.current_index = len(self.json_data) - 1  # 跳转到新对象
         self.update_table()
@@ -178,6 +169,87 @@ class HostNetargsAppEditor(QDialog):
         return self.json_data
 
 
+class HostNetargsAppEditorNormal(HostNetargsAppEditor):
+    def __init__(self, json_data):
+        QDialog.__init__(self)
+        self.current_index = 0
+        self.json_data = json_data
+        self.setup_ui()
+        self.add_source_menu = self.create_add_source_menu()
+        self.add_source_button.setMenu(self.add_source_menu)
+        self.add_sink_menu = self.create_add_sink_menu()
+        self.add_sink_button.setMenu(self.add_sink_menu)
+        self.update_table()
+
+    def create_add_source_menu(self):
+        menu = QMenu(self)
+        sources = ["Udp", "Tcp"]
+        for source in sources:
+            action = QAction(source, self)
+            action.triggered.connect(lambda checked, s=source: self.add_source(s))
+            menu.addAction(action)
+        return menu
+
+    def create_add_sink_menu(self):
+        menu = QMenu(self)
+        sinks = ["Udp", "Tcp"]  # 示例接收端类型
+        for sink in sinks:
+            action = QAction(sink, self)
+            action.triggered.connect(lambda checked, s=sink: self.add_sink(s))
+            menu.addAction(action)
+        return menu
+
+    def add_source(self, source_type):
+        udp_source = {
+            "typename": "UdpSourceApp",
+            "packetLength": "1000B",
+            "productionInterval": "100us",
+            "destAddress": "",
+            "destPort": "",
+        }
+        tcp_source = {
+            "typename": "TcpSessionApp",
+            "sendBytes": "1000MiB",
+            "localPort": "",
+            "connectAddress": "",
+            "connectPort": "",
+        }
+        new_source = {"Udp": udp_source, "Tcp": tcp_source}
+        self.json_data.append(new_source[source_type])
+        self.current_index = len(self.json_data) - 1
+        self.update_table()
+
+    def add_sink(self, sink_type):
+        udp_sink = {"typename": "UdpSinkApp", "localPort": ""}
+        tcp_sink = {"typename": "TcpSinkApp", "localPort": ""}
+        new_sink = {"Udp": udp_sink, "Tcp": tcp_sink}
+        self.json_data.append(new_sink[sink_type])
+        self.current_index = len(self.json_data) - 1
+        self.update_table()
+
+
+class HostNetargsAppEditorUdp(HostNetargsAppEditor):
+    def add_source(self):
+        """添加一个空的 JSON 对象并跳转到新对象"""
+        new_object = {
+            "typename": "UdpSourceApp",
+            "packetLength": "1000B",
+            "productionInterval": "100us",
+            "destAddress": "",
+            "destPort": "",
+        }
+        self.json_data.append(new_object)
+        self.current_index = len(self.json_data) - 1  # 跳转到新对象
+        self.update_table()
+
+    def add_sink(self):
+        """添加一个空的 JSON 对象并跳转到新对象"""
+        new_object = {"typename": "UdpSinkApp", "localPort": ""}
+        self.json_data.append(new_object)
+        self.current_index = len(self.json_data) - 1  # 跳转到新对象
+        self.update_table()
+
+
 class HostNetargsAppEditorTcp(HostNetargsAppEditor):
     def add_source(self):
         new_object = {
@@ -200,26 +272,74 @@ class HostNetargsAppEditorTcp(HostNetargsAppEditor):
 
 
 class HostNetargsAppEditorDds(HostNetargsAppEditor):
-    def add_source(self):
-        new_object = {
+    def __init__(self, json_data):
+        QDialog.__init__(self)
+        self.current_index = 0
+        self.json_data = json_data
+        self.setup_ui()
+        self.add_source_menu = self.create_add_source_menu()
+        self.add_source_button.setMenu(self.add_source_menu)
+        self.add_sink_menu = self.create_add_sink_menu()
+        self.add_sink_button.setMenu(self.add_sink_menu)
+        self.update_table()
+
+    def create_add_source_menu(self):
+        menu = QMenu(self)
+        sources = ["Udp", "Tcp"]
+        for source in sources:
+            action = QAction(source, self)
+            action.triggered.connect(lambda checked, s=source: self.add_source(s))
+            menu.addAction(action)
+        return menu
+
+    def create_add_sink_menu(self):
+        menu = QMenu(self)
+        sinks = ["Udp", "Tcp"]  # 示例接收端类型
+        for sink in sinks:
+            action = QAction(sink, self)
+            action.triggered.connect(lambda checked, s=sink: self.add_sink(s))
+            menu.addAction(action)
+        return menu
+
+    def add_source(self, source_type):
+        udp_source = {
+            "typename": "UdpSourceApp",
+            "packetLength": "1000B",
+            "productionInterval": "100us",
+            "destAddress": "",
+            "destPort": "",
+        }
+        tcp_source = {
+            "typename": "TcpSessionApp",
+            "sendBytes": "1000MiB",
+            "localPort": "",
+            "connectAddress": "",
+            "connectPort": "",
+        }
+
+        dds_source = {
             "typename": "DDSPublishApp",
             "publish": "",
             "destPort": "",
             "packetLength": "5000B",
             "productionInterval": "200ms",
         }
-        self.json_data.append(new_object)
-        self.current_index = len(self.json_data) - 1  # 跳转到新对象
+        new_source = {"Udp": udp_source, "Tcp": tcp_source, "Dds": dds_source}
+        self.json_data.append(new_source[source_type])
+        self.current_index = len(self.json_data) - 1
         self.update_table()
 
-    def add_sink(self):
-        new_object = {
+    def add_sink(self, sink_type):
+        udp_sink = {"typename": "UdpSinkApp", "localPort": ""}
+        tcp_sink = {"typename": "TcpSinkApp", "localPort": ""}
+        dds_sink = {
             "typename": "DDSSubscribeApp",
             "subscribeTopic": "Topic1",
             "subscribePort": "1000",
             "localPort": "1000",
             "flowName": "default",
         }
-        self.json_data.append(new_object)
-        self.current_index = len(self.json_data) - 1  # 跳转到新对象
+        new_sink = {"Udp": udp_sink, "Tcp": tcp_sink, "Dds": dds_sink}
+        self.json_data.append(new_sink[sink_type])
+        self.current_index = len(self.json_data) - 1
         self.update_table()

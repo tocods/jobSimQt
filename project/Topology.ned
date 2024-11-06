@@ -1,32 +1,20 @@
 import inet.networks.base.WiredNetworkBase;
-import inet.node.ethernet.Eth100M;
-import inet.node.inet.DDSStandardHost;
-import inet.node.inet.StandardHost;
+import inet.common.misc.ThruputMeteringChannel;
 import inet.node.ethernet.EthernetSwitch;
+import inet.node.inet.StandardHost;
+import inet.node.ethernet.Eth100M;
 network TargetNetwork extends WiredNetworkBase
 {
+    parameters:
+    types:
     submodules:
-        dds_cpu: DDSStandardHost {
+        udp_tcp_cpu: StandardHost {
         }
-        dds_cpu2: DDSStandardHost {
+        udp_tcp_cpu2: StandardHost {
         }
-        dds_cpu3: DDSStandardHost {
-        }
-        dds_cpu4: DDSStandardHost {
-        }
-        dds_cpu5: DDSStandardHost {
-        }
-        dds_switch: EthernetSwitch {
-        }
-        dds_switch2: EthernetSwitch {
+        switch: EthernetSwitch {
         }
     connections:
-        dds_cpu.ethg++ <--> { datarate=100Mbps;} <--> dds_switch.ethg++;
-        dds_cpu2.ethg++ <--> { datarate=100Mbps;} <--> dds_switch2.ethg++;
-        dds_switch.ethg++ <--> { datarate=100Mbps;} <--> dds_cpu3.ethg++;
-        dds_switch.ethg++ <--> { datarate=100Mbps;} <--> dds_cpu4.ethg++;
-        dds_switch.ethg++ <--> { datarate=100Mbps;} <--> dds_cpu5.ethg++;
-        dds_switch2.ethg++ <--> { datarate=100Mbps;} <--> dds_cpu3.ethg++;
-        dds_switch2.ethg++ <--> { datarate=100Mbps;} <--> dds_cpu4.ethg++;
-        dds_switch2.ethg++ <--> { datarate=100Mbps;} <--> dds_cpu5.ethg++;
+        udp_tcp_cpu.ethg++ <--> { datarate=100Mbps;} <--> switch.ethg++;
+        udp_tcp_cpu2.ethg++ <--> { datarate=100Mbps;} <--> switch.ethg++;
 }

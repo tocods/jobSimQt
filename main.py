@@ -33,6 +33,8 @@ class JobSimQt(QMainWindow):
     def __init__(self, path) -> None:
         super().__init__()
         self.duration = 100
+        if not os.path.isabs(path):
+            path = os.path.abspath(path)
         project.projectPath = path
         self._initJsonFiles()
         # 取消标题栏

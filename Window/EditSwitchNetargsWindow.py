@@ -51,37 +51,22 @@ class EditSwitchNetargsWindow(QDialog):
         return
 
     def apply_settings(self):
-        print("未指定类型")
         item = self.ui.tableWidget_netargs.item(0, 0)
         print(
             f"Switch {self.switchGraphicItem.switchAttr.name} transmission_rate change to {item.text()}"
         )
         self.switchGraphicItem.switchAttr.transmission_rate = int(item.text())
         self.hide()
+
+
+class EditSwitchNetargsWindowNormal(EditSwitchNetargsWindow):
+    def __init__(self, parent=None, type="Normal"):
+        super().__init__(parent, type)
 
 
 class EditSwitchNetargsWindowUdp(EditSwitchNetargsWindow):
     def __init__(self, parent=None, type="Udp"):
         super().__init__(parent, type)
-
-    def apply_settings(self):
-        item = self.ui.tableWidget_netargs.item(0, 0)
-        print(
-            f"Switch {self.switchGraphicItem.switchAttr.name} transmission_rate change to {item.text()}"
-        )
-        self.switchGraphicItem.switchAttr.transmission_rate = int(item.text())
-        self.hide()
-
-    def setSwitchGraphicItem(self, switchGraphicItem):
-        self.switchGraphicItem = switchGraphicItem
-        # 将当前交换机的属性显示在界面上
-        self.ui.lineEdit_name.setText(self.switchGraphicItem.switchAttr.name)
-        self.ui.tableWidget_netargs.setItem(
-            0,
-            0,
-            QTableWidgetItem(str(self.switchGraphicItem.switchAttr.transmission_rate)),
-        )
-        return
 
 
 class EditSwitchNetargsWindowTcp(EditSwitchNetargsWindow):

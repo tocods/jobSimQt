@@ -27,47 +27,6 @@
            </property>
           </widget>
          </item>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="conf">
-           <property name="styleSheet">
-            <string notr="true">border:none;</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset>
-             <normaloff>../../img/省略号.png</normaloff>../../img/省略号.png</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="add">
-           <property name="styleSheet">
-            <string notr="true">border:none;</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset>
-             <normaloff>../../img/plus.png</normaloff>../../img/plus.png</iconset>
-           </property>
-          </widget>
-         </item>
         </layout>
        </item>
        <item>
@@ -78,6 +37,61 @@
             <number>0</number>
            </property>
           </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>添加</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QGridLayout" name="add" rowstretch="0,0,0,0">
+           <item row="2" column="1">
+            <widget class="QPushButton" name="global_setting">
+             <property name="text">
+              <string>全局设置</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../../img/MaterialSymbolsSettings.png</normaloff>../../img/MaterialSymbolsSettings.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPushButton" name="add_switch">
+             <property name="text">
+              <string>交换机</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../../img/MdiSwitch.png</normaloff>../../img/MdiSwitch.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QPushButton" name="add_line">
+             <property name="text">
+              <string>连线</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../../img/WhhLine.png</normaloff>../../img/WhhLine.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QPushButton" name="add_host">
+             <property name="text">
+              <string>主机</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../../img/Host.png</normaloff>../../img/Host.png</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <widget class="QPushButton" name="run">

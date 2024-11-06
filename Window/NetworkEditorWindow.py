@@ -24,161 +24,165 @@ class NetworkEditorWindow(QWidget):
         self.setSimtimeWindow = SetSimtimeWindow(self)
         self.networkGlobalConfigWindow = NetworkGlobalConfig()
         self.init_add_node_menu()
-        self.ui.add.clicked.connect(self.show_context_menu)
-        self.ui.conf.clicked.connect(self.show_network_global_config)
+        self.ui.add_host.setMenu(self.add_host_menu)
+        self.ui.add_switch.setMenu(self.add_switch_menu)
+        self.ui.add_line.clicked.connect(self.ui.graphicsView.lineToolEnable)
+        self.ui.global_setting.clicked.connect(self.show_network_global_config)
         self.ui.run.clicked.connect(self.action_set_netsim_time_cb)
         self.update_tree_view()
 
-    def show_context_menu(self):
-        button = self.ui.add
+    def show_add_host_menu(self):
+        button = self.ui.add_host
         button_pos = button.mapToGlobal(button.rect().bottomLeft())
-        self.context_menu.move(button_pos)
-        self.context_menu.show()
+        self.add_host_menu.move(button_pos)
+        self.add_host_menu.show()
+
+    def show_add_switch_menu(self):
+        button = self.ui.add_switch
+        button_pos = button.mapToGlobal(button.rect().bottomLeft())
+        self.add_switch_menu.move(button_pos)
+        self.add_switch_menu.show()
 
     def action_set_netsim_time_cb(self):
         self.setSimtimeWindow.show()
 
-    def init_add_node_menu(self):
-        self.context_menu = QMenu(self)
-
+    def init_add_host_menu(self):
+        self.add_host_menu = QMenu(self)
         menu_item_names = [
-            "Udp cpu型主机",
-            "Tcp cpu型主机",
+            "udp_tcp通用 cpu型主机",
             "Rdma cpu型主机",
             "Tsn cpu型主机",
             "Dds cpu型主机",
-            "Udp cpu-gpu型主机",
-            "Tcp cpu-gpu型主机",
+            "udp_tcp通用 cpu-gpu型主机",
             "Rdma cpu-gpu型主机",
             "Tsn cpu-gpu型主机",
             "Dds cpu-gpu型主机",
-            "Udp交换机",
-            "Tcp交换机",
-            "Rdma交换机",
-            "Tsn交换机",
-            "Dds交换机",
         ]
+
         for index in range(0, len(menu_item_names)):
             item_name = menu_item_names[index]
             action = QAction(item_name, self)
             action.triggered.connect(
-                lambda _, i=index: self.add_node_menu_item_selected(i)
+                lambda _, i=index: self.add_host_menu_item_selected(i)
             )
-            self.context_menu.addAction(action)
+            self.add_host_menu.addAction(action)
+
+    def init_add_switch_menu(self):
+        self.add_switch_menu = QMenu(self)
+        menu_item_names = [
+            "udp_tcp-Dds通用 交换机",
+            "Rdma 交换机",
+            "Tsn 交换机",
+        ]
+
+        for index in range(0, len(menu_item_names)):
+            item_name = menu_item_names[index]
+            action = QAction(item_name, self)
+            action.triggered.connect(
+                lambda _, i=index: self.add_switch_menu_item_selected(i)
+            )
+            self.add_switch_menu.addAction(action)
+
+    def init_add_node_menu(self):
+        self.init_add_host_menu()
+        self.init_add_switch_menu()
 
     def show_network_global_config(self):
         self.networkGlobalConfigWindow.show()
 
-    def add_node_menu_item_selected(self, index):
+    def add_host_menu_item_selected(self, index):
         name_list = [
-            "udp_cpu",
-            "tcp_cpu",
+            "udp_tcp_cpu",
             "rdma_cpu",
             "tsn_cpu",
             "dds_cpu",
-            "udp_mix",
-            "tcp_mix",
+            "udp_tcp_mix",
             "rdma_mix",
             "tsn_mix",
             "dds_mix",
-            "udp_switch",
-            "tcp_switch",
-            "rdma_switch",
-            "tsn_switch",
-            "dds_switch",
         ]
         type_list = [
             "StandardHost",
             "StandardHost",
-            "StandardHost",
             "TsnDevice",
             "StandardHost",
             "StandardHost",
             "StandardHost",
-            "StandardHost",
             "TsnDevice",
             "StandardHost",
-            "EthernetSwitch",
-            "EthernetSwitch",
-            "EthernetSwitch",
-            "EthernetSwitch",
-            "EthernetSwitch",
         ]
         img_list = [
-            "img/UDP_CPU_Host.png",
-            "img/TCP_CPU_Host.png",
+            "img/Normal_CPU_Host.png",
             "img/RDMA_CPU_Host.png",
             "img/TSN_CPU_Host.png",
             "img/DDS_CPU_Host.png",
-            "img/UDP_CPU_GPU_Host.png",
-            "img/TCP_CPU_GPU_Host.png",
+            "img/Normal_CPU_Host.png",
             "img/RDMA_CPU_GPU_Host.png",
             "img/TSN_CPU_GPU_Host.png",
             "img/DDS_CPU_GPU_Host.png",
-            "img/UDP_Switch.png",
-            "img/TCP_Switch.png",
-            "img/RDMA_Switch.png",
-            "img/TSN_Switch.png",
-            "img/DDS_Switch.png",
         ]
         only_cpu_list = [
             True,
             True,
             True,
             True,
-            True,
             False,
             False,
             False,
             False,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
         ]
         class_list = [
-            UdpHost,
-            TcpHost,
+            NormalHost,
             RdmaHost,
             TsnHost,
             DdsHost,
-            UdpHost,
-            TcpHost,
+            NormalHost,
             RdmaHost,
             TsnHost,
             DdsHost,
-            UdpSwitch,
-            TcpSwitch,
-            RdmaSwitch,
-            TsnSwitch,
-            DdsSwitch,
         ]
 
-        # image = QImage(img_list[index])
-        # width = image.width()
-        # height = image.height()
-        if index < 10:
-            self.ui.graphicsView.createGraphicHostItem(
-                name_list[index],
-                type_list[index],
-                img_list[index],
-                100,
-                100,
-                only_cpu_list[index],
-                class_list[index],
-            )
-        else:
-            self.ui.graphicsView.createGraphicSwitchItem(
-                name_list[index],
-                type_list[index],
-                img_list[index],
-                100,
-                100,
-                class_list[index],
-            )
+        self.ui.graphicsView.createGraphicHostItem(
+            name_list[index],
+            type_list[index],
+            img_list[index],
+            100,
+            100,
+            only_cpu_list[index],
+            class_list[index],
+        )
+        self.update_tree_view()
 
+    def add_switch_menu_item_selected(self, index):
+        name_list = [
+            "switch",
+            "rdma_switch",
+            "tsn_switch",
+        ]
+        type_list = [
+            "EthernetSwitch",
+            "EthernetSwitch",
+            "EthernetSwitch",
+        ]
+        img_list = [
+            "img/Normal_Switch.png",
+            "img/RDMA_Switch.png",
+            "img/TSN_Switch.png",
+        ]
+        class_list = [
+            NormalSwitch,
+            RdmaSwitch,
+            TsnSwitch,
+        ]
+
+        self.ui.graphicsView.createGraphicSwitchItem(
+            name_list[index],
+            type_list[index],
+            img_list[index],
+            100,
+            100,
+            class_list[index],
+        )
         self.update_tree_view()
 
     def update_tree_view(self):
@@ -202,7 +206,6 @@ class NetworkEditorWindow(QWidget):
             self.ui.graphicsView.delete_node()
             self.update_tree_view()
 
-
     def load_network_from_xml(self):
         # Helper function to find a host or switch by name
         def find_host_or_switch_by_name(name):
@@ -213,16 +216,17 @@ class NetworkEditorWindow(QWidget):
                 if switch.switchAttr.name == name:
                     return switch
             return None
+
         print(globaldata.currentProjectInfo.path)
         if (
-            os.path.exists(globaldata.currentProjectInfo.path + "network_data.xml")
+            os.path.exists(os.path.join(globaldata.currentProjectInfo.path, "network_data.xml"))
             == False
         ):
             print("Could not find network_data.xml")
             return
 
         # Load the XML from the file
-        tree = ET.parse(globaldata.currentProjectInfo.path + "network_data.xml")
+        tree = ET.parse(os.path.join(globaldata.currentProjectInfo.path, "network_data.xml"))
         root = tree.getroot()
 
         # Clear existing lists
@@ -240,6 +244,7 @@ class NetworkEditorWindow(QWidget):
 
         # Parse Hosts
         hosts_element = root.find("Hosts")
+        normal_hosts_element = hosts_element.find("NormalHosts")
         udp_hosts_element = hosts_element.find("UdpHosts")
         tcp_hosts_element = hosts_element.find("TcpHosts")
         rdma_hosts_element = hosts_element.find("RdmaHosts")
@@ -276,6 +281,9 @@ class NetworkEditorWindow(QWidget):
             # self.gr_scene.add_node(item)
 
         # Load all host types
+        for normal_host_element in normal_hosts_element.findall("NormalHost"):
+            create_host_from_xml(normal_host_element, globaldata.NormalHost)
+
         for udp_host_element in udp_hosts_element.findall("UdpHost"):
             create_host_from_xml(udp_host_element, globaldata.UdpHost)
 
@@ -293,6 +301,7 @@ class NetworkEditorWindow(QWidget):
 
         # Parse Switches
         switches_element = root.find("Switches")
+        normal_switches_element = switches_element.find("NormalSwitches")
         udp_switches_element = switches_element.find("UdpSwitches")
         tcp_switches_element = switches_element.find("TcpSwitches")
         rdma_switches_element = switches_element.find("RdmaSwitches")
@@ -312,16 +321,17 @@ class NetworkEditorWindow(QWidget):
             pos_y = float(element.get("graphic_pos_y"))
 
             # Switch graphic item creation
-            item = (
-                self.ui.graphicsView.createGraphicSwitchItem(
-                    name, type, para, width, height, Switch_class=switch_class
-                )
+            item = self.ui.graphicsView.createGraphicSwitchItem(
+                name, type, para, width, height, Switch_class=switch_class
             )
             item.setPos(pos_x, pos_y)
 
             item.switchAttr.readXMLElement(element)
 
         # Load all switch types
+        for normal_switch_element in normal_switches_element.findall("NormalSwitch"):
+            create_switch_from_xml(normal_switch_element, globaldata.NormalSwitch)
+
         for udp_switch_element in udp_switches_element.findall("UdpSwitch"):
             create_switch_from_xml(udp_switch_element, globaldata.UdpSwitch)
 
@@ -354,11 +364,9 @@ class NetworkEditorWindow(QWidget):
             if endpoint1 is None or endpoint2 is None:
                 print("Error: Could not find host or switch by name")
                 return
-            
+
             graphicView = self.ui.graphicsView
-            edge = graphicView.createGraphicLink(
-                endpoint1, endpoint2
-            )
+            edge = graphicView.createGraphicLink(endpoint1, endpoint2)
             edge.linkAttr.type = element.get("type")
             edge.linkAttr.link_bandwidth = element.get("link_bandwidth")
 
@@ -370,4 +378,3 @@ class NetworkEditorWindow(QWidget):
         print("Network loaded from XML!")
 
         self.update_tree_view()
-

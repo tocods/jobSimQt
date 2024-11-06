@@ -29,7 +29,7 @@ class SetSimtimeWindow(QDialog):
 
     def apply_time(self):
         time = float(self.time_input.text())
-        project = globaldata.currentProjectInfo.fullname
+        project = globaldata.currentProjectInfo.name
         # 修改仿真时间
         # alterSimTime(project+'/Parameters.ini', time)
         print("开始仿真\n \t仿真工程:{project}\n \t仿真时间:{time}")
@@ -58,7 +58,7 @@ class SetSimtimeWindow(QDialog):
 
     # 在当前工程（globaldata.currentProjectInfo.path）中生成.ned文件
     def generateNED(self):
-        with open(globaldata.currentProjectInfo.path + "Topology.ned", "w") as f:
+        with open(os.path.join(globaldata.currentProjectInfo.path, "Topology.ned"), "w") as f:
             if self.type_combo.currentText() == "Udp":
                 f.write("import inet.networks.base.WiredNetworkBase;\n")
                 f.write("import inet.node.inet.StandardHost;\n")
@@ -74,14 +74,15 @@ class SetSimtimeWindow(QDialog):
                 f.write("parameters:")
                 f.write("*.eth[*].bitrate = default(100Mbps);")
             if self.type_combo.currentText() == "Tcp":
+                f.write("import inet.networks.base.WiredNetworkBase;\n")
                 f.write("import inet.common.misc.ThruputMeteringChannel;\n")
-                f.write(
-                    "import inet.networklayer.configurator.ipv4.Ipv4NetworkConfigurator;\n"
-                )
+                # f.write(
+                #     "import inet.networklayer.configurator.ipv4.Ipv4NetworkConfigurator;\n"
+                # )
                 f.write("import inet.node.ethernet.EthernetSwitch;\n")
                 f.write("import inet.node.inet.StandardHost;\n")
                 f.write("import inet.node.ethernet.Eth100M;\n")
-                f.write("network TargetNetwork\n")
+                f.write("network TargetNetwork extends WiredNetworkBase\n")
                 f.write("{\n")
                 f.write("    parameters:\n")
                 f.write("    types:\n")
@@ -94,8 +95,8 @@ class SetSimtimeWindow(QDialog):
                 f.write("network TargetNetwork extends WiredNetworkBase\n")
                 f.write("{\n")
             f.write("    submodules:\n")
-            if self.type_combo.currentText() == "Tcp":
-                f.write("configurator: Ipv4NetworkConfigurator {}\n")
+            # if self.type_combo.currentText() == "Tcp":
+            #     f.write("configurator: Ipv4NetworkConfigurator {}\n")
 
             for i, host in enumerate(globaldata.hostList):
                 host.hostAttr.generateNED(f)
@@ -124,7 +125,7 @@ class SetSimtimeWindow(QDialog):
 
     # 在当前工程（globaldata.currentProjectInfo.path）中生成.ini文件
     def generateINI(self, time):
-        with open(globaldata.currentProjectInfo.path + "Parameters.ini", "w") as f:
+        with open(os.path.join(globaldata.currentProjectInfo.path, "Parameters.ini"), "w") as f:
             f.write("[General]\n")
             f.write("network = TargetNetwork\n")
             f.write(f"sim-time-limit = {time}s\n")

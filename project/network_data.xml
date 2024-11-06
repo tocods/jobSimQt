@@ -1,36 +1,28 @@
 <?xml version="1.0" ?>
 <Network>
     <Hosts>
+        <NormalHosts>
+            <NormalHost name="udp_tcp_cpu" type="StandardHost" ip="0.0.0.0" numApps="1" appArgs="[{&quot;typename&quot;: &quot;UdpSourceApp&quot;, &quot;packetLength&quot;: &quot;1000B&quot;, &quot;productionInterval&quot;: &quot;100us&quot;, &quot;destAddress&quot;: &quot;udp_tcp_cpu2&quot;, &quot;destPort&quot;: &quot;1000&quot;}]" only_cpu="True" graphic_pos_x="-125.0" graphic_pos_y="6.0" graphic_image="img/Normal_CPU_Host.png" graphic_width="100.0" graphic_height="100.0"/>
+            <NormalHost name="udp_tcp_cpu2" type="StandardHost" ip="0.0.0.0" numApps="1" appArgs="[{&quot;typename&quot;: &quot;UdpSinkApp&quot;, &quot;localPort&quot;: &quot;1000&quot;}]" only_cpu="True" graphic_pos_x="490.0" graphic_pos_y="164.0" graphic_image="img/Normal_CPU_Host.png" graphic_width="100.0" graphic_height="100.0"/>
+        </NormalHosts>
         <UdpHosts/>
         <TcpHosts/>
         <RdmaHosts/>
         <TsnHosts/>
-        <DdsHosts>
-            <DdsHost name="dds_cpu" type="DDSStandardHost" ip="0.0.0.0" numApps="1" appArgs="[{&quot;typename&quot;: &quot;DDSPublishApp&quot;, &quot;publish&quot;: &quot;Topic1&quot;, &quot;destPort&quot;: &quot;1000&quot;, &quot;packetLength&quot;: &quot;5000B&quot;, &quot;productionInterval&quot;: &quot;200ms&quot;}]" only_cpu="True" graphic_pos_x="-172.0" graphic_pos_y="-32.0" graphic_image="img/DDS_CPU_Host.png" graphic_width="100.0" graphic_height="100.0"/>
-            <DdsHost name="dds_cpu2" type="DDSStandardHost" ip="0.0.0.0" numApps="1" appArgs="[{&quot;typename&quot;: &quot;DDSPublishApp&quot;, &quot;publish&quot;: &quot;Topic2&quot;, &quot;destPort&quot;: &quot;1001&quot;, &quot;packetLength&quot;: &quot;1000B&quot;, &quot;productionInterval&quot;: &quot;200ms&quot;}]" only_cpu="True" graphic_pos_x="291.0" graphic_pos_y="-18.0" graphic_image="img/DDS_CPU_Host.png" graphic_width="100.0" graphic_height="100.0"/>
-            <DdsHost name="dds_cpu3" type="DDSStandardHost" ip="0.0.0.0" numApps="1" appArgs="[{&quot;typename&quot;: &quot;DDSSubscribeApp&quot;, &quot;subscribeTopic&quot;: &quot;Topic1&quot;, &quot;subscribePort&quot;: &quot;1000&quot;, &quot;localPort&quot;: &quot;1000&quot;, &quot;flowName&quot;: &quot;default1&quot;}]" only_cpu="True" graphic_pos_x="-218.0" graphic_pos_y="278.0" graphic_image="img/DDS_CPU_Host.png" graphic_width="100.0" graphic_height="100.0"/>
-            <DdsHost name="dds_cpu4" type="DDSStandardHost" ip="0.0.0.0" numApps="1" appArgs="[{&quot;typename&quot;: &quot;DDSSubscribeApp&quot;, &quot;subscribeTopic&quot;: &quot;Topic2&quot;, &quot;subscribePort&quot;: &quot;1001&quot;, &quot;localPort&quot;: &quot;1001&quot;, &quot;flowName&quot;: &quot;default2&quot;}]" only_cpu="True" graphic_pos_x="43.0" graphic_pos_y="317.0" graphic_image="img/DDS_CPU_Host.png" graphic_width="100.0" graphic_height="100.0"/>
-            <DdsHost name="dds_cpu5" type="DDSStandardHost" ip="0.0.0.0" numApps="1" appArgs="[{&quot;typename&quot;: &quot;DDSSubscribeApp&quot;, &quot;subscribeTopic&quot;: &quot;Topic2&quot;, &quot;subscribePort&quot;: &quot;1001&quot;, &quot;localPort&quot;: &quot;1001&quot;, &quot;flowName&quot;: &quot;default3&quot;}]" only_cpu="True" graphic_pos_x="291.0" graphic_pos_y="333.0" graphic_image="img/DDS_CPU_Host.png" graphic_width="100.0" graphic_height="100.0"/>
-        </DdsHosts>
+        <DdsHosts/>
     </Hosts>
     <Switches>
+        <NormalSwitches>
+            <NormalSwitch name="switch" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="121.0" graphic_pos_y="112.0" graphic_image="img/Normal_Switch.png" graphic_width="100.0" graphic_height="100.0"/>
+        </NormalSwitches>
         <UdpSwitches/>
         <TcpSwitches/>
         <RdmaSwitches/>
         <TsnSwitches/>
-        <DdsSwitches>
-            <DdsSwitch name="dds_switch" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="-75.0" graphic_pos_y="158.0" graphic_image="img/DDS_Switch.png" graphic_width="100.0" graphic_height="100.0"/>
-            <DdsSwitch name="dds_switch2" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="150.0" graphic_pos_y="173.0" graphic_image="img/DDS_Switch.png" graphic_width="100.0" graphic_height="100.0"/>
-        </DdsSwitches>
+        <DdsSwitches/>
     </Switches>
     <Links>
-        <Link name="Link" type="Eth100M" endpoint1="dds_cpu" endpoint2="dds_switch" link_bandwidth="100"/>
-        <Link name="Link2" type="Eth100M" endpoint1="dds_cpu2" endpoint2="dds_switch2" link_bandwidth="100"/>
-        <Link name="Link3" type="Eth100M" endpoint1="dds_switch" endpoint2="dds_cpu3" link_bandwidth="100"/>
-        <Link name="Link4" type="Eth100M" endpoint1="dds_switch" endpoint2="dds_cpu4" link_bandwidth="100"/>
-        <Link name="Link5" type="Eth100M" endpoint1="dds_switch" endpoint2="dds_cpu5" link_bandwidth="100"/>
-        <Link name="Link6" type="Eth100M" endpoint1="dds_switch2" endpoint2="dds_cpu3" link_bandwidth="100"/>
-        <Link name="Link7" type="Eth100M" endpoint1="dds_switch2" endpoint2="dds_cpu4" link_bandwidth="100"/>
-        <Link name="Link8" type="Eth100M" endpoint1="dds_switch2" endpoint2="dds_cpu5" link_bandwidth="100"/>
+        <Link name="Link" type="Eth100M" endpoint1="udp_tcp_cpu" endpoint2="switch" link_bandwidth="100"/>
+        <Link name="Link2" type="Eth100M" endpoint1="udp_tcp_cpu2" endpoint2="switch" link_bandwidth="100"/>
     </Links>
 </Network>

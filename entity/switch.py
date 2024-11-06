@@ -28,6 +28,20 @@ class Switch(NetworkDevice):
         f.write("        }\n")
 
 
+class NormalSwitch(Switch):
+    def __init__(self, name):
+        super().__init__(name, "EthernetSwitch")
+
+    def setXMLElement(self, element):
+        return super().setXMLElement(element)
+
+    def readXMLElement(self, element):
+        return super().readXMLElement(element)
+
+    def generateNED(self, f):
+        return super().generateNED(f)
+
+
 class UdpSwitch(Switch):
     def __init__(self, name):
         super().__init__(name, "EthernetSwitch")
@@ -119,3 +133,12 @@ class TsnSwitch(Switch):
 class DdsSwitch(Switch):
     def __init__(self, name):
         super().__init__(name, "EthernetSwitch")
+
+    def setXMLElement(self, element):
+        return super().setXMLElement(element)
+
+    def readXMLElement(self, element):
+        return super().readXMLElement(element)
+
+    def generateNED(self, f):
+        return super().generateNED(f)

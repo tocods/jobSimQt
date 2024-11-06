@@ -22,11 +22,6 @@
      <height>41</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <pointsize>20</pointsize>
-    </font>
-   </property>
    <property name="text">
     <string>应用</string>
    </property>
@@ -42,11 +37,6 @@
      <width>751</width>
      <height>361</height>
     </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>20</pointsize>
-    </font>
    </property>
    <property name="layoutDirection">
     <enum>Qt::LeftToRight</enum>
@@ -79,41 +69,20 @@
     <property name="text">
      <string>app数量</string>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>20</pointsize>
-     </font>
-    </property>
    </row>
    <row>
     <property name="text">
      <string>app参数</string>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>20</pointsize>
-     </font>
     </property>
    </row>
    <column>
     <property name="text">
      <string>值</string>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>20</pointsize>
-      <bold>false</bold>
-     </font>
-    </property>
    </column>
    <item row="0" column="0">
     <property name="text">
      <string/>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>20</pointsize>
-     </font>
     </property>
     <property name="textAlignment">
      <set>AlignCenter</set>

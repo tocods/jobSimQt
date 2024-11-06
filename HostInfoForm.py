@@ -17,7 +17,6 @@ class HostInfoForm(QMainWindow):
         onlyCpu = self.jobSim.onlyCPU[item]
         self.item = item
         host = self.jobSim.getHostInfo(item)
-        print(host)
         self.addHost = QWidget()
         self.addHost.resize(1600, 1200)
         self.addHost.cpu_num = len(host.cpu_infos)

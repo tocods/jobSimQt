@@ -31,30 +31,20 @@ projectPath = "."
 
 class ProjectInfo:
     def __init__(self):
-        self.directory = ""
         self.name = ""
-        self.fullname = ""
         self.path = ""
         return
 
-    def setDirAndName(self, directory, name):  # 比如 D:/fe , omnet_template
-        self.directory = directory
+    def setFullPath(self, fullpath):
+        self.path = fullpath
+        _, name = os.path.split(fullpath)
         self.name = name
-        self.fullname = directory + "/" + name
-        self.path = directory + "/" + name + "/"
 
-    def setFullname(self, fullname):  # 比如 D:/fe/omnet_template
-        directory, name = os.path.split(fullname)  # 分离文件名和路径
-        self.directory = directory
-        self.name = name
-        self.fullname = directory + "/" + name
-        self.path = directory + "/" + name + "/"
-    
     def setRelativePath(self, relativePath):
         self.directory = os.getcwd()
-        self.name = relativePath
-        self.fullname = self.directory + "\\" + relativePath
-        self.path = self.directory + "\\" + relativePath + "\\"
+        self.path = os.path.join(self.directory, relativePath)
+        _, name = os.path.split(self.path)
+        self.name = name
 
 
 global currentProjectInfo
@@ -86,6 +76,7 @@ def create_xml():
     hosts_element = ET.SubElement(root, "Hosts")
 
     # 添加主机不同类型
+    normal_hosts_element = ET.SubElement(hosts_element, "NormalHosts")
     udp_hosts_element = ET.SubElement(hosts_element, "UdpHosts")
     tcp_hosts_element = ET.SubElement(hosts_element, "TcpHosts")
     rdma_hosts_element = ET.SubElement(hosts_element, "RdmaHosts")
@@ -94,7 +85,9 @@ def create_xml():
 
     for host_graphic_item in hostList:
         # 判断主机类型
-        if isinstance(host_graphic_item.hostAttr, UdpHost):
+        if isinstance(host_graphic_item.hostAttr, NormalHost):
+            host_element = ET.SubElement(normal_hosts_element, "NormalHost")
+        elif isinstance(host_graphic_item.hostAttr, UdpHost):
             host_element = ET.SubElement(udp_hosts_element, "UdpHost")
         elif isinstance(host_graphic_item.hostAttr, TcpHost):
             host_element = ET.SubElement(tcp_hosts_element, "TcpHost")
@@ -122,6 +115,7 @@ def create_xml():
     switches_element = ET.SubElement(root, "Switches")
 
     # 添加交换机不同类型
+    normal_switches_element = ET.SubElement(switches_element, "NormalSwitches")
     udp_switches_element = ET.SubElement(switches_element, "UdpSwitches")
     tcp_switches_element = ET.SubElement(switches_element, "TcpSwitches")
     rdma_switches_element = ET.SubElement(switches_element, "RdmaSwitches")
@@ -130,7 +124,9 @@ def create_xml():
 
     for switch_graphic_item in switchList:
         # 判断交换机类型
-        if isinstance(switch_graphic_item.switchAttr, UdpSwitch):
+        if isinstance(switch_graphic_item.switchAttr, NormalSwitch):
+            switch_element = ET.SubElement(normal_switches_element, "NormalSwitch")
+        elif isinstance(switch_graphic_item.switchAttr, UdpSwitch):
             switch_element = ET.SubElement(udp_switches_element, "UdpSwitch")
         elif isinstance(switch_graphic_item.switchAttr, TcpSwitch):
             switch_element = ET.SubElement(tcp_switches_element, "TcpSwitch")
@@ -183,5 +179,5 @@ def create_xml():
 def save_data():
     # Save the data to a file
     xml_str = create_xml()
-    with open(currentProjectInfo.path + "network_data.xml", "w") as f:
+    with open(os.path.join(currentProjectInfo.path, "network_data.xml"), "w") as f:
         f.write(xml_str)

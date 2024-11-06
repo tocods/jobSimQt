@@ -1,6 +1,6 @@
 from qdarktheme.qtpy.QtWidgets import QDialog
 from UI.Network.Host.set_host_args_ui import Ui_Dialog
-from entity.host import TsnHost, UdpHost, TcpHost, DdsHost
+from entity.host import *
 
 
 class SetHostArgsWindow(QDialog):
@@ -51,13 +51,16 @@ class SetHostArgsWindow(QDialog):
 
     def netButton_cb(self):
         self.hide()
-        # 传递主机对象
+        if isinstance(self.hostGraphicItem.hostAttr, NormalHost):
+            self.parent.editHostNetargsWindowNormal.setHostGraphicItem(
+                self.hostGraphicItem
+            )
+            self.parent.editHostNetargsWindowNormal.show()
         if isinstance(self.hostGraphicItem.hostAttr, UdpHost):
             self.parent.editHostNetargsWindowUdp.setHostGraphicItem(
                 self.hostGraphicItem
             )
             self.parent.editHostNetargsWindowUdp.show()
-        # TODO:待开发其他类型
         if isinstance(self.hostGraphicItem.hostAttr, TsnHost):
             self.parent.editHostNetargsWindowTsn.setHostGraphicItem(
                 self.hostGraphicItem
@@ -73,6 +76,11 @@ class SetHostArgsWindow(QDialog):
                 self.hostGraphicItem
             )
             self.parent.editHostNetargsWindowDds.show()
+        if isinstance(self.hostGraphicItem.hostAttr, RdmaHost):
+            self.parent.editHostNetargsWindowRdma.setHostGraphicItem(
+                self.hostGraphicItem
+            )
+            self.parent.editHostNetargsWindowRdma.show()
         # self.hide()
 
     def sysButton_cb(self):
