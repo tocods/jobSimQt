@@ -7,7 +7,7 @@
 
 
 from qdarktheme.qtpy import QtCore, QtGui, QtWidgets
-from realtime_draw.QtUI import CamShow
+from realtime_draw.LatencyResult import LatencyResult
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -18,7 +18,7 @@ class Ui_Dialog(object):
         self.tabWidget.setTabPosition(QtWidgets.QTabWidget.TabPosition.North)
         self.tabWidget.setDocumentMode(True)
         self.tabWidget.setObjectName("tabWidget")
-        self.latency = CamShow()
+        self.latency = LatencyResult()
         self.latency.setObjectName("model")
         self.tabWidget.addTab(self.latency, "时延曲线")
         self.buffer = QtWidgets.QWidget(Dialog)

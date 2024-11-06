@@ -101,8 +101,8 @@ class UI:
         activitybar.setProperty("type", "activitybar")
 
         # layout
-        #stack_1 = ShowNetResultsWindow()
-        stack_1 = QWidget()
+        stack_1 = ShowNetResultsWindow()
+        # stack_1 = QWidget()
         #self.homeui = Ui_home()
         #HomeUI().setup_ui(stack_1)
         self.stack_widget.addWidget(stack_1)

@@ -1,5 +1,4 @@
-import numpy as np
-
+import os
 import globaldata
 # from scipy.interpolate import make_interp_spline
 
@@ -25,8 +24,9 @@ def read_file():
     向下读
     所有开头为 87\t 的行， 都是有效数据
     '''
-    project = globaldata.currentProjectInfo.fullname
-    data_path = project+"/results/General-#0.vec" 
+    project = globaldata.currentProjectInfo.path
+    print(project)
+    data_path = os.path.join(project, "results", "General-#0.vec")
     print(f"数据文件：{data_path}")
     vector_id = -1
     with open(data_path, 'r', encoding='utf-8') as fp:
@@ -61,7 +61,7 @@ def read_file():
                     continue
                 id = int(line_list[0]) #id
                 print(f"id:{id}, line_list:{line_list}")
-                id_points[id].append( [float(line_list[2])*(30000), float(line_list[3])*(3000)] ) #某个id添加新的点
+                id_points[id].append( [float(line_list[2]), float(line_list[3])] ) #某个id添加新的点
             except:
                 continue
     print(len(id_points[vector_id]))
@@ -110,25 +110,6 @@ def parser_data(file_path, id_list):
             del line_list[2]
             del line_list[1]
             id_points[id].append(line_list) #某个id添加新的点
-
-    # new_id_points = {}  # 存储插值完后的坐标值
-    # # 遍历所有的线条，对线条进行插值
-    # for key, value in id_points.items():
-    #     print(key)
-    #     # 取出原来的x和y坐标
-    #     np_value = np.array(value).astype(np.int)
-    #     # 进行插值,开头加0
-    #     X = np.insert(np_value[:, 0], 0, 0, 0)
-    #     # print(X)
-    #     Y = np.insert(np_value[:, 1], 0, 0, 0)
-    #     # print(Y)
-    #     x_smooth = np.linspace(0, X.max(), X.max() - X.min())
-    #     y_smooth = make_interp_spline(X, Y)(x_smooth)
-    #
-    #     np_xy = np.dstack((x_smooth, y_smooth))
-    #     # np_xy = np.hstack[np.transpose(x_smooth), np.transpose(y_smooth)]
-    #     # 插值后重新构造坐标并写入
-    #     new_id_points[key] = np_xy.tolist()
 
     return id_points
 

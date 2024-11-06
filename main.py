@@ -33,8 +33,11 @@ class JobSimQt(QMainWindow):
     def __init__(self, path) -> None:
         super().__init__()
         self.duration = 100
+        print(path)
+        if not os.path.isabs(path):
+            path = os.path.abspath(path)
         project.projectPath = path
-        globaldata.currentProjectInfo.setRelativePath(path)
+        globaldata.currentProjectInfo.setFullPath(path)
         self._initOutputFiles()
         # 取消标题栏
         #self.setWindowFlags(Qt.FramelessWindowHint)

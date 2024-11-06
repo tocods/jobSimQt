@@ -1,2 +1,0 @@
-global projectPath
-projectPath = "./project"

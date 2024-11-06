@@ -29,11 +29,6 @@
           </property>
           <item>
            <widget class="QPushButton" name="displayButton">
-            <property name="font">
-             <font>
-              <pointsize>20</pointsize>
-             </font>
-            </property>
             <property name="text">
              <string>开始</string>
             </property>
@@ -41,11 +36,6 @@
           </item>
           <item>
            <widget class="QPushButton" name="pauseButton">
-            <property name="font">
-             <font>
-              <pointsize>20</pointsize>
-             </font>
-            </property>
             <property name="text">
              <string>暂停/继续</string>
             </property>
@@ -53,11 +43,6 @@
           </item>
           <item>
            <widget class="QPushButton" name="stopButton">
-            <property name="font">
-             <font>
-              <pointsize>20</pointsize>
-             </font>
-            </property>
             <property name="text">
              <string>终止</string>
             </property>
@@ -67,11 +52,6 @@
         </item>
         <item>
          <widget class="QListWidget" name="listWidgetCheck">
-          <property name="font">
-           <font>
-            <pointsize>20</pointsize>
-           </font>
-          </property>
          </widget>
         </item>
        </layout>
