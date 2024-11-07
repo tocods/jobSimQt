@@ -6,6 +6,7 @@ import math
 from qdarktheme.qtpy.QtWidgets import QGraphicsPathItem, QGraphicsItem
 from qdarktheme.qtpy.QtGui import QColor, QPen, QPainterPath
 from qdarktheme.qtpy.QtCore import Qt, QPointF
+from entity.link import Link
 import globaldata
 
 # 线条的包装类
@@ -22,7 +23,7 @@ class Edge:
         # self.scene.add_edge(self.gr_edge)
 
         # 连接属性
-        self.linkAttr = globaldata.Link(start_item, end_item, "Eth100M")
+        self.linkAttr = Link(start_item, end_item, "Eth100M")
         # 添加到全局变量中
         globaldata.linkList.append(self)
 

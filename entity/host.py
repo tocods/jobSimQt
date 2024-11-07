@@ -1,5 +1,6 @@
 from entity.network_device import NetworkDevice
 import json
+import globaldata
 
 
 # Host类继承自NetworkDevice
@@ -145,16 +146,32 @@ class RdmaHost(Host):
     def __init__(self, name):
         super().__init__(name, "StandardHost")
 
-        self.rdmaArgs = []
+        self.rdmaArgs = {
+            "connectionType": "RELIABLE_CONNECTION",
+            "maxSendQueueSize": "256",
+            "maxRecvQueueSize": "256",
+        }
 
     def generateINI(self, f):
+        f.write(f"")
         f.write(f"*.{self.name}.numApps = {len(self.appArgs)}\n")
         for index in range(0, len(self.appArgs)):
             appArg = self.appArgs[index]
-            if appArg["typename"] == "UdpSourceApp":
-                f.write(
-                    f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n'
-                )
+            RdmaArg = globaldata.networkGlobalConfig["Rdma"]
+            f.write(
+                f'*.{self.name}.rocev2.connectionType = "{RdmaArg["connectionType"]}"\n'
+            )
+            f.write(
+                f'*.{self.name}.rocev2.maxSendQueueSize = {RdmaArg["maxSendQueueSize"]}\n'
+            )
+            f.write(
+                f'*.{self.name}.rocev2.maxRecvQueueSize = {RdmaArg["maxRecvQueueSize"]}\n'
+            )
+            f.write(f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n')
+            f.write(
+                f'*.{self.name}.app[{index}].io.localQueuePairNumber = "{appArg["localQueuePairNumber"]}"\n'
+            )
+            if len(appArg) > 2:
                 f.write(
                     f'*.{self.name}.app[{index}].source.packetLength = {appArg["packetLength"]}\n'
                 )
@@ -165,41 +182,12 @@ class RdmaHost(Host):
                     f'*.{self.name}.app[{index}].io.destAddress = "{appArg["destAddress"]}"\n'
                 )
                 f.write(
-                    f'*.{self.name}.app[{index}].io.destPort = {appArg["destPort"]}\n'
+                    f'*.{self.name}.app[{index}].io.destinationQueuePairNumber = {appArg["destinationQueuePairNumber"]}\n'
                 )
-            if appArg["typename"] == "UdpSinkApp":
+                f.write(f'*.{self.name}.app[{index}].io.pcp = {appArg["pcp"]}\n')
                 f.write(
-                    f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n'
+                    f'*.{self.name}.app[{index}].io.messageType = {appArg["messageType"]}\n'
                 )
-                f.write(
-                    f'*.{self.name}.app[{index}].io.localPort = {appArg["localPort"]}\n'
-                )
-
-            f.write(f"*.{self.name}.hasOutgoingStreams = true\n")
-            if len(self.rdmaArgs) != 0:
-                f.write(
-                    f"*.{self.name}.bridging.streamIdentifier.identifier.mapping = ["
-                )
-                for index in range(0, len(self.rdmaArgs)):
-                    tmp = self.rdmaArgs[index]
-                    f.write("{")
-                    f.write(f'stream: "{tmp["stream"]}", ')
-                    f.write(f'packetfilter: {tmp["packetFilter"]}')
-                    f.write("}")
-                    if index < len(self.rdmaArgs) - 1:
-                        f.write(",")
-                f.write("]\n")
-            if self.rdmaArgs != "":
-                f.write(f"*.{self.name}.bridging.streamCoder.encoder.mapping = [")
-                for index in range(0, len(self.rdmaArgs)):
-                    tmp = self.rdmaArgs[index]
-                    f.write("{")
-                    f.write(f'stream: "{tmp["stream"]}", ')
-                    f.write(f'pcp: {tmp["pcp"]}')
-                    f.write("}")
-                    if index < len(self.rdmaArgs) - 1:
-                        f.write(",")
-                f.write("]\n")
             f.write("\n")
 
     def generateNED(self, f):
@@ -332,7 +320,7 @@ class DdsHost(Host):
                     f'*.{self.name}.app[{index}].io.destPort = {appArg["destPort"]}\n'
                 )
                 f.write(f"*.{self.name}.ipv4.ip.limitedBroadcast = true\n")
-                
+
                 f.write(
                     f'*.{self.name}.app[{index}].source.packetLength = {appArg["packetLength"]}\n'
                 )

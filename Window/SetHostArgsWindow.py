@@ -16,8 +16,6 @@ class SetHostArgsWindow(QDialog):
         self.ui.lineEdit_name.returnPressed.connect(self.lineEdit_name_cb)
         # 编辑网络属性
         self.ui.netButton.clicked.connect(self.netButton_cb)
-        # 编辑计算属性
-        self.ui.sysButton.clicked.connect(self.sysButton_cb)
 
         # 用于保存当前配置的主机
         self.hostGraphicItem = None

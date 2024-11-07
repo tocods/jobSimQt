@@ -6,6 +6,7 @@ from qdarktheme.qtpy.QtWidgets import (
 from qdarktheme.qtpy.QtCore import Qt
 from entity.host import *
 from entity.switch import *
+from entity.link import *
 from qdarktheme.qtpy.QtGui import QAction
 from Window.SetSimtimeWindow import SetSimtimeWindow
 from Window.NetworkGlobalConfig import NetworkGlobalConfig
@@ -49,14 +50,10 @@ class NetworkEditorWindow(QWidget):
     def init_add_host_menu(self):
         self.add_host_menu = QMenu(self)
         menu_item_names = [
-            "udp_tcp通用 cpu型主机",
-            "Rdma cpu型主机",
-            "Tsn cpu型主机",
-            "Dds cpu型主机",
-            "udp_tcp通用 cpu-gpu型主机",
-            "Rdma cpu-gpu型主机",
-            "Tsn cpu-gpu型主机",
-            "Dds cpu-gpu型主机",
+            "UDP-TCP通用型主机",
+            "RDMA型主机",
+            "TSN型主机",
+            "DDS型主机",
         ]
 
         for index in range(0, len(menu_item_names)):
@@ -70,9 +67,8 @@ class NetworkEditorWindow(QWidget):
     def init_add_switch_menu(self):
         self.add_switch_menu = QMenu(self)
         menu_item_names = [
-            "udp_tcp-Dds通用 交换机",
-            "Rdma 交换机",
-            "Tsn 交换机",
+            "通用交换机",
+            "Tsn型交换机",
         ]
 
         for index in range(0, len(menu_item_names)):
@@ -88,24 +84,17 @@ class NetworkEditorWindow(QWidget):
         self.init_add_switch_menu()
 
     def show_network_global_config(self):
+        self.networkGlobalConfigWindow.set_data(globaldata.networkGlobalConfig.copy())
         self.networkGlobalConfigWindow.show()
 
     def add_host_menu_item_selected(self, index):
         name_list = [
-            "udp_tcp_cpu",
-            "rdma_cpu",
-            "tsn_cpu",
-            "dds_cpu",
-            "udp_tcp_mix",
-            "rdma_mix",
-            "tsn_mix",
-            "dds_mix",
+            "udp_tcp",
+            "rdma",
+            "tsn",
+            "dds",
         ]
         type_list = [
-            "StandardHost",
-            "StandardHost",
-            "TsnDevice",
-            "StandardHost",
             "StandardHost",
             "StandardHost",
             "TsnDevice",
@@ -116,26 +105,14 @@ class NetworkEditorWindow(QWidget):
             "img/RDMA_CPU_Host.png",
             "img/TSN_CPU_Host.png",
             "img/DDS_CPU_Host.png",
-            "img/Normal_CPU_Host.png",
-            "img/RDMA_CPU_GPU_Host.png",
-            "img/TSN_CPU_GPU_Host.png",
-            "img/DDS_CPU_GPU_Host.png",
         ]
         only_cpu_list = [
             True,
             True,
             True,
             True,
-            False,
-            False,
-            False,
-            False,
         ]
         class_list = [
-            NormalHost,
-            RdmaHost,
-            TsnHost,
-            DdsHost,
             NormalHost,
             RdmaHost,
             TsnHost,
@@ -156,22 +133,18 @@ class NetworkEditorWindow(QWidget):
     def add_switch_menu_item_selected(self, index):
         name_list = [
             "switch",
-            "rdma_switch",
             "tsn_switch",
         ]
         type_list = [
             "EthernetSwitch",
             "EthernetSwitch",
-            "EthernetSwitch",
         ]
         img_list = [
             "img/Normal_Switch.png",
-            "img/RDMA_Switch.png",
             "img/TSN_Switch.png",
         ]
         class_list = [
             NormalSwitch,
-            RdmaSwitch,
             TsnSwitch,
         ]
 
@@ -237,8 +210,8 @@ class NetworkEditorWindow(QWidget):
         globaldata.hostList.clear()
         globaldata.switchList.clear()
         globaldata.linkList.clear()
-        globaldata.NetworkDevice.name_registry.clear()
-        globaldata.Link.name_registry.clear()
+        NetworkDevice.name_registry.clear()
+        Link.name_registry.clear()
 
         # 清除画布上所有内容
         graphicView = self.ui.graphicsView
@@ -286,22 +259,22 @@ class NetworkEditorWindow(QWidget):
 
         # Load all host types
         for normal_host_element in normal_hosts_element.findall("NormalHost"):
-            create_host_from_xml(normal_host_element, globaldata.NormalHost)
+            create_host_from_xml(normal_host_element, NormalHost)
 
         for udp_host_element in udp_hosts_element.findall("UdpHost"):
-            create_host_from_xml(udp_host_element, globaldata.UdpHost)
+            create_host_from_xml(udp_host_element, UdpHost)
 
         for tcp_host_element in tcp_hosts_element.findall("TcpHost"):
-            create_host_from_xml(tcp_host_element, globaldata.TcpHost)
+            create_host_from_xml(tcp_host_element, TcpHost)
 
         for rdma_host_element in rdma_hosts_element.findall("RdmaHost"):
-            create_host_from_xml(rdma_host_element, globaldata.RdmaHost)
+            create_host_from_xml(rdma_host_element, RdmaHost)
 
         for tsn_host_element in tsn_hosts_element.findall("TsnHost"):
-            create_host_from_xml(tsn_host_element, globaldata.TsnHost)
+            create_host_from_xml(tsn_host_element, TsnHost)
 
         for dds_host_element in dds_hosts_element.findall("DdsHost"):
-            create_host_from_xml(dds_host_element, globaldata.DdsHost)
+            create_host_from_xml(dds_host_element, DdsHost)
 
         # Parse Switches
         switches_element = root.find("Switches")
@@ -334,22 +307,22 @@ class NetworkEditorWindow(QWidget):
 
         # Load all switch types
         for normal_switch_element in normal_switches_element.findall("NormalSwitch"):
-            create_switch_from_xml(normal_switch_element, globaldata.NormalSwitch)
+            create_switch_from_xml(normal_switch_element, NormalSwitch)
 
         for udp_switch_element in udp_switches_element.findall("UdpSwitch"):
-            create_switch_from_xml(udp_switch_element, globaldata.UdpSwitch)
+            create_switch_from_xml(udp_switch_element, UdpSwitch)
 
         for tcp_switch_element in tcp_switches_element.findall("TcpSwitch"):
-            create_switch_from_xml(tcp_switch_element, globaldata.TcpSwitch)
+            create_switch_from_xml(tcp_switch_element, TcpSwitch)
 
         for rdma_switch_element in rdma_switches_element.findall("RdmaSwitch"):
-            create_switch_from_xml(rdma_switch_element, globaldata.RdmaSwitch)
+            create_switch_from_xml(rdma_switch_element, RdmaSwitch)
 
         for tsn_switch_element in tsn_switches_element.findall("TsnSwitch"):
-            create_switch_from_xml(tsn_switch_element, globaldata.TsnSwitch)
+            create_switch_from_xml(tsn_switch_element, TsnSwitch)
 
         for dds_switch_element in dds_switches_element.findall("DdsSwitch"):
-            create_switch_from_xml(dds_switch_element, globaldata.DdsSwitch)
+            create_switch_from_xml(dds_switch_element, DdsSwitch)
 
         # Parse Links
         links_element = root.find("Links")

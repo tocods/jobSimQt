@@ -1,10 +1,8 @@
 import os
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
-
-from entity.host import *
+import entity.host
 from entity.switch import *
-from entity.link import Link
 
 global scheduler
 scheduler = 0
@@ -62,7 +60,11 @@ networkGlobalConfig = {
         "queuePacketCapacity": "100",
         "tcpAlgorithmClass": "TcpReno",
     },
-    "Rdma": {},
+    "Rdma": {
+        "connectionType": "RELIABLE_CONNECTION",
+        "maxSendQueueSize": "256",
+        "maxRecvQueueSize": "256",
+    },
     "Tsn": {},
     "Dds": {
         "queueTypename": "DropTailQueue",
@@ -88,17 +90,17 @@ def create_xml():
 
     for host_graphic_item in hostList:
         # 判断主机类型
-        if isinstance(host_graphic_item.hostAttr, NormalHost):
+        if isinstance(host_graphic_item.hostAttr, entity.host.NormalHost):
             host_element = ET.SubElement(normal_hosts_element, "NormalHost")
-        elif isinstance(host_graphic_item.hostAttr, UdpHost):
+        elif isinstance(host_graphic_item.hostAttr, entity.host.UdpHost):
             host_element = ET.SubElement(udp_hosts_element, "UdpHost")
-        elif isinstance(host_graphic_item.hostAttr, TcpHost):
+        elif isinstance(host_graphic_item.hostAttr, entity.host.TcpHost):
             host_element = ET.SubElement(tcp_hosts_element, "TcpHost")
-        elif isinstance(host_graphic_item.hostAttr, RdmaHost):
+        elif isinstance(host_graphic_item.hostAttr, entity.host.RdmaHost):
             host_element = ET.SubElement(rdma_hosts_element, "RdmaHost")
-        elif isinstance(host_graphic_item.hostAttr, TsnHost):
+        elif isinstance(host_graphic_item.hostAttr, entity.host.TsnHost):
             host_element = ET.SubElement(tsn_hosts_element, "TsnHost")
-        elif isinstance(host_graphic_item.hostAttr, DdsHost):
+        elif isinstance(host_graphic_item.hostAttr, entity.host.DdsHost):
             host_element = ET.SubElement(dds_hosts_element, "DdsHost")
         else:
             print("not a valid host!")
@@ -158,12 +160,12 @@ def create_xml():
         link_element.set("name", link_item.linkAttr.name)
         link_element.set("type", link_item.linkAttr.type)
 
-        if isinstance(link_item.linkAttr.endpoint1.get_attr(), Host):
+        if isinstance(link_item.linkAttr.endpoint1.get_attr(), entity.host.Host):
             link_element.set("endpoint1", link_item.linkAttr.endpoint1.hostAttr.name)
         elif isinstance(link_item.linkAttr.endpoint1.get_attr(), Switch):
             link_element.set("endpoint1", link_item.linkAttr.endpoint1.switchAttr.name)
 
-        if isinstance(link_item.linkAttr.endpoint2.get_attr(), Host):
+        if isinstance(link_item.linkAttr.endpoint2.get_attr(), entity.host.Host):
             link_element.set("endpoint2", link_item.linkAttr.endpoint2.hostAttr.name)
         elif isinstance(link_item.linkAttr.endpoint2.get_attr(), Switch):
             link_element.set("endpoint2", link_item.linkAttr.endpoint2.switchAttr.name)

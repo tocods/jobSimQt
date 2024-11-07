@@ -8,6 +8,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QHBoxLayout,
     QMessageBox,
     QMenu,
+    QComboBox,
 )
 from qdarktheme.qtpy.QtGui import QAction
 from qdarktheme.qtpy.QtCore import Qt
@@ -30,7 +31,7 @@ class HostNetargsAppEditor(QDialog):
 
         self.table_widget = QTableWidget()
         self.table_widget.setColumnCount(2)
-        self.table_widget.setHorizontalHeaderLabels(["Field", "Value"])
+        self.table_widget.setHorizontalHeaderLabels(["参数", "值"])
         self.table_widget.itemChanged.connect(self.update_json_data)  # 监听单元格更改
 
         self.next_button = QPushButton("下一页")
@@ -98,14 +99,12 @@ class HostNetargsAppEditor(QDialog):
                 item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
 
     def update_json_data(self, item):
-        """将用户编辑的单元格数据保存到 JSON 对象"""
         if not self.json_data:
             return
 
         row = item.row()
         col = item.column()
 
-        # 避免在迭代过程中修改字典，将键值先取出
         current_object = self.json_data[self.current_index]
         keys = list(current_object.keys())
 
@@ -265,7 +264,72 @@ class HostNetargsAppEditorTcp(HostNetargsAppEditor):
 
     def add_sink(self):
         """添加一个空的 JSON 对象并跳转到新对象"""
-        new_object = {"typename": "TcpSinkApp", "localPort": ""}
+        new_object = {"typename": "UdpSinkApp", "localPort": ""}
+        self.json_data.append(new_object)
+        self.current_index = len(self.json_data) - 1  # 跳转到新对象
+        self.update_table()
+
+
+class HostNetargsAppEditorRdma(HostNetargsAppEditor):
+    def update_table(self):
+        if not self.json_data:  # 检查数据是否为空
+            self.table_widget.setRowCount(0)
+            self.info_label.setText("没有数据")
+            self.next_button.setEnabled(False)
+            self.prev_button.setEnabled(False)
+            self.delete_button.setEnabled(False)
+            return
+        else:
+            self.info_label.setText(
+                f" {self.current_index + 1} / {len(self.json_data)}"
+            )
+            self.next_button.setEnabled(self.current_index < len(self.json_data) - 1)
+            self.prev_button.setEnabled(self.current_index > 0)
+            self.delete_button.setEnabled(True)
+
+        current_object = self.json_data[self.current_index]
+
+        self.table_widget.setRowCount(len(current_object))
+        for row, (field, value) in enumerate(current_object.items()):
+            self.table_widget.setItem(row, 0, QTableWidgetItem(field))
+            self.table_widget.setItem(row, 1, QTableWidgetItem(str(value)))
+            item = self.table_widget.item(row, 0)
+            item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
+            if field == "typename":
+                item = self.table_widget.item(row, 1)
+                item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
+            if field == "messageType":
+                combo_box = QComboBox()
+                combo_box.addItems(["SEND", "RDMA_READ", "RDMA_WRITE"])
+                combo_box.setCurrentText(value)
+                self.table_widget.setCellWidget(row, 1, combo_box)
+            if field == "pcp":
+                combo_box = QComboBox()
+                combo_box.addItems(["0", "1", "2", "3", "4", "5", "6", "7"])
+                combo_box.setCurrentText(value)
+                self.table_widget.setCellWidget(row, 1, combo_box)
+
+    def add_source(self):
+        new_object = {
+            "typename": "Rocev2App",
+            "packetLength": "1000B",
+            "productionInterval": "100us",
+            "destAddress": "",
+            "destinationQueuePairNumber": "100",
+            "localQueuePairNumber": "100",
+            "pcp": "0",
+            "messageType": "SEND",
+        }
+        self.json_data.append(new_object)
+        self.current_index = len(self.json_data) - 1  # 跳转到新对象
+        self.update_table()
+
+    def add_sink(self):
+        """添加一个空的 JSON 对象并跳转到新对象"""
+        new_object = {
+            "typename": "Rocev2App",
+            "localQueuePairNumber": "100",
+        }
         self.json_data.append(new_object)
         self.current_index = len(self.json_data) - 1  # 跳转到新对象
         self.update_table()

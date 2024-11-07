@@ -1,6 +1,7 @@
 from UI.Network.Host.edit_host_netargs_udp_ui import Ui_Udp as udp_ui
 from UI.Network.Host.edit_host_netargs_tsn_ui import Ui_Tsn as tsn_ui
 from UI.Network.Host.edit_host_netargs_dds_ui import Ui_Udp as dds_ui
+from UI.Network.Host.edit_host_netargs_rdma_ui import Ui_Rdma as rdma_ui
 from Window.HostNetargsAppEditor import *
 from Window.JsonArrayEditor import JsonArrayEditor
 from qdarktheme.qtpy.QtWidgets import (
@@ -209,14 +210,14 @@ class EditHostNetargsWindowTcp(EditHostNetargsWindow):
 class EditHostNetargsWindowRdma(EditHostNetargsWindow):
     def __init__(self, parent=None, type="Rdma"):
         super().__init__(parent, type)
-        self.ui = tsn_ui()
+        self.ui = rdma_ui()
         self.ui.setupUi(self)
         self.setWindowTitle("编辑主机网络属性")
 
         self.hostGraphicItem = None
         self.tmp_numApps = 0
         self.tmp_appArgs = []
-        self.tmp_rdmaArgs = []
+        self.tmp_rdmaArgs = {}
 
         self.ui.applyButton.clicked.connect(self.apply_setting)
         self.hide()
@@ -254,15 +255,10 @@ class EditHostNetargsWindowRdma(EditHostNetargsWindow):
             Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
         )
 
-        identifier_button = QPushButton("编辑rdma参数")
-        identifier_button.clicked.connect(lambda _: self.open_rdmaArgs_editor())
-        self.ui.tableWidget_netargs.setCellWidget(2, 0, identifier_button)
-
     def open_appArgs_editor(self):
-        """打开 JSON 对象数组编辑器窗口"""
         json_data = self.tmp_appArgs.copy()
 
-        editor = HostNetargsAppEditorUdp(json_data)
+        editor = HostNetargsAppEditorRdma(json_data)
         if editor.exec() == QDialog.DialogCode.Accepted:
             # 更新 JSON 数据
             self.tmp_appArgs = editor.get_json_data()
@@ -271,19 +267,6 @@ class EditHostNetargsWindowRdma(EditHostNetargsWindow):
                 0, 0, QTableWidgetItem(str(self.tmp_numApps))
             )
             QMessageBox.information(self, "Success", "应用参数已保存")
-
-    def open_rdmaArgs_editor(self):
-        json_data = self.tmp_rdmaArgs.copy()
-
-        editor = JsonArrayEditor(
-            json_data,
-            ["stream", "packetFilter", "pcp"],
-            ["best-effort", "expr(udp.destPort == 1000)", "0"],
-        )
-        if editor.exec() == QDialog.DialogCode.Accepted:
-            # 更新 JSON 数据
-            self.tmp_rdmaArgs = editor.get_json_data()
-            QMessageBox.information(self, "Success", "rdma参数已保存")
 
 
 class EditHostNetargsWindowTsn(EditHostNetargsWindow):

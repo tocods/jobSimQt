@@ -18,7 +18,8 @@ from HostInfoForm import HostInfoForm
 from jobSim import jobSim
 from HostInfoForm import HostInfoForm
 from jobSim import sysSim
-from entity.switch import TsnSwitch
+from entity.host import *
+from entity.switch import *
 
 
 class GraphicView(QGraphicsView):
@@ -76,7 +77,7 @@ class GraphicView(QGraphicsView):
         width,
         height,
         onlyCpu=False,
-        Host_class=globaldata.Host,
+        Host_class=Host,
     ):
         item = HostGraphicItem(
             host_name, host_type, img, width, height, Host_class=Host_class
@@ -96,7 +97,7 @@ class GraphicView(QGraphicsView):
         img,
         width,
         height,
-        Switch_class=globaldata.Switch,
+        Switch_class=Switch,
     ):
         item = SwitchGraphicItem(
             switch_name, switch_type, img, width, height, Switch_class=Switch_class
@@ -158,7 +159,7 @@ class GraphicView(QGraphicsView):
                 self.editLinkArgsWindow.setLinkGraphicItem(self.mouse_pos_item)
                 self.editLinkArgsWindow.show()
                 return
-        else:
+        elif self.lineToolEnabled:
             self.lineClick(event)
 
     # 当前鼠标所在图元
@@ -183,7 +184,7 @@ class GraphicView(QGraphicsView):
     def lineToolEnable(self):
         if not self.lineToolEnabled:
             self.lineToolEnabled = True
-            self.parent.ui.add_line.setText("禁用连线工具")
+            self.parent.ui.add_line.setText("停止连线")
         else:
             self.lineToolEnabled = False
             self.parent.ui.add_line.setText("连线")
@@ -205,8 +206,6 @@ class GraphicView(QGraphicsView):
                     self.lineToolEnable()
                 else:
                     self.drag_start_item = None
-        else:
-            super().mouseDoubleClickEvent(event)
 
     def delete_node(self):
         # 删除键

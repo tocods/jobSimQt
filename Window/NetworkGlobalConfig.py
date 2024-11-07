@@ -13,31 +13,40 @@ import globaldata
 class NetworkGlobalConfig(QWidget):
     def __init__(self):
         super().__init__()
-
+        self.option = {
+            "forwarding": ["true", "false"],
+            "connectionType": ["RELIABLE_CONNECTION", "UNRELIABLE_CONNECTION"],
+            "tcpAlgorithmClass": [
+                "TcpReno",
+                "TcpTahoe",
+                "TcpNewReno",
+                "TcpNoCongestionControl",
+                "DumbTcp",
+            ],
+        }
         self.tmp_data = globaldata.networkGlobalConfig.copy()
         self.setWindowTitle("全局参数设置")
         self.setGeometry(100, 100, 400, 300)
 
         self.layout = QVBoxLayout(self)
 
-        # 创建下拉框
         self.combo_box = QComboBox(self)
         for key, _ in globaldata.networkGlobalConfig.items():
             self.combo_box.addItem(key)
         self.combo_box.currentTextChanged.connect(self.update_table)
         self.layout.addWidget(self.combo_box)
 
-        # 创建表格
         self.table_widget = QTableWidget(self)
         self.layout.addWidget(self.table_widget)
 
-        # 创建保存按钮
         self.save_button = QPushButton("保存", self)
         self.save_button.clicked.connect(self.save_data)
         self.layout.addWidget(self.save_button)
 
-        # 初始化表格
         self.update_table(self.combo_box.currentText())
+
+    def set_data(self, json_data):
+        self.tmp_data = json_data
 
     def update_table(self, selection):
 
@@ -52,27 +61,13 @@ class NetworkGlobalConfig(QWidget):
 
         # 填充表格
         for key, value in items:
-
             row_position = self.table_widget.rowCount()
             self.table_widget.insertRow(row_position)
             self.table_widget.setItem(row_position, 0, QTableWidgetItem(key))
-            if value == "true" or value == "false":
+            if key in self.option:
                 combo_box = QComboBox()
-                combo_box.addItems(["false", "true"])
-                combo_box.setCurrentText(str(value).lower())
-                self.table_widget.setCellWidget(row_position, 1, combo_box)
-            elif key == "tcpAlgorithmClass":
-                combo_box = QComboBox()
-                combo_box.addItems(
-                    [
-                        "TcpReno",
-                        "TcpTahoe",
-                        "TcpNewReno",
-                        "TcpNoCongestionControl",
-                        "DumbTcp",
-                    ]
-                )
-                combo_box.setCurrentText(str(value).lower())
+                combo_box.addItems(self.option[key])
+                combo_box.setCurrentText(value)
                 self.table_widget.setCellWidget(row_position, 1, combo_box)
             else:
                 self.table_widget.setItem(row_position, 1, QTableWidgetItem(value))

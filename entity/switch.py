@@ -21,6 +21,7 @@ class Switch(NetworkDevice):
         element.set("port_buffer_size", str(self.port_buffer_size))
 
     def generateINI(self, f):
+        f.write(f'*.{self.name}.eth[*].bitrate = {self.transmission_rate}Mbps\n')
         return
 
     def generateNED(self, f):
@@ -96,6 +97,7 @@ class TsnSwitch(Switch):
         self.tsn_queue = json.loads(element.get("tsn_queue"))
 
     def generateINI(self, f):
+        f.write(f'*.{self.name}.eth[*].bitrate = {self.transmission_rate}Mbps\n')
         f.write(f"*.{self.name}.hasEgressTrafficShaping = true\n")
         f.write(
             f'*.{self.name}.bridging.directionReverser.reverser.excludeEncapsulationProtocols = ["ieee8021qctag"]\n'

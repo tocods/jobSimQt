@@ -81,16 +81,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QPushButton" name="sysButton">
-         <property name="text">
-          <string>编辑计算属性</string>
-         </property>
-         <property name="autoDefault">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
      <item>
