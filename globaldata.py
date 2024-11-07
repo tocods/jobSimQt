@@ -6,6 +6,8 @@ from entity.host import *
 from entity.switch import *
 from entity.link import Link
 
+from PySide6.QtGui import QFont
+
 global scheduler
 scheduler = 0
 
@@ -185,3 +187,8 @@ def save_data():
     xml_str = create_xml()
     with open(currentProjectInfo.path + "network_data.xml", "w") as f:
         f.write(xml_str)
+
+
+global font
+font = QFont()
+font.setPointSize(20)

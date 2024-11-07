@@ -16,7 +16,6 @@ import qdarktheme
 from qdarktheme.qtpy.QtCore import QDir, Qt, Slot, QRegularExpression
 from qdarktheme.qtpy.QtGui import *
 from qdarktheme.qtpy.QtWidgets import *
-import PySide6.QtWidgets
 from main_ui import UI
 from util.jobSim import sysSim, ParseUtil, HostInfo, CPUInfo, GPUInfo, VideoCardInfo, JobInfo, CPUTaskInfo, GPUTaskInfo, FaultGenerator, tranFromC2E, tranFromE2C
 from jobSimPage import JobSimPage
@@ -33,6 +32,9 @@ class JobSimQt(QMainWindow):
     def __init__(self, path) -> None:
         super().__init__()
         self.duration = 100
+        self.wfont = QFont()
+        self.wfont.setPointSize(15)
+        self.setFont(self.wfont)
         project.projectPath = path
         self._initJsonFiles()
         # 取消标题栏
@@ -83,7 +85,7 @@ class JobSimQt(QMainWindow):
         action_name = self.sender().text()
         #self._ui.stack_widget.setCurrentIndex(0 if action_name == "运行仿真" else 1)
         if action_name == "系统管理评估平台":
-            os.popen("python D:/analysis/main.py " + project.projectPath)
+            os.popen("python d:/analysis/main.py " + project.projectPath)
         if action_name == "系统管理集成开发平台":
             self._startSoftware()
 
@@ -257,6 +259,9 @@ class JobSimQt(QMainWindow):
 
 
     def initTreeView(self):
+        f = QFont()
+        f.setPointSize(10)
+        self._ui.homeui.infoList.setFont(f)
         # 删除所有节点
         self._ui.homeui.infoList.clear()
         print("init tree")
@@ -408,10 +413,6 @@ class JobSimQt(QMainWindow):
         self.nowJob.cpu_task.pes_number = self.jobInfoPage.corenum.value()
         self.nowJob.cpu_task.length = self.jobInfoPage.cpuflops.text()
         self.nowJob.gpu_task = None
-        if self.jobInfoPage.host.currentText() != "不指定":
-            self.nowJob.host = self.jobInfoPage.host.currentText()
-        else:
-            self.nowJob.host = ""
         if self.kernel_num > 0:
             request_gddram_total = 0
             task_input_size_total = 0
@@ -444,10 +445,8 @@ class JobSimQt(QMainWindow):
         newFault.setName(self.faultInfoPage.name.text())
         if self.faultInfoPage.hardware.currentText() == "CPU":
             newFault.setHardware("CPU")
-        elif self.faultInfoPage.hardware.currentText() == "内存":
+        else:
             newFault.setHardware("ram")
-        elif self.faultInfoPage.hardware.currentText() == "GPU":
-            newFault.setHardware("gpu")
         print("aaaa")
         newFault.print()
         sysSim.faults.pop(name_before)
@@ -635,14 +634,6 @@ class JobSimQt(QMainWindow):
             print("no gpu task")
             self.kernel_num = 0
             self._initKernelTable(0, None)
-        self.jobInfoPage.host.clear()
-        self.jobInfoPage.host.addItem("不指定")
-        for(host_name, host) in sysSim.hosts.items():
-            self.jobInfoPage.host.addItem(host_name)
-        if job.host != "":
-            self.jobInfoPage.host.setCurrentText(job.host)
-        else:
-            self.jobInfoPage.host.setCurrentText("不指定")
         self._ui.homeui.tabWidget.setCurrentIndex(1)
 
     def _initKernelTable(self, kernel_num, gpu_task):
@@ -730,10 +721,10 @@ class JobSimQt(QMainWindow):
             item7 = QTableWidgetItem("输出(MB)")
             item7.setBackground(QColor(192, 192, 192))
             self.jobInfoPage.gputable.setItem(0, 6, item7)
-            # del_kernel = QPushButton()
-            # del_kernel.setText("删除")
-            # del_kernel.clicked.connect(self._delKernel)
-            # self.jobInfoPage.gputable.setCellWidget(0, 7, del_kernel)
+            del_kernel = QPushButton()
+            del_kernel.setText("删除")
+            del_kernel.clicked.connect(self._delKernel)
+            self.jobInfoPage.gputable.setCellWidget(0, 7, del_kernel)
 
         self.jobInfoPage.gputable.setItem(i, 0, QTableWidgetItem(str(i)))
         self.jobInfoPage.gputable.setItem(i, 1, QTableWidgetItem("0"))
@@ -742,10 +733,7 @@ class JobSimQt(QMainWindow):
         self.jobInfoPage.gputable.setItem(i, 4, QTableWidgetItem("0"))
         self.jobInfoPage.gputable.setItem(i, 5, QTableWidgetItem("0"))
         self.jobInfoPage.gputable.setItem(i, 6, QTableWidgetItem("0"))
-        del_kernel = QPushButton()
-        del_kernel.setText("删除")
-        del_kernel.clicked.connect(self._delKernel)
-        self.jobInfoPage.gputable.setCellWidget(i, 7, del_kernel)
+
 
     def _initFaultInfo(self, fault: FaultGenerator, ifTrueFault=True):
         self.showFaultInject.setChart(QChart())
@@ -785,8 +773,6 @@ class JobSimQt(QMainWindow):
                 self.faultInfoPage.hardware.setCurrentIndex(0)
             elif fault.type == "ram":
                 self.faultInfoPage.hardware.setCurrentIndex(1)
-            elif fault.type == "gpu":
-                self.faultInfoPage.hardware.setCurrentIndex(2)
              # 填充故障信息表格
             path = project.projectPath + "/OutputFiles/faultRecords.xml"
             print(path)
@@ -831,8 +817,7 @@ class JobSimQt(QMainWindow):
             validator = QRegularExpressionValidator(regular_ex, self.faultInfoPage.time2)
             self.faultInfoPage.time2.setValidator(validator)
             self._ui.homeui.tabWidget.setCurrentIndex(2)
-            self.showFaultInject.setChart(QChart())
-            self.showFaultInject2.setChart(QChart())
+            self.faultInfoPage.show.setChart(QChart())
 
     def __getNormalLine(self, avg):
         print("get normal line")
