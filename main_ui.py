@@ -18,6 +18,7 @@ from qdarktheme.qtpy.QtWidgets import (
 from component.home import Ui_home
 from component.result import Ui_Result
 from ShowNetResultsWindow import ShowNetResultsWindow
+from component.netanalysis import Ui_NetAnalysis
 
 class UI:
     def setup_ui(self, main_win: QMainWindow) -> None:
@@ -104,6 +105,8 @@ class UI:
         # layout
         #stack_1 = ShowNetResultsWindow()
         stack_1 = QWidget()
+        self.netanalysis = Ui_NetAnalysis()
+        self.netanalysis.setupUi(stack_1)
         #self.homeui = Ui_home()
         #HomeUI().setup_ui(stack_1)
         self.stack_widget.addWidget(stack_1)

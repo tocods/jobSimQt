@@ -32,3 +32,6 @@ class ProjectInfo:
 
 global currentProjectInfo
 currentProjectInfo = ProjectInfo()
+
+global lastChose
+lastChose = None

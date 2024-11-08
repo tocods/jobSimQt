@@ -13,13 +13,13 @@ import random
 from functools import partial
 import project
 import qdarktheme
-from qdarktheme.qtpy.QtCore import QDir, Qt, Slot, QRegularExpression, QUrl
+from qdarktheme.qtpy.QtCore import QDir, Qt, Slot, QRegularExpression, QUrl, QRectF
 from qdarktheme.qtpy.QtGui import *
 from qdarktheme.qtpy.QtWidgets import *
 from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtNetwork import QNetworkCookie
 from main_ui import UI
-from util.jobSim import sysSim, ParseUtil, HostInfo, CPUInfo, GPUInfo, VideoCardInfo, JobInfo, CPUTaskInfo, GPUTaskInfo, FaultGenerator, tranFromC2E, tranFromE2C
+from util.jobSim import sysSim, ParseUtil, HostInfo, CPUInfo, GPUInfo, VideoCardInfo, JobInfo, CPUTaskInfo, GPUTaskInfo, FaultGenerator, tranFromC2E, tranFromE2C, LinkNet, HostNet, SwtichNet, FlowNet
 from jobSimPage import JobSimPage
 from component.hostinfo import Ui_HostInfo
 from component.jobinfo import Ui_JobInfo
@@ -29,6 +29,11 @@ from jobSimPainter import Painter, XmlParser
 from util.table import NumericDelegate
 from resultUtil import getAverageRunTime, getAverageRunTimeInHost, getThroughput, getEfficiency
 import globaldata
+from item import GraphicItem
+from edge import Edge
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
+
 class JobSimQt(QMainWindow):
     def __init__(self, path) -> None:
         super().__init__()
@@ -184,7 +189,147 @@ class JobSimQt(QMainWindow):
         self.faults = parser.parseFaults(path)
         for fault in self.faults:
             sysSim.faults[fault.name] = fault
+        self.__initNetAnalysis()
+        self._ui.netanalysis.chose.clicked.connect(self.__choseFlow)
+        self._ui.netanalysis.run.clicked.connect(self.__runNetAnalysis)
         self._initJobResult()
+
+        
+
+    def __choseFlow(self):
+        if self.chosing == False:
+            self.__printNet()
+            self._ui.netanalysis.nets.setEnabled(True)
+            self._ui.netanalysis.run.setEnabled(False)
+            self.chosing = True
+            self._ui.netanalysis.chose.setText("添加")
+        else:
+            self._ui.netanalysis.nets.setEnabled(False)
+            self._ui.netanalysis.run.setEnabled(True)
+            self.chosing = False
+            self._ui.netanalysis.chose.setText("选择流")
+            row = self._ui.netanalysis.shows.rowCount()
+            self.nowFlow.name = "Flow_" + row.__str__()
+            self.flows.append(self.nowFlow)
+            self.nowFlow.printNodes()
+            self.nowFlow = None
+            self.lastChose = None
+           
+            
+            self._ui.netanalysis.shows.setRowCount(row+1)
+            self._ui.netanalysis.shows.setItem(row, 0, QTableWidgetItem("Flow_" + row.__str__()))
+            show = QPushButton()
+            show.setText("展示")
+            show.clicked.connect(self.showNetFlow)
+            self._ui.netanalysis.shows.setCellWidget(row, 1, show)
+            dels = QPushButton()
+            dels.setText("删除")
+            dels.clicked.connect(self.delNetFlow)
+            self._ui.netanalysis.shows.setCellWidget(row, 2, dels)
+            self.__printNet()
+            
+    def showNetFlow(self):
+        self.__printNet()
+        row = self._ui.netanalysis.shows.currentRow()
+        flow = self.flows[row]
+        for name in flow.nodes:
+            x = -1
+            y = -1
+            if name in self.netHosts:
+                x = self.netHosts[name].x
+                y = self.netHosts[name].y
+            if name in self.netSwtichs:
+                x = self.netSwtichs[name].x
+                y = self.netSwtichs[name].y
+            rect = QRectF()
+            rect.setX(float(x))
+            rect.setY(float(y))
+            rect.setWidth(100)
+            rect.setHeight(100)
+            self.screne.addRect(rect)
+    
+    def delNetFlow(self):
+        self.__printNet()
+        row = self._ui.netanalysis.shows.currentRow()
+        self.flows.pop(row)
+        self._ui.netanalysis.shows.removeRow(row)
+
+    def __runNetAnalysis(self):
+        root = ET.Element("Flows")
+
+        for flow in self.flows:
+            f = ET.SubElement(root, "Flow")
+            for node in flow.nodes:
+                n = ET.SubElement(f, "node")
+                n.set("name", node)
+
+        xml_str = ET.tostring(root, encoding="unicode")
+
+        parsed_xml_str = minidom.parseString(xml_str)
+        formatted_xml_str = parsed_xml_str.toprettyxml(indent="    ")
+        with open(project.projectPath + "/flow_data.xml", "w") as f:
+            f.write(formatted_xml_str)
+        self.__printNet()
+    
+    def __initNetAnalysis(self):
+        self._ui.netanalysis.shows.setRowCount(0)
+        self._ui.netanalysis.shows.setColumnCount(4)
+        self._ui.netanalysis.shows.setHorizontalHeaderLabels(["流", "数据大小(MB)", "", ""])
+        self._ui.netanalysis.shows.verticalHeader().setVisible(False)
+        self._ui.netanalysis.shows.horizontalHeader().setVisible(True)
+        self.chosing = False
+        self.nowFlow = None
+        self.lastChose = None
+        self.flows = []
+        self.netHosts = {}
+        self.netSwtichs = {}
+        self.netLinks = {}
+        self.netHostsPic = {}
+        self.netSwtichsPic = {}
+        self.netLinksPic = {}
+        parser = ParseUtil()
+        path = project.projectPath + "/network_data.xml"
+        hosts = parser.parse_nethost_xml(path)
+        switches = parser.parse_netswtich_xml(path)
+        links = parser.parse_netlink_xml(path)
+        for host in hosts:
+            self.netHosts[host.name] = host
+        for switch in switches:
+            self.netSwtichs[switch.name] = switch
+        for link in links:
+            self.netLinks[link.name] = link
+        self.__printNet()
+     
+    def __printNet(self):
+        self.screne = QGraphicsScene()
+        for host in self.netHosts.values():
+            p = GraphicItem(host.image, host.name, self)
+            self.netHostsPic[host.name] = p
+            self.screne.addItem(p)
+            p.setPos(float(host.x), float(host.y))
+        for switch in self.netSwtichs.values():
+            p = GraphicItem(switch.image, switch.name, self)
+            self.netSwtichsPic[switch.name] = p
+            self.screne.addItem(p)
+            p.setPos(float(switch.x), float(switch.y))
+        for link in self.netLinks.values():
+            e1 = None
+            e2 = None
+            if link.p1 in self.netHostsPic:
+                e1 = self.netHostsPic[link.p1]
+            elif link.p1 in self.netSwtichsPic:
+                e2 = self.netSwtichsPic[link.p1]
+            if link.p2 in self.netHostsPic:
+                e1 = self.netHostsPic[link.p2]
+            elif link.p2 in self.netSwtichsPic:
+                e2 = self.netSwtichsPic[link.p2]
+            if e1 != None and e2 != None:
+                new_edge = Edge(self.screne, e1, e2)
+                # 保存连接线
+                new_edge.store()
+        self._ui.netanalysis.nets.setScene(self.screne)
+        self._ui.netanalysis.nets.setEnabled(False)
+        
 
     def _initJobResult(self):
         print("init job result")
