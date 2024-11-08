@@ -507,7 +507,7 @@ class jobSim:
             if host.video_card_infos != None:
                 for video_card in host.video_card_infos:
                     for gpu in video_card.gpu_infos:
-                        FLOPS += (int)(gpu.flops_per_core) * (int)(gpu.cores)
+                        FLOPS += gpu.flops_per_core * gpu.cores
         return FLOPS
 
 

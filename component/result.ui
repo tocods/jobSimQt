@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>Result</class>
+ <widget class="QWidget" name="Result">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,120 +13,133 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>160</x>
-     <y>110</y>
-     <width>614</width>
-     <height>265</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,1,1">
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout" stretch="5,1">
-      <item>
-       <widget class="QTabWidget" name="jobTabs">
-        <property name="currentIndex">
-         <number>-1</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>平均运行</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QTextEdit" name="jobshow1">
-            <property name="styleSheet">
-             <string notr="true">background-color: transparent; 
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,1,1">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="5,1">
+       <item>
+        <widget class="QTabWidget" name="jobTabs">
+         <property name="currentIndex">
+          <number>-1</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>平均运行</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="jobshow1">
+             <property name="styleSheet">
+              <string notr="true">background-color: transparent; 
 </string>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
-          <item>
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>吞吐</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QTextEdit" name="jobshow2">
-            <property name="styleSheet">
-             <string notr="true">background-color: transparent; </string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout_4" stretch="2,1">
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout" stretch="0">
-          <item>
-           <widget class="QTabWidget" name="showHost"/>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QTabWidget" name="hostTabs"/>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="5,1">
-      <item>
-       <widget class="QTabWidget" name="faultTabs">
-        <property name="currentIndex">
-         <number>-1</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_7">
-        <item>
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>余度可靠性</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTextEdit" name="faultResult">
-          <property name="styleSheet">
-           <string notr="true">background: transparent;</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </item>
-   </layout>
-  </widget>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_8">
+           <item>
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>算力利用率</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="jobShow3">
+             <property name="styleSheet">
+              <string notr="true">background-color: transparent; 
+</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>吞吐</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="jobshow2">
+             <property name="styleSheet">
+              <string notr="true">background-color: transparent; </string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="2,1">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout" stretch="0">
+           <item>
+            <widget class="QTabWidget" name="showHost"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTabWidget" name="hostTabs"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="5,1">
+       <item>
+        <widget class="QTabWidget" name="faultTabs">
+         <property name="currentIndex">
+          <number>-1</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_7">
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>余度可靠性</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTextEdit" name="faultResult">
+           <property name="styleSheet">
+            <string notr="true">background: transparent;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

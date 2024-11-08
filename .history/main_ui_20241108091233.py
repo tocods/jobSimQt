@@ -83,7 +83,7 @@ class UI:
 
         menu_toggle = menubar.addMenu("系统管理评估平台")
         # menu_toggle.addActions((self.action_enable, self.action_disable))
-        menu_toggle.addActions((self.action_out, self.action_refresh))
+        menu_toggle.addActions((self.action_out,))
         menu_theme = menubar.addMenu("")
         menu_theme.addActions(self.actions_theme)
      

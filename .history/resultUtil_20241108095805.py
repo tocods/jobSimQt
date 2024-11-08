@@ -51,4 +51,4 @@ def getEfficiency(jobs: List[JobRecord]):
             time_total_tmp += (float)(jobRun.duration)
         if time_total_tmp > time_total:
             time_total = time_total_tmp
-    return  flops_total / (time_total * sysSim.getFLOPS())
+    return  flops_total/ (time_total * sysSim.getFLOPS())

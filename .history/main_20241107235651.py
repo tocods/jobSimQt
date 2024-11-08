@@ -48,7 +48,6 @@ class JobSimQt(QMainWindow):
         self._ui.action_change_dock.triggered.connect(self._change_page)
         self._ui.action_micro_service.triggered.connect(self._change_page)
         self._ui.action_net_safe.triggered.connect(self._change_page)
-        self._ui.action_refresh.triggered.connect(self._initAll)
         self._ui.action_open_folder.triggered.connect(self.loadFromProject
             #lambda: QFileDialog.getOpenFileName(self, "Open File", options=QFileDialog.Option.DontUseNativeDialog)
         )
@@ -146,10 +145,7 @@ class JobSimQt(QMainWindow):
         # self._ui.resultui.showGPU.setChart(QChart())
         # self._ui.resultui.faultResultAnalysis.setChart(QChart())
         # self._ui.resultui.jobResultAnalysis.setChart(QChart())
-        self._ui.resultui.faultResult.clear()
-        self._ui.resultui.jobshow1.clear()
-        self._ui.resultui.jobshow2.clear()
-        self._ui.resultui.jobShow3.clear()
+        self._ui.resultui.faultResult
         self._initAll()
         #self.setClicked()
     
@@ -209,7 +205,6 @@ class JobSimQt(QMainWindow):
         self._ui.resultui.faultResult.clear()
         self._ui.resultui.jobshow1.clear()
         self._ui.resultui.jobshow2.clear()
-        self._ui.resultui.jobShow3.clear()
         # self._ui.resultui.jobResultAnalysis.setChart(QChart())
 
         # 绘制折线图

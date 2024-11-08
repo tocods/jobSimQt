@@ -32,7 +32,7 @@ def getThroughput(jobs: List[JobRecord]):
         flops_total += jobInfo.getFLOPS() * len(job.jobRuns)
         for jobRun in job.jobRuns:
             time_total_tmp += (float)(jobRun.duration)
-            print("time_total_tmp:" + jobRun.duration)
+            print("time_total_tmp:" + jo)
         if time_total_tmp > time_total:
             time_total = time_total_tmp
     print("f:" + flops_total.__str__())
@@ -51,4 +51,4 @@ def getEfficiency(jobs: List[JobRecord]):
             time_total_tmp += (float)(jobRun.duration)
         if time_total_tmp > time_total:
             time_total = time_total_tmp
-    return  flops_total / (time_total * sysSim.getFLOPS())
+    return  flops_total/ (time_total * sysSim.getFLOPS())

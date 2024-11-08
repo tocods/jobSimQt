@@ -31,7 +31,7 @@ class UI:
         # self.action_disable = QAction(QIcon("icons:clear_24dp.svg"), "Disable")
         self.actions_theme = [QAction(theme, main_win) for theme in ["黑色", "白色"]]
         self.action_out = QAction("退出")
-        self.action_refresh = QAction("刷新")
+        self.action_
         action_group_toolbar = QActionGroup(main_win)
 
         # Widgets
@@ -83,7 +83,7 @@ class UI:
 
         menu_toggle = menubar.addMenu("系统管理评估平台")
         # menu_toggle.addActions((self.action_enable, self.action_disable))
-        menu_toggle.addActions((self.action_out, self.action_refresh))
+        menu_toggle.addActions((self.action_out,))
         menu_theme = menubar.addMenu("")
         menu_theme.addActions(self.actions_theme)
      
