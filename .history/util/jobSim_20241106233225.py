@@ -503,11 +503,11 @@ class jobSim:
         FLOPS = 0
         for (name, host) in self.hosts.items():
             for cpu in host.cpu_infos:
-                FLOPS += (int)(cpu.mips) * (int)(cpu.cores)
+                FLOPS += (int)(cpu.mips * cpu.cores
             if host.video_card_infos != None:
                 for video_card in host.video_card_infos:
                     for gpu in video_card.gpu_infos:
-                        FLOPS += (int)(gpu.flops_per_core) * (int)(gpu.cores)
+                        FLOPS += gpu.flops_per_core * gpu.cores
         return FLOPS
 
 

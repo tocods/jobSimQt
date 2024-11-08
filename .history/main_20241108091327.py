@@ -209,7 +209,6 @@ class JobSimQt(QMainWindow):
         self._ui.resultui.faultResult.clear()
         self._ui.resultui.jobshow1.clear()
         self._ui.resultui.jobshow2.clear()
-        self._ui.resultui.jobShow3.clear()
         # self._ui.resultui.jobResultAnalysis.setChart(QChart())
 
         # 绘制折线图

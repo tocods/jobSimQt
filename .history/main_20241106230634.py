@@ -27,7 +27,7 @@ from component.faultinfo import Ui_FaultInfo
 from PySide6.QtCharts import QChart,QChartView,QLineSeries,QDateTimeAxis,QValueAxis, QPieSeries
 from jobSimPainter import Painter, XmlParser
 from util.table import NumericDelegate
-from resultUtil import getAverageRunTime, getAverageRunTimeInHost, getThroughput, getEfficiency
+from resultUtil import getAverageRunTime, getAverageRunTimeInHost, getThroughput
 import globaldata
 class JobSimQt(QMainWindow):
     def __init__(self, path) -> None:
@@ -48,7 +48,6 @@ class JobSimQt(QMainWindow):
         self._ui.action_change_dock.triggered.connect(self._change_page)
         self._ui.action_micro_service.triggered.connect(self._change_page)
         self._ui.action_net_safe.triggered.connect(self._change_page)
-        self._ui.action_refresh.triggered.connect(self._initAll)
         self._ui.action_open_folder.triggered.connect(self.loadFromProject
             #lambda: QFileDialog.getOpenFileName(self, "Open File", options=QFileDialog.Option.DontUseNativeDialog)
         )
@@ -136,20 +135,12 @@ class JobSimQt(QMainWindow):
         self._ui.resultui.hostTabs.clear()
         self._ui.resultui.jobTabs.clear()
         self._ui.resultui.faultTabs.clear()
-        #self._ui.resultui.show.setChart(QChart())
-        self.cpushow.setChart(QChart())
-        self.ramshow.setChart(QChart())
-        self.gpushow.setChart(QChart())
-        self.totalshow.setChart(QChart())
-        # self._ui.resultui.showCPU.setChart(QChart())
-        # self._ui.resultui.showRam.setChart(QChart())
-        # self._ui.resultui.showGPU.setChart(QChart())
-        # self._ui.resultui.faultResultAnalysis.setChart(QChart())
-        # self._ui.resultui.jobResultAnalysis.setChart(QChart())
-        self._ui.resultui.faultResult.clear()
-        self._ui.resultui.jobshow1.clear()
-        self._ui.resultui.jobshow2.clear()
-        self._ui.resultui.jobShow3.clear()
+        self._ui.resultui.show.setChart(QChart())
+        self._ui.resultui.showCPU.setChart(QChart())
+        self._ui.resultui.showRam.setChart(QChart())
+        self._ui.resultui.showGPU.setChart(QChart())
+        self._ui.resultui.faultResultAnalysis.setChart(QChart())
+        self._ui.resultui.jobResultAnalysis.setChart(QChart())
         self._initAll()
         #self.setClicked()
     
@@ -209,7 +200,6 @@ class JobSimQt(QMainWindow):
         self._ui.resultui.faultResult.clear()
         self._ui.resultui.jobshow1.clear()
         self._ui.resultui.jobshow2.clear()
-        self._ui.resultui.jobShow3.clear()
         # self._ui.resultui.jobResultAnalysis.setChart(QChart())
 
         # 绘制折线图
@@ -268,15 +258,6 @@ class JobSimQt(QMainWindow):
         self._ui.resultui.jobshow2.append(numFormat.format(str(self.throughput))) 
         self._ui.resultui.jobshow2.append(otherFormat.format('FLOPS/s')) 
 
-
-        self.efficiency = round(getEfficiency(self.job_results), 2)
-        # self._ui.resultui.jobshow3.setText(str(self.efficiency))
-        # 不可编辑
-        self._ui.resultui.jobShow3.setReadOnly(True)
-        self._ui.resultui.jobShow3.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        # 字体大，天蓝色
-        self._ui.resultui.jobShow3.append(numFormat.format(str(self.efficiency * 100)))
-        self._ui.resultui.jobShow3.append(otherFormat.format('%'))
 
 
 
