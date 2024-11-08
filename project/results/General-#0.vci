@@ -1,30 +1,33 @@
-file 32718840 1730787311                                        
+file 2757296 1731052313                                         
 version 3
-run General-0-20241105-14:15:07-14228
+run General-0-20241108-15:51:53-13932
 attr configname General
-attr datetime 20241105-14:15:07
-attr datetimef 20241105-141507
+attr datetime 20241108-15:51:53
+attr datetimef 20241108-155153
 attr experiment General
-attr inifile project/Parameters.ini
+attr inifile D:/jobSimQt/project/Parameters.ini
 attr iterationvars ""
 attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network TargetNetwork
-attr processid 14228
+attr processid 13932
 attr repetition 0
 attr replication #0
 attr resultdir results
 attr runnumber 0
 attr seedset 0
 config network TargetNetwork
-config sim-time-limit 1.5s
+config sim-time-limit 0.1s
+config *.*.ethernet.typename EthernetLayer
+config *.*.eth[*].typename LayeredEthernetInterface
+config *.*.eth[*].bitrate 100Mbps
+config **.eth[*].queue.typename DropTailQueue
+config **.eth[*].queue.packetCapacity 20
 config **.forwarding false
 config **.arp.retryTimeout 1s
 config **.arp.retryCount 3
 config **.arp.cacheTimeout 100s
-config **.eth[*].queue.typename DropTailQueue
-config **.eth[*].queue.packetCapacity 100
 config **.tcp.tcpAlgorithmClass "\"TcpReno\""
 config **.tcp.typename Tcp
 config **.tcp.advertisedWindow 65535
@@ -36,1634 +39,1303 @@ config **.tcp.sackSupport false
 config **.tcp.windowScalingSupport false
 config **.tcp.timestampSupport false
 config **.tcp.mss 1452
-config *.udp_tcp_cpu.numApps 2
-config *.udp_tcp_cpu.app[0].typename UdpSourceApp
-config *.udp_tcp_cpu.app[0].source.packetLength 1000B
-config *.udp_tcp_cpu.app[0].source.productionInterval exponential(100us)
-config *.udp_tcp_cpu.app[0].io.destAddress "\"udp_tcp_cpu2\""
-config *.udp_tcp_cpu.app[0].io.destPort 1000
-config *.udp_tcp_cpu.app[1].typename TcpSessionApp
-config *.udp_tcp_cpu.app[1].sendBytes 1000MiB
-config *.udp_tcp_cpu.app[1].active true
-config *.udp_tcp_cpu.app[1].localPort 1002
-config *.udp_tcp_cpu.app[1].connectAddress "\"udp_tcp_cpu2\""
-config *.udp_tcp_cpu.app[1].connectPort 1003
-config *.udp_tcp_cpu.app[1].tOpen 0s
-config *.udp_tcp_cpu.app[1].tSend 0s
-config *.udp_tcp_cpu.app[1].tClose 0s
-config *.udp_tcp_cpu.app[1].sendScript "\"\""
-config *.udp_tcp_cpu2.numApps 2
-config *.udp_tcp_cpu2.app[0].typename UdpSinkApp
-config *.udp_tcp_cpu2.app[0].io.localPort 1000
-config *.udp_tcp_cpu2.app[1].typename TcpSinkApp
-config *.udp_tcp_cpu2.app[1].localPort 1003
-config *.switch.ethernet.typename EthernetLayer
-config *.switch.eth[*].typename LayeredEthernetInterface
+config *.configurator.config "xml(\"<config><interface hosts='**' address='192.x.x.x' netmask='255.x.x.x'/></config>\")"
+config *.udp_tcp.numApps 1
+config *.udp_tcp.app[0].typename UdpApp615
+config *.udp_tcp.app[0].source.packetLength 1000B
+config *.udp_tcp.app[0].source.productionInterval exponential(100us)
+config *.udp_tcp.app[0].io.destAddress "\"udp_tcp2\""
+config *.udp_tcp.app[0].io.destPort 1000
+config *.udp_tcp.app[0].sink.typename ""
+config *.udp_tcp2.numApps 1
+config *.udp_tcp2.app[0].typename UdpApp615
+config *.udp_tcp2.app[0].source.typename ""
+config *.udp_tcp2.app[0].io.destPort -1
+config *.udp_tcp2.app[0].io.localPort 1000
+config *.udp_tcp2.app[0].sink.flowName "\"default\""
 config *.switch.eth[*].bitrate 100Mbps
 
-vector 0 TargetNetwork.udp_tcp_cpu.udp passedUpPk:vector(count) ETV
-attr interpolationmode none
-attr recordingmode vector(count)
-attr source packetSentToUpper
-attr title "packets passed up, count"
-vector 1 TargetNetwork.udp_tcp_cpu.udp droppedPkWrongPort:vector(count) ETV
-attr interpolationmode none
-attr recordingmode vector(count)
-attr source packetDropReasonIsNoPortFound(packetDropped)
-attr title "packets dropped (wrong port), count"
-vector 2 TargetNetwork.udp_tcp_cpu.udp droppedPkBadChecksum:vector(count) ETV
-attr interpolationmode none
-attr recordingmode vector(count)
-attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
-attr title "packets dropped (checksum error), count"
-vector 3 TargetNetwork.udp_tcp_cpu2.udp passedUpPk:vector(count) ETV
-attr interpolationmode none
-attr recordingmode vector(count)
-attr source packetSentToUpper
-attr title "packets passed up, count"
-vector 4 TargetNetwork.udp_tcp_cpu2.udp droppedPkWrongPort:vector(count) ETV
-attr interpolationmode none
-attr recordingmode vector(count)
-attr source packetDropReasonIsNoPortFound(packetDropped)
-attr title "packets dropped (wrong port), count"
-vector 5 TargetNetwork.udp_tcp_cpu2.udp droppedPkBadChecksum:vector(count) ETV
-attr interpolationmode none
-attr recordingmode vector(count)
-attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
-attr title "packets dropped (checksum error), count"
-vector 6 TargetNetwork.switch.eth[0].phyLayer.interFrameGapInserter interpacketGap:vector ETV
+vector 0 TargetNetwork.udp_tcp.eth[0].phyLayer.interFrameGapInserter interpacketGap:vector ETV
 attr interpolationmode sample-hold
 attr recordingmode vector
 attr source "count(interpacketGapStarted) - count(interpacketGapEnded)"
 attr title "interpacket gap state"
 attr type int
-vector 7 TargetNetwork.switch.eth[0].phyLayer.transmitter transmitting:vector ETV
+vector 1 TargetNetwork.udp_tcp.eth[0].phyLayer.transmitter transmitting:vector ETV
 attr interpolationmode sample-hold
 attr recordingmode vector
 attr source "count(transmissionStarted) - count(transmissionEnded)"
 attr title "transmitting state"
 attr type int
-vector 8 TargetNetwork.switch.eth[1].phyLayer.interFrameGapInserter interpacketGap:vector ETV
+vector 2 TargetNetwork.udp_tcp.udp passedUpPk:vector(count) ETV
+attr interpolationmode none
+attr recordingmode vector(count)
+attr source packetSentToUpper
+attr title "packets passed up, count"
+vector 3 TargetNetwork.udp_tcp.udp droppedPkWrongPort:vector(count) ETV
+attr interpolationmode none
+attr recordingmode vector(count)
+attr source packetDropReasonIsNoPortFound(packetDropped)
+attr title "packets dropped (wrong port), count"
+vector 4 TargetNetwork.udp_tcp.udp droppedPkBadChecksum:vector(count) ETV
+attr interpolationmode none
+attr recordingmode vector(count)
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packets dropped (checksum error), count"
+vector 5 TargetNetwork.udp_tcp2.eth[0].phyLayer.interFrameGapInserter interpacketGap:vector ETV
 attr interpolationmode sample-hold
 attr recordingmode vector
 attr source "count(interpacketGapStarted) - count(interpacketGapEnded)"
 attr title "interpacket gap state"
 attr type int
-vector 9 TargetNetwork.switch.eth[1].phyLayer.transmitter transmitting:vector ETV
+vector 6 TargetNetwork.udp_tcp2.eth[0].phyLayer.transmitter transmitting:vector ETV
 attr interpolationmode sample-hold
 attr recordingmode vector
 attr source "count(transmissionStarted) - count(transmissionEnded)"
 attr title "transmitting state"
 attr type int
-vector 10 TargetNetwork.udp_tcp_cpu.app[0].source packetLengths:vector ETV
+vector 7 TargetNetwork.udp_tcp2.udp passedUpPk:vector(count) ETV
+attr interpolationmode none
+attr recordingmode vector(count)
+attr source packetSentToUpper
+attr title "packets passed up, count"
+vector 8 TargetNetwork.udp_tcp2.udp droppedPkWrongPort:vector(count) ETV
+attr interpolationmode none
+attr recordingmode vector(count)
+attr source packetDropReasonIsNoPortFound(packetDropped)
+attr title "packets dropped (wrong port), count"
+vector 9 TargetNetwork.udp_tcp2.udp droppedPkBadChecksum:vector(count) ETV
+attr interpolationmode none
+attr recordingmode vector(count)
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packets dropped (checksum error), count"
+vector 10 TargetNetwork.switch.eth[0].phyLayer.interFrameGapInserter interpacketGap:vector ETV
+attr interpolationmode sample-hold
+attr recordingmode vector
+attr source "count(interpacketGapStarted) - count(interpacketGapEnded)"
+attr title "interpacket gap state"
+attr type int
+vector 11 TargetNetwork.switch.eth[0].phyLayer.transmitter transmitting:vector ETV
+attr interpolationmode sample-hold
+attr recordingmode vector
+attr source "count(transmissionStarted) - count(transmissionEnded)"
+attr title "transmitting state"
+attr type int
+vector 12 TargetNetwork.switch.eth[1].phyLayer.interFrameGapInserter interpacketGap:vector ETV
+attr interpolationmode sample-hold
+attr recordingmode vector
+attr source "count(interpacketGapStarted) - count(interpacketGapEnded)"
+attr title "interpacket gap state"
+attr type int
+vector 13 TargetNetwork.switch.eth[1].phyLayer.transmitter transmitting:vector ETV
+attr interpolationmode sample-hold
+attr recordingmode vector
+attr source "count(transmissionStarted) - count(transmissionEnded)"
+attr title "transmitting state"
+attr type int
+vector 14 TargetNetwork.udp_tcp.app[0].source packetLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source packetLength(packetPushed)
 attr title "packet lengths"
 attr unit b
-vector 11 TargetNetwork.udp_tcp_cpu.app[0].io packetSent:vector(packetBytes) ETV
+vector 15 TargetNetwork.udp_tcp.app[0].io packetSent:vector(packetBytes) ETV
 attr interpolationmode none
 attr recordingmode vector(packetBytes)
 attr source packetSent
 attr title "packets sent, packetBytes"
-vector 12 TargetNetwork.udp_tcp_cpu.udp packetSent:vector(packetBytes) ETV
+vector 16 TargetNetwork.udp_tcp.udp packetSent:vector(packetBytes) ETV
 attr interpolationmode none
 attr recordingmode vector(packetBytes)
 attr source packetSent
 attr title "packets sent, packetBytes"
-vector 13 TargetNetwork.udp_tcp_cpu.tcp.conn-4 tcpRcvQueueBytes:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 14 TargetNetwork.udp_tcp_cpu.tcp.conn-4 rcvAdv:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 15 TargetNetwork.udp_tcp_cpu.tcp.conn-4 rcvWnd:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 16 TargetNetwork.udp_tcp_cpu.tcp.conn-4 sndAck:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 17 TargetNetwork.udp_tcp_cpu.ethernet encapPk:vector(packetBytes) ETV
+vector 17 TargetNetwork.udp_tcp.ethernet.macHeaderInserter incomingPacketLengths:vector ETV
 attr interpolationmode none
-attr recordingmode vector(packetBytes)
-attr source encapPk
-attr title "packets encapsulated, packetBytes"
-vector 18 TargetNetwork.udp_tcp_cpu.eth[0].queue incomingPacketLengths:vector ETV
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 18 TargetNetwork.udp_tcp.ethernet.macHeaderInserter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 19 TargetNetwork.udp_tcp.ethernet.paddingInserter incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 20 TargetNetwork.udp_tcp.ethernet.paddingInserter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 21 TargetNetwork.udp_tcp.ethernet.fcsInserter incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 22 TargetNetwork.udp_tcp.ethernet.fcsInserter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 23 TargetNetwork.udp_tcp.eth[0].macLayer.queue incomingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source packetLength(packetPushStarted)
 attr title "incoming packet lengths"
 attr unit b
-vector 19 TargetNetwork.udp_tcp_cpu.eth[0].queue _port0 ETV
-vector 20 TargetNetwork.udp_tcp_cpu.eth[0].queue queueingTime:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source queueingTime(packetPulled)
-attr title "queueing times"
-attr unit s
-vector 21 TargetNetwork.udp_tcp_cpu.eth[0].queue outgoingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source packetLength(packetPulled)
-attr title "outgoing packet lengths"
-attr unit b
-vector 22 TargetNetwork.udp_tcp_cpu.eth[0].mac packetReceivedFromUpper:vector(packetBytes) ETV
-attr interpolationmode none
-attr recordingmode vector(packetBytes)
-attr source packetReceivedFromUpper
-attr title "packet bytes from higher layer, packetBytes"
-vector 23 TargetNetwork.udp_tcp_cpu.eth[0].queue queueLength:vector ETV
+vector 24 TargetNetwork.udp_tcp.eth[0].macLayer.queue queueLength:vector ETV
 attr autoWarmupFilter false
 attr interpolationmode sample-hold
 attr recordingmode vector
 attr source "warmup(atomic(constant0(packetPushEnded) + count(packetPushStarted) - count(packetPulled) - count(packetRemoved) - count(packetDropped)))"
 attr title "queue length"
 attr unit pk
-vector 24 TargetNetwork.udp_tcp_cpu.eth[0].queue queueBitLength:vector ETV
+vector 25 TargetNetwork.udp_tcp.eth[0].macLayer.queue queueBitLength:vector ETV
 attr autoWarmupFilter false
 attr interpolationmode sample-hold
 attr recordingmode vector
 attr source "warmup(atomic(constant0(packetPushEnded) + sum(packetLength(packetPushStarted)) - sum(packetLength(packetPulled)) - sum(packetLength(packetRemoved)) - sum(packetLength(packetDropped))))"
 attr title "queue bit length"
 attr unit b
-vector 25 TargetNetwork.switch.eth[0].phyLayer.receiver receptionTime:vector ETV
+vector 26 TargetNetwork.udp_tcp.eth[0].macLayer.queue queueingTime:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source queueingTime(packetPulled)
+attr title "queueing times"
+attr unit s
+vector 27 TargetNetwork.udp_tcp.eth[0].macLayer.queue outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source packetLength(packetPulled)
+attr title "outgoing packet lengths"
+attr unit b
+vector 28 TargetNetwork.udp_tcp.eth[0].macLayer.server incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source packetLength(packetPulled)
+attr title "incoming packet lengths"
+attr unit b
+vector 29 TargetNetwork.udp_tcp.eth[0].macLayer.server outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source packetLength(packetPushed)
+attr title "outgoing packet lengths"
+attr unit b
+vector 30 TargetNetwork.udp_tcp.eth[0].macLayer.outboundEmitter incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 31 TargetNetwork.udp_tcp.eth[0].macLayer.outboundEmitter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 32 TargetNetwork.udp_tcp.eth[0].phyLayer.phyHeaderInserter incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 33 TargetNetwork.udp_tcp.eth[0].phyLayer.phyHeaderInserter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 34 TargetNetwork.udp_tcp.eth[0].phyLayer.outboundEmitter incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 35 TargetNetwork.udp_tcp.eth[0].phyLayer.outboundEmitter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 36 TargetNetwork.switch.eth[0].phyLayer.receiver receptionTime:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source packetDuration(receptionEnded)
 attr title "reception time"
 attr unit s
-vector 26 TargetNetwork.switch.eth[0].phyLayer.inboundEmitter incomingPacketLengths:vector ETV
+vector 37 TargetNetwork.switch.eth[0].phyLayer.inboundEmitter incomingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming packet lengths"
 attr unit b
-vector 27 TargetNetwork.switch.eth[0].phyLayer.inboundEmitter outgoingPacketLengths:vector ETV
+vector 38 TargetNetwork.switch.eth[0].phyLayer.inboundEmitter outgoingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing packet lengths"
 attr unit b
-vector 28 TargetNetwork.switch.eth[0].phyLayer.phyHeaderChecker incomingPacketLengths:vector ETV
+vector 39 TargetNetwork.switch.eth[0].phyLayer.phyHeaderChecker incomingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming packet lengths"
 attr unit b
-vector 29 TargetNetwork.switch.eth[0].phyLayer.phyHeaderChecker outgoingPacketLengths:vector ETV
+vector 40 TargetNetwork.switch.eth[0].phyLayer.phyHeaderChecker outgoingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing packet lengths"
 attr unit b
-vector 30 TargetNetwork.switch.eth[0].macLayer.inboundEmitter incomingPacketLengths:vector ETV
+vector 41 TargetNetwork.switch.eth[0].macLayer.inboundEmitter incomingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming packet lengths"
 attr unit b
-vector 31 TargetNetwork.switch.eth[0].macLayer.inboundEmitter outgoingPacketLengths:vector ETV
+vector 42 TargetNetwork.switch.eth[0].macLayer.inboundEmitter outgoingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing packet lengths"
 attr unit b
-vector 32 TargetNetwork.switch.eth[0].macLayer.fcsChecker incomingPacketLengths:vector ETV
+vector 43 TargetNetwork.switch.eth[0].macLayer.fcsChecker incomingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming packet lengths"
 attr unit b
-vector 33 TargetNetwork.switch.eth[0].macLayer.fcsChecker outgoingPacketLengths:vector ETV
+vector 44 TargetNetwork.switch.eth[0].macLayer.fcsChecker outgoingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing packet lengths"
 attr unit b
-vector 34 TargetNetwork.switch.ethernet.fcsChecker incomingPacketLengths:vector ETV
+vector 45 TargetNetwork.switch.ethernet.fcsChecker incomingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming packet lengths"
 attr unit b
-vector 35 TargetNetwork.switch.ethernet.fcsChecker outgoingPacketLengths:vector ETV
+vector 46 TargetNetwork.switch.ethernet.fcsChecker outgoingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing packet lengths"
 attr unit b
-vector 36 TargetNetwork.switch.ethernet.macHeaderChecker incomingPacketLengths:vector ETV
+vector 47 TargetNetwork.switch.ethernet.macHeaderChecker incomingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming packet lengths"
 attr unit b
-vector 37 TargetNetwork.switch.ethernet.macHeaderChecker outgoingPacketLengths:vector ETV
+vector 48 TargetNetwork.switch.ethernet.macHeaderChecker outgoingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing packet lengths"
 attr unit b
-vector 38 TargetNetwork.udp_tcp_cpu.eth[0].mac txPk:vector(packetBytes) ETV
+vector 49 TargetNetwork.udp_tcp.eth[0].phyLayer.transmitter transmissionTime:vector ETV
 attr interpolationmode none
-attr recordingmode vector(packetBytes)
-attr source packetSentToLower
-attr title "packets transmitted, packetBytes"
-vector 39 TargetNetwork.switch.ethernet.macHeaderInserter incomingPacketLengths:vector ETV
+attr recordingmode vector
+attr source packetDuration(transmissionEnded)
+attr title "transmission time"
+attr unit s
+vector 50 TargetNetwork.switch.ethernet.macHeaderInserter incomingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming packet lengths"
 attr unit b
-vector 40 TargetNetwork.switch.ethernet.macHeaderInserter outgoingPacketLengths:vector ETV
+vector 51 TargetNetwork.switch.ethernet.macHeaderInserter outgoingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing packet lengths"
 attr unit b
-vector 41 TargetNetwork.switch.ethernet.paddingInserter incomingPacketLengths:vector ETV
+vector 52 TargetNetwork.switch.ethernet.paddingInserter incomingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming packet lengths"
 attr unit b
-vector 42 TargetNetwork.switch.ethernet.paddingInserter outgoingPacketLengths:vector ETV
+vector 53 TargetNetwork.switch.ethernet.paddingInserter outgoingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing packet lengths"
 attr unit b
-vector 43 TargetNetwork.switch.ethernet.fcsInserter incomingPacketLengths:vector ETV
+vector 54 TargetNetwork.switch.ethernet.fcsInserter incomingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming packet lengths"
 attr unit b
-vector 44 TargetNetwork.switch.ethernet.fcsInserter outgoingPacketLengths:vector ETV
+vector 55 TargetNetwork.switch.ethernet.fcsInserter outgoingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing packet lengths"
 attr unit b
-vector 45 TargetNetwork.switch.eth[1].macLayer.queue incomingPacketLengths:vector ETV
+vector 56 TargetNetwork.switch.eth[1].macLayer.queue incomingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source packetLength(packetPushStarted)
 attr title "incoming packet lengths"
 attr unit b
-vector 46 TargetNetwork.switch.eth[1].macLayer.queue _port3 ETV
-vector 47 TargetNetwork.switch.eth[1].macLayer.queue queueLength:vector ETV
+vector 57 TargetNetwork.switch.eth[1].macLayer.queue queueLength:vector ETV
 attr autoWarmupFilter false
 attr interpolationmode sample-hold
 attr recordingmode vector
 attr source "warmup(atomic(constant0(packetPushEnded) + count(packetPushStarted) - count(packetPulled) - count(packetRemoved) - count(packetDropped)))"
 attr title "queue length"
 attr unit pk
-vector 48 TargetNetwork.switch.eth[1].macLayer.queue queueBitLength:vector ETV
+vector 58 TargetNetwork.switch.eth[1].macLayer.queue queueBitLength:vector ETV
 attr autoWarmupFilter false
 attr interpolationmode sample-hold
 attr recordingmode vector
 attr source "warmup(atomic(constant0(packetPushEnded) + sum(packetLength(packetPushStarted)) - sum(packetLength(packetPulled)) - sum(packetLength(packetRemoved)) - sum(packetLength(packetDropped))))"
 attr title "queue bit length"
 attr unit b
-vector 49 TargetNetwork.switch.eth[1].macLayer.queue queueingTime:vector ETV
+vector 59 TargetNetwork.switch.eth[1].macLayer.queue queueingTime:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source queueingTime(packetPulled)
 attr title "queueing times"
 attr unit s
-vector 50 TargetNetwork.switch.eth[1].macLayer.queue outgoingPacketLengths:vector ETV
+vector 60 TargetNetwork.switch.eth[1].macLayer.queue outgoingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source packetLength(packetPulled)
 attr title "outgoing packet lengths"
 attr unit b
-vector 51 TargetNetwork.switch.eth[1].macLayer.server incomingPacketLengths:vector ETV
+vector 61 TargetNetwork.switch.eth[1].macLayer.server incomingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source packetLength(packetPulled)
 attr title "incoming packet lengths"
 attr unit b
-vector 52 TargetNetwork.switch.eth[1].macLayer.server outgoingPacketLengths:vector ETV
+vector 62 TargetNetwork.switch.eth[1].macLayer.server outgoingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source packetLength(packetPushed)
 attr title "outgoing packet lengths"
 attr unit b
-vector 53 TargetNetwork.switch.eth[1].macLayer.outboundEmitter incomingPacketLengths:vector ETV
+vector 63 TargetNetwork.switch.eth[1].macLayer.outboundEmitter incomingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming packet lengths"
 attr unit b
-vector 54 TargetNetwork.switch.eth[1].macLayer.outboundEmitter outgoingPacketLengths:vector ETV
+vector 64 TargetNetwork.switch.eth[1].macLayer.outboundEmitter outgoingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing packet lengths"
 attr unit b
-vector 55 TargetNetwork.switch.eth[1].phyLayer.phyHeaderInserter incomingPacketLengths:vector ETV
+vector 65 TargetNetwork.switch.eth[1].phyLayer.phyHeaderInserter incomingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming packet lengths"
 attr unit b
-vector 56 TargetNetwork.switch.eth[1].phyLayer.phyHeaderInserter outgoingPacketLengths:vector ETV
+vector 66 TargetNetwork.switch.eth[1].phyLayer.phyHeaderInserter outgoingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing packet lengths"
 attr unit b
-vector 57 TargetNetwork.switch.eth[1].phyLayer.outboundEmitter incomingPacketLengths:vector ETV
+vector 67 TargetNetwork.switch.eth[1].phyLayer.outboundEmitter incomingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming packet lengths"
 attr unit b
-vector 58 TargetNetwork.switch.eth[1].phyLayer.outboundEmitter outgoingPacketLengths:vector ETV
+vector 68 TargetNetwork.switch.eth[1].phyLayer.outboundEmitter outgoingPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing packet lengths"
 attr unit b
-vector 59 TargetNetwork.udp_tcp_cpu2.eth[0].mac rxPkOk:vector(packetBytes) ETV
+vector 69 TargetNetwork.udp_tcp2.eth[0].phyLayer.receiver receptionTime:vector ETV
 attr interpolationmode none
-attr recordingmode vector(packetBytes)
-attr source rxPkOk
-attr title "packets received OK, packetBytes"
-vector 60 TargetNetwork.udp_tcp_cpu2.eth[0].mac passedUpPk:vector(packetBytes) ETV
+attr recordingmode vector
+attr source packetDuration(receptionEnded)
+attr title "reception time"
+attr unit s
+vector 70 TargetNetwork.udp_tcp2.eth[0].phyLayer.inboundEmitter incomingPacketLengths:vector ETV
 attr interpolationmode none
-attr recordingmode vector(packetBytes)
-attr source packetSentToUpper
-attr title "packets passed to higher layer, packetBytes"
-vector 61 TargetNetwork.switch.eth[1].phyLayer.transmitter transmissionTime:vector ETV
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 71 TargetNetwork.udp_tcp2.eth[0].phyLayer.inboundEmitter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 72 TargetNetwork.udp_tcp2.eth[0].phyLayer.phyHeaderChecker incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 73 TargetNetwork.udp_tcp2.eth[0].phyLayer.phyHeaderChecker outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 74 TargetNetwork.udp_tcp2.eth[0].macLayer.inboundEmitter incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 75 TargetNetwork.udp_tcp2.eth[0].macLayer.inboundEmitter outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 76 TargetNetwork.udp_tcp2.eth[0].macLayer.fcsChecker incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 77 TargetNetwork.udp_tcp2.eth[0].macLayer.fcsChecker outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 78 TargetNetwork.udp_tcp2.ethernet.fcsChecker incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 79 TargetNetwork.udp_tcp2.ethernet.fcsChecker outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 80 TargetNetwork.udp_tcp2.ethernet.macHeaderChecker incomingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming packet lengths"
+attr unit b
+vector 81 TargetNetwork.udp_tcp2.ethernet.macHeaderChecker outgoingPacketLengths:vector ETV
+attr interpolationmode none
+attr recordingmode vector
+attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing packet lengths"
+attr unit b
+vector 82 TargetNetwork.switch.eth[1].phyLayer.transmitter transmissionTime:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source packetDuration(transmissionEnded)
 attr title "transmission time"
 attr unit s
-vector 62 TargetNetwork.udp_tcp_cpu2.ethernet decapPk:vector(packetBytes) ETV
-attr interpolationmode none
-attr recordingmode vector(packetBytes)
-attr source decapPk
-attr title "packets decapsulated, packetBytes"
-vector 63 TargetNetwork.udp_tcp_cpu2.udp packetReceived:vector(packetBytes) ETV
+vector 83 TargetNetwork.udp_tcp2.udp packetReceived:vector(packetBytes) ETV
 attr interpolationmode none
 attr recordingmode vector(packetBytes)
 attr source packetReceived
 attr title "packets received, packetBytes"
-vector 64 TargetNetwork.udp_tcp_cpu2.app[0].io packetReceived:vector(packetBytes) ETV
+vector 84 TargetNetwork.udp_tcp2.app[0].io packetReceived:vector(packetBytes) ETV
 attr interpolationmode none
 attr recordingmode vector(packetBytes)
 attr source packetReceived
 attr title "packets received, packetBytes"
-vector 65 TargetNetwork.udp_tcp_cpu2.app[0].sink packetLengths:vector ETV
+vector 85 TargetNetwork.udp_tcp2.app[0].sink packetLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source packetLength(packetPushed)
 attr title "packet lengths"
 attr unit b
-vector 66 TargetNetwork.udp_tcp_cpu2.app[0].sink droppedPacketLengths:vector ETV
+vector 86 TargetNetwork.udp_tcp2.app[0].sink default ETV
+vector 87 TargetNetwork.udp_tcp2.app[0].sink droppedPacketLengths:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source packetLength(packetDropped)
 attr title "dropped packet lengths"
 attr unit b
-vector 67 TargetNetwork.udp_tcp_cpu2.tcp.conn-2 rcvSeq:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 68 TargetNetwork.udp_tcp_cpu2.tcp.conn-2 rcvAck:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 69 TargetNetwork.udp_tcp_cpu2.tcp.conn-2 tcpRcvPayloadBytes:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 70 TargetNetwork.udp_tcp_cpu2.tcp.conn-5 rcvAdv:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 71 TargetNetwork.udp_tcp_cpu2.tcp.conn-5 sndWnd:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 72 TargetNetwork.udp_tcp_cpu2.tcp.conn-5 tcpRcvQueueBytes:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 73 TargetNetwork.udp_tcp_cpu2.tcp.conn-5 rcvWnd:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 74 TargetNetwork.udp_tcp_cpu2.tcp.conn-5 sndAck:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 75 TargetNetwork.udp_tcp_cpu2.ethernet encapPk:vector(packetBytes) ETV
-attr interpolationmode none
-attr recordingmode vector(packetBytes)
-attr source encapPk
-attr title "packets encapsulated, packetBytes"
-vector 76 TargetNetwork.udp_tcp_cpu2.eth[0].queue incomingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source packetLength(packetPushStarted)
-attr title "incoming packet lengths"
-attr unit b
-vector 77 TargetNetwork.udp_tcp_cpu2.eth[0].queue _port1 ETV
-vector 78 TargetNetwork.udp_tcp_cpu2.eth[0].queue queueingTime:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source queueingTime(packetPulled)
-attr title "queueing times"
-attr unit s
-vector 79 TargetNetwork.udp_tcp_cpu2.eth[0].queue outgoingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source packetLength(packetPulled)
-attr title "outgoing packet lengths"
-attr unit b
-vector 80 TargetNetwork.udp_tcp_cpu2.eth[0].mac packetReceivedFromUpper:vector(packetBytes) ETV
-attr interpolationmode none
-attr recordingmode vector(packetBytes)
-attr source packetReceivedFromUpper
-attr title "packet bytes from higher layer, packetBytes"
-vector 81 TargetNetwork.udp_tcp_cpu2.eth[0].queue queueLength:vector ETV
-attr autoWarmupFilter false
-attr interpolationmode sample-hold
-attr recordingmode vector
-attr source "warmup(atomic(constant0(packetPushEnded) + count(packetPushStarted) - count(packetPulled) - count(packetRemoved) - count(packetDropped)))"
-attr title "queue length"
-attr unit pk
-vector 82 TargetNetwork.udp_tcp_cpu2.eth[0].queue queueBitLength:vector ETV
-attr autoWarmupFilter false
-attr interpolationmode sample-hold
-attr recordingmode vector
-attr source "warmup(atomic(constant0(packetPushEnded) + sum(packetLength(packetPushStarted)) - sum(packetLength(packetPulled)) - sum(packetLength(packetRemoved)) - sum(packetLength(packetDropped))))"
-attr title "queue bit length"
-attr unit b
-vector 83 TargetNetwork.switch.eth[1].phyLayer.receiver receptionTime:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source packetDuration(receptionEnded)
-attr title "reception time"
-attr unit s
-vector 84 TargetNetwork.switch.eth[1].phyLayer.inboundEmitter incomingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming packet lengths"
-attr unit b
-vector 85 TargetNetwork.switch.eth[1].phyLayer.inboundEmitter outgoingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing packet lengths"
-attr unit b
-vector 86 TargetNetwork.switch.eth[1].phyLayer.phyHeaderChecker incomingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming packet lengths"
-attr unit b
-vector 87 TargetNetwork.switch.eth[1].phyLayer.phyHeaderChecker outgoingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing packet lengths"
-attr unit b
-vector 88 TargetNetwork.switch.eth[1].macLayer.inboundEmitter incomingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming packet lengths"
-attr unit b
-vector 89 TargetNetwork.switch.eth[1].macLayer.inboundEmitter outgoingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing packet lengths"
-attr unit b
-vector 90 TargetNetwork.switch.eth[1].macLayer.fcsChecker incomingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming packet lengths"
-attr unit b
-vector 91 TargetNetwork.switch.eth[1].macLayer.fcsChecker outgoingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing packet lengths"
-attr unit b
-vector 92 TargetNetwork.udp_tcp_cpu2.eth[0].mac txPk:vector(packetBytes) ETV
-attr interpolationmode none
-attr recordingmode vector(packetBytes)
-attr source packetSentToLower
-attr title "packets transmitted, packetBytes"
-vector 93 TargetNetwork.switch.eth[0].macLayer.queue incomingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source packetLength(packetPushStarted)
-attr title "incoming packet lengths"
-attr unit b
-vector 94 TargetNetwork.switch.eth[0].macLayer.queue _port2 ETV
-vector 95 TargetNetwork.switch.eth[0].macLayer.queue queueLength:vector ETV
-attr autoWarmupFilter false
-attr interpolationmode sample-hold
-attr recordingmode vector
-attr source "warmup(atomic(constant0(packetPushEnded) + count(packetPushStarted) - count(packetPulled) - count(packetRemoved) - count(packetDropped)))"
-attr title "queue length"
-attr unit pk
-vector 96 TargetNetwork.switch.eth[0].macLayer.queue queueBitLength:vector ETV
-attr autoWarmupFilter false
-attr interpolationmode sample-hold
-attr recordingmode vector
-attr source "warmup(atomic(constant0(packetPushEnded) + sum(packetLength(packetPushStarted)) - sum(packetLength(packetPulled)) - sum(packetLength(packetRemoved)) - sum(packetLength(packetDropped))))"
-attr title "queue bit length"
-attr unit b
-vector 97 TargetNetwork.switch.eth[0].macLayer.queue queueingTime:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source queueingTime(packetPulled)
-attr title "queueing times"
-attr unit s
-vector 98 TargetNetwork.switch.eth[0].macLayer.queue outgoingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source packetLength(packetPulled)
-attr title "outgoing packet lengths"
-attr unit b
-vector 99 TargetNetwork.switch.eth[0].macLayer.server incomingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source packetLength(packetPulled)
-attr title "incoming packet lengths"
-attr unit b
-vector 100 TargetNetwork.switch.eth[0].macLayer.server outgoingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source packetLength(packetPushed)
-attr title "outgoing packet lengths"
-attr unit b
-vector 101 TargetNetwork.switch.eth[0].macLayer.outboundEmitter incomingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming packet lengths"
-attr unit b
-vector 102 TargetNetwork.switch.eth[0].macLayer.outboundEmitter outgoingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing packet lengths"
-attr unit b
-vector 103 TargetNetwork.switch.eth[0].phyLayer.phyHeaderInserter incomingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming packet lengths"
-attr unit b
-vector 104 TargetNetwork.switch.eth[0].phyLayer.phyHeaderInserter outgoingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing packet lengths"
-attr unit b
-vector 105 TargetNetwork.switch.eth[0].phyLayer.outboundEmitter incomingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source "packetLength(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming packet lengths"
-attr unit b
-vector 106 TargetNetwork.switch.eth[0].phyLayer.outboundEmitter outgoingPacketLengths:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source "packetLength(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing packet lengths"
-attr unit b
-vector 107 TargetNetwork.udp_tcp_cpu.eth[0].mac rxPkOk:vector(packetBytes) ETV
-attr interpolationmode none
-attr recordingmode vector(packetBytes)
-attr source rxPkOk
-attr title "packets received OK, packetBytes"
-vector 108 TargetNetwork.udp_tcp_cpu.eth[0].mac passedUpPk:vector(packetBytes) ETV
-attr interpolationmode none
-attr recordingmode vector(packetBytes)
-attr source packetSentToUpper
-attr title "packets passed to higher layer, packetBytes"
-vector 109 TargetNetwork.switch.eth[0].phyLayer.transmitter transmissionTime:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source packetDuration(transmissionEnded)
-attr title "transmission time"
-attr unit s
-vector 110 TargetNetwork.udp_tcp_cpu.ethernet decapPk:vector(packetBytes) ETV
-attr interpolationmode none
-attr recordingmode vector(packetBytes)
-attr source decapPk
-attr title "packets decapsulated, packetBytes"
-vector 111 TargetNetwork.udp_tcp_cpu.tcp.conn-4 rcvSeq:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 112 TargetNetwork.udp_tcp_cpu.tcp.conn-4 rcvAck:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 113 TargetNetwork.udp_tcp_cpu.tcp.conn-4 tcpRcvPayloadBytes:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 114 TargetNetwork.udp_tcp_cpu.tcp.conn-4 sndWnd:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 115 TargetNetwork.udp_tcp_cpu.app[1] packetSent:vector(packetBytes) ETV
-attr interpolationmode none
-attr recordingmode vector(packetBytes)
-attr source packetSent
-attr title "packets sent, packetBytes"
-vector 116 TargetNetwork.udp_tcp_cpu.tcp.conn-4 sndNxt:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 117 TargetNetwork.udp_tcp_cpu.tcp.conn-4 unacked:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 118 TargetNetwork.udp_tcp_cpu2.app[0].sink meanBitLifeTimePerPacket:vector ETV
+vector 88 TargetNetwork.udp_tcp2.app[0].sink meanBitLifeTimePerPacket:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source weightedMeanPerGroup(groupRegionsPerPacket(lifeTimePerRegion(packetPushed)))
 attr title "mean bit life time per packet"
 attr unit s
-vector 119 TargetNetwork.udp_tcp_cpu2.app[0].sink packetJitter:vector ETV
+vector 89 TargetNetwork.udp_tcp2.app[0].sink packetJitter:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source jitter(weightedMeanPerGroup(groupRegionsPerPacket(lifeTimePerRegion(packetPushed))))
 attr title "packet jitter"
 attr unit s
-vector 120 TargetNetwork.udp_tcp_cpu2.app[0].sink packetDelayDifferenceToMean:vector ETV
+vector 90 TargetNetwork.udp_tcp2.app[0].sink packetDelayDifferenceToMean:vector ETV
 attr interpolationmode none
 attr recordingmode vector
 attr source differenceToMean(weightedMeanPerGroup(groupRegionsPerPacket(lifeTimePerRegion(packetPushed))))
 attr title "packet delay difference to mean"
 attr unit s
-vector 121 TargetNetwork.udp_tcp_cpu2.app[0].sink packetDelayVariation:vector ETV
+vector 91 TargetNetwork.udp_tcp2.app[0].sink packetDelayVariation:vector ETV
 attr recordingmode vector
 attr source stddev(weightedMeanPerGroup(groupRegionsPerPacket(lifeTimePerRegion(packetPushed))))
 attr title "packet delay variation"
 attr unit s
-vector 122 TargetNetwork.udp_tcp_cpu2.tcp.conn-5 rcvSeq:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 123 TargetNetwork.udp_tcp_cpu2.tcp.conn-5 rcvAck:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 124 TargetNetwork.udp_tcp_cpu2.tcp.conn-5 tcpRcvPayloadBytes:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 125 TargetNetwork.udp_tcp_cpu2.tcp.conn-5 unacked:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 126 TargetNetwork.udp_tcp_cpu2.tcp.conn-5 dupAcks:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 127 TargetNetwork.udp_tcp_cpu2.app[1].thread_5 packetReceived:vector(packetBytes) ETV
-attr interpolationmode none
-attr recordingmode vector(packetBytes)
-attr source packetReceived
-attr title "packets received, packetBytes"
-vector 128 TargetNetwork.udp_tcp_cpu2.app[1].thread_5 endToEndDelay:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source dataAge(packetReceived)
-attr title "end-to-end delay"
-attr unit s
-vector 129 TargetNetwork.udp_tcp_cpu2.app[1] packetReceived:vector(packetBytes) ETV
-attr checkSignals false
-attr interpolationmode none
-attr recordingmode vector(packetBytes)
-attr source packetReceived
-attr title "packets received, packetBytes"
-vector 130 TargetNetwork.udp_tcp_cpu2.app[1] endToEndDelay:vector ETV
-attr checkSignals false
-attr interpolationmode none
-attr recordingmode vector
-attr source dataAge(packetReceived)
-attr title "end-to-end delay"
-attr unit s
-vector 131 TargetNetwork.udp_tcp_cpu.tcp.conn-4 rtt:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 132 TargetNetwork.udp_tcp_cpu.tcp.conn-4 srtt:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 133 TargetNetwork.udp_tcp_cpu.tcp.conn-4 rttvar:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 134 TargetNetwork.udp_tcp_cpu.tcp.conn-4 rto:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 135 TargetNetwork.udp_tcp_cpu.tcp.conn-4 cwnd:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 136 TargetNetwork.udp_tcp_cpu.tcp.conn-4 ssthresh:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 137 TargetNetwork.udp_tcp_cpu.tcp.conn-4 dupAcks:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 138 TargetNetwork.udp_tcp_cpu.eth[0].queue incomingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source throughput(packetPushStarted)
-attr title "incoming datarate"
-attr unit bps
-vector 139 TargetNetwork.switch.ethernet.fcsChecker incomingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming data rate"
-attr unit bps
-vector 140 TargetNetwork.switch.ethernet.fcsChecker outgoingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing data rate"
-attr unit bps
-vector 141 TargetNetwork.switch.ethernet.macHeaderChecker incomingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming data rate"
-attr unit bps
-vector 142 TargetNetwork.switch.ethernet.macHeaderChecker outgoingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing data rate"
-attr unit bps
-vector 143 TargetNetwork.switch.ethernet.macHeaderInserter incomingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming data rate"
-attr unit bps
-vector 144 TargetNetwork.switch.ethernet.macHeaderInserter outgoingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing data rate"
-attr unit bps
-vector 145 TargetNetwork.switch.ethernet.paddingInserter incomingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming data rate"
-attr unit bps
-vector 146 TargetNetwork.switch.ethernet.paddingInserter outgoingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing data rate"
-attr unit bps
-vector 147 TargetNetwork.switch.ethernet.fcsInserter incomingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming data rate"
-attr unit bps
-vector 148 TargetNetwork.switch.ethernet.fcsInserter outgoingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing data rate"
-attr unit bps
-vector 149 TargetNetwork.udp_tcp_cpu.app[0].source dataRate:vector ETV
+vector 92 TargetNetwork.udp_tcp.app[0].source dataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetPushed)
 attr title "data rate"
 attr unit bps
-vector 150 TargetNetwork.udp_tcp_cpu.eth[0].queue outgoingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source throughput(packetPulled)
-attr title "outgoing datarate"
-attr unit bps
-vector 151 TargetNetwork.udp_tcp_cpu.eth[0].queue droppedPacketLengthsQueueOverflow:vector ETV
-attr interpolationmode none
-attr recordingmode vector
-attr source packetLength(packetDropReasonIsQueueOverflow(packetDropped))
-attr title "dropped packet lengths: queue overflow"
-attr unit b
-vector 152 TargetNetwork.switch.eth[1].phyLayer.transmitter utilization:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "100 * utilization(count(transmissionStarted) - count(transmissionEnded))"
-attr title utilization
-attr unit %
-vector 153 TargetNetwork.switch.eth[0].phyLayer.receiver throughput:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source throughput(receptionEnded)
-attr title throughput
-attr unit bps
-vector 154 TargetNetwork.switch.eth[0].phyLayer.inboundEmitter incomingDataRate:vector ETV
+vector 93 TargetNetwork.udp_tcp.ethernet.macHeaderInserter incomingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source "throughput(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming data rate"
 attr unit bps
-vector 155 TargetNetwork.switch.eth[0].phyLayer.inboundEmitter outgoingDataRate:vector ETV
+vector 94 TargetNetwork.udp_tcp.ethernet.macHeaderInserter outgoingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source "throughput(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing data rate"
 attr unit bps
-vector 156 TargetNetwork.switch.eth[0].phyLayer.phyHeaderChecker incomingDataRate:vector ETV
+vector 95 TargetNetwork.udp_tcp.ethernet.paddingInserter incomingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source "throughput(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming data rate"
 attr unit bps
-vector 157 TargetNetwork.switch.eth[0].phyLayer.phyHeaderChecker outgoingDataRate:vector ETV
+vector 96 TargetNetwork.udp_tcp.ethernet.paddingInserter outgoingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source "throughput(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing data rate"
 attr unit bps
-vector 158 TargetNetwork.switch.eth[0].macLayer.inboundEmitter incomingDataRate:vector ETV
+vector 97 TargetNetwork.udp_tcp.ethernet.fcsInserter incomingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source "throughput(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming data rate"
 attr unit bps
-vector 159 TargetNetwork.switch.eth[0].macLayer.inboundEmitter outgoingDataRate:vector ETV
+vector 98 TargetNetwork.udp_tcp.ethernet.fcsInserter outgoingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source "throughput(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing data rate"
 attr unit bps
-vector 160 TargetNetwork.switch.eth[0].macLayer.fcsChecker incomingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming data rate"
-attr unit bps
-vector 161 TargetNetwork.switch.eth[0].macLayer.fcsChecker outgoingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing data rate"
-attr unit bps
-vector 162 TargetNetwork.switch.eth[1].macLayer.queue incomingDataRate:vector ETV
+vector 99 TargetNetwork.udp_tcp.eth[0].macLayer.queue incomingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetPushStarted)
 attr title "incoming datarate"
 attr unit bps
-vector 163 TargetNetwork.switch.eth[1].macLayer.queue outgoingDataRate:vector ETV
+vector 100 TargetNetwork.udp_tcp.eth[0].phyLayer.transmitter utilization:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "100 * utilization(count(transmissionStarted) - count(transmissionEnded))"
+attr title utilization
+attr unit %
+vector 101 TargetNetwork.udp_tcp.eth[0].macLayer.queue outgoingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetPulled)
 attr title "outgoing datarate"
 attr unit bps
-vector 164 TargetNetwork.switch.eth[1].macLayer.server incomingDataRate:vector ETV
+vector 102 TargetNetwork.udp_tcp.eth[0].macLayer.server incomingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetPulled)
 attr title "incoming datarate"
 attr unit bps
-vector 165 TargetNetwork.switch.eth[1].macLayer.server outgoingDataRate:vector ETV
+vector 103 TargetNetwork.udp_tcp.eth[0].macLayer.server outgoingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetPushed)
 attr title "outgoing datarate"
 attr unit bps
-vector 166 TargetNetwork.switch.eth[1].macLayer.outboundEmitter incomingDataRate:vector ETV
+vector 104 TargetNetwork.udp_tcp.eth[0].macLayer.outboundEmitter incomingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source "throughput(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming data rate"
 attr unit bps
-vector 167 TargetNetwork.switch.eth[1].macLayer.outboundEmitter outgoingDataRate:vector ETV
+vector 105 TargetNetwork.udp_tcp.eth[0].macLayer.outboundEmitter outgoingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source "throughput(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing data rate"
 attr unit bps
-vector 168 TargetNetwork.switch.eth[1].phyLayer.phyHeaderInserter incomingDataRate:vector ETV
+vector 106 TargetNetwork.udp_tcp.eth[0].phyLayer.phyHeaderInserter incomingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source "throughput(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming data rate"
 attr unit bps
-vector 169 TargetNetwork.switch.eth[1].phyLayer.phyHeaderInserter outgoingDataRate:vector ETV
+vector 107 TargetNetwork.udp_tcp.eth[0].phyLayer.phyHeaderInserter outgoingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source "throughput(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing data rate"
 attr unit bps
-vector 170 TargetNetwork.switch.eth[1].phyLayer.outboundEmitter incomingDataRate:vector ETV
+vector 108 TargetNetwork.udp_tcp.eth[0].phyLayer.outboundEmitter incomingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source "throughput(merge(packetPushedIn, packetPulledIn))"
 attr title "incoming data rate"
 attr unit bps
-vector 171 TargetNetwork.switch.eth[1].phyLayer.outboundEmitter outgoingDataRate:vector ETV
+vector 109 TargetNetwork.udp_tcp.eth[0].phyLayer.outboundEmitter outgoingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source "throughput(merge(packetPushedOut, packetPulledOut))"
 attr title "outgoing data rate"
 attr unit bps
-vector 172 TargetNetwork.switch.eth[1].phyLayer.transmitter throughput:vector ETV
+vector 110 TargetNetwork.switch.eth[1].phyLayer.transmitter utilization:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "100 * utilization(count(transmissionStarted) - count(transmissionEnded))"
+attr title utilization
+attr unit %
+vector 111 TargetNetwork.switch.eth[0].phyLayer.receiver throughput:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(receptionEnded)
+attr title throughput
+attr unit bps
+vector 112 TargetNetwork.switch.eth[0].phyLayer.inboundEmitter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 113 TargetNetwork.switch.eth[0].phyLayer.inboundEmitter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 114 TargetNetwork.switch.eth[0].phyLayer.phyHeaderChecker incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 115 TargetNetwork.switch.eth[0].phyLayer.phyHeaderChecker outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 116 TargetNetwork.switch.eth[0].macLayer.inboundEmitter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 117 TargetNetwork.switch.eth[0].macLayer.inboundEmitter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 118 TargetNetwork.switch.eth[0].macLayer.fcsChecker incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 119 TargetNetwork.switch.eth[0].macLayer.fcsChecker outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 120 TargetNetwork.switch.ethernet.fcsChecker incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 121 TargetNetwork.switch.ethernet.fcsChecker outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 122 TargetNetwork.switch.ethernet.macHeaderChecker incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 123 TargetNetwork.switch.ethernet.macHeaderChecker outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 124 TargetNetwork.udp_tcp.eth[0].phyLayer.transmitter throughput:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(transmissionEnded)
 attr title throughput
 attr unit bps
-vector 173 TargetNetwork.udp_tcp_cpu2.app[0].sink dataRate:vector ETV
+vector 125 TargetNetwork.switch.ethernet.macHeaderInserter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 126 TargetNetwork.switch.ethernet.macHeaderInserter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 127 TargetNetwork.switch.ethernet.paddingInserter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 128 TargetNetwork.switch.ethernet.paddingInserter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 129 TargetNetwork.switch.ethernet.fcsInserter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 130 TargetNetwork.switch.ethernet.fcsInserter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 131 TargetNetwork.switch.eth[1].macLayer.queue incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPushStarted)
+attr title "incoming datarate"
+attr unit bps
+vector 132 TargetNetwork.switch.eth[1].macLayer.queue outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPulled)
+attr title "outgoing datarate"
+attr unit bps
+vector 133 TargetNetwork.switch.eth[1].macLayer.server incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPulled)
+attr title "incoming datarate"
+attr unit bps
+vector 134 TargetNetwork.switch.eth[1].macLayer.server outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPushed)
+attr title "outgoing datarate"
+attr unit bps
+vector 135 TargetNetwork.switch.eth[1].macLayer.outboundEmitter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 136 TargetNetwork.switch.eth[1].macLayer.outboundEmitter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 137 TargetNetwork.switch.eth[1].phyLayer.phyHeaderInserter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 138 TargetNetwork.switch.eth[1].phyLayer.phyHeaderInserter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 139 TargetNetwork.switch.eth[1].phyLayer.outboundEmitter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 140 TargetNetwork.switch.eth[1].phyLayer.outboundEmitter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 141 TargetNetwork.udp_tcp2.eth[0].phyLayer.receiver throughput:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(receptionEnded)
+attr title throughput
+attr unit bps
+vector 142 TargetNetwork.udp_tcp2.eth[0].phyLayer.inboundEmitter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 143 TargetNetwork.udp_tcp2.eth[0].phyLayer.inboundEmitter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 144 TargetNetwork.udp_tcp2.eth[0].phyLayer.phyHeaderChecker incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 145 TargetNetwork.udp_tcp2.eth[0].phyLayer.phyHeaderChecker outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 146 TargetNetwork.udp_tcp2.eth[0].macLayer.inboundEmitter incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 147 TargetNetwork.udp_tcp2.eth[0].macLayer.inboundEmitter outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 148 TargetNetwork.udp_tcp2.eth[0].macLayer.fcsChecker incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 149 TargetNetwork.udp_tcp2.eth[0].macLayer.fcsChecker outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 150 TargetNetwork.udp_tcp2.ethernet.fcsChecker incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 151 TargetNetwork.udp_tcp2.ethernet.fcsChecker outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 152 TargetNetwork.udp_tcp2.ethernet.macHeaderChecker incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedIn, packetPulledIn))"
+attr title "incoming data rate"
+attr unit bps
+vector 153 TargetNetwork.udp_tcp2.ethernet.macHeaderChecker outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source "throughput(merge(packetPushedOut, packetPulledOut))"
+attr title "outgoing data rate"
+attr unit bps
+vector 154 TargetNetwork.switch.eth[1].phyLayer.transmitter throughput:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(transmissionEnded)
+attr title throughput
+attr unit bps
+vector 155 TargetNetwork.udp_tcp2.app[0].sink dataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetPushed)
 attr title "data rate"
 attr unit bps
-vector 174 TargetNetwork.udp_tcp_cpu2.app[0].sink droppedDataRate:vector ETV
+vector 156 TargetNetwork.udp_tcp2.app[0].sink droppedDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetDropped)
 attr title "dropped data rate"
 attr unit bps
-vector 175 TargetNetwork.switch.eth[0].phyLayer.transmitter utilization:vector ETV
+vector 157 TargetNetwork.udp_tcp.ethernet.macHeaderChecker droppedDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
-attr source "100 * utilization(count(transmissionStarted) - count(transmissionEnded))"
-attr title utilization
-attr unit %
-vector 176 TargetNetwork.udp_tcp_cpu2.eth[0].queue incomingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source throughput(packetPushStarted)
-attr title "incoming datarate"
+attr source throughput(packetDropped)
+attr title "dropped data rate"
 attr unit bps
-vector 177 TargetNetwork.udp_tcp_cpu2.eth[0].queue outgoingDataRate:vector ETV
+vector 158 TargetNetwork.udp_tcp.ethernet.fcsChecker droppedDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
-attr source throughput(packetPulled)
-attr title "outgoing datarate"
+attr source throughput(packetDropped)
+attr title "dropped data rate"
 attr unit bps
-vector 178 TargetNetwork.switch.eth[1].phyLayer.receiver throughput:vector ETV
+vector 159 TargetNetwork.udp_tcp.eth[0].macLayer.fcsChecker droppedDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetDropped)
+attr title "dropped data rate"
+attr unit bps
+vector 160 TargetNetwork.udp_tcp.eth[0].phyLayer.phyHeaderChecker droppedDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetDropped)
+attr title "dropped data rate"
+attr unit bps
+vector 161 TargetNetwork.udp_tcp.eth[0].phyLayer.receiver throughput:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(receptionEnded)
 attr title throughput
 attr unit bps
-vector 179 TargetNetwork.switch.eth[1].phyLayer.inboundEmitter incomingDataRate:vector ETV
+vector 162 TargetNetwork.udp_tcp2.ethernet.macHeaderChecker droppedDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
-attr source "throughput(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming data rate"
+attr source throughput(packetDropped)
+attr title "dropped data rate"
 attr unit bps
-vector 180 TargetNetwork.switch.eth[1].phyLayer.inboundEmitter outgoingDataRate:vector ETV
+vector 163 TargetNetwork.udp_tcp2.ethernet.fcsChecker droppedDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
-attr source "throughput(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing data rate"
+attr source throughput(packetDropped)
+attr title "dropped data rate"
 attr unit bps
-vector 181 TargetNetwork.switch.eth[1].phyLayer.phyHeaderChecker incomingDataRate:vector ETV
+vector 164 TargetNetwork.udp_tcp2.eth[0].macLayer.queue outgoingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
-attr source "throughput(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming data rate"
+attr source throughput(packetPulled)
+attr title "outgoing datarate"
 attr unit bps
-vector 182 TargetNetwork.switch.eth[1].phyLayer.phyHeaderChecker outgoingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing data rate"
-attr unit bps
-vector 183 TargetNetwork.switch.eth[1].macLayer.inboundEmitter incomingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming data rate"
-attr unit bps
-vector 184 TargetNetwork.switch.eth[1].macLayer.inboundEmitter outgoingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing data rate"
-attr unit bps
-vector 185 TargetNetwork.switch.eth[1].macLayer.fcsChecker incomingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming data rate"
-attr unit bps
-vector 186 TargetNetwork.switch.eth[1].macLayer.fcsChecker outgoingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing data rate"
-attr unit bps
-vector 187 TargetNetwork.switch.eth[0].macLayer.queue incomingDataRate:vector ETV
+vector 165 TargetNetwork.udp_tcp2.eth[0].macLayer.queue incomingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetPushStarted)
 attr title "incoming datarate"
 attr unit bps
-vector 188 TargetNetwork.switch.eth[0].macLayer.queue outgoingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source throughput(packetPulled)
-attr title "outgoing datarate"
-attr unit bps
-vector 189 TargetNetwork.switch.eth[0].macLayer.server incomingDataRate:vector ETV
+vector 166 TargetNetwork.udp_tcp2.eth[0].macLayer.server incomingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetPulled)
 attr title "incoming datarate"
 attr unit bps
-vector 190 TargetNetwork.switch.eth[0].macLayer.server outgoingDataRate:vector ETV
+vector 167 TargetNetwork.udp_tcp2.eth[0].macLayer.server outgoingDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetPushed)
 attr title "outgoing datarate"
 attr unit bps
-vector 191 TargetNetwork.switch.eth[0].macLayer.outboundEmitter incomingDataRate:vector ETV
+vector 168 TargetNetwork.udp_tcp2.eth[0].macLayer.fcsChecker droppedDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
-attr source "throughput(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming data rate"
+attr source throughput(packetDropped)
+attr title "dropped data rate"
 attr unit bps
-vector 192 TargetNetwork.switch.eth[0].macLayer.outboundEmitter outgoingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing data rate"
-attr unit bps
-vector 193 TargetNetwork.switch.eth[0].phyLayer.phyHeaderInserter incomingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming data rate"
-attr unit bps
-vector 194 TargetNetwork.switch.eth[0].phyLayer.phyHeaderInserter outgoingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing data rate"
-attr unit bps
-vector 195 TargetNetwork.switch.eth[0].phyLayer.outboundEmitter incomingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedIn, packetPulledIn))"
-attr title "incoming data rate"
-attr unit bps
-vector 196 TargetNetwork.switch.eth[0].phyLayer.outboundEmitter outgoingDataRate:vector ETV
-attr interpolationmode linear
-attr recordingmode vector
-attr source "throughput(merge(packetPushedOut, packetPulledOut))"
-attr title "outgoing data rate"
-attr unit bps
-vector 197 TargetNetwork.switch.eth[0].phyLayer.transmitter throughput:vector ETV
+vector 169 TargetNetwork.udp_tcp2.eth[0].phyLayer.transmitter throughput:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(transmissionEnded)
 attr title throughput
 attr unit bps
-vector 198 TargetNetwork.udp_tcp_cpu2.tcp.conn-5 rcvOooSeg:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-0	48666 9 0 0 0 0 1 0 0 0 0
-1	48675 9 0 0 0 0 1 0 0 0 0
-2	48684 9 0 0 0 0 1 0 0 0 0
-3	48693 215974 0 160656 0 0.759355793789 7414 0 7413 27479991 135815275519
-4	264667 9 0 0 0 0 1 0 0 0 0
-5	264676 9 0 0 0 0 1 0 0 0 0
-6	264685 6922 0 9510 0 0.033585956986 280 0 1 139 139
-7	271607 6922 0 9506 0 0.033584996986 280 0 1 139 139
-8	278529 396624 0 160661 0 0.759356753789 15108 0 1 7553 7553
-9	675153 396648 0 160665 0 0.759356753789 15109 0 1 7554 7554
-10	1071801 225842 0 160667 0 0.759405760143 7475 8000 8000 59800000 478400000000
-11	1297643 225811 1 160647 0 0.75927785795 7474 1000 1000 7474000 7474000000
-12	1523454 225812 9 160648 0 0.75927785795 7474 1008 1008 7533792 7594062336
-13	1749266 3891 10 7022 0 0.023991556986 152 0 0 0 0
-14	1753157 4523 10 7022 0 0.023991556986 153 65535 65579 10033543 657986832857
-15	1757680 4499 10 7022 0 0.023991556986 152 65535 65535 9961320 652815106200
-16	1762179 4042 10 7022 0 0.023991556986 152 0 44 6644 292336
-17	1766221 230156 13 160650 0 0.75927785795 7626 40 1492 7907156 8232316752
-18	1996377 230308 15 160651 0 0.75927785795 7626 464 12080 64355392 545244492288
-19	2226685 415687 15 160666 0 0.759357713789 15181 0 101 147726 8655624
-20	2642372 286971 15 160666 0 0.759357713789 7555 0 0.010191294569 6.403381742642 0.035633621649039
-21	2929343 228702 15 160666 0 0.759357713789 7555 464 12080 63716720 539361993472
-22	3158045 228562 15 160666 0 0.759357713789 7555 58 1510 7964590 8427531148
-23	3386607 385832 15 160666 0 0.759357713789 14088 0 100 146575 8642873
-24	3772439 429160 15 160666 0 0.759357713789 14088 0 1003840 1306624144 7.3264335881549e+14
-25	4201599 266449 23 160659 0.00008432 0.759356753789 7554 5.76e-06 0.00012144 0.64191872000012 5.4747765145603e-05
-26	4468048 228679 23 160659 0.00008432 0.759356753789 7554 576 12144 64191872 547477651456
-27	4696727 228679 23 160659 0.00008432 0.759356753789 7554 576 12144 64191872 547477651456
-28	4925406 228679 23 160659 0.00008432 0.759356753789 7554 576 12144 64191872 547477651456
-29	5154085 228679 23 160659 0.00008432 0.759356753789 7554 512 12080 63708416 539292033024
-30	5382764 228679 23 160659 0.00008432 0.759356753789 7554 512 12080 63708416 539292033024
-31	5611443 228679 23 160659 0.00008432 0.759356753789 7554 512 12080 63708416 539292033024
-32	5840122 228679 23 160659 0.00008432 0.759356753789 7554 512 12080 63708416 539292033024
-33	6068801 228679 23 160659 0.00008432 0.759356753789 7554 512 12080 63708416 539292033024
-34	6297480 232548 23 160659 0.00008432 0.759356753789 7693 512 12080 63779584 539328471040
-35	6530028 232548 23 160659 0.00008432 0.759356753789 7693 480 12048 63533408 535254455296
-36	6762576 232548 23 160659 0.00008432 0.759356753789 7693 480 12048 63533408 535254455296
-37	6995124 232548 23 160659 0.00008432 0.759356753789 7693 368 11936 62671792 521119472896
-38	7227672 228539 24 160660 0.00008432 0.759356753789 7554 64 1510 7963552 8426438016
-39	7456211 232550 26 160664 0.00008432 0.759356753789 7693 368 11936 62671792 521119472896
-40	7688761 232550 26 160664 0.00008432 0.759356753789 7693 480 12048 63533408 535254455296
-41	7921311 232550 26 160664 0.00008432 0.759356753789 7693 480 12048 63533408 535254455296
-42	8153861 232550 26 160664 0.00008432 0.759356753789 7693 480 12048 63533408 535254455296
-43	8386411 232550 26 160664 0.00008432 0.759356753789 7693 480 12048 63533408 535254455296
-44	8618961 232550 26 160664 0.00008432 0.759356753789 7693 512 12080 63779584 539328471040
-45	8851511 228681 26 160664 0.00008432 0.759356753789 7554 512 12080 63708416 539292033024
-46	9080192 411763 26 160665 0.00008432 0.759356753789 15108 0 1 7554 7554
-47	9491955 411763 26 160665 0.00008432 0.759356753789 15108 0 1 7554 7554
-48	9903718 434561 26 160665 0.00008432 0.759356753789 15108 0 12080 63708416 539292033024
-49	10338279 212676 27 160665 0.00008432 0.759356753789 7554 0 7.856e-05 0.031532119932001 1.1762406876598e-06
-50	10550955 228678 27 160665 0.00008432 0.759356753789 7554 512 12080 63708416 539292033024
-51	10779633 228678 27 160665 0.00008432 0.759356753789 7554 512 12080 63708416 539292033024
-52	11008311 228678 27 160665 0.00008432 0.759356753789 7554 512 12080 63708416 539292033024
-53	11236989 228678 27 160665 0.00008432 0.759356753789 7554 512 12080 63708416 539292033024
-54	11465667 228678 27 160665 0.00008432 0.759356753789 7554 512 12080 63708416 539292033024
-55	11694345 228678 27 160665 0.00008432 0.759356753789 7554 512 12080 63708416 539292033024
-56	11923023 228678 27 160665 0.00008432 0.759356753789 7554 576 12144 64191872 547477651456
-57	12151701 228678 27 160665 0.00008432 0.759356753789 7554 576 12144 64191872 547477651456
-58	12380379 228678 27 160665 0.00008432 0.759356753789 7554 576 12144 64191872 547477651456
-59	12609057 228512 35 160652 0.00016864 0.759355793789 7553 64 1510 7962506 8425343900
-60	12837569 228512 35 160652 0.00016864 0.759355793789 7553 64 1510 7962506 8425343900
-61	13066081 266417 36 160653 0.00016864 0.759355793789 7553 5.76e-06 0.00012144 0.64183440000012 5.4740655283203e-05
-62	13332498 228512 37 160654 0.00016864 0.759355793789 7553 46 1492 7826552 8141140856
-63	13561010 224485 39 160656 0.00016864 0.759355793789 7413 1008 1008 7472304 7532082432
-64	13785495 224485 40 160657 0.00016864 0.759355793789 7413 1000 1000 7413000 7413000000
-65	14009980 224485 41 160658 0.00016864 0.759355793789 7413 8000 8000 59304000 474432000000
-66	14234465 224485 41 160658 0.00016864 0.759355793789 7413 8000 8000 59304000 474432000000
-67	14458950 20 55 55 0.00017536 0.00017536 1 0 0 0 0
-68	14458970 20 55 55 0.00017536 0.00017536 1 0 0 0 0
-69	14458990 20 55 55 0.00017536 0.00017536 1 0 0 0 0
-70	14459010 4285 55 9492 0.00017536 0.033573476986 140 65536 216544 22237232 3890655872960
-71	14463295 49 55 131 0.00017536 0.00035264 2 65535 65535 131070 8589672450
-72	14463344 7416 55 9492 0.00017536 0.033573476986 277 0 47916 1674156 54855961776
-73	14470760 4146 55 9492 0.00017536 0.033573476986 139 61179 65535 9105009 596430269091
-74	14474906 4206 55 9492 0.00017536 0.033573476986 139 1 155365 13066687 1578633511363
-75	14479112 3729 57 9495 0.00017536 0.033573476986 139 40 44 5564 222736
-76	14482841 3868 58 9496 0.00017536 0.033573476986 139 464 496 64528 29956864
-77	14486709 7180 58 9496 0.00017536 0.033573476986 278 0 1 139 139
-78	14493889 3590 58 9496 0.00017536 0.033573476986 139 0 0 0 0
-79	14497479 3868 58 9496 0.00017536 0.033573476986 139 464 496 64528 29956864
-80	14501347 3729 58 9496 0.00017536 0.033573476986 139 58 62 8066 468076
-81	14505076 3590 58 9496 0.00017536 0.033573476986 139 0 0 0 0
-82	14508666 3590 58 9496 0.00017536 0.033573476986 139 0 0 0 0
-83	14512256 4564 67 9499 0.00018112 0.033579236986 139 5.76e-06 5.76e-06 0.00080064 4.6116864e-09
-84	14516820 3869 67 9499 0.00018112 0.033579236986 139 576 576 80064 46116864
-85	14520689 3869 67 9499 0.00018112 0.033579236986 139 576 576 80064 46116864
-86	14524558 3869 67 9499 0.00018112 0.033579236986 139 576 576 80064 46116864
-87	14528427 3869 67 9499 0.00018112 0.033579236986 139 512 512 71168 36438016
-88	14532296 3869 67 9499 0.00018112 0.033579236986 139 512 512 71168 36438016
-89	14536165 3869 67 9499 0.00018112 0.033579236986 139 512 512 71168 36438016
-90	14540034 3869 67 9499 0.00018112 0.033579236986 139 512 512 71168 36438016
-91	14543903 3869 67 9499 0.00018112 0.033579236986 139 512 512 71168 36438016
-92	14547772 3730 68 9500 0.00018112 0.033579236986 139 64 64 8896 569344
-93	14551502 3869 70 9502 0.00018112 0.033579236986 139 512 512 71168 36438016
-94	14555371 7182 70 9503 0.00018112 0.033579236986 278 0 1 139 139
-95	14562553 7182 70 9503 0.00018112 0.033579236986 278 0 1 139 139
-96	14569735 7460 70 9503 0.00018112 0.033579236986 278 0 512 71168 36438016
-97	14577195 3591 71 9503 0.00018112 0.033579236986 139 0 0 0 0
-98	14580786 3869 71 9503 0.00018112 0.033579236986 139 512 512 71168 36438016
-99	14584655 3869 71 9503 0.00018112 0.033579236986 139 512 512 71168 36438016
-100	14588524 4008 71 9503 0.00018112 0.033579236986 139 512 512 71168 36438016
-101	14592532 4008 71 9503 0.00018112 0.033579236986 139 512 512 71168 36438016
-102	14596540 4008 71 9503 0.00018112 0.033579236986 139 512 512 71168 36438016
-103	14600548 4008 71 9503 0.00018112 0.033579236986 139 512 512 71168 36438016
-104	14604556 4008 71 9503 0.00018112 0.033579236986 139 576 576 80064 46116864
-105	14608564 4008 71 9503 0.00018112 0.033579236986 139 576 576 80064 46116864
-106	14612572 4008 71 9503 0.00018112 0.033579236986 139 576 576 80064 46116864
-107	14616580 3869 73 9505 0.00018688 0.033584996986 139 64 64 8896 569344
-108	14620449 3869 73 9505 0.00018688 0.033584996986 139 64 64 8896 569344
-109	14624318 4703 74 9506 0.00018688 0.033584996986 139 5.76e-06 5.76e-06 0.00080064 4.6116864e-09
-110	14629021 3869 75 9507 0.00018688 0.033584996986 139 46 46 6394 294124
-111	14632890 3869 77 9509 0.00018688 0.033584996986 139 43 44 6115 269017
-112	14636759 4346 77 9509 0.00018688 0.033584996986 139 1 155365 13066687 1578633511363
-113	14641105 3730 77 9509 0.00018688 0.033584996986 139 0 0 0 0
-114	14644835 4286 77 9509 0.00018688 0.033584996986 139 61179 65535 9105009 596430269091
-115	14649121 30 81 81 0.00018688 0.00018688 1 1048576000 1048576000 1048576000 1.099511627776e+18
-116	14649151 4681 83 7022 0.00018688 0.023991556986 150 1 214897 16160910 2324205568230
-117	14653832 6454 83 9509 0.00018688 0.033584996986 210 0 65340 10691076 628807992912
-118	14660286 300962 97 160658 0.00016864 0.759270513789 7412 0.00016864 0.010397054569 6.8058868328681 0.030896963353874
-119	14961248 296703 97 160658 0.00016864 0.759270513789 7412 -0.000606279891 0.000423226403 0.001494918603 4.6395189897138e-05
-120	15257951 338346 97 160658 0.00016864 0.759270513789 7412 -0.0051508900331442 0.0048749676855612 9.5496692364259 0.024604372259598
-121	15596297 334802 97 160658 0.00016864 0.759270513789 7412 0 0.0034814190890188 18.378578687758 0.047392477719198
-122	15931099 4341 131 9492 0.00035264 0.033573476986 139 1 214897 13979995 1923640312843
-123	15935440 3869 131 9492 0.00035264 0.033573476986 139 44 44 6116 269104
-124	15939309 4144 131 9492 0.00035264 0.033573476986 139 0 1452 200376 290945952
-125	15943453 22 131 131 0.00035264 0.00035264 1 0 0 0 0
-126	15943475 3708 159 9492 0.00051216 0.033573476986 138 0 0 0 0
-127	15947183 3132 160 9493 0.00051216 0.033573476986 105 1452 4356 155364 238238352
-128	15950315 4258 160 9493 0.00051216 0.033573476986 107 0.00032528 0.033386596986 1.249126640516 0.020194346868784
-129	15954573 3132 160 9493 0.00051216 0.033573476986 105 1452 4356 155364 238238352
-130	15957705 4258 160 9493 0.00051216 0.033573476986 107 0.00032528 0.033386596986 1.249126640516 0.020194346868784
-131	15961963 247 176 4139 0.00052368 0.013696836986 7 0.000296996986 0.00656048 0.013509956986 5.8480096387293e-05
-132	15962210 265 176 4139 0.00052368 0.013696836986 7 4.21e-05 0.001489767573 0.003081583983 3.0188746725571e-06
-133	15962475 267 176 4139 0.00052368 0.013696836986 7 0.295836012089 0.6562921 3.191066055954 1.5560247030275
-134	15962742 267 176 4139 0.00052368 0.013696836986 7 1.184833815929 2.6252105 12.767345807799 24.904938033006
-135	15963009 4231 176 9509 0.00052368 0.033584996986 136 2904 152460 9937688 939057354704
-136	15967240 3758 176 7022 0.00052368 0.023991556986 105 32767 4294967295 446676631447 1.9184613827735e+21
-137	15970998 3733 176 9509 0.00052368 0.033584996986 138 0 33 561 12529
-138	15974731 3199 1658 160135 0.005512036986 0.757303136991 76 67655001.566179 214501900.85501 6621412666.2638 6.1051001042857e+17
-139	15977930 3195 2057 158646 0.006880996986 0.750732840598 76 68369299.797511 100993823.4338 6455359114.1386 5.5419247697922e+17
-140	15981125 3202 2057 158646 0.006880996986 0.750732840598 76 68107849.320274 100529419.96006 6430350145.7328 5.4989735022452e+17
-141	15984327 3202 2057 158646 0.006880996986 0.750732840598 76 68107849.320274 100529419.96006 6430350145.7328 5.4989735022452e+17
-142	15987529 3202 2057 158646 0.006880996986 0.750732840598 76 67192772.649944 98904007.801978 6342818756.3125 5.349963187326e+17
-143	15990731 3202 2060 158651 0.006880996986 0.750732840598 76 67192772.649944 98904007.801978 6342818756.3125 5.349963187326e+17
-144	15993933 3202 2060 158651 0.006880996986 0.750732840598 76 68107849.320274 100529419.96006 6430350145.7328 5.4989735022452e+17
-145	15997135 3202 2060 158651 0.006880996986 0.750732840598 76 68107849.320274 100529419.96006 6430350145.7328 5.4989735022452e+17
-146	16000337 3202 2060 158651 0.006880996986 0.750732840598 76 68107849.320274 100529419.96006 6430350145.7328 5.4989735022452e+17
-147	16003539 3202 2060 158651 0.006880996986 0.750732840598 76 68107849.320274 100529419.96006 6430350145.7328 5.4989735022452e+17
-148	16006741 3195 2060 158651 0.006880996986 0.750732840598 76 68369299.797511 100993823.4338 6455359114.1386 5.5419247697922e+17
-149	16009936 3118 3056 159272 0.009971887076 0.753461950453 74 65447247.9793 96072641.850305 5855579754.6914 4.6677392158269e+17
-150	16013054 3156 3129 159439 0.010145636986 0.75429984918 75 67783740.671647 99583298.849956 6337487989.5762 5.4026018685655e+17
-151	16016210 1744 3157 8230 0.010257878959 0.028414453964 58 8368 12080 529888 4972194304
-152	16017954 3162 3159 159441 0.010266116986 0.75438320918 75 68.302163162443 99.055237135479 6384.3452912192 548260.64863325
-153	16021116 3162 3167 159447 0.010267076986 0.75438416918 75 68302163.162443 99051773.184146 6384759540.7902 5.4831661022352e+17
-154	16024278 3162 3167 159447 0.010267076986 0.75438416918 75 68302163.162443 99051773.184146 6384759540.7902 5.4831661022352e+17
-155	16027440 3162 3167 159447 0.010267076986 0.75438416918 75 68302163.162443 99051773.184146 6384759540.7902 5.4831661022352e+17
-156	16030602 3162 3167 159447 0.010267076986 0.75438416918 75 68302163.162443 99051773.184146 6384759540.7902 5.4831661022352e+17
-157	16033764 3156 3167 159447 0.010267076986 0.75438416918 75 67783740.671647 98419621.973576 6336675877.0606 5.4009884789717e+17
-158	16036920 3156 3167 159447 0.010267076986 0.75438416918 75 67783740.671647 98419621.973576 6336675877.0606 5.4009884789717e+17
-159	16040076 3156 3167 159447 0.010267076986 0.75438416918 75 67783740.671647 98419621.973576 6336675877.0606 5.4009884789717e+17
-160	16043232 3156 3167 159447 0.010267076986 0.75438416918 75 67783740.671647 98419621.973576 6336675877.0606 5.4009884789717e+17
-161	16046388 3156 3167 159447 0.010267076986 0.75438416918 75 67783740.671647 98419621.973576 6336675877.0606 5.4009884789717e+17
-162	16049544 3156 3172 159452 0.010267076986 0.75438416918 75 67783740.671647 98419621.973576 6336675877.0606 5.4009884789717e+17
-163	16052700 3156 3173 159453 0.010267076986 0.75438416918 75 67783740.671647 98411651.278914 6336651256.2431 5.4008640857583e+17
-164	16055856 3156 3173 159453 0.010267076986 0.75438416918 75 67783740.671647 98411651.278914 6336651256.2431 5.4008640857583e+17
-165	16059012 3156 3173 159453 0.010267076986 0.75438416918 75 67783740.671647 98411651.278914 6336651256.2431 5.4008640857583e+17
-166	16062168 3156 3173 159453 0.010267076986 0.75438416918 75 67783740.671647 98411651.278914 6336651256.2431 5.4008640857583e+17
-167	16065324 3156 3173 159453 0.010267076986 0.75438416918 75 67783740.671647 98411651.278914 6336651256.2431 5.4008640857583e+17
-168	16068480 3156 3173 159453 0.010267076986 0.75438416918 75 67783740.671647 98411651.278914 6336651256.2431 5.4008640857583e+17
-169	16071636 3161 3173 159453 0.010267076986 0.75438416918 75 68302163.162443 99035002.989311 6384735172.1575 5.4830415421032e+17
-170	16074797 3161 3173 159453 0.010267076986 0.75438416918 75 68302163.162443 99035002.989311 6384735172.1575 5.4830415421032e+17
-171	16077958 3161 3173 159453 0.010267076986 0.75438416918 75 68302163.162443 99035002.989311 6384735172.1575 5.4830415421032e+17
-172	16081119 3160 3198 159462 0.010388516986 0.75446848918 75 68302163.162443 99051773.184146 6383939314.1411 5.4814774008811e+17
-173	16084279 3123 5945 160379 0.019926756986 0.758247153789 74 40147024.453706 93808630.393996 5870424199.5314 4.7165021882659e+17
-174	16087402 3123 5945 160379 0.019926756986 0.758247153789 74 40147024.453706 93808630.393996 5870424199.5314 4.7165021882659e+17
-175	16090525 41 6278 6278 0.021099076986 0.021099076986 1 2.7026774696276 2.7026774696276 2.7026774696276 7.3044655048326
-176	16090566 41 6343 6343 0.021380516986 0.021380516986 1 2171696.7849937 2171696.7849937 2171696.7849937 4716266925952.1
-177	16090607 41 6343 6343 0.021380516986 0.021380516986 1 2171696.7849937 2171696.7849937 2171696.7849937 4716266925952.1
-178	16090648 41 6346 6346 0.021386276986 0.021386276986 1 2693315.9070981 2693315.9070981 2693315.9070981 7253950575427.7
-179	16090689 41 6346 6346 0.021386276986 0.021386276986 1 2693315.9070981 2693315.9070981 2693315.9070981 7253950575427.7
-180	16090730 41 6346 6346 0.021386276986 0.021386276986 1 2693315.9070981 2693315.9070981 2693315.9070981 7253950575427.7
-181	16090771 41 6346 6346 0.021386276986 0.021386276986 1 2693315.9070981 2693315.9070981 2693315.9070981 7253950575427.7
-182	16090812 41 6346 6346 0.021386276986 0.021386276986 1 2394058.5840872 2394058.5840872 2394058.5840872 5731516504041.6
-183	16090853 41 6346 6346 0.021386276986 0.021386276986 1 2394058.5840872 2394058.5840872 2394058.5840872 5731516504041.6
-184	16090894 41 6346 6346 0.021386276986 0.021386276986 1 2394058.5840872 2394058.5840872 2394058.5840872 5731516504041.6
-185	16090935 41 6346 6346 0.021386276986 0.021386276986 1 2394058.5840872 2394058.5840872 2394058.5840872 5731516504041.6
-186	16090976 41 6346 6346 0.021386276986 0.021386276986 1 2394058.5840872 2394058.5840872 2394058.5840872 5731516504041.6
-187	16091017 41 6349 6349 0.021386276986 0.021386276986 1 2394058.5840872 2394058.5840872 2394058.5840872 5731516504041.6
-188	16091058 41 6350 6350 0.021386276986 0.021386276986 1 2394058.5840872 2394058.5840872 2394058.5840872 5731516504041.6
-189	16091099 41 6350 6350 0.021386276986 0.021386276986 1 2394058.5840872 2394058.5840872 2394058.5840872 5731516504041.6
-190	16091140 41 6350 6350 0.021386276986 0.021386276986 1 2394058.5840872 2394058.5840872 2394058.5840872 5731516504041.6
-191	16091181 41 6350 6350 0.021386276986 0.021386276986 1 2394058.5840872 2394058.5840872 2394058.5840872 5731516504041.6
-192	16091222 41 6350 6350 0.021386276986 0.021386276986 1 2394058.5840872 2394058.5840872 2394058.5840872 5731516504041.6
-193	16091263 41 6350 6350 0.021386276986 0.021386276986 1 2394058.5840872 2394058.5840872 2394058.5840872 5731516504041.6
-194	16091304 41 6350 6350 0.021386276986 0.021386276986 1 2693315.9070981 2693315.9070981 2693315.9070981 7253950575427.7
-195	16091345 41 6350 6350 0.021386276986 0.021386276986 1 2693315.9070981 2693315.9070981 2693315.9070981 7253950575427.7
-196	16091386 41 6350 6350 0.021386276986 0.021386276986 1 2693315.9070981 2693315.9070981 2693315.9070981 7253950575427.7
-197	16091427 41 6353 6353 0.021392036986 0.021392036986 1 2692590.7073598 2692590.7073598 2692590.7073598 7250044717360.2
-198	16091468 915 6837 9211 0.023308836986 0.032427716986 33 1 33 561 12529
-vector 199 TargetNetwork.udp_tcp_cpu.tcp.conn-4 numRtos:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-vector 200 TargetNetwork.udp_tcp_cpu2.tcp.conn-5 rcvNASeg:vector ETV
-attr interpolationmode sample-hold
-attr recordingmode vector
-3	16092647 227032 160677 320957 0.759441073789 1.491872889062 7429 7414 14842 82669912 954118014666
-6	16319679 7020 257643 280067 1.218766566117 1.306192326117 260 0 1 130 130
-7	16326699 7020 257640 280063 1.218760806117 1.306191366117 260 0 1 130 130
-8	16333719 406824 160674 320962 0.759441073789 1.491873849062 15118 0 1 7559 7559
-9	16740543 406797 160674 320954 0.759441073789 1.491872889062 15117 0 1 7558 7558
-10	17147340 229537 160703 320947 0.759563404304 1.491841544435 7431 8000 8000 59448000 475584000000
-11	17376877 229568 160668 320948 0.759405760143 1.491841544435 7432 1000 1000 7432000 7432000000
-12	17606445 229568 160669 320949 0.759405760143 1.491841544435 7432 1008 1008 7491456 7551387648
-13	17836013 3752 257561 278202 1.218418812915 1.298404806117 134 0 0 0 0
-14	17839765 4288 257561 278202 1.218418812915 1.298404806117 134 65579 65579 8787586 576281102294
-15	17844053 4288 257561 278202 1.218418812915 1.298404806117 134 65535 65535 8781690 575508054150
-16	17848341 3886 257561 278202 1.218418812915 1.298404806117 134 44 44 5896 259424
-17	17852227 233722 160671 320951 0.759405760143 1.491841544435 7566 1028 1492 7840024 8152311264
-18	18085949 233856 160672 320952 0.759405760143 1.491841544435 7566 8368 12080 63809696 539968224768
-19	18319805 426112 160672 320952 0.759405760143 1.491841544435 15124 0 101 258099 16243811
-20	18745917 295401 160687 320946 0.759442993789 1.491789529062 7558 0 0.008934189806 11.167020694083 0.061635777599159
-21	19041318 233747 160687 320946 0.759442993789 1.491789529062 7558 8368 12080 63727904 539104425472
-22	19275065 233617 160687 320946 0.759442993789 1.491789529062 7558 1046 1510 7965988 8423506648
-23	19508682 402259 160672 320952 0.759405760143 1.491841544435 14269 0 100 257225 16239137
-24	19910941 449078 160672 320952 0.759405760143 1.491841544435 14269 0 877632 2205399344 1.2007195971525e+15
-25	20360019 271573 160680 320960 0.759442033789 1.491873849062 7559 8.432e-05 0.00012144 0.64220048000011 5.4736365337603e-05
-26	20631592 233778 160680 320960 0.759442033789 1.491873849062 7559 8432 12144 64220048 547363653376
-27	20865370 233778 160680 320960 0.759442033789 1.491873849062 7559 8432 12144 64220048 547363653376
-28	21099148 233778 160680 320960 0.759442033789 1.491873849062 7559 8432 12144 64220048 547363653376
-29	21332926 233778 160680 320960 0.759442033789 1.491873849062 7559 8368 12080 63736272 539174448896
-30	21566704 233778 160680 320960 0.759442033789 1.491873849062 7559 8368 12080 63736272 539174448896
-31	21800482 233778 160680 320960 0.759442033789 1.491873849062 7559 8368 12080 63736272 539174448896
-32	22034260 233778 160680 320960 0.759442033789 1.491873849062 7559 8368 12080 63736272 539174448896
-33	22268038 233778 160680 320960 0.759442033789 1.491873849062 7559 8368 12080 63736272 539174448896
-34	22501816 237678 160680 320960 0.759442033789 1.491873849062 7689 512 12080 63802832 539208527616
-35	22739494 237678 160680 320960 0.759442033789 1.491873849062 7689 480 12048 63556784 535133019904
-36	22977172 237678 160680 320960 0.759442033789 1.491873849062 7689 480 12048 63556784 535133019904
-37	23214850 237678 160680 320960 0.759442033789 1.491873849062 7689 368 11936 62695616 520992751104
-38	23452528 233648 160681 320961 0.759442033789 1.491873849062 7559 1046 1510 7967034 8424600764
-39	23686176 237678 160685 320965 0.759442033789 1.491873849062 7689 368 11936 62695616 520992751104
-40	23923854 237647 160685 320944 0.759442033789 1.491788569062 7688 480 12048 63548448 535063531008
-41	24161501 237647 160685 320944 0.759442033789 1.491788569062 7688 480 12048 63548448 535063531008
-42	24399148 237647 160685 320944 0.759442033789 1.491788569062 7688 480 12048 63548448 535063531008
-43	24636795 237647 160685 320944 0.759442033789 1.491788569062 7688 480 12048 63548448 535063531008
-44	24874442 237647 160685 320944 0.759442033789 1.491788569062 7688 512 12080 63794464 539138504192
-45	25112089 233747 160685 320944 0.759442033789 1.491788569062 7558 8368 12080 63727904 539104425472
-46	25345836 421886 160685 320945 0.759442033789 1.491788569062 15116 0 1 7558 7558
-47	25767722 421886 160685 320945 0.759442033789 1.491788569062 15116 0 1 7558 7558
-48	26189608 444690 160685 320945 0.759442033789 1.491788569062 15116 0 12080 63727904 539104425472
-49	26634298 224359 160686 320945 0.759442033789 1.491788569062 7558 0 3.712e-05 0.062250240000002 2.3107289088001e-06
-50	26858657 233747 160686 320945 0.759442033789 1.491788569062 7558 8368 12080 63727904 539104425472
-51	27092404 233747 160686 320945 0.759442033789 1.491788569062 7558 8368 12080 63727904 539104425472
-52	27326151 233747 160686 320945 0.759442033789 1.491788569062 7558 8368 12080 63727904 539104425472
-53	27559898 233747 160686 320945 0.759442033789 1.491788569062 7558 8368 12080 63727904 539104425472
-54	27793645 233747 160686 320945 0.759442033789 1.491788569062 7558 8368 12080 63727904 539104425472
-55	28027392 233747 160686 320945 0.759442033789 1.491788569062 7558 8368 12080 63727904 539104425472
-56	28261139 233747 160686 320945 0.759442033789 1.491788569062 7558 8432 12144 64211616 547292554752
-57	28494886 233747 160686 320945 0.759442033789 1.491788569062 7558 8432 12144 64211616 547292554752
-58	28728633 233747 160686 320945 0.759442033789 1.491788569062 7558 8432 12144 64211616 547292554752
-59	28962380 233648 160673 320953 0.759441073789 1.491872889062 7559 1046 1510 7967034 8424600764
-60	29196028 233648 160673 320953 0.759441073789 1.491872889062 7559 1046 1510 7967034 8424600764
-61	29429676 271573 160674 320954 0.759441073789 1.491872889062 7559 8.432e-05 0.00012144 0.64220048000011 5.4736365337603e-05
-62	29701249 233648 160675 320955 0.759441073789 1.491872889062 7559 1028 1492 7830972 8140236656
-63	29934897 229618 160677 320957 0.759441073789 1.491872889062 7429 1008 1008 7488432 7548339456
-64	30164515 229618 160678 320958 0.759441073789 1.491872889062 7429 1000 1000 7429000 7429000000
-65	30394133 229618 160679 320959 0.759441073789 1.491872889062 7429 8000 8000 59432000 475456000000
-66	30623751 229618 160679 320959 0.759441073789 1.491872889062 7429 8000 8000 59432000 475456000000
-70	30853369 4290 257629 280050 1.218755046117 1.306179846117 130 216544 414016 43077280 14710200034720
-72	30857659 6978 257629 280050 1.218755046117 1.306179846117 242 0 45012 845064 19455429312
-73	30864637 4160 257629 280050 1.218755046117 1.306179846117 130 37947 65535 8155098 516988204506
-74	30868797 4290 257629 280050 1.218755046117 1.306179846117 130 158269 354289 34922182 9757416712954
-75	30873087 3770 257632 280052 1.218755046117 1.306179846117 130 40 40 5200 208000
-76	30876857 3900 257633 280053 1.218755046117 1.306179846117 130 464 464 60320 27988480
-77	30880757 7280 257633 280053 1.218755046117 1.306179846117 260 0 1 130 130
-78	30888037 3640 257633 280053 1.218755046117 1.306179846117 130 0 0 0 0
-79	30891677 3900 257633 280053 1.218755046117 1.306179846117 130 464 464 60320 27988480
-80	30895577 3770 257633 280053 1.218755046117 1.306179846117 130 58 58 7540 437320
-81	30899347 3640 257633 280053 1.218755046117 1.306179846117 130 0 0 0 0
-82	30902987 3640 257633 280053 1.218755046117 1.306179846117 130 0 0 0 0
-83	30906627 4550 257636 280056 1.218760806117 1.306185606117 130 5.76e-06 5.76e-06 0.0007488 4.313088e-09
-84	30911177 3900 257636 280056 1.218760806117 1.306185606117 130 576 576 74880 43130880
-85	30915077 3900 257636 280056 1.218760806117 1.306185606117 130 576 576 74880 43130880
-86	30918977 3900 257636 280056 1.218760806117 1.306185606117 130 576 576 74880 43130880
-87	30922877 3900 257636 280056 1.218760806117 1.306185606117 130 512 512 66560 34078720
-88	30926777 3900 257636 280056 1.218760806117 1.306185606117 130 512 512 66560 34078720
-89	30930677 3900 257636 280056 1.218760806117 1.306185606117 130 512 512 66560 34078720
-90	30934577 3900 257636 280056 1.218760806117 1.306185606117 130 512 512 66560 34078720
-91	30938477 3900 257636 280056 1.218760806117 1.306185606117 130 512 512 66560 34078720
-92	30942377 3770 257637 280057 1.218760806117 1.306185606117 130 64 64 8320 532480
-93	30946147 3900 257639 280059 1.218760806117 1.306185606117 130 512 512 66560 34078720
-94	30950047 7280 257639 280060 1.218760806117 1.306185606117 260 0 1 130 130
-95	30957327 7280 257639 280060 1.218760806117 1.306185606117 260 0 1 130 130
-96	30964607 7540 257639 280060 1.218760806117 1.306185606117 260 0 512 66560 34078720
-97	30972147 3640 257640 280060 1.218760806117 1.306185606117 130 0 0 0 0
-98	30975787 3900 257640 280060 1.218760806117 1.306185606117 130 512 512 66560 34078720
-99	30979687 3900 257640 280060 1.218760806117 1.306185606117 130 512 512 66560 34078720
-100	30983587 4030 257640 280060 1.218760806117 1.306185606117 130 512 512 66560 34078720
-101	30987617 4030 257640 280060 1.218760806117 1.306185606117 130 512 512 66560 34078720
-102	30991647 4030 257640 280060 1.218760806117 1.306185606117 130 512 512 66560 34078720
-103	30995677 4030 257640 280060 1.218760806117 1.306185606117 130 512 512 66560 34078720
-104	30999707 4030 257640 280060 1.218760806117 1.306185606117 130 576 576 74880 43130880
-105	31003737 4030 257640 280060 1.218760806117 1.306185606117 130 576 576 74880 43130880
-106	31007767 4030 257640 280060 1.218760806117 1.306185606117 130 576 576 74880 43130880
-107	31011797 3900 257642 280062 1.218766566117 1.306191366117 130 64 64 8320 532480
-108	31015697 3900 257642 280062 1.218766566117 1.306191366117 130 64 64 8320 532480
-109	31019597 4680 257643 280063 1.218766566117 1.306191366117 130 5.76e-06 5.76e-06 0.0007488 4.313088e-09
-110	31024277 3900 257644 280064 1.218766566117 1.306191366117 130 46 46 5980 275080
-111	31028177 3900 257646 280066 1.218766566117 1.306191366117 130 44 44 5720 251680
-112	31032077 4420 257646 280066 1.218766566117 1.306191366117 130 158269 354289 34922182 9757416712954
-113	31036497 3770 257646 280066 1.218766566117 1.306191366117 130 0 0 0 0
-114	31040267 4290 257646 280066 1.218766566117 1.306191366117 130 37947 65535 8155098 516988204506
-116	31044557 4556 257561 278202 1.218418812915 1.298404806117 134 155365 365905 36117182 10180878286262
-117	31049113 6577 257646 278616 1.218766566117 1.300318086117 201 0 58080 2745732 50567671440
-118	31055690 307147 160679 320959 0.759355793789 1.4917870713 7429 0.00016864 0.009139949806 11.875426404361 0.062429700503857
-119	31362837 304807 160679 320959 0.759355793789 1.4917870713 7429 -0.000774010567 0.000748120672 -0.001288601036 4.952178987128e-05
-120	31667644 347555 160679 320959 0.759355793789 1.4917870713 7429 -0.0081722692008762 0.001156555628343 -4.920680148851 0.045160136989501
-121	32015199 340225 160679 320959 0.759355793789 1.4917870713 7429 0.0014586744821917 0.0022532035897319 13.166648188281 0.023879990903216
-122	32355424 4420 257629 280050 1.218755046117 1.306179846117 130 155365 365905 34698574 9677638042378
-123	32359844 3900 257629 280050 1.218755046117 1.306179846117 130 44 44 5720 251680
-124	32363744 4160 257629 280050 1.218755046117 1.306179846117 130 1452 1452 188760 274079520
-126	32367904 3248 257629 280050 1.218755046117 1.306179846117 112 0 0 0 0
-127	32371152 3235 257630 278600 1.218755046117 1.300306566117 101 1452 14520 198924 811697040
-128	32374387 5754 257630 278600 1.218755046117 1.300306566117 137 1.218568166117 1.300119686117 171.07438419803 213.70962546638
-129	32380141 3235 257630 278600 1.218755046117 1.300306566117 101 1452 14520 198924 811697040
-130	32383376 5754 257630 278600 1.218755046117 1.300306566117 137 1.218568166117 1.300119686117 171.07438419803 213.70962546638
-131	32389130 718 257739 274932 1.219144806117 1.285348966117 19 0.0001224 0.00803536 0.06531024 0.0003384414877952
-132	32389848 798 257739 274932 1.219144806117 1.285348966117 19 0.000983727239 0.004785020281 0.042243471051 0.00012106661897979
-133	32390646 795 257739 274932 1.219144806117 1.285348966117 19 0.02566968581 0.258995451525 1.92663622186 0.28649226901116
-134	32391441 564 257739 274932 1.219144806117 1.285348966117 19 1 1.037332632726 19.037332632726 19.076058990918
-135	32392005 3756 257561 278616 1.218418812915 1.300318086117 115 1452 22845 1436687 20851466829
-136	32395761 3270 257561 276651 1.218418812915 1.292127206117 102 2904 16383 391333 2560568251
-137	32399031 3770 257646 280066 1.218766566117 1.306191366117 130 0 9 86 398
-138	32402801 3217 162385 318990 0.768417077394 1.482266176225 75 68004979.093768 121404722.77693 6658330851.2452 6.0289466372705e+17
-139	32406018 3282 160794 319250 0.759953713789 1.483341918697 77 68421332.244473 99526564.965807 6793707493.5715 6.0547963569713e+17
-140	32409300 3293 160794 319250 0.759953713789 1.483341918697 77 68159682.790383 99121919.637438 6767467925.8403 6.0080665669357e+17
-141	32412593 3293 160794 319250 0.759953713789 1.483341918697 77 68159682.790383 99121919.637438 6767467925.8403 6.0080665669357e+17
-142	32415886 3294 160794 319250 0.759953713789 1.483341918697 77 67243909.701069 97705660.988144 6675629438.781 5.8459388049518e+17
-143	32419180 3294 160799 319255 0.759953713789 1.483341918697 77 67243909.701069 97705660.988144 6675629438.781 5.8459388049518e+17
-144	32422474 3293 160799 319255 0.759953713789 1.483341918697 77 68159682.790383 99121919.637438 6767467925.8403 6.0080665669357e+17
-145	32425767 3293 160799 319255 0.759953713789 1.483341918697 77 68159682.790383 99121919.637438 6767467925.8403 6.0080665669357e+17
-146	32429060 3293 160799 319255 0.759953713789 1.483341918697 77 68159682.790383 99121919.637438 6767467925.8403 6.0080665669357e+17
-147	32432353 3293 160799 319255 0.759953713789 1.483341918697 77 68159682.790383 99121919.637438 6767467925.8403 6.0080665669357e+17
-148	32435646 3282 160799 319255 0.759953713789 1.483341918697 77 68421332.244473 99526564.965807 6793707493.5715 6.0547963569713e+17
-149	32438928 3211 161327 320845 0.762336918046 1.491423357396 75 63075912.236546 99791061.292873 6169559341.5073 5.133748195531e+17
-150	32442139 3239 161545 320667 0.763195313789 1.490215942367 76 66824386.897472 98636266.780311 6680015012.4625 5.9283960631061e+17
-151	32445378 608 273975 275819 1.281629766117 1.2885824944 19 8368 12080 173840 1634056960
-152	32445986 3257 161559 320669 0.763278673789 1.490299302367 76 67.335472074508 98.984771573604 6730.9270278444 601927.76177435
-153	32449243 3262 161565 320675 0.763279633789 1.490300262367 76 67335472.074508 98980770.537474 6730813701.2789 6.0189521917211e+17
-154	32452505 3262 161565 320675 0.763279633789 1.490300262367 76 67335472.074508 98980770.537474 6730813701.2789 6.0189521917211e+17
-155	32455767 3262 161565 320675 0.763279633789 1.490300262367 76 67335472.074508 98980770.537474 6730813701.2789 6.0189521917211e+17
-156	32459029 3262 161565 320675 0.763279633789 1.490300262367 76 67335472.074508 98980770.537474 6730813701.2789 6.0189521917211e+17
-157	32462291 3239 161565 320675 0.763279633789 1.490300262367 76 66824386.897472 98301284.229123 6680123950.0694 5.9287007141194e+17
-158	32465530 3239 161565 320675 0.763279633789 1.490300262367 76 66824386.897472 98301284.229123 6680123950.0694 5.9287007141194e+17
-159	32468769 3239 161565 320675 0.763279633789 1.490300262367 76 66824386.897472 98301284.229123 6680123950.0694 5.9287007141194e+17
-160	32472008 3239 161565 320675 0.763279633789 1.490300262367 76 66824386.897472 98301284.229123 6680123950.0694 5.9287007141194e+17
-161	32475247 3239 161565 320675 0.763279633789 1.490300262367 76 66824386.897472 98301284.229123 6680123950.0694 5.9287007141194e+17
-162	32478486 3239 161570 320680 0.763279633789 1.490300262367 76 66824386.897472 98301284.229123 6680123950.0694 5.9287007141194e+17
-163	32481725 3238 161571 320681 0.763279633789 1.490300262367 76 66824386.897472 98636266.780311 6680040000.8085 5.9284451130615e+17
-164	32484963 3238 161571 320681 0.763279633789 1.490300262367 76 66824386.897472 98636266.780311 6680040000.8085 5.9284451130615e+17
-165	32488201 3238 161571 320681 0.763279633789 1.490300262367 76 66824386.897472 98636266.780311 6680040000.8085 5.9284451130615e+17
-166	32491439 3238 161571 320681 0.763279633789 1.490300262367 76 66824386.897472 98636266.780311 6680040000.8085 5.9284451130615e+17
-167	32494677 3238 161571 320681 0.763279633789 1.490300262367 76 66824386.897472 98636266.780311 6680040000.8085 5.9284451130615e+17
-168	32497915 3238 161571 320681 0.763279633789 1.490300262367 76 66824386.897472 98636266.780311 6680040000.8085 5.9284451130615e+17
-169	32501153 3262 161571 320681 0.763279633789 1.490300262367 76 67335472.074508 99346544.498899 6730729369.3628 6.0186936883839e+17
-170	32504415 3262 161571 320681 0.763279633789 1.490300262367 76 67335472.074508 99346544.498899 6730729369.3628 6.0186936883839e+17
-171	32507677 3262 161571 320681 0.763279633789 1.490300262367 76 67335472.074508 99346544.498899 6730729369.3628 6.0186936883839e+17
-172	32510939 3262 161580 320684 0.763363953789 1.490384582367 76 67335472.074508 98980770.537474 6730840882.9132 6.019006979962e+17
-173	32514201 3169 162407 320065 0.768516582748 1.487156005104 74 57748266.264839 93808630.393996 6076056121.9309 5.0408785275478e+17
-174	32517370 3169 162407 320065 0.768516582748 1.487156005104 74 57748266.264839 93808630.393996 6076056121.9309 5.0408785275478e+17
-175	32520539 402 257640 274500 0.121099076986 1.283648646117 13 0 0.92086965266485 1.2088696526649 0.90440283719908
-176	32520941 400 257633 274526 0.121380516986 1.283765286117 13 0 751208.99945292 983208.99945292 599666564059.06
-177	32521341 400 257633 274526 0.121380516986 1.283765286117 13 0 751208.99945292 983208.99945292 599666564059.06
-178	32521741 399 257636 274529 0.121386276986 1.283771046117 13 0 932535.3096657 1220535.3096657 924099722973.29
-179	32522140 399 257636 274529 0.121386276986 1.283771046117 13 0 932535.3096657 1220535.3096657 924099722973.29
-180	32522539 399 257636 274529 0.121386276986 1.283771046117 13 0 932535.3096657 1220535.3096657 924099722973.29
-181	32522938 399 257636 274529 0.121386276986 1.283771046117 13 0 932535.3096657 1220535.3096657 924099722973.29
-182	32523337 399 257636 274529 0.121386276986 1.283771046117 13 0 828920.2752584 1084920.2752584 730152867534.45
-183	32523736 399 257636 274529 0.121386276986 1.283771046117 13 0 828920.2752584 1084920.2752584 730152867534.45
-184	32524135 399 257636 274529 0.121386276986 1.283771046117 13 0 828920.2752584 1084920.2752584 730152867534.45
-185	32524534 399 257636 274529 0.121386276986 1.283771046117 13 0 828920.2752584 1084920.2752584 730152867534.45
-186	32524933 399 257636 274529 0.121386276986 1.283771046117 13 0 828920.2752584 1084920.2752584 730152867534.45
-187	32525332 399 257639 274532 0.121386276986 1.283771046117 13 0 828920.2752584 1084920.2752584 730152867534.45
-188	32525731 399 257640 274533 0.121386276986 1.283771046117 13 0 828920.2752584 1084920.2752584 730152867534.45
-189	32526130 399 257640 274533 0.121386276986 1.283771046117 13 0 828920.2752584 1084920.2752584 730152867534.45
-190	32526529 399 257640 274533 0.121386276986 1.283771046117 13 0 828920.2752584 1084920.2752584 730152867534.45
-191	32526928 399 257640 274533 0.121386276986 1.283771046117 13 0 828920.2752584 1084920.2752584 730152867534.45
-192	32527327 399 257640 274533 0.121386276986 1.283771046117 13 0 828920.2752584 1084920.2752584 730152867534.45
-193	32527726 399 257640 274533 0.121386276986 1.283771046117 13 0 828920.2752584 1084920.2752584 730152867534.45
-194	32528125 399 257640 274533 0.121386276986 1.283771046117 13 0 932535.3096657 1220535.3096657 924099722973.29
-195	32528524 399 257640 274533 0.121386276986 1.283771046117 13 0 932535.3096657 1220535.3096657 924099722973.29
-196	32528923 399 257640 274533 0.121386276986 1.283771046117 13 0 932535.3096657 1220535.3096657 924099722973.29
-197	32529322 399 257643 274536 0.121392036986 1.283776806117 13 0 932535.3096657 1220535.3096657 924099722973.29
-198	32529721 330 276544 280050 1.291785606117 1.306179846117 11 34 44 429 16841
-199	32530051 29 257561 257561 1.218418812915 1.218418812915 1 1 1 1 1
-200	32530080 531 257773 259970 1.219255686117 1.227288006117 18 1 18 171 2109
-vector 201 TargetNetwork.switch.ethernet.macHeaderChecker droppedDataRate:vector ETV
+vector 170 TargetNetwork.udp_tcp2.eth[0].phyLayer.phyHeaderChecker droppedDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetDropped)
 attr title "dropped data rate"
 attr unit bps
-vector 202 TargetNetwork.switch.ethernet.fcsChecker droppedDataRate:vector ETV
+vector 171 TargetNetwork.switch.ethernet.macHeaderChecker droppedDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetDropped)
 attr title "dropped data rate"
 attr unit bps
-vector 203 TargetNetwork.switch.ieee8021q.qTagHeaderChecker droppedDataRate:vector ETV
+vector 172 TargetNetwork.switch.ethernet.fcsChecker droppedDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetDropped)
 attr title "dropped data rate"
 attr unit bps
-vector 204 TargetNetwork.switch.ieee8021r.rTagHeaderChecker droppedDataRate:vector ETV
+vector 173 TargetNetwork.switch.ieee8021q.qTagHeaderChecker droppedDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetDropped)
 attr title "dropped data rate"
 attr unit bps
-vector 205 TargetNetwork.switch.eth[0].macLayer.fcsChecker droppedDataRate:vector ETV
+vector 174 TargetNetwork.switch.ieee8021r.rTagHeaderChecker droppedDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetDropped)
 attr title "dropped data rate"
 attr unit bps
-vector 206 TargetNetwork.switch.eth[0].phyLayer.phyHeaderChecker droppedDataRate:vector ETV
+vector 175 TargetNetwork.switch.eth[0].macLayer.queue outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPulled)
+attr title "outgoing datarate"
+attr unit bps
+vector 176 TargetNetwork.switch.eth[0].macLayer.queue incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPushStarted)
+attr title "incoming datarate"
+attr unit bps
+vector 177 TargetNetwork.switch.eth[0].macLayer.server incomingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPulled)
+attr title "incoming datarate"
+attr unit bps
+vector 178 TargetNetwork.switch.eth[0].macLayer.server outgoingDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetPushed)
+attr title "outgoing datarate"
+attr unit bps
+vector 179 TargetNetwork.switch.eth[0].macLayer.fcsChecker droppedDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetDropped)
 attr title "dropped data rate"
 attr unit bps
-vector 207 TargetNetwork.switch.eth[1].macLayer.fcsChecker droppedDataRate:vector ETV
+vector 180 TargetNetwork.switch.eth[0].phyLayer.transmitter throughput:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(transmissionEnded)
+attr title throughput
+attr unit bps
+vector 181 TargetNetwork.switch.eth[0].phyLayer.phyHeaderChecker droppedDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetDropped)
 attr title "dropped data rate"
 attr unit bps
-vector 208 TargetNetwork.switch.eth[1].phyLayer.phyHeaderChecker droppedDataRate:vector ETV
+vector 182 TargetNetwork.switch.eth[1].macLayer.fcsChecker droppedDataRate:vector ETV
 attr interpolationmode linear
 attr recordingmode vector
 attr source throughput(packetDropped)
 attr title "dropped data rate"
 attr unit bps
-3	32532465 2656 320984 322763 1.491958169062 1.499966418991 86 14843 14928 1280153 19055770479
-8	32535121 4624 320981 322768 1.491958169062 1.499967378991 172 0 1 86 86
-9	32539745 4651 320966 322772 1.491873849062 1.499967378991 173 0 1 87 87
-10	32544396 2659 320968 322753 1.491928742082 1.499945602419 86 8000 8000 688000 5504000000
-11	32547055 2659 320969 322754 1.491928742082 1.499945602419 86 1000 1000 86000 86000000
-12	32549714 2659 320970 322755 1.491928742082 1.499945602419 86 1008 1008 86688 87381504
-17	32552373 2659 320972 322757 1.491928742082 1.499945602419 86 1028 1028 88408 90883424
-18	32555032 2659 320973 322758 1.491928742082 1.499945602419 86 8368 8368 719648 6022014464
-19	32557691 4827 320967 322773 1.491874809062 1.499968338991 173 0 5 283 727
-20	32562518 3359 320967 322773 1.491874809062 1.499968338991 87 0 0.000400773347 0.011694194168 2.4621767747486e-06
-21	32565877 2687 320967 322773 1.491874809062 1.499968338991 87 8368 8368 728016 6092037888
-22	32568564 2687 320967 322773 1.491874809062 1.499968338991 87 1046 1046 91002 95188092
-23	32571251 4464 320967 322773 1.491874809062 1.499968338991 160 0 5 270 714
-24	32575715 4928 320967 322773 1.491874809062 1.499968338991 160 0 41840 2259360 49996724736
-25	32580643 3086 320987 322766 1.491959129062 1.499967378991 86 8.432e-05 8.432e-05 0.00725152 6.114481664e-07
-26	32583729 2656 320987 322766 1.491959129062 1.499967378991 86 8432 8432 725152 6114481664
-27	32586385 2656 320987 322766 1.491959129062 1.499967378991 86 8432 8432 725152 6114481664
-28	32589041 2656 320987 322766 1.491959129062 1.499967378991 86 8432 8432 725152 6114481664
-29	32591697 2656 320987 322766 1.491959129062 1.499967378991 86 8368 8368 719648 6022014464
-30	32594353 2656 320987 322766 1.491959129062 1.499967378991 86 8368 8368 719648 6022014464
-31	32597009 2656 320987 322766 1.491959129062 1.499967378991 86 8368 8368 719648 6022014464
-32	32599665 2656 320987 322766 1.491959129062 1.499967378991 86 8368 8368 719648 6022014464
-33	32602321 2656 320987 322766 1.491959129062 1.499967378991 86 8368 8368 719648 6022014464
-34	32604977 2656 320987 322766 1.491959129062 1.499967378991 86 8368 8368 719648 6022014464
-35	32607633 2656 320987 322766 1.491959129062 1.499967378991 86 8336 8336 716896 5976045056
-36	32610289 2656 320987 322766 1.491959129062 1.499967378991 86 8336 8336 716896 5976045056
-37	32612945 2656 320987 322766 1.491959129062 1.499967378991 86 8224 8224 707264 5816539136
-38	32615601 2656 320988 322767 1.491959129062 1.499967378991 86 1046 1046 89956 94093976
-39	32618257 2656 320992 322771 1.491959129062 1.499967378991 86 8224 8224 707264 5816539136
-40	32620913 2687 320965 322771 1.491873849062 1.499967378991 87 8336 8336 725232 6045533952
-41	32623600 2687 320965 322771 1.491873849062 1.499967378991 87 8336 8336 725232 6045533952
-42	32626287 2687 320965 322771 1.491873849062 1.499967378991 87 8336 8336 725232 6045533952
-43	32628974 2687 320965 322771 1.491873849062 1.499967378991 87 8336 8336 725232 6045533952
-44	32631661 2687 320965 322771 1.491873849062 1.499967378991 87 8368 8368 728016 6092037888
-45	32634348 2687 320965 322771 1.491873849062 1.499967378991 87 8368 8368 728016 6092037888
-46	32637035 4852 320965 322772 1.491873849062 1.499967378991 174 0 1 87 87
-47	32641887 4852 320965 322772 1.491873849062 1.499967378991 174 0 1 87 87
-48	32646739 5113 320965 322772 1.491873849062 1.499967378991 174 0 8368 728016 6092037888
-49	32651852 2426 320966 322772 1.491873849062 1.499967378991 87 0 0 0 0
-50	32654278 2687 320966 322772 1.491873849062 1.499967378991 87 8368 8368 728016 6092037888
-51	32656965 2687 320966 322772 1.491873849062 1.499967378991 87 8368 8368 728016 6092037888
-52	32659652 2687 320966 322772 1.491873849062 1.499967378991 87 8368 8368 728016 6092037888
-53	32662339 2687 320966 322772 1.491873849062 1.499967378991 87 8368 8368 728016 6092037888
-54	32665026 2687 320966 322772 1.491873849062 1.499967378991 87 8368 8368 728016 6092037888
-55	32667713 2687 320966 322772 1.491873849062 1.499967378991 87 8368 8368 728016 6092037888
-56	32670400 2687 320966 322772 1.491873849062 1.499967378991 87 8432 8432 733584 6185580288
-57	32673087 2687 320966 322772 1.491873849062 1.499967378991 87 8432 8432 733584 6185580288
-58	32675774 2687 320966 322772 1.491873849062 1.499967378991 87 8432 8432 733584 6185580288
-59	32678461 2656 320980 322759 1.491958169062 1.499966418991 86 1046 1046 89956 94093976
-60	32681117 2656 320980 322759 1.491958169062 1.499966418991 86 1046 1046 89956 94093976
-61	32683773 3086 320981 322760 1.491958169062 1.499966418991 86 8.432e-05 8.432e-05 0.00725152 6.114481664e-07
-62	32686859 2656 320982 322761 1.491958169062 1.499966418991 86 1028 1028 88408 90883424
-63	32689515 2656 320984 322763 1.491958169062 1.499966418991 86 1008 1008 86688 87381504
-64	32692171 2656 320985 322764 1.491958169062 1.499966418991 86 1000 1000 86000 86000000
-65	32694827 2656 320986 322765 1.491958169062 1.499966418991 86 8000 8000 688000 5504000000
-66	32697483 2656 320986 322765 1.491958169062 1.499966418991 86 8000 8000 688000 5504000000
-118	32700139 3543 320986 322765 1.491872889062 1.499866120885 86 0.00016864 0.000569413347 0.026086814856 8.8026666846481e-06
-119	32703682 3500 320986 322765 1.491872889062 1.499866120885 86 -0.000339304762 8.4532254e-05 -3.7677567e-05 6.8339370978452e-07
-120	32707182 3991 320986 322765 1.491872889062 1.499866120885 86 0.00068499936493237 0.0010900503299575 0.081929360790483 7.8936611417283e-05
-121	32711173 3939 320986 322765 1.491872889062 1.499866120885 86 0.0021638244121252 0.0021688042514378 0.18630157636272 0.0004035848044243
-138	32715112 75 321135 322774 1.492673801814 1.5 2 80402584.897407 89091774.946422 169494359.84383 1.4401920021289e+16
-139	32715187 43 321338 321338 1.493498723836 1.493498723836 1 82388112.063592 82388112.063592 82388112.063592 6.787801009403e+15
-140	32715230 43 321338 321338 1.493498723836 1.493498723836 1 82073052.361628 82073052.361628 82073052.361628 6.7359859239545e+15
-141	32715273 43 321338 321338 1.493498723836 1.493498723836 1 82073052.361628 82073052.361628 82073052.361628 6.7359859239545e+15
-142	32715316 43 321338 321338 1.493498723836 1.493498723836 1 80970343.404754 80970343.404754 80970343.404754 6.5561965110838e+15
-143	32715359 43 321343 321343 1.493498723836 1.493498723836 1 80970343.404754 80970343.404754 80970343.404754 6.5561965110838e+15
-144	32715402 43 321343 321343 1.493498723836 1.493498723836 1 82073052.361628 82073052.361628 82073052.361628 6.7359859239545e+15
-145	32715445 43 321343 321343 1.493498723836 1.493498723836 1 82073052.361628 82073052.361628 82073052.361628 6.7359859239545e+15
-146	32715488 43 321343 321343 1.493498723836 1.493498723836 1 82073052.361628 82073052.361628 82073052.361628 6.7359859239545e+15
-147	32715531 43 321343 321343 1.493498723836 1.493498723836 1 82073052.361628 82073052.361628 82073052.361628 6.7359859239545e+15
-148	32715574 43 321343 321343 1.493498723836 1.493498723836 1 82388112.063592 82388112.063592 82388112.063592 6.787801009403e+15
-149	32715617 32 322774 322774 1.5 1.5 1 85814465.401268 85814465.401268 85814465.401268 7.3641224721054e+15
-150	32715649 61 322773 322774 1.499968338991 1.5 2 0 85804549.616111 85804549.616111 7.3624207348236e+15
-153	32715710 32 322774 322774 1.5 1.5 1 86060884.488256 86060884.488256 86060884.488256 7.4064758389009e+15
-162	32715742 32 322774 322774 1.5 1.5 1 85407670.943753 85407670.943753 85407670.943753 7.2944702560364e+15
-163	32715774 32 322774 322774 1.5 1.5 1 85407670.943753 85407670.943753 85407670.943753 7.2944702560364e+15
-164	32715806 32 322774 322774 1.5 1.5 1 85407670.943753 85407670.943753 85407670.943753 7.2944702560364e+15
-165	32715838 32 322774 322774 1.5 1.5 1 85407670.943753 85407670.943753 85407670.943753 7.2944702560364e+15
-172	32715870 32 322774 322774 1.5 1.5 1 85938648.901117 85938648.901117 85938648.901117 7.3854513749495e+15
-173	32715902 75 322171 322774 1.497089194986 1.5 2 76954656.503144 80538075.835003 157492732.33815 1.2408400816722e+16
-174	32715977 75 322171 322774 1.497089194986 1.5 2 76954656.503144 80538075.835003 157492732.33815 1.2408400816722e+16
-176	32716052 80 322774 322774 1.383765286117 1.5 3 0 83520 83520 6975590400
-177	32716132 80 322774 322774 1.383765286117 1.5 3 0 83520 83520 6975590400
-178	32716212 81 322774 322774 1.383771046117 1.5 3 0 103680 103680 10749542400
-187	32716293 80 322774 322774 1.383771046117 1.5 3 0 92160 92160 8493465600
-188	32716373 80 322774 322774 1.383771046117 1.5 3 0 92160 92160 8493465600
-189	32716453 80 322774 322774 1.383771046117 1.5 3 0 92160 92160 8493465600
-190	32716533 80 322774 322774 1.383771046117 1.5 3 0 92160 92160 8493465600
-197	32716613 81 322774 322774 1.383776806117 1.5 3 0 103680 103680 10749542400
-201	32716694 268 322774 322774 0.1 1.5 15 0 0 0 0
-202	32716962 268 322774 322774 0.1 1.5 15 0 0 0 0
-203	32717230 268 322774 322774 0.1 1.5 15 0 0 0 0
-204	32717498 268 322774 322774 0.1 1.5 15 0 0 0 0
-205	32717766 268 322774 322774 0.1 1.5 15 0 0 0 0
-206	32718034 268 322774 322774 0.1 1.5 15 0 0 0 0
-207	32718302 268 322774 322774 0.1 1.5 15 0 0 0 0
-208	32718570 268 322774 322774 0.1 1.5 15 0 0 0 0
+vector 183 TargetNetwork.switch.eth[1].phyLayer.phyHeaderChecker droppedDataRate:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(packetDropped)
+attr title "dropped data rate"
+attr unit bps
+vector 184 TargetNetwork.switch.eth[1].phyLayer.receiver throughput:vector ETV
+attr interpolationmode linear
+attr recordingmode vector
+attr source throughput(receptionEnded)
+attr title throughput
+attr unit bps
+0	48848 50295 0 20788 0 0.099868575154 1982 0 1 990 990
+1	99143 50283 0 20782 0 0.099867615154 1982 0 1 990 990
+2	149426 9 0 0 0 0 1 0 0 0 0
+3	149435 9 0 0 0 0 1 0 0 0 0
+4	149444 9 0 0 0 0 1 0 0 0 0
+5	149453 18 0 0 0 0 2 0 0 0 0
+6	149471 18 0 0 0 0 2 0 0 0 0
+7	149489 27020 0 20793 0 0.099951935154 991 0 990 490545 323923215
+8	176509 9 0 0 0 0 1 0 0 0 0
+9	176518 9 0 0 0 0 1 0 0 0 0
+10	176527 20 0 0 0 0 2 0 0 0 0
+11	176547 20 0 0 0 0 2 0 0 0 0
+12	176567 52278 0 20796 0 0.099952895154 1982 0 1 990 990
+13	228845 52278 0 20791 0 0.099951935154 1982 0 1 990 990
+14	281123 29023 0 20739 0 0.099654222353 990 8000 8000 7920000 63360000000
+15	310146 29023 2 20740 0 0.099654222353 990 1000 1000 990000 990000000
+16	339169 29023 9 20741 0 0.099654222353 990 1008 1008 997920 1005903360
+17	368192 29024 11 20743 0 0.099654222353 990 8224 8224 8141760 66957834240
+18	397216 29024 11 20743 0 0.099654222353 990 8336 8336 8252640 68794007040
+19	426240 29024 11 20743 0 0.099654222353 990 8336 8336 8252640 68794007040
+20	455264 29024 11 20743 0 0.099654222353 990 8336 8336 8252640 68794007040
+21	484288 29024 11 20743 0 0.099654222353 990 8336 8336 8252640 68794007040
+22	513312 29024 11 20743 0 0.099654222353 990 8368 8368 8284320 69323189760
+23	542336 29024 11 20743 0 0.099654222353 990 8368 8368 8284320 69323189760
+24	571360 52198 11 20774 0 0.099783295154 1980 0 13 5148 25142
+25	623558 58126 11 20774 0 0.099783295154 1980 0 108784 43078464 1760528926208
+26	681684 36586 12 20774 0 0.099783295154 990 0 0.001071001305 0.212605584224 8.9778528380588e-05
+27	718270 29088 12 20774 0 0.099783295154 990 8368 8368 8284320 69323189760
+28	747358 29088 12 20774 0 0.099783295154 990 8368 8368 8284320 69323189760
+29	776446 29088 12 20774 0 0.099783295154 990 8368 8368 8284320 69323189760
+30	805534 29088 12 20774 0 0.099783295154 990 8368 8368 8284320 69323189760
+31	834622 29088 12 20774 0 0.099783295154 990 8368 8368 8284320 69323189760
+32	863710 29088 12 20774 0 0.099783295154 990 8368 8368 8284320 69323189760
+33	892798 29088 12 20774 0 0.099783295154 990 8432 8432 8347680 70387637760
+34	921886 29088 12 20774 0 0.099783295154 990 8432 8432 8347680 70387637760
+35	950974 29088 12 20774 0 0.099783295154 990 8432 8432 8347680 70387637760
+36	980062 34047 19 20781 0.00008432 0.099867615154 990 8.432e-05 8.432e-05 0.083476799999999 7.0387637760001e-06
+37	1014109 29097 19 20781 0.00008432 0.099867615154 990 8432 8432 8347680 70387637760
+38	1043206 29097 19 20781 0.00008432 0.099867615154 990 8432 8432 8347680 70387637760
+39	1072303 29097 19 20781 0.00008432 0.099867615154 990 8432 8432 8347680 70387637760
+40	1101400 29097 19 20781 0.00008432 0.099867615154 990 8368 8368 8284320 69323189760
+41	1130497 29097 19 20781 0.00008432 0.099867615154 990 8368 8368 8284320 69323189760
+42	1159594 29097 19 20781 0.00008432 0.099867615154 990 8368 8368 8284320 69323189760
+43	1188691 29097 19 20781 0.00008432 0.099867615154 990 8368 8368 8284320 69323189760
+44	1217788 29097 19 20781 0.00008432 0.099867615154 990 8368 8368 8284320 69323189760
+45	1246885 29097 19 20781 0.00008432 0.099867615154 990 8368 8368 8284320 69323189760
+46	1275982 29097 19 20781 0.00008432 0.099867615154 990 8336 8336 8252640 68794007040
+47	1305079 29097 19 20781 0.00008432 0.099867615154 990 8336 8336 8252640 68794007040
+48	1334176 29097 19 20781 0.00008432 0.099867615154 990 8224 8224 8141760 66957834240
+49	1363273 34047 20 20782 0.00008432 0.099867615154 990 8.432e-05 8.432e-05 0.083476799999999 7.0387637760001e-06
+50	1397320 29099 22 20786 0.00008432 0.099867615154 990 8224 8224 8141760 66957834240
+51	1426419 29099 22 20786 0.00008432 0.099867615154 990 8336 8336 8252640 68794007040
+52	1455518 29099 22 20786 0.00008432 0.099867615154 990 8336 8336 8252640 68794007040
+53	1484617 29099 22 20786 0.00008432 0.099867615154 990 8336 8336 8252640 68794007040
+54	1513716 29099 22 20786 0.00008432 0.099867615154 990 8336 8336 8252640 68794007040
+55	1542815 29099 22 20786 0.00008432 0.099867615154 990 8368 8368 8284320 69323189760
+56	1571914 29099 22 20786 0.00008432 0.099867615154 990 8368 8368 8284320 69323189760
+57	1601013 52258 22 20787 0.00008432 0.099867615154 1980 0 1 990 990
+58	1653271 55228 22 20787 0.00008432 0.099867615154 1980 0 8368 8284320 69323189760
+59	1708499 26129 23 20787 0.00008432 0.099867615154 990 0 0 0 0
+60	1734628 29099 23 20787 0.00008432 0.099867615154 990 8368 8368 8284320 69323189760
+61	1763727 29099 23 20787 0.00008432 0.099867615154 990 8368 8368 8284320 69323189760
+62	1792826 29099 23 20787 0.00008432 0.099867615154 990 8368 8368 8284320 69323189760
+63	1821925 29099 23 20787 0.00008432 0.099867615154 990 8368 8368 8284320 69323189760
+64	1851024 29099 23 20787 0.00008432 0.099867615154 990 8368 8368 8284320 69323189760
+65	1880123 29099 23 20787 0.00008432 0.099867615154 990 8368 8368 8284320 69323189760
+66	1909222 29099 23 20787 0.00008432 0.099867615154 990 8432 8432 8347680 70387637760
+67	1938321 29099 23 20787 0.00008432 0.099867615154 990 8432 8432 8347680 70387637760
+68	1967420 29099 23 20787 0.00008432 0.099867615154 990 8432 8432 8347680 70387637760
+69	1996519 34049 26 20790 0.00016864 0.099951935154 990 8.432e-05 8.432e-05 0.083476799999999 7.0387637760001e-06
+70	2030568 29099 26 20790 0.00016864 0.099951935154 990 8432 8432 8347680 70387637760
+71	2059667 29099 26 20790 0.00016864 0.099951935154 990 8432 8432 8347680 70387637760
+72	2088766 29099 26 20790 0.00016864 0.099951935154 990 8432 8432 8347680 70387637760
+73	2117865 29099 26 20790 0.00016864 0.099951935154 990 8368 8368 8284320 69323189760
+74	2146964 29099 26 20790 0.00016864 0.099951935154 990 8368 8368 8284320 69323189760
+75	2176063 29099 26 20790 0.00016864 0.099951935154 990 8368 8368 8284320 69323189760
+76	2205162 29099 26 20790 0.00016864 0.099951935154 990 8368 8368 8284320 69323189760
+77	2234261 29099 26 20790 0.00016864 0.099951935154 990 8368 8368 8284320 69323189760
+78	2263360 29099 26 20790 0.00016864 0.099951935154 990 8368 8368 8284320 69323189760
+79	2292459 29099 26 20790 0.00016864 0.099951935154 990 8336 8336 8252640 68794007040
+80	2321558 29099 26 20790 0.00016864 0.099951935154 990 8336 8336 8252640 68794007040
+81	2350657 29099 26 20790 0.00016864 0.099951935154 990 8224 8224 8141760 66957834240
+82	2379756 34049 27 20791 0.00016864 0.099951935154 990 8.432e-05 8.432e-05 0.083476799999999 7.0387637760001e-06
+83	2413805 29099 29 20793 0.00016864 0.099951935154 990 1008 1008 997920 1005903360
+84	2442904 29099 30 20794 0.00016864 0.099951935154 990 1000 1000 990000 990000000
+85	2472003 29099 31 20795 0.00016864 0.099951935154 990 8000 8000 7920000 63360000000
+86	2501102 38279 31 20795 0.00016864 0.099951935154 990 0.00016864 0.001239641305 0.379559184224 0.00018964119493166
+87	2539381 29099 31 20795 0.00016864 0.099951935154 990 8000 8000 7920000 63360000000
+88	2568480 38242 53 20795 0.00016864 0.099866655154 989 0.00016864 0.001239641305 0.379261471423 0.00018955256201978
+89	2606722 37559 53 20795 0.00016864 0.099866655154 989 -0.000378748 0.00016864 0.000292746478 5.6066347571886e-06
+90	2644281 44142 53 20795 0.00016864 0.099866655154 989 -0.0008428029151957 0.00023116332937471 -0.050493724852057 4.3999955444609e-05
+91	2688423 43763 53 20795 0.00016864 0.099866655154 989 0 0.00022057569040848 0.15839387412712 2.7183514656796e-05
+92	2732186 393 2019 20798 0.009971887076 0.1 10 68815413.709212 95578414.814045 796949450.91075 6.3968164865875e+16
+93	2732579 361 2023 18891 0.009971887076 0.090356273324 9 70742245.293069 98254610.428839 742513623.07983 6.1709907327388e+16
+94	2732940 364 2023 18891 0.009971887076 0.090356273324 9 71705661.084998 99592708.236235 752625676.31243 6.3402167159433e+16
+95	2733304 364 2023 18891 0.009971887076 0.090356273324 9 71705661.084998 99592708.236235 752625676.31243 6.3402167159433e+16
+96	2733668 364 2023 18891 0.009971887076 0.090356273324 9 71705661.084998 99592708.236235 752625676.31243 6.3402167159433e+16
+97	2734032 364 2023 18891 0.009971887076 0.090356273324 9 71705661.084998 99592708.236235 752625676.31243 6.3402167159433e+16
+98	2734396 365 2023 18891 0.009971887076 0.090356273324 9 71980922.739835 99975021.895492 755514834.37889 6.3889874340842e+16
+99	2734761 395 2023 20798 0.009971887076 0.1 10 71980922.739835 99975021.895492 833609125.65264 6.9988592670392e+16
+100	2735156 373 2101 18873 0.010237043699 0.090205259847 9 77.711196160645 93.931828387805 758.57124088592 64132.391151258
+101	2735529 404 2108 20798 0.010238003699 0.1 10 75756156.145797 95294630.308938 830806709.49594 6.9276335984399e+16
+102	2735933 404 2108 20798 0.010238003699 0.1 10 75756156.145797 95294630.308938 830806709.49594 6.9276335984399e+16
+103	2736337 404 2108 20798 0.010238003699 0.1 10 75756156.145797 95294630.308938 830806709.49594 6.9276335984399e+16
+104	2736741 373 2108 18892 0.010238003699 0.090356273324 9 75756156.145797 95294630.308938 752712418.22219 6.3177617654849e+16
+105	2737114 373 2108 18892 0.010238003699 0.090356273324 9 75756156.145797 95294630.308938 752712418.22219 6.3177617654849e+16
+106	2737487 373 2108 18892 0.010238003699 0.090356273324 9 75756156.145797 95294630.308938 752712418.22219 6.3177617654849e+16
+107	2737860 373 2108 18892 0.010238003699 0.090356273324 9 76335553.133527 96023461.133481 758469300.96194 6.4147701244342e+16
+108	2738233 373 2108 18892 0.010238003699 0.090356273324 9 76335553.133527 96023461.133481 758469300.96194 6.4147701244342e+16
+109	2738606 373 2108 18892 0.010238003699 0.090356273324 9 76335553.133527 96023461.133481 758469300.96194 6.4147701244342e+16
+110	2738979 373 2116 18880 0.010321363699 0.090289579847 9 77.711196160645 93.931828387805 757.90507137613 64024.190874163
+111	2739352 403 2121 20798 0.010322323699 0.1 10 76335553.133527 96023461.133481 837182208.2048 7.0339421188564e+16
+112	2739755 373 2121 18893 0.010322323699 0.090440593324 9 76335553.133527 96023461.133481 757796528.13898 6.4037334989051e+16
+113	2740128 373 2121 18893 0.010322323699 0.090440593324 9 76335553.133527 96023461.133481 757796528.13898 6.4037334989051e+16
+114	2740501 373 2121 18893 0.010322323699 0.090440593324 9 76335553.133527 96023461.133481 757796528.13898 6.4037334989051e+16
+115	2740874 373 2121 18893 0.010322323699 0.090440593324 9 75756156.145797 95294630.308938 752044751.83432 6.306892043042e+16
+116	2741247 373 2121 18893 0.010322323699 0.090440593324 9 75756156.145797 95294630.308938 752044751.83432 6.306892043042e+16
+117	2741620 373 2121 18893 0.010322323699 0.090440593324 9 75756156.145797 95294630.308938 752044751.83432 6.306892043042e+16
+118	2741993 373 2121 18893 0.010322323699 0.090440593324 9 75756156.145797 95294630.308938 752044751.83432 6.306892043042e+16
+119	2742366 373 2121 18893 0.010322323699 0.090440593324 9 75756156.145797 95294630.308938 752044751.83432 6.306892043042e+16
+120	2742739 373 2121 18893 0.010322323699 0.090440593324 9 75756156.145797 95294630.308938 752044751.83432 6.306892043042e+16
+121	2743112 373 2121 18893 0.010322323699 0.090440593324 9 75466457.651931 94930214.896667 749168863.68199 6.2587480049844e+16
+122	2743485 373 2121 18893 0.010322323699 0.090440593324 9 75466457.651931 94930214.896667 749168863.68199 6.2587480049844e+16
+123	2743858 373 2121 18893 0.010322323699 0.090440593324 9 74452512.923403 93654760.953718 739103255.14883 6.0916964936205e+16
+124	2744231 403 2122 20798 0.010322323699 0.1 10 76335553.133527 96023461.133481 837182208.2048 7.0339421188564e+16
+125	2744634 373 2126 18896 0.010322323699 0.090440593324 9 74452512.923403 93654760.953718 739103255.14883 6.0916964936205e+16
+126	2745007 373 2126 18896 0.010322323699 0.090440593324 9 75466457.651931 94930214.896667 749168863.68199 6.2587480049844e+16
+127	2745380 373 2126 18896 0.010322323699 0.090440593324 9 75466457.651931 94930214.896667 749168863.68199 6.2587480049844e+16
+128	2745753 373 2126 18896 0.010322323699 0.090440593324 9 75466457.651931 94930214.896667 749168863.68199 6.2587480049844e+16
+129	2746126 373 2126 18896 0.010322323699 0.090440593324 9 75466457.651931 94930214.896667 749168863.68199 6.2587480049844e+16
+130	2746499 373 2126 18896 0.010322323699 0.090440593324 9 75756156.145797 95294630.308938 752044751.83432 6.306892043042e+16
+131	2746872 404 2126 20798 0.010322323699 0.1 10 75756156.145797 95294630.308938 830827884.04385 6.9275702351165e+16
+132	2747276 404 2127 20798 0.010322323699 0.1 10 75756156.145797 95294630.308938 830827884.04385 6.9275702351165e+16
+133	2747680 404 2127 20798 0.010322323699 0.1 10 75756156.145797 95294630.308938 830827884.04385 6.9275702351165e+16
+134	2748084 404 2127 20798 0.010322323699 0.1 10 75756156.145797 95294630.308938 830827884.04385 6.9275702351165e+16
+135	2748488 373 2127 18897 0.010322323699 0.090440593324 9 75756156.145797 95294630.308938 752044751.83432 6.306892043042e+16
+136	2748861 373 2127 18897 0.010322323699 0.090440593324 9 75756156.145797 95294630.308938 752044751.83432 6.306892043042e+16
+137	2749234 373 2127 18897 0.010322323699 0.090440593324 9 75756156.145797 95294630.308938 752044751.83432 6.306892043042e+16
+138	2749607 373 2127 18897 0.010322323699 0.090440593324 9 76335553.133527 96023461.133481 757796528.13898 6.4037334989051e+16
+139	2749980 373 2127 18897 0.010322323699 0.090440593324 9 76335553.133527 96023461.133481 757796528.13898 6.4037334989051e+16
+140	2750353 373 2127 18897 0.010322323699 0.090440593324 9 76335553.133527 96023461.133481 757796528.13898 6.4037334989051e+16
+141	2750726 404 2130 20798 0.010406643699 0.1 10 76335553.133527 96023461.133481 837226800.93903 7.0344392004792e+16
+142	2751130 373 2130 18900 0.010406643699 0.090524913324 9 76335553.133527 96023461.133481 757134657.62152 6.3929640583599e+16
+143	2751503 373 2130 18900 0.010406643699 0.090524913324 9 76335553.133527 96023461.133481 757134657.62152 6.3929640583599e+16
+144	2751876 373 2130 18900 0.010406643699 0.090524913324 9 76335553.133527 96023461.133481 757134657.62152 6.3929640583599e+16
+145	2752249 373 2130 18900 0.010406643699 0.090524913324 9 75756156.145797 95294630.308938 751387905.00201 6.2962854650366e+16
+146	2752622 373 2130 18900 0.010406643699 0.090524913324 9 75756156.145797 95294630.308938 751387905.00201 6.2962854650366e+16
+147	2752995 373 2130 18900 0.010406643699 0.090524913324 9 75756156.145797 95294630.308938 751387905.00201 6.2962854650366e+16
+148	2753368 373 2130 18900 0.010406643699 0.090524913324 9 75756156.145797 95294630.308938 751387905.00201 6.2962854650366e+16
+149	2753741 373 2130 18900 0.010406643699 0.090524913324 9 75756156.145797 95294630.308938 751387905.00201 6.2962854650366e+16
+150	2754114 373 2130 18900 0.010406643699 0.090524913324 9 75756156.145797 95294630.308938 751387905.00201 6.2962854650366e+16
+151	2754487 373 2130 18900 0.010406643699 0.090524913324 9 75466457.651931 94930214.896667 748514528.69225 6.2482223929272e+16
+152	2754860 373 2130 18900 0.010406643699 0.090524913324 9 75466457.651931 94930214.896667 748514528.69225 6.2482223929272e+16
+153	2755233 373 2130 18900 0.010406643699 0.090524913324 9 74452512.923403 93654760.953718 738457711.60809 6.0814518194444e+16
+154	2755606 404 2131 20798 0.010406643699 0.1 10 76335553.133527 96023461.133481 837226800.93903 7.0344392004792e+16
+155	2756010 404 2135 20798 0.010406643699 0.1 10 72424623.466345 91103853.067819 794332828.2154 6.3321071984553e+16
+156	2756414 404 2135 20798 0.010406643699 0.1 10 72424623.466345 91103853.067819 794332828.2154 6.3321071984553e+16
+157	2756818 17 20798 20798 0.1 0.1 1 0 0 0 0
+158	2756835 17 20798 20798 0.1 0.1 1 0 0 0 0
+159	2756852 17 20798 20798 0.1 0.1 1 0 0 0 0
+160	2756869 17 20798 20798 0.1 0.1 1 0 0 0 0
+161	2756886 17 20798 20798 0.1 0.1 1 0 0 0 0
+162	2756903 17 20798 20798 0.1 0.1 1 0 0 0 0
+163	2756920 17 20798 20798 0.1 0.1 1 0 0 0 0
+164	2756937 17 20798 20798 0.1 0.1 1 0 0 0 0
+165	2756954 17 20798 20798 0.1 0.1 1 0 0 0 0
+166	2756971 17 20798 20798 0.1 0.1 1 0 0 0 0
+167	2756988 17 20798 20798 0.1 0.1 1 0 0 0 0
+168	2757005 17 20798 20798 0.1 0.1 1 0 0 0 0
+169	2757022 17 20798 20798 0.1 0.1 1 0 0 0 0
+170	2757039 17 20798 20798 0.1 0.1 1 0 0 0 0
+171	2757056 17 20798 20798 0.1 0.1 1 0 0 0 0
+172	2757073 17 20798 20798 0.1 0.1 1 0 0 0 0
+173	2757090 17 20798 20798 0.1 0.1 1 0 0 0 0
+174	2757107 17 20798 20798 0.1 0.1 1 0 0 0 0
+175	2757124 17 20798 20798 0.1 0.1 1 0 0 0 0
+176	2757141 17 20798 20798 0.1 0.1 1 0 0 0 0
+177	2757158 17 20798 20798 0.1 0.1 1 0 0 0 0
+178	2757175 17 20798 20798 0.1 0.1 1 0 0 0 0
+179	2757192 17 20798 20798 0.1 0.1 1 0 0 0 0
+180	2757209 17 20798 20798 0.1 0.1 1 0 0 0 0
+181	2757226 17 20798 20798 0.1 0.1 1 0 0 0 0
+182	2757243 17 20798 20798 0.1 0.1 1 0 0 0 0
+183	2757260 17 20798 20798 0.1 0.1 1 0 0 0 0
+184	2757277 17 20798 20798 0.1 0.1 1 0 0 0 0
 

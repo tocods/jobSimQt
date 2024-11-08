@@ -19,29 +19,8 @@ class Host(NetworkDevice):
         f.write(f"*.{self.name}.numApps = {len(self.appArgs)}\n")
         for index in range(0, len(self.appArgs)):
             appArg = self.appArgs[index]
-            if appArg["typename"] == "UdpSourceApp":
-                f.write(
-                    f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].source.packetLength = {appArg["packetLength"]}\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].source.productionInterval = exponential({appArg["productionInterval"]})\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].io.destAddress = "{appArg["destAddress"]}"\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].io.destPort = {appArg["destPort"]}\n'
-                )
-            if appArg["typename"] == "UdpSinkApp":
-                f.write(
-                    f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].io.localPort = {appArg["localPort"]}\n'
-                )
+            if appArg["typename"] == "UdpApp615":
+                self.generateINIUdp(f, index)
             if appArg["typename"] == "TcpSessionApp":
                 f.write(
                     f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n'
@@ -70,7 +49,37 @@ class Host(NetworkDevice):
                 f.write(
                     f'*.{self.name}.app[{index}].localPort = {appArg["localPort"]}\n'
                 )
+                f.write(
+                    f'*.{self.name}.app[{index}].flowName = "{appArg["flowName"]}"\n'
+                )
             f.write("\n")
+
+    def generateINIUdp(self, f, index):
+        appArg = self.appArgs[index]
+        if len(appArg) > 3:
+            f.write(f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n')
+            f.write(
+                f'*.{self.name}.app[{index}].source.packetLength = {appArg["packetLength"]}\n'
+            )
+            f.write(
+                f'*.{self.name}.app[{index}].source.productionInterval = exponential({appArg["productionInterval"]})\n'
+            )
+            f.write(
+                f'*.{self.name}.app[{index}].io.destAddress = "{appArg["destAddress"]}"\n'
+            )
+            f.write(f'*.{self.name}.app[{index}].io.destPort = {appArg["destPort"]}\n')
+            f.write(f'*.{self.name}.app[{index}].sink.typename = ""\n')
+        else:
+            f.write(f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n')
+
+            f.write(f'*.{self.name}.app[{index}].source.typename = ""\n')
+            f.write(f"*.{self.name}.app[{index}].io.destPort = {-1}\n")
+            f.write(
+                f'*.{self.name}.app[{index}].io.localPort = {appArg["localPort"]}\n'
+            )
+            f.write(
+                f'*.{self.name}.app[{index}].sink.flowName = "{appArg["flowName"]}"\n'
+            )
 
     def generateNED(self, f):
         f.write(f"        {self.name}: {self.type} {{\n")
@@ -222,59 +231,31 @@ class TsnHost(Host):
         self.tsnArgs = []
 
     def generateINI(self, f):
-        f.write(f"*.{self.name}.numApps = {len(self.appArgs)}\n")
-        for index in range(0, len(self.appArgs)):
-            appArg = self.appArgs[index]
-            if appArg["typename"] == "UdpSourceApp":
-                f.write(
-                    f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].source.packetLength = {appArg["packetLength"]}\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].source.productionInterval = exponential({appArg["productionInterval"]})\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].io.destAddress = "{appArg["destAddress"]}"\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].io.destPort = {appArg["destPort"]}\n'
-                )
-            if appArg["typename"] == "UdpSinkApp":
-                f.write(
-                    f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].io.localPort = {appArg["localPort"]}\n'
-                )
-
-            f.write(f"*.{self.name}.hasOutgoingStreams = true\n")
-            if len(self.tsnArgs) != 0:
-                f.write(
-                    f"*.{self.name}.bridging.streamIdentifier.identifier.mapping = ["
-                )
-                for index in range(0, len(self.tsnArgs)):
-                    tmp = self.tsnArgs[index]
-                    f.write("{")
-                    f.write(f'stream: "{tmp["stream"]}", ')
-                    f.write(f'packetfilter: {tmp["packetFilter"]}')
-                    f.write("}")
-                    if index < len(self.tsnArgs) - 1:
-                        f.write(",")
-                f.write("]\n")
-            if self.tsnArgs != "":
-                f.write(f"*.{self.name}.bridging.streamCoder.encoder.mapping = [")
-                for index in range(0, len(self.tsnArgs)):
-                    tmp = self.tsnArgs[index]
-                    f.write("{")
-                    f.write(f'stream: "{tmp["stream"]}", ')
-                    f.write(f'pcp: {tmp["pcp"]}')
-                    f.write("}")
-                    if index < len(self.tsnArgs) - 1:
-                        f.write(",")
-                f.write("]\n")
-            f.write("\n")
+        super().generateINI(f)
+        f.write(f"*.{self.name}.hasOutgoingStreams = true\n")
+        if len(self.tsnArgs) != 0:
+            f.write(f"*.{self.name}.bridging.streamIdentifier.identifier.mapping = [")
+            for index in range(0, len(self.tsnArgs)):
+                tmp = self.tsnArgs[index]
+                f.write("{")
+                f.write(f'stream: "{tmp["stream"]}", ')
+                f.write(f'packetfilter: {tmp["packetFilter"]}')
+                f.write("}")
+                if index < len(self.tsnArgs) - 1:
+                    f.write(",")
+            f.write("]\n")
+        if self.tsnArgs != "":
+            f.write(f"*.{self.name}.bridging.streamCoder.encoder.mapping = [")
+            for index in range(0, len(self.tsnArgs)):
+                tmp = self.tsnArgs[index]
+                f.write("{")
+                f.write(f'stream: "{tmp["stream"]}", ')
+                f.write(f'pcp: {tmp["pcp"]}')
+                f.write("}")
+                if index < len(self.tsnArgs) - 1:
+                    f.write(",")
+            f.write("]\n")
+        f.write("\n")
 
     def generateNED(self, f):
         f.write(

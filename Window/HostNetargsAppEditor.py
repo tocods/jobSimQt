@@ -17,6 +17,7 @@ from qdarktheme.qtpy.QtCore import Qt
 class HostNetargsAppEditor(QDialog):
     def __init__(self, json_data):
         QDialog.__init__(self)
+
         self.current_index = 0
         self.json_data = json_data
 
@@ -24,6 +25,29 @@ class HostNetargsAppEditor(QDialog):
         self.add_source_button.clicked.connect(self.add_source)
         self.add_sink_button.clicked.connect(self.add_sink)
         self.update_table()
+    def get_key_chinese(self):
+        key_chinese = {
+            "typename": "类型名",
+            "packetLength": "发包长度",
+            "productionInterval": "发包间隔",
+            "destAddress": "目标地址（名称）",
+            "destPort": "目标端口",
+            "sendBytes": "发送长度",
+            "localPort": "本机端口",
+            "connectAddress": "目标地址（名称）",
+            "connectPort": "目标端口",
+            "localPort": "本地端口",
+            "destinationQueuePairNumber": "目标队列序号",
+            "localQueuePairNumber": "目标队列序号",
+            "pcp": "优先级",
+            "messageType": "消息类型",
+            "publish": "发布主题",
+            "subscribeTopic": "订阅主题",
+            "subscribePort": "订阅端口",
+            "nackCountdown": "nackCountdown",
+            "flowName": "flow名称",
+        }
+        return key_chinese
 
     def setup_ui(self):
         self.setWindowTitle("编辑器")
@@ -89,8 +113,12 @@ class HostNetargsAppEditor(QDialog):
 
         # 更新表格行数并填充数据
         self.table_widget.setRowCount(len(current_object))
-        for row, (field, value) in enumerate(current_object.items()):
-            self.table_widget.setItem(row, 0, QTableWidgetItem(field))
+        for row, (field, value) in enumerate(current_object.copy().items()):
+            if field in self.get_key_chinese():
+                field_name = self.get_key_chinese()[field]
+                self.table_widget.setItem(row, 0, QTableWidgetItem(field_name))
+            else:
+                self.table_widget.setItem(row, 0, QTableWidgetItem(field))
             self.table_widget.setItem(row, 1, QTableWidgetItem(str(value)))
             item = self.table_widget.item(row, 0)
             item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
@@ -109,14 +137,7 @@ class HostNetargsAppEditor(QDialog):
         keys = list(current_object.keys())
 
         if col == 0:
-            # 修改字段名
-            old_key = keys[row]
-            new_key = item.text()
-            if new_key and new_key != old_key:
-                # 更新字段名的方式
-                value = current_object.pop(old_key)
-                current_object[new_key] = value
-                self.update_table()  # 刷新表格显示
+            return
         elif col == 1:
             # 修改字段值
             key = keys[row]
@@ -200,7 +221,7 @@ class HostNetargsAppEditorNormal(HostNetargsAppEditor):
 
     def add_source(self, source_type):
         udp_source = {
-            "typename": "UdpSourceApp",
+            "typename": "UdpApp615",
             "packetLength": "1000B",
             "productionInterval": "100us",
             "destAddress": "",
@@ -219,8 +240,8 @@ class HostNetargsAppEditorNormal(HostNetargsAppEditor):
         self.update_table()
 
     def add_sink(self, sink_type):
-        udp_sink = {"typename": "UdpSinkApp", "localPort": ""}
-        tcp_sink = {"typename": "TcpSinkApp", "localPort": ""}
+        udp_sink = {"typename": "UdpApp615", "localPort": "", "flowName": "default"}
+        tcp_sink = {"typename": "TcpSinkApp", "localPort": "", "flowName": "default"}
         new_sink = {"Udp": udp_sink, "Tcp": tcp_sink}
         self.json_data.append(new_sink[sink_type])
         self.current_index = len(self.json_data) - 1
@@ -231,11 +252,12 @@ class HostNetargsAppEditorUdp(HostNetargsAppEditor):
     def add_source(self):
         """添加一个空的 JSON 对象并跳转到新对象"""
         new_object = {
-            "typename": "UdpSourceApp",
+            "typename": "UdpApp615",
             "packetLength": "1000B",
             "productionInterval": "100us",
             "destAddress": "",
             "destPort": "",
+            "sinkTypename": "",
         }
         self.json_data.append(new_object)
         self.current_index = len(self.json_data) - 1  # 跳转到新对象
@@ -243,7 +265,7 @@ class HostNetargsAppEditorUdp(HostNetargsAppEditor):
 
     def add_sink(self):
         """添加一个空的 JSON 对象并跳转到新对象"""
-        new_object = {"typename": "UdpSinkApp", "localPort": ""}
+        new_object = {"typename": "UdpApp615", "localPort": ""}
         self.json_data.append(new_object)
         self.current_index = len(self.json_data) - 1  # 跳转到新对象
         self.update_table()
@@ -263,8 +285,7 @@ class HostNetargsAppEditorTcp(HostNetargsAppEditor):
         self.update_table()
 
     def add_sink(self):
-        """添加一个空的 JSON 对象并跳转到新对象"""
-        new_object = {"typename": "UdpSinkApp", "localPort": ""}
+        new_object = {"typename": "UdpSinkApp", "localPort": "", "flowName": "default"}
         self.json_data.append(new_object)
         self.current_index = len(self.json_data) - 1  # 跳转到新对象
         self.update_table()
@@ -291,7 +312,11 @@ class HostNetargsAppEditorRdma(HostNetargsAppEditor):
 
         self.table_widget.setRowCount(len(current_object))
         for row, (field, value) in enumerate(current_object.items()):
-            self.table_widget.setItem(row, 0, QTableWidgetItem(field))
+            if field in self.get_key_chinese():
+                field_name = self.get_key_chinese()[field]
+                self.table_widget.setItem(row, 0, QTableWidgetItem(field_name))
+            else:
+                self.table_widget.setItem(row, 0, QTableWidgetItem(field))
             self.table_widget.setItem(row, 1, QTableWidgetItem(str(value)))
             item = self.table_widget.item(row, 0)
             item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
@@ -335,7 +360,7 @@ class HostNetargsAppEditorRdma(HostNetargsAppEditor):
         self.update_table()
 
 
-class HostNetargsAppEditorDds(HostNetargsAppEditor):
+class HostNetargsAppEditorTsn(HostNetargsAppEditor):
     def __init__(self, json_data):
         QDialog.__init__(self)
         self.current_index = 0
@@ -358,7 +383,67 @@ class HostNetargsAppEditorDds(HostNetargsAppEditor):
 
     def create_add_sink_menu(self):
         menu = QMenu(self)
-        sinks = ["Udp", "Tcp"]  # 示例接收端类型
+        sinks = ["Udp", "Tcp"]
+        for sink in sinks:
+            action = QAction(sink, self)
+            action.triggered.connect(lambda checked, s=sink: self.add_sink(s))
+            menu.addAction(action)
+        return menu
+
+    def add_source(self, source_type):
+        udp_source = {
+            "typename": "UdpApp615",
+            "packetLength": "1000B",
+            "productionInterval": "100us",
+            "destAddress": "",
+            "destPort": "",
+        }
+        tcp_source = {
+            "typename": "TcpSessionApp",
+            "sendBytes": "1000MiB",
+            "localPort": "",
+            "connectAddress": "",
+            "connectPort": "",
+        }
+
+        new_source = {"Udp": udp_source, "Tcp": tcp_source}
+        self.json_data.append(new_source[source_type])
+        self.current_index = len(self.json_data) - 1
+        self.update_table()
+
+    def add_sink(self, sink_type):
+        udp_sink = {"typename": "UdpApp615", "localPort": "", "flowName": "default"}
+        tcp_sink = {"typename": "TcpSinkApp", "localPort": "", "flowName": "default"}
+        new_sink = {"Udp": udp_sink, "Tcp": tcp_sink}
+        self.json_data.append(new_sink[sink_type])
+        self.current_index = len(self.json_data) - 1
+        self.update_table()
+
+
+class HostNetargsAppEditorDds(HostNetargsAppEditor):
+    def __init__(self, json_data):
+        QDialog.__init__(self)
+        self.current_index = 0
+        self.json_data = json_data
+        self.setup_ui()
+        self.add_source_menu = self.create_add_source_menu()
+        self.add_source_button.setMenu(self.add_source_menu)
+        self.add_sink_menu = self.create_add_sink_menu()
+        self.add_sink_button.setMenu(self.add_sink_menu)
+        self.update_table()
+
+    def create_add_source_menu(self):
+        menu = QMenu(self)
+        sources = ["Udp", "Tcp", "Dds"]
+        for source in sources:
+            action = QAction(source, self)
+            action.triggered.connect(lambda checked, s=source: self.add_source(s))
+            menu.addAction(action)
+        return menu
+
+    def create_add_sink_menu(self):
+        menu = QMenu(self)
+        sinks = ["Udp", "Tcp", "Dds"]
         for sink in sinks:
             action = QAction(sink, self)
             action.triggered.connect(lambda checked, s=sink: self.add_sink(s))

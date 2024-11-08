@@ -20,7 +20,7 @@ class SetSimtimeWindow(QDialog):
         self.time_input = QLineEdit()
         self.time_input.setText("1.5")
         self.type_combo = QComboBox()
-        self.type_combo.addItems(["Udp", "Tcp", "Rdma", "Tsn", "Dds"])
+        self.type_combo.addItems(["通用", "RDMA"])
 
         layout.addRow("时间:", self.time_input)
         layout.addRow("网络类型:", self.type_combo)
@@ -83,42 +83,24 @@ class SetSimtimeWindow(QDialog):
         return
 
     def generateNEDHeader(self, f):
-        if self.type_combo.currentText() == "Udp":
-            f.write("import inet.networks.base.WiredNetworkBase;\n")
-            f.write("import inet.node.inet.StandardHost;\n")
-            f.write("import inet.node.ethernet.EthernetSwitch;\n\n")
-            f.write("network TargetNetwork extends WiredNetworkBase\n")
-            f.write("{\n")
-        if self.type_combo.currentText() == "Tsn":
-            f.write("import inet.networks.base.TsnNetworkBase;\n")
-            f.write("import inet.node.contract.IEthernetNetworkNode;\n")
-            f.write("import inet.node.ethernet.EthernetLink;\n")
-            f.write("network TargetNetwork extends TsnNetworkBase\n")
-            f.write("{\n")
-            f.write("parameters:")
-            f.write("*.eth[*].bitrate = default(100Mbps);")
-        if self.type_combo.currentText() == "Tcp":
-            f.write("import inet.networks.base.WiredNetworkBase;\n")
-            f.write("import inet.common.misc.ThruputMeteringChannel;\n")
-            # f.write(
-            #     "import inet.networklayer.configurator.ipv4.Ipv4NetworkConfigurator;\n"
-            # )
-            f.write("import inet.node.ethernet.EthernetSwitch;\n")
-            f.write("import inet.node.inet.StandardHost;\n")
-            f.write("import inet.node.ethernet.Eth100M;\n")
-            f.write("network TargetNetwork extends WiredNetworkBase\n")
-            f.write("{\n")
-            f.write("    parameters:\n")
-            f.write("    types:\n")
-        if self.type_combo.currentText() == "Dds":
-            f.write("import inet.networks.base.WiredNetworkBase;\n")
-            f.write("import inet.node.ethernet.Eth100M;\n")
-            f.write("import inet.node.inet.DDSStandardHost;\n")
-            f.write("import inet.node.inet.StandardHost;\n")
-            f.write("import inet.node.ethernet.EthernetSwitch;\n")
-            f.write("network TargetNetwork extends WiredNetworkBase\n")
-            f.write("{\n")
-        f.write("    submodules:\n")
+        f.write(
+            f"import inet.linklayer.configurator.gatescheduling.contract.IGateScheduleConfigurator;\n"
+        )
+        f.write(
+            f"import inet.networklayer.configurator.contract.INetworkConfigurator;\n"
+        )
+        f.write(f"import inet.node.tsn.TsnDevice;\n")
+        f.write(f"import inet.node.tsn.TsnSwitch;\n")
+        f.write(f"import inet.networks.base.WiredNetworkBase;\n")
+        f.write(f"import inet.node.contract.IEthernetNetworkNode;\n")
+        f.write(f"import inet.node.ethernet.EthernetLink;\n")
+        f.write(f"import inet.node.ethernet.Eth100M;\n")
+        f.write(f"import inet.node.inet.StandardHost;\n")
+        f.write(f"import inet.node.ethernet.EthernetSwitch;\n")
+        f.write(f"import inet.node.inet.DDSStandardHost;\n")
+        f.write(f'network TargetNetwork extends WiredNetworkBase\n')
+        f.write(f'{"{"}\n')
+        f.write('    submodules:\n')
 
     def generateINI(self, time):
         with open(
@@ -137,15 +119,15 @@ class SetSimtimeWindow(QDialog):
         f.write("network = TargetNetwork\n")
         f.write(f"sim-time-limit = {time}s\n")
         f.write("\n")
-        if self.type_combo.currentText() == "Tcp":
-            self.generateTcpINIHeader(f)
-        if self.type_combo.currentText() == "Dds":
-            self.generateDdsINIHeader(f)
-        if self.type_combo.currentText() == "Rdma":
-            self.generateRdmaINIHeader(f)
-
         f.write(f'*.*.ethernet.typename = "EthernetLayer"\n')
         f.write(f'*.*.eth[*].typename = "LayeredEthernetInterface"\n')
+        f.write(f'*.*.eth[*].bitrate = 100Mbps\n')
+        data = globaldata.networkGlobalConfig["common"]
+        f.write(f'**.eth[*].queue.typename = "{data["queueTypename"]}"\n')
+        f.write(f'**.eth[*].queue.packetCapacity = {data["queuePacketCapacity"]}\n')
+        self.generateTcpINIHeader(f)
+        self.generateDdsINIHeader(f)
+        # self.generateRdmaINIHeader(f)
 
     def generateTcpINIHeader(self, f):
         data = globaldata.networkGlobalConfig["Tcp"]
@@ -153,8 +135,6 @@ class SetSimtimeWindow(QDialog):
         f.write(f'**.arp.retryTimeout = {data["retryTimeout"]}\n')
         f.write(f'**.arp.retryCount = {data["retryCount"]}\n')
         f.write(f'**.arp.cacheTimeout = {data["cacheTimeout"]}\n')
-        f.write(f'**.eth[*].queue.typename = "{data["queueTypename"]}"\n')
-        f.write(f'**.eth[*].queue.packetCapacity = {data["queuePacketCapacity"]}\n')
         f.write(f'**.tcp.tcpAlgorithmClass = "{data["tcpAlgorithmClass"]}"\n')
         f.write('**.tcp.typename = "Tcp"\n')
         f.write("**.tcp.advertisedWindow = 65535\n")
@@ -168,12 +148,9 @@ class SetSimtimeWindow(QDialog):
         f.write("**.tcp.mss = 1452\n")
 
     def generateDdsINIHeader(self, f):
-        data = globaldata.networkGlobalConfig["Dds"]
         f.write(
             "*.configurator.config = xml(\"<config><interface hosts='**' address='192.x.x.x' netmask='255.x.x.x'/></config>\")\n"
         )
-        f.write(f'**.macLayer.queue.typename = "{data["queueTypename"]}"\n')
-        f.write(f'**.macLayer.queue.packetCapacity = {data["queuePacketCapacity"]}\n')
 
     def generateRdmaINIHeader(self, f):
         f.write('*.*.llc.typename = ""\n')

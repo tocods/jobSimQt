@@ -67,7 +67,7 @@ class EditHostNetargsWindowNormal(EditHostNetargsWindow):
             0, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.numApps))
         )
         button = QPushButton("编辑应用参数")
-        button.clicked.connect(lambda _: self.open_json_object_array_editor())
+        button.clicked.connect(self.open_json_object_array_editor)
         self.ui.tableWidget_netargs.setCellWidget(1, 0, button)
         self.ui.tableWidget_netargs.item(0, 0).setFlags(
             Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
@@ -325,7 +325,7 @@ class EditHostNetargsWindowTsn(EditHostNetargsWindow):
         """打开 JSON 对象数组编辑器窗口"""
         json_data = self.tmp_appArgs.copy()
 
-        editor = HostNetargsAppEditorUdp(json_data)
+        editor = HostNetargsAppEditorTsn(json_data)
         if editor.exec() == QDialog.DialogCode.Accepted:
             # 更新 JSON 数据
             self.tmp_appArgs = editor.get_json_data()
