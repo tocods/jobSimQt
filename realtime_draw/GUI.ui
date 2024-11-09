@@ -28,31 +28,23 @@
            <enum>QLayout::SetNoConstraint</enum>
           </property>
           <item>
+           <widget class="QPushButton" name="loadButton">
+            <property name="text">
+             <string>加载数据</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="displayButton">
             <property name="text">
-             <string>开始</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pauseButton">
-            <property name="text">
-             <string>暂停/继续</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="stopButton">
-            <property name="text">
-             <string>终止</string>
+             <string>绘图</string>
             </property>
            </widget>
           </item>
          </layout>
         </item>
         <item>
-         <widget class="QListWidget" name="listWidgetCheck">
-         </widget>
+         <widget class="QListWidget" name="listWidgetCheck"/>
         </item>
        </layout>
       </item>

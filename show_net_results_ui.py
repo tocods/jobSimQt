@@ -7,7 +7,8 @@
 
 
 from qdarktheme.qtpy import QtCore, QtGui, QtWidgets
-from realtime_draw.LatencyResult import LatencyResult
+from realtime_draw.ResultPlot import LatencyResultPlot
+from realtime_draw.ResultPlot import BufferResultPlot
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -18,18 +19,12 @@ class Ui_Dialog(object):
         self.tabWidget.setTabPosition(QtWidgets.QTabWidget.TabPosition.North)
         self.tabWidget.setDocumentMode(True)
         self.tabWidget.setObjectName("tabWidget")
-        self.latency = LatencyResult()
+        self.latency = LatencyResultPlot(Dialog)
         self.latency.setObjectName("model")
         self.tabWidget.addTab(self.latency, "时延曲线")
-        self.buffer = QtWidgets.QWidget(Dialog)
+        self.buffer = BufferResultPlot(Dialog)
         self.buffer.setObjectName("develop")
         self.tabWidget.addTab(self.buffer, "缓冲区曲线")
-        self.width = QtWidgets.QWidget(Dialog)
-        self.width.setObjectName("width")
-        self.tabWidget.addTab(self.width, "端口实时带宽")
-        self.loss = QtWidgets.QWidget(Dialog)
-        self.loss.setObjectName("loss")
-        self.tabWidget.addTab(self.loss, "丢包率")
 
         self.netCal = QtWidgets.QWidget(Dialog)
         self.netCal.setObjectName("netCal")
