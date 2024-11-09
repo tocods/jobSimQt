@@ -453,6 +453,7 @@ class ParseUtil:
         jobs = []
         for job in json_data:
             job_info = JobInfo()
+            job_info.host = job["host"]
             job_info.name = job["name"]
             job_info.period = job["period"]
             cpu_task = CPUTaskInfo()

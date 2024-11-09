@@ -38,7 +38,7 @@ class JobSimQt(QMainWindow):
         project.projectPath = path
         self._initJsonFiles()
         # 取消标题栏
-        self.setWindowFlags(Qt.FramelessWindowHint)
+        # self.setWindowFlags(Qt.FramelessWindowHint)
         self.nowClect = None
         self._ui = UI()
         self._ui.setup_ui(self)
@@ -72,7 +72,7 @@ class JobSimQt(QMainWindow):
         self.setClicked()
         self.center()
 
-        globaldata.currentProjectInfo.setRelativePath(path)
+        globaldata.currentProjectInfo.setPath(path)
         self._ui.network_editor.load_network_from_xml()
 
     def center(self):
@@ -391,7 +391,8 @@ class JobSimQt(QMainWindow):
                 gpus.append(gpu)
                 videoCardInfo = VideoCardInfo(gpus)
                 videoCardInfo.pcie_bw = (int)(self.hostInfoPage.pcie.value()) 
-            self.nowHost.video_card_infos.append(VideoCardInfo(gpus))
+                print("apply: " + videoCardInfo.pcie_bw.__str__())
+            self.nowHost.video_card_infos.append(videoCardInfo)
         self.nowHost.print()
         sysSim.hosts.pop(name_before)
         sysSim.hosts[self.nowHost.name] = self.nowHost
@@ -413,6 +414,11 @@ class JobSimQt(QMainWindow):
         self.nowJob.cpu_task.pes_number = self.jobInfoPage.corenum.value()
         self.nowJob.cpu_task.length = self.jobInfoPage.cpuflops.text()
         self.nowJob.gpu_task = None
+        print(self.jobInfoPage.host.currentText())
+        if self.jobInfoPage.host.currentText() != "不指定":
+            self.nowJob.host = self.jobInfoPage.host.currentText()
+        else:
+            self.nowJob.host = ""
         if self.kernel_num > 0:
             request_gddram_total = 0
             task_input_size_total = 0
@@ -493,6 +499,8 @@ class JobSimQt(QMainWindow):
         self.hostInfoPage.cpuflops.setValidator(validator)
         self._ui.homeui.tabWidget.setCurrentIndex(0)
         if host.video_card_infos != []:
+            print(host.video_card_infos[0].pcie_bw)
+            self.hostInfoPage.pcie.setValue(host.video_card_infos[0].pcie_bw)
             gpu_num = len(host.video_card_infos[0].gpu_infos)
             if gpu_num > 0:
                 self.gpu_num = gpu_num
@@ -634,6 +642,16 @@ class JobSimQt(QMainWindow):
             print("no gpu task")
             self.kernel_num = 0
             self._initKernelTable(0, None)
+        self.jobInfoPage.host.clear()
+        self.jobInfoPage.host.addItem("不指定")
+        for(host_name, host) in sysSim.hosts.items():
+            self.jobInfoPage.host.addItem(host_name)
+        print(job.host)
+        print("===")
+        if job.host != "":
+            self.jobInfoPage.host.setCurrentText(job.host)
+        else:
+            self.jobInfoPage.host.setCurrentText("不指定")
         self._ui.homeui.tabWidget.setCurrentIndex(1)
 
     def _initKernelTable(self, kernel_num, gpu_task):
