@@ -649,7 +649,6 @@ class JobSimQt(QMainWindow):
             newFault.setHardware("CPU")
         else:
             newFault.setHardware("ram")
-        print("aaaa")
         newFault.print()
         sysSim.faults.pop(name_before)
         sysSim.faults[newFault.name] = newFault
@@ -671,7 +670,7 @@ class JobSimQt(QMainWindow):
             self.nowHost = host
         else:
             self.nowHost = None
-        if ifTrueHost:
+        if ifTrueHost and os.path.isdir(project.projectPath + "/OutputFiles") and os.path.isfile(project.projectPath + "/OutputFiles/hostUtils.xml"):
             path = project.projectPath + "/OutputFiles/hostUtils.xml"
             if os.path.exists(path):
                 xmlParser = XmlParser(path)
@@ -811,7 +810,7 @@ class JobSimQt(QMainWindow):
             self.nowJob = job
         else:
             self.nowJob = None
-        if ifTrueJob:
+        if ifTrueJob and os.path.isdir(project.projectPath + "/OutputFiles") and os.path.isfile(project.projectPath + "/OutputFiles/jobRun.xml"):
             path = project.projectPath + "/OutputFiles/jobRun.xml"
             if os.path.exists(path):
                 xmlParser = XmlParser(path)
@@ -994,7 +993,7 @@ class JobSimQt(QMainWindow):
              # 填充故障信息表格
             path = project.projectPath + "/OutputFiles/faultRecords.xml"
             print(path)
-            if os.path.exists(path):
+            if os.path.exists(path) and os.path.isdir(project.projectPath + "/OutputFiles") and os.path.isfile(project.projectPath + "/OutputFiles/faultRecords.xml"):
                 print("exist")
                 xmlParser = XmlParser(path)
                 fault_results = xmlParser.parseFaultRecord()
