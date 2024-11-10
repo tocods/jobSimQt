@@ -16,8 +16,8 @@ import qdarktheme
 from qdarktheme.qtpy.QtCore import QDir, Qt, Slot, QRegularExpression
 from qdarktheme.qtpy.QtGui import *
 from qdarktheme.qtpy.QtWidgets import *
-import PySide6.QtWidgets
 from main_ui import UI
+from component.start import Ui_start
 from util.jobSim import sysSim, ParseUtil, HostInfo, CPUInfo, GPUInfo, VideoCardInfo, JobInfo, CPUTaskInfo, GPUTaskInfo, FaultGenerator, tranFromC2E, tranFromE2C
 from jobSimPage import JobSimPage
 from component.hostinfo import Ui_HostInfo
@@ -26,19 +26,112 @@ from component.faultinfo import Ui_FaultInfo
 from PySide6.QtCharts import QChart,QChartView,QLineSeries,QDateTimeAxis,QValueAxis, QPieSeries
 from jobSimPainter import Painter, XmlParser
 from util.table import NumericDelegate
-from resultUtil import getAverageRunTime, getAverageRunTimeInHost, getThroughput
 import globaldata
 
 class JobSimQt(QMainWindow):
-    def __init__(self, path) -> None:
+    def __init__(self) -> None:
         super().__init__()
+        self.start = Ui_start()
+        self.start.setupUi(self)
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.center()
+        self.history = []
+        i = 0
+        f = QFont()
+        f.setPointSize(13)
+        self.start.projects.setFont(f)
+        self.start.projects.setHeaderHidden(True)
+        self.start.projects.clicked.connect(self.choseP)
+        with open("history.txt", "r") as f:
+            for line in f.readlines():
+                if i > 10:
+                    break
+                self.history.append(line)
+                i = i + 1
+                item = QTreeWidgetItem([line.strip('\n')])
+                self.start.projects.addTopLevelItem(item)
+        self.start.newP.clicked.connect(self.newP)
+        self.start.openP.clicked.connect(self.openP)
+        self.start.shutdown.clicked.connect(sys.exit)
+
+
+    def newP(self):
+        file_name = QFileDialog.getExistingDirectory(None, "Open File", "")
+        print(file_name)
+        with open(file_name + "/hosts.json", "w") as f:
+            f.write("[]")
+        with open(file_name + "/jobs.json", "w") as f:
+            f.write("[]")
+        with open(file_name + "/faults.json", "w") as f:
+            f.write("[]")
+        l = file_name + '\n'
+        if l in self.history:
+            self.history.remove(file_name + '\n')
+        self.history.insert(0, file_name + '\n')
+        with open("history.txt", "w") as f:
+            f.writelines(self.history)
+        self.startUp(file_name)
+    
+
+    def openP(self):
+        file_name = QFileDialog.getExistingDirectory(None, "Open File", "")
+        print(file_name)
+        self.openProject(file_name)
+
+    def openProject(self, file_name):
+        if not os.path.isdir(file_name):
+            QMessageBox.information(self, "", "项目不存在")
+            l = file_name + '\n'
+            if l in self.history:
+                self.history.remove(file_name + '\n')
+            with open("history.txt", "w") as f:
+                f.writelines(self.history)
+            self.start.projects.clear()
+            for his in self.history:
+                item = QTreeWidgetItem([his.strip('\n')])
+                self.start.projects.addTopLevelItem(item)
+            return
+        if not os.path.exists(file_name + "/hosts.json"):
+            QMessageBox.information(self, "", "主机信息文件不存在")
+            return
+        if not os.path.exists(file_name + "/jobs.json"):
+            QMessageBox.information(self, "", "任务信息文件不存在")
+            return
+        if not os.path.exists(file_name + "/hosts.json"):
+            QMessageBox.information(self, "", "故障模型信息文件不存在")
+            return
+        l = file_name + '\n'
+        if l in self.history:
+            self.history.remove(file_name + '\n')
+        self.history.insert(0, file_name + '\n')
+        with open("history.txt", "w") as f:
+            f.writelines(self.history)
+        self.startUp(file_name)
+
+    def choseP(self):
+        print("aaa")
+        if_root = False
+        #获取点击item所属根节点的名称（如无根节点则返回自身）
+        nowClect = self.start.projects.currentItem().parent()
+        if nowClect is None:
+            if_root = True
+            nowClect = self.start.projects.currentItem()
+        print(nowClect.text(0))
+        if not if_root:
+            return
+        self.openProject(nowClect.text(0))
+
+    def startUp(self, path):
         self.duration = 100
         if not os.path.isabs(path):
             path = os.path.abspath(path)
+        self.wfont = QFont()
+        self.wfont.setPointSize(30)
+        self.setFont(self.wfont)
         project.projectPath = path
         self._initJsonFiles()
         # 取消标题栏
-        self.setWindowFlags(Qt.FramelessWindowHint)
+        # self.setWindowFlags(Qt.FramelessWindowHint)
         self.nowClect = None
         self._ui = UI()
         self._ui.setup_ui(self)
@@ -65,14 +158,14 @@ class JobSimQt(QMainWindow):
         screen_size = screen.availableGeometry()
         self._ui.homeui.infoList.setHeaderHidden(True)
         self.setGeometry(0, 0, screen_size.width() * 0.9, screen_size.height() * 0.9)
-        self._ui.homeui.layoutWidget.setGeometry(0, 0, screen_size.width() * 0.8, screen_size.height() * 0.8)
-        self._ui.resultui.layoutWidget.setGeometry(0, 0, screen_size.width() * 0.8, screen_size.height() * 0.8)
+        # self._ui.homeui.layoutWidget.setGeometry(0, 0, screen_size.width() * 0.8, screen_size.height() * 0.8)
+        # self._ui.resultui.layoutWidget.setGeometry(0, 0, screen_size.width() * 0.8, screen_size.height() * 0.8)
         self._initAll()
         self.initTreeView()
         self.setClicked()
         self.center()
 
-        globaldata.currentProjectInfo.setRelativePath(path)
+        globaldata.currentProjectInfo.setFullname(path)
         self._ui.network_editor.load_network_from_xml()
 
     def center(self):
@@ -85,7 +178,7 @@ class JobSimQt(QMainWindow):
         action_name = self.sender().text()
         #self._ui.stack_widget.setCurrentIndex(0 if action_name == "运行仿真" else 1)
         if action_name == "系统管理评估平台":
-            os.popen("python D:/analysis/main.py " + project.projectPath)
+            os.popen("python d:/analysis/main.py " + project.projectPath)
         if action_name == "系统管理集成开发平台":
             self._startSoftware()
 
@@ -199,7 +292,6 @@ class JobSimQt(QMainWindow):
         path = project.projectPath + "/hosts.json"
         parser = ParseUtil()
         self.hosts = parser.parseHosts(path)
-        print(self.hosts)
         for host in self.hosts:
             sysSim.hosts[host.name] = host
         path = project.projectPath + "/jobs.json"
@@ -209,6 +301,7 @@ class JobSimQt(QMainWindow):
         path = project.projectPath + "/faults.json"
         self.faults = parser.parseFaults(path)
         for fault in self.faults:
+            print(fault.name)
             sysSim.faults[fault.name] = fault
 
         w = QWidget()
@@ -260,6 +353,9 @@ class JobSimQt(QMainWindow):
 
 
     def initTreeView(self):
+        f = QFont()
+        f.setPointSize(10)
+        self._ui.homeui.infoList.setFont(f)
         # 删除所有节点
         self._ui.homeui.infoList.clear()
         print("init tree")
@@ -357,7 +453,7 @@ class JobSimQt(QMainWindow):
             item.setFlags(item.flags())
             self.nowClect.addChild(item)
             self._ui.homeui.infoList.setCurrentItem(item)
-            new_fault = FaultGenerator("Normal", 0, 0)
+            new_fault = FaultGenerator("Normal", 10, 10)
             if len(sysSim.hosts) > 0:
                 new_fault.setAim(list(sysSim.hosts.keys())[0])
             new_fault.setName(name)
@@ -369,6 +465,32 @@ class JobSimQt(QMainWindow):
     def _applyHost(self):
         print("apply host")
         if self.nowHost is None:
+            return
+        print(self.hostInfoPage.corenum.text() + "AAA")
+        if self.hostInfoPage.hostName.text() == "":
+            QMessageBox.information(self, "", "主机名不能为空")
+            self._initHostInfo(self.nowHost)
+            return
+        if self.hostInfoPage.hostName.text() in sysSim.hosts and self.hostInfoPage.hostName.text() != self.nowHost.name:
+            QMessageBox.information(self, "", "主机名重复")
+            self._initHostInfo(self.nowHost)
+            return
+        if self.hostInfoPage.ram.text() == "" or int(self.hostInfoPage.ram.value()) == 0:
+            QMessageBox.information(self, "", "主机内存不能为0")
+            self._initHostInfo(self.nowHost)
+            return
+        if self.hostInfoPage.cpunum.text() == "" or int(self.hostInfoPage.cpunum.value()) == 0:
+            print("asa")
+            QMessageBox.information(self, "", "主机CPU数不能为0")
+            self._initHostInfo(self.nowHost)
+            return
+        if self.hostInfoPage.corenum.text() == "" or int(self.hostInfoPage.corenum.value()) == 0:
+            QMessageBox.information(self, "", "主机CPU核数不能为0")
+            self._initHostInfo(self.nowHost)
+            return
+        if self.hostInfoPage.cpuflops.text() == "" or int(self.hostInfoPage.cpuflops.text()) == 0:
+            QMessageBox.information(self, "", "主机核FLOPs不能为0")
+            self._initHostInfo(self.nowHost)
             return
         name_before = self.nowHost.name
         self.nowHost.name = self.hostInfoPage.hostName.text()
@@ -385,11 +507,32 @@ class JobSimQt(QMainWindow):
             self.nowHost.video_card_infos = []
             gpus = []
             for i in range(self.hostInfoPage.gputable.rowCount() - 1):
+                n = i + 1
+                n = n.__str__()
+                if int(self.hostInfoPage.gputable.item(i + 1, 1).text()) == 0:
+                    QMessageBox.information(self, "", "第" + n + "个GPU的核心数不能为0")
+                    continue
+                if int(self.hostInfoPage.gputable.item(i + 1, 2).text()) == 0:
+                    QMessageBox.information(self, "", "第" + n + "个GPU的每SM核心数不能为0")
+                    continue
+                if int(self.hostInfoPage.gputable.item(i + 1, 3).text()) == 0:
+                    QMessageBox.information(self, "", "第" + n + "个GPU的SM最大线程块数不能为0")
+                    continue
+                if int(self.hostInfoPage.gputable.item(i + 1, 4).text()) == 0:
+                    QMessageBox.information(self, "", "第" + n + "个GPU的核心FLOPs不能为0")
+                    continue
+                if int(self.hostInfoPage.gputable.item(i + 1, 5).text()) == 0:
+                    QMessageBox.information(self, "", "第" + n + "个GPU的显存不能为0")
+                    continue
                 gpu = GPUInfo(int(self.hostInfoPage.gputable.item(i + 1, 1).text()), (int)(self.hostInfoPage.gputable.item(i + 1, 2).text()), (int)(self.hostInfoPage.gputable.item(i+ 1, 3).text()), (int)(self.hostInfoPage.gputable.item(i+1, 5).text()), (int)(self.hostInfoPage.gputable.item(i+1, 4).text()))
                 gpus.append(gpu)
                 videoCardInfo = VideoCardInfo(gpus)
+                if (int)(self.hostInfoPage.pcie.value()) == 0:
+                    QMessageBox.information(self, "", "PCIe带宽不能为0")
+                    return
                 videoCardInfo.pcie_bw = (int)(self.hostInfoPage.pcie.value()) 
-            self.nowHost.video_card_infos.append(VideoCardInfo(gpus))
+                print("apply: " + videoCardInfo.pcie_bw.__str__())
+            self.nowHost.video_card_infos.append(videoCardInfo)
         self.nowHost.print()
         sysSim.hosts.pop(name_before)
         sysSim.hosts[self.nowHost.name] = self.nowHost
@@ -404,6 +547,30 @@ class JobSimQt(QMainWindow):
         print("apply job")
         if self.nowJob is None:
             return
+        if self.jobInfoPage.jobName.text() == "":
+            QMessageBox.information(self, "", "任务名不能为空")
+            self.__initJobInfo(self.nowJob)
+            return
+        if self.jobInfoPage.jobName.text() in sysSim.jobs and self.jobInfoPage.jobName.text() != self.nowJob.name:
+            QMessageBox.information(self, "", "任务名重复")
+            self.__initJobInfo(self.nowJob)
+            return
+        if self.jobInfoPage.ram.text() == "" or int(self.jobInfoPage.ram.text()) == 0:
+            QMessageBox.information(self, "", "任务请求内存不能为0")
+            self.__initJobInfo(self.nowJob)
+            return
+        if self.jobInfoPage.corenum.text() == "" or int(self.jobInfoPage.corenum.text()) == 0:
+            QMessageBox.information(self, "", "任务请求CPU核数不能为0")
+            self.__initJobInfo(self.nowJob)
+            return
+        if self.jobInfoPage.ram.text() == "" or int(self.jobInfoPage.ram.text()) == 0:
+            QMessageBox.information(self, "", "任务CPU部分计算量不能为0")
+            self.__initJobInfo(self.nowJob)
+            return
+        if self.jobInfoPage.period.text() == "":
+            QMessageBox.information(self, "", "任务周期不能为空")
+            self.__initJobInfo(self.nowJob)
+            return
         name_before = self.nowJob.name
         self.nowJob.name = self.jobInfoPage.jobName.text()
         self.nowJob.cpu_task.ram = self.jobInfoPage.ram.text()
@@ -411,12 +578,28 @@ class JobSimQt(QMainWindow):
         self.nowJob.cpu_task.pes_number = self.jobInfoPage.corenum.value()
         self.nowJob.cpu_task.length = self.jobInfoPage.cpuflops.text()
         self.nowJob.gpu_task = None
+        print(self.jobInfoPage.host.currentText())
+        if self.jobInfoPage.host.currentText() != "不指定":
+            self.nowJob.host = self.jobInfoPage.host.currentText()
+        else:
+            self.nowJob.host = ""
         if self.kernel_num > 0:
             request_gddram_total = 0
             task_input_size_total = 0
             task_output_size_total = 0
             kernels = []
             for i in range(self.jobInfoPage.gputable.rowCount() - 1):
+                n = i + 1
+                n = n.__str__()
+                if int(self.jobInfoPage.gputable.item(i + 1, 1).text()) == 0:
+                    QMessageBox.information(self, "", "第" + n + "个内核的线程块数不能为0")
+                    continue
+                if int(self.jobInfoPage.gputable.item(i + 1, 2).text()) == 0:
+                    QMessageBox.information(self, "", "第" + n + "个内核的每线程块线程数不能为0")
+                    continue
+                if int(self.jobInfoPage.gputable.item(i + 1, 3).text()) == 0:
+                    QMessageBox.information(self, "", "第" + n + "个内核的每线程FLOPS不能为0")
+                    continue
                 request_gddram_total += int(self.jobInfoPage.gputable.item(i + 1, 4).text())
                 task_input_size_total += int(self.jobInfoPage.gputable.item(i + 1, 5).text())
                 task_output_size_total += int(self.jobInfoPage.gputable.item(i + 1, 6).text())
@@ -436,6 +619,30 @@ class JobSimQt(QMainWindow):
     def _applyFault(self):
         print("apply fault")
         if self.nowFault is None:
+            return
+        if self.faultInfoPage.name.text() == "":
+            QMessageBox.information(self, "", "错误模型名不能为空")
+            self._initFaultInfo(self.nowFault)
+            return
+        if self.faultInfoPage.name.text() in sysSim.faults and self.faultInfoPage.name.text() != self.nowFault.name:
+            QMessageBox.information(self, "", "错误模型名重复")
+            self._initFaultInfo(self.nowFault)
+            return
+        if self.faultInfoPage.time1.text() == "":
+            QMessageBox.information(self, "", "平均无故障时间不能为空")
+            self._initFaultInfo(self.nowFault)
+            return
+        if self.faultInfoPage.time2.text() == "":
+            QMessageBox.information(self, "", "平均故障修复时间不能为空")
+            self._initFaultInfo(self.nowFault)
+            return
+        if (int)(self.faultInfoPage.time1.text()) == 0:
+            QMessageBox.information(self, "", "平均无故障时间不能为0")
+            self._initFaultInfo(self.nowFault)
+            return
+        if (int)(self.faultInfoPage.time2.text()) == 0:
+            QMessageBox.information(self, "", "平均故障修复时间不能为0")
+            self._initFaultInfo(self.nowFault)
             return
         name_before = self.nowFault.name
         newFault = FaultGenerator(tranFromC2E(self.faultInfoPage.type.currentText()), (float)(self.faultInfoPage.time1.text()), (float)(self.faultInfoPage.time2.text()))
@@ -491,6 +698,8 @@ class JobSimQt(QMainWindow):
         self.hostInfoPage.cpuflops.setValidator(validator)
         self._ui.homeui.tabWidget.setCurrentIndex(0)
         if host.video_card_infos != []:
+            print(host.video_card_infos[0].pcie_bw)
+            self.hostInfoPage.pcie.setValue(host.video_card_infos[0].pcie_bw)
             gpu_num = len(host.video_card_infos[0].gpu_infos)
             if gpu_num > 0:
                 self.gpu_num = gpu_num
@@ -503,6 +712,9 @@ class JobSimQt(QMainWindow):
             self.initGpuTable(0, [])
                 
     def initGpuTable(self, gpu_num, gpu_infos):    
+        f = QFont()
+        f.setPointSize(10)
+        self.hostInfoPage.gputable.setFont(f)
         delegate = NumericDelegate(self.hostInfoPage.gputable)
         self.hostInfoPage.gputable.setItemDelegate(delegate)
         self.hostInfoPage.gputable.setColumnCount(7)
@@ -527,7 +739,7 @@ class JobSimQt(QMainWindow):
         item3 = QTableWidgetItem("SM核心数")
         item3.setBackground(QColor(192, 192, 192))
         self.hostInfoPage.gputable.setItem(i, 2, item3)
-        item4 = QTableWidgetItem("SM最大线程块数")
+        item4 = QTableWidgetItem("SM最大线程块")
         item4.setBackground(QColor(192, 192, 192))
         self.hostInfoPage.gputable.setItem(i, 3, item4)
         item5 = QTableWidgetItem("核心FLOPs")
@@ -576,7 +788,7 @@ class JobSimQt(QMainWindow):
             item3 = QTableWidgetItem("SM核心数")
             item3.setBackground(QColor(192, 192, 192))
             self.hostInfoPage.gputable.setItem(0, 2, item3)
-            item4 = QTableWidgetItem("SM最大线程块数")
+            item4 = QTableWidgetItem("SM最大线程块")
             item4.setBackground(QColor(192, 192, 192))
             self.hostInfoPage.gputable.setItem(0, 3, item4)
             item5 = QTableWidgetItem("核心FLOPs")
@@ -632,6 +844,16 @@ class JobSimQt(QMainWindow):
             print("no gpu task")
             self.kernel_num = 0
             self._initKernelTable(0, None)
+        self.jobInfoPage.host.clear()
+        self.jobInfoPage.host.addItem("不指定")
+        for(host_name, host) in sysSim.hosts.items():
+            self.jobInfoPage.host.addItem(host_name)
+        print(job.host)
+        print("===")
+        if job.host != "":
+            self.jobInfoPage.host.setCurrentText(job.host)
+        else:
+            self.jobInfoPage.host.setCurrentText("不指定")
         self._ui.homeui.tabWidget.setCurrentIndex(1)
 
     def _initKernelTable(self, kernel_num, gpu_task):
@@ -719,10 +941,7 @@ class JobSimQt(QMainWindow):
             item7 = QTableWidgetItem("输出(MB)")
             item7.setBackground(QColor(192, 192, 192))
             self.jobInfoPage.gputable.setItem(0, 6, item7)
-            del_kernel = QPushButton()
-            del_kernel.setText("删除")
-            del_kernel.clicked.connect(self._delKernel)
-            self.jobInfoPage.gputable.setCellWidget(0, 7, del_kernel)
+            
 
         self.jobInfoPage.gputable.setItem(i, 0, QTableWidgetItem(str(i)))
         self.jobInfoPage.gputable.setItem(i, 1, QTableWidgetItem("0"))
@@ -731,6 +950,10 @@ class JobSimQt(QMainWindow):
         self.jobInfoPage.gputable.setItem(i, 4, QTableWidgetItem("0"))
         self.jobInfoPage.gputable.setItem(i, 5, QTableWidgetItem("0"))
         self.jobInfoPage.gputable.setItem(i, 6, QTableWidgetItem("0"))
+        del_kernel = QPushButton()
+        del_kernel.setText("删除")
+        del_kernel.clicked.connect(self._delKernel)
+        self.jobInfoPage.gputable.setCellWidget(i, 7, del_kernel)
 
 
     def _initFaultInfo(self, fault: FaultGenerator, ifTrueFault=True):
@@ -746,11 +969,11 @@ class JobSimQt(QMainWindow):
             self.faultInfoPage.aim.setCurrentText(fault.aim)
             self.faultInfoPage.type.setCurrentText(tranFromE2C(fault.mttf_type))
             print(tranFromE2C(fault.mttf_type))
-            self.faultInfoPage.time1.setText(str(fault.mttf_scale))
+            self.faultInfoPage.time1.setText(str((int)(fault.mttf_scale)))
             regular_ex = QRegularExpression("[0-9]+")
             validator = QRegularExpressionValidator(regular_ex, self.faultInfoPage.time1)
             self.faultInfoPage.time1.setValidator(validator)
-            self.faultInfoPage.time2.setText(str(fault.mttr_scale))
+            self.faultInfoPage.time2.setText(str((int)(fault.mttr_scale)))
             regular_ex = QRegularExpression("[0-9]+")
             validator = QRegularExpressionValidator(regular_ex, self.faultInfoPage.time2)
             self.faultInfoPage.time2.setValidator(validator)
@@ -815,7 +1038,7 @@ class JobSimQt(QMainWindow):
             validator = QRegularExpressionValidator(regular_ex, self.faultInfoPage.time2)
             self.faultInfoPage.time2.setValidator(validator)
             self._ui.homeui.tabWidget.setCurrentIndex(2)
-            self.faultInfoPage.show.setChart(QChart())
+            #self.faultInfoPage.show.setChart(QChart())
 
     def __getNormalLine(self, avg):
         print("get normal line")
@@ -975,6 +1198,7 @@ class JobSimQt(QMainWindow):
             fault = FaultGenerator("正态分布", 0, 0)
             fault.setAim("")
             fault.setName("")
+            fault.setHardware("CPU")
             self._initFaultInfo(FaultGenerator("正态分布", 0, 0), False)
         self.nowClect.removeChild(self._ui.homeui.infoList.currentItem())
     
@@ -1277,7 +1501,7 @@ if __name__ == "__main__":
     # if hasattr(Qt.ApplicationAttribute, "AA_UseHighDpiPixmaps"):  # Enable High DPI display with Qt5
     #     app.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps)
     # QDir.addSearchPath("icons", f"{get_project_root_path().as_posix()}/widget_gallery/ui/svg")
-    win = JobSimQt(sys.argv[1])
+    win = JobSimQt()
     win.menuBar().setNativeMenuBar(False)
     app.setStyleSheet(qdarktheme.load_stylesheet())
     win.show()

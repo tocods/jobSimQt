@@ -4,6 +4,8 @@ from xml.dom import minidom
 import entity.host
 from entity.switch import *
 
+from PySide6.QtGui import QFont
+
 global scheduler
 scheduler = 0
 
@@ -38,6 +40,16 @@ class ProjectInfo:
         _, name = os.path.split(fullpath)
         self.name = name
 
+    def setFullname(self, fullname):  # 比如 D:/fe/omnet_template
+        directory, name = os.path.split(fullname)  # 分离文件名和路径
+        self.directory = directory
+        self.name = name
+        self.fullname = directory + "/" + name
+        self.path = directory + "/" + name + "/"
+
+    def setPath(self, path):  # 比如 D:/fe/omnet_template/
+        self.directory = path
+    
     def setRelativePath(self, relativePath):
         self.directory = os.getcwd()
         self.path = os.path.join(self.directory, relativePath)
@@ -195,3 +207,8 @@ def save_data():
     xml_str = create_xml()
     with open(os.path.join(currentProjectInfo.path, "network_data.xml"), "w") as f:
         f.write(xml_str)
+
+
+global font
+font = QFont()
+font.setPointSize(20)

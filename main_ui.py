@@ -4,7 +4,7 @@
 # --------------------------------------------------------------------------------------------*/
 
 from qdarktheme.qtpy.QtCore import Qt
-from qdarktheme.qtpy.QtGui import QAction, QActionGroup, QIcon
+from qdarktheme.qtpy.QtGui import QAction, QActionGroup, QIcon, QFont
 from qdarktheme.qtpy.QtWidgets import (
     QMainWindow,
     QMenuBar,
@@ -22,6 +22,8 @@ from Window.NetworkEditorWindow import NetworkEditorWindow
 
 class UI:
     def setup_ui(self, main_win: QMainWindow) -> None:
+        f = QFont()
+        f.setPointSize(15)
         # Actions
         self.action_change_home = QAction("建模与仿真")
         self.action_change_dock = QAction("系统管理评估平台")
@@ -81,6 +83,7 @@ class UI:
         # statusbar.showMessage("Enable")
 
         menu_toggle = menubar.addMenu("系统管理建模和仿真工具")
+        menu_toggle.setFont(f)
         # menu_toggle.addActions((self.action_enable, self.action_disable))
         menu_toggle.addActions((self.action_out,))
         menu_theme = menubar.addMenu("")
