@@ -5,6 +5,7 @@
 
 import sys
 import json
+import webbrowser
 import subprocess
 import os
 import numpy as np
@@ -102,11 +103,13 @@ class JobSimQt(QMainWindow):
         if action_name == "微服务指标采集":
                     # 初始化一个page
             self.webview = QWebEngineView(self._ui.stack_3)
-            self.weburl="http://localhost:3000/d/IV0hu1m7z/windows-exporter-dashboard?orgId=1"
+            self.weburl="http://localhost:3000/d/IV0hu1m7z/windows-exporter-dashboard?var-interval=60s&from=now-2d&to=now&timezone=browser&var-server=localhost:9182&refresh=5s"
+            webbrowser.open("http://localhost:3000/d/IV0hu1m7z/windows-exporter-dashboard?var-interval=60s&from=now-2d&to=now&timezone=browser&var-server=localhost:9182&refresh=5s")
             #self.save_cookies()
             #self.load_cookies()
             # 加载一个网页，以便产生一些 cookies
             self.webview.page().load(QUrl(self.weburl))
+            self.webview.show()
             #self.cookie_store.cookieAdded.connect(self.handlecookie))
             #页面加载完成执行
             #self.view.page().loadFinished.connect(self.on_page_load_finished)
@@ -114,7 +117,7 @@ class JobSimQt(QMainWindow):
             screen_size = screen.availableGeometry()
             self._ui.stack_3.setGeometry(0, 0, screen_size.width() * 0.8, screen_size.height() * 0.8)
             self.webview.setGeometry(0, 0, screen_size.width() * 0.8, screen_size.height() * 0.8)
-            self._ui.stack_widget.setCurrentIndex(2)
+            #self._ui.stack_widget.setCurrentIndex(2)
         if action_name == "网络安全评估":
             os.popen("D:\\NetworkDataSecurityAssessment\\run.bat")
     
@@ -155,6 +158,7 @@ class JobSimQt(QMainWindow):
         globaldata.currentProjectInfo.setFullPath(file_name)
         self._ui.stack_1.reload()
         project.projectPath = file_name
+        globaldata.currentProjectInfo.setFullPath(file_name)
         self._initOutputFiles()
         self._ui.stack_widget.setCurrentIndex(1)
         self._ui.resultui.hostTabs.clear()
@@ -218,8 +222,8 @@ class JobSimQt(QMainWindow):
         for fault in self.faults:
             sysSim.faults[fault.name] = fault
         self.__initNetAnalysis()
-        self._ui.stack_1.ui.netCalUi.chose.clicked.connect(self.__choseFlow)
-        self._ui.stack_1.ui.netCalUi.run.clicked.connect(self.__runNetAnalysis)
+        self._ui.stack_1.netCalUi.chose.clicked.connect(self.__choseFlow)
+        self._ui.stack_1.netCalUi.run.clicked.connect(self.__runNetAnalysis)
         self._initJobResult()
 
         
@@ -227,16 +231,16 @@ class JobSimQt(QMainWindow):
     def __choseFlow(self):
         if self.chosing == False:
             self.__printNet()
-            self._ui.stack_1.ui.netCalUi.nets.setEnabled(True)
-            self._ui.stack_1.ui.netCalUi.run.setEnabled(False)
+            self._ui.stack_1.netCalUi.nets.setEnabled(True)
+            self._ui.stack_1.netCalUi.run.setEnabled(False)
             self.chosing = True
-            self._ui.stack_1.ui.netCalUi.chose.setText("添加")
+            self._ui.stack_1.netCalUi.chose.setText("添加")
         else:
-            self._ui.stack_1.ui.netCalUi.nets.setEnabled(False)
-            self._ui.stack_1.ui.netCalUi.run.setEnabled(True)
+            self._ui.stack_1.netCalUi.nets.setEnabled(False)
+            self._ui.stack_1.netCalUi.run.setEnabled(True)
             self.chosing = False
-            self._ui.stack_1.ui.netCalUi.chose.setText("选择流")
-            row = self._ui.stack_1.ui.netCalUi.shows.rowCount()
+            self._ui.stack_1.netCalUi.chose.setText("选择流")
+            row = self._ui.stack_1.netCalUi.shows.rowCount()
             self.nowFlow.name = "Flow_" + row.__str__()
             self.flows.append(self.nowFlow)
             self.nowFlow.printNodes()
@@ -244,21 +248,21 @@ class JobSimQt(QMainWindow):
             self.lastChose = None
             self.lastlastChose = None
             
-            self._ui.stack_1.ui.netCalUi.shows.setRowCount(row+1)
-            self._ui.stack_1.ui.netCalUi.shows.setItem(row, 0, QTableWidgetItem("Flow_" + row.__str__()))
+            self._ui.stack_1.netCalUi.shows.setRowCount(row+1)
+            self._ui.stack_1.netCalUi.shows.setItem(row, 0, QTableWidgetItem("Flow_" + row.__str__()))
             show = QPushButton()
             show.setText("展示")
             show.clicked.connect(self.showNetFlow)
-            self._ui.stack_1.ui.netCalUi.shows.setCellWidget(row, 1, show)
+            self._ui.stack_1.netCalUi.shows.setCellWidget(row, 1, show)
             dels = QPushButton()
             dels.setText("删除")
             dels.clicked.connect(self.delNetFlow)
-            self._ui.stack_1.ui.netCalUi.shows.setCellWidget(row, 2, dels)
+            self._ui.stack_1.netCalUi.shows.setCellWidget(row, 2, dels)
             self.__printNet()
             
     def showNetFlow(self):
         self.__printNet()
-        row = self._ui.stack_1.ui.netCalUi.shows.currentRow()
+        row = self._ui.stack_1.netCalUi.shows.currentRow()
         flow = self.flows[row]
         for name in flow.nodes:
             x = -1
@@ -279,9 +283,9 @@ class JobSimQt(QMainWindow):
     
     def delNetFlow(self):
         self.__printNet()
-        row = self._ui.stack_1.ui.netCalUi.shows.currentRow()
+        row = self._ui.stack_1.netCalUi.shows.currentRow()
         self.flows.pop(row)
-        self._ui.stack_1.ui.netCalUi.shows.removeRow(row)
+        self._ui.stack_1.netCalUi.shows.removeRow(row)
 
     def __runNetAnalysis(self):
         root = ET.Element("Flows")
@@ -363,10 +367,10 @@ class JobSimQt(QMainWindow):
             q = QPushButton("查看")
             q.clicked.connect(self.showBack)
             self.netResultTable.setCellWidget(i, 2, q)
-        self._ui.stack_1.ui.netCalUi.results.clear()
-        self._ui.stack_1.ui.netCalUi.results.addTab(self.netResultTable, "结果")
-        self._ui.stack_1.ui.netCalUi.results.addTab(self.delayChart, "端到端总延迟")
-        self._ui.stack_1.ui.netCalUi.results.addTab(self.backChart, "最大缓冲区上界")
+        self._ui.stack_1.netCalUi.results.clear()
+        self._ui.stack_1.netCalUi.results.addTab(self.netResultTable, "结果")
+        self._ui.stack_1.netCalUi.results.addTab(self.delayChart, "端到端总延迟")
+        self._ui.stack_1.netCalUi.results.addTab(self.backChart, "最大缓冲区上界")
         
     def showDelay(self):
         bar1 = QBarSet("TFA")
@@ -390,7 +394,7 @@ class JobSimQt(QMainWindow):
         chart.createDefaultAxes()
         chart.axisY().setTitleText("端到端总延迟")
         self.delayChart.setChart(chart)
-        self._ui.stack_1.ui.netCalUi.results.setCurrentIndex(1)
+        self._ui.stack_1.netCalUi.results.setCurrentIndex(1)
 
     def showBack(self):
         bar1 = QBarSet("TFA")
@@ -414,14 +418,14 @@ class JobSimQt(QMainWindow):
         chart.createDefaultAxes()
         chart.axisY().setTitleText("最大缓冲区上界")
         self.backChart.setChart(chart)
-        self._ui.stack_1.ui.netCalUi.results.setCurrentIndex(2)
+        self._ui.stack_1.netCalUi.results.setCurrentIndex(2)
 
     def __initNetAnalysis(self):
-        self._ui.stack_1.ui.netCalUi.shows.setRowCount(0)
-        self._ui.stack_1.ui.netCalUi.shows.setColumnCount(4)
-        self._ui.stack_1.ui.netCalUi.shows.setHorizontalHeaderLabels(["流", "数据大小(MB)", "", ""])
-        self._ui.stack_1.ui.netCalUi.shows.verticalHeader().setVisible(False)
-        self._ui.stack_1.ui.netCalUi.shows.horizontalHeader().setVisible(True)
+        self._ui.stack_1.netCalUi.shows.setRowCount(0)
+        self._ui.stack_1.netCalUi.shows.setColumnCount(4)
+        self._ui.stack_1.netCalUi.shows.setHorizontalHeaderLabels(["流", "数据大小(MB)", "", ""])
+        self._ui.stack_1.netCalUi.shows.verticalHeader().setVisible(False)
+        self._ui.stack_1.netCalUi.shows.horizontalHeader().setVisible(True)
         self.chosing = False
         self.nowFlow = None
         self.lastChose = None
@@ -473,8 +477,8 @@ class JobSimQt(QMainWindow):
                 new_edge = Edge(self.screne, e1, e2)
                 # 保存连接线
                 new_edge.store()
-        self._ui.stack_1.ui.netCalUi.nets.setScene(self.screne)
-        self._ui.stack_1.ui.netCalUi.nets.setEnabled(False)
+        self._ui.stack_1.netCalUi.nets.setScene(self.screne)
+        self._ui.stack_1.netCalUi.nets.setEnabled(False)
         
 
     def _initJobResult(self):
@@ -730,7 +734,7 @@ class JobSimQt(QMainWindow):
         self._ui.resultui.faultTabs.setCurrentIndex(1)
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
+    app = QApplication(sys.argv+["--no-sandbox"])
     print(sys.argv)
     # if hasattr(Qt.ApplicationAttribute, "AA_UseHighDpiPixmaps"):  # Enable High DPI display with Qt5
     #     app.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps)
