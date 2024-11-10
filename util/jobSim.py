@@ -405,6 +405,8 @@ class ParseUtil:
                     continue
                 for host in hosts:
                     type = "udp"
+                    if host.tag == "NormalHosts":
+                        type = "normal"
                     if host.tag == "TcpHosts":
                         type = "tcp"
                     if host.tag == "RdmaHosts":
