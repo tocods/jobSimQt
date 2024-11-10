@@ -87,7 +87,7 @@ networkGlobalConfig = {
 def readPath():
     with open("path.ini", "r", encoding="utf-8") as fp:
         for line in fp:
-            targetPath.append(line)
+            targetPath.append(line.strip("\n"))
 
 
 def create_xml():
