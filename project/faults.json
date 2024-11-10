@@ -8,17 +8,6 @@
         "mttr_shape": 5.0,
         "name": "fault_4101",
         "aim": "host1",
-        "type": "CPU"
-    },
-    {
-        "mttf_type": "Normal",
-        "mttf_scale": 10.0,
-        "mttf_shape": 10.0,
-        "mttr_type": "Normal",
-        "mttr_scale": 5.0,
-        "mttr_shape": 5.0,
-        "name": "fault_4101",
-        "aim": "host1",
         "type": "RAM"
     }
 ]
