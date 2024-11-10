@@ -5,18 +5,32 @@
         <UdpHosts/>
         <TcpHosts/>
         <RdmaHosts/>
-        <TsnHosts/>
+        <TsnHosts>
+            <TsnHost name="tsn" type="StandardHost" ip="0.0.0.0" numApps="0" appArgs="[]" tsnArgs="[]" only_cpu="True" graphic_pos_x="-172.0" graphic_pos_y="198.0" graphic_image="img/TSN_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+            <TsnHost name="tsn2" type="StandardHost" ip="0.0.0.0" numApps="0" appArgs="[]" tsnArgs="[]" only_cpu="True" graphic_pos_x="-169.0" graphic_pos_y="-49.0" graphic_image="img/TSN_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+            <TsnHost name="tsn3" type="StandardHost" ip="0.0.0.0" numApps="0" appArgs="[]" tsnArgs="[]" only_cpu="True" graphic_pos_x="406.0" graphic_pos_y="94.0" graphic_image="img/TSN_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+        </TsnHosts>
         <DdsHosts/>
-        <AllHosts/>
+        <AllHosts>
+            <TsnHost name="tsn" type="StandardHost" ip="0.0.0.0" numApps="0" appArgs="[]" tsnArgs="[]" only_cpu="True" graphic_pos_x="-172.0" graphic_pos_y="198.0" graphic_image="img/TSN_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+            <TsnHost name="tsn2" type="StandardHost" ip="0.0.0.0" numApps="0" appArgs="[]" tsnArgs="[]" only_cpu="True" graphic_pos_x="-169.0" graphic_pos_y="-49.0" graphic_image="img/TSN_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+            <TsnHost name="tsn3" type="StandardHost" ip="0.0.0.0" numApps="0" appArgs="[]" tsnArgs="[]" only_cpu="True" graphic_pos_x="406.0" graphic_pos_y="94.0" graphic_image="img/TSN_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+        </AllHosts>
     </Hosts>
     <Switches>
         <NormalSwitches/>
         <UdpSwitches/>
         <TcpSwitches/>
         <RdmaSwitches/>
-        <TsnSwitches/>
+        <TsnSwitches>
+            <TsnSwitch name="tsn_switch" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" tsn_queue="[]" graphic_pos_x="111.0" graphic_pos_y="58.0" graphic_image="img/TSN_Switch.png" graphic_width="100" graphic_height="100"/>
+        </TsnSwitches>
         <DdsSwitches/>
     </Switches>
-    <Links/>
+    <Links>
+        <Link name="Link" type="Eth100M" endpoint1="tsn_switch" endpoint2="tsn2" link_bandwidth="100"/>
+        <Link name="Link2" type="Eth100M" endpoint1="tsn_switch" endpoint2="tsn" link_bandwidth="100"/>
+        <Link name="Link3" type="Eth100M" endpoint1="tsn_switch" endpoint2="tsn3" link_bandwidth="100"/>
+    </Links>
     <GlobalSetting content="{&quot;Tcp&quot;: {&quot;forwarding&quot;: &quot;false&quot;, &quot;retryTimeout&quot;: &quot;1s&quot;, &quot;retryCount&quot;: &quot;3&quot;, &quot;cacheTimeout&quot;: &quot;100s&quot;, &quot;tcpAlgorithmClass&quot;: &quot;TcpReno&quot;}, &quot;Rdma&quot;: {&quot;connectionType&quot;: &quot;RELIABLE_CONNECTION&quot;, &quot;maxSendQueueSize&quot;: &quot;256&quot;, &quot;maxRecvQueueSize&quot;: &quot;256&quot;}, &quot;common&quot;: {&quot;queueTypename&quot;: &quot;DropTailQueue&quot;, &quot;queuePacketCapacity&quot;: &quot;20&quot;, &quot;TsnQueue&quot;: [{&quot;stream&quot;: &quot;best-effort&quot;, &quot;pcp&quot;: &quot;0&quot;}, {&quot;stream&quot;: &quot;time-triggered&quot;, &quot;pcp&quot;: &quot;4&quot;}, {&quot;stream&quot;: &quot;ack&quot;, &quot;pcp&quot;: &quot;5&quot;}]}}"/>
 </Network>
