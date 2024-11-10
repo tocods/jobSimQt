@@ -37,6 +37,8 @@ def getThroughput(jobs: List[JobRecord]):
             time_total = time_total_tmp
     print("f:" + flops_total.__str__())
     print("t:" + time_total.__str__())
+    if time_total_tmp == 0.0:
+        return 0
     return  flops_total/ time_total_tmp
 
 # 计算集群的算力利用率
@@ -51,4 +53,6 @@ def getEfficiency(jobs: List[JobRecord]):
             time_total_tmp += (float)(jobRun.duration)
         if time_total_tmp > time_total:
             time_total = time_total_tmp
+    if time_total_tmp == 0.0:
+        return 0
     return  flops_total / (time_total * sysSim.getFLOPS())

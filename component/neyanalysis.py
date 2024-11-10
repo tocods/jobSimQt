@@ -16,7 +16,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QGraphicsView, QHBoxLayout, QPushButton,
-    QSizePolicy, QTabWidget, QVBoxLayout, QWidget, QTableWidget)
+    QSizePolicy, QTabWidget, QVBoxLayout, QWidget)
 
 class Ui_NetAnalysis(object):
     def setupUi(self, NetAnalysis):
@@ -46,7 +46,7 @@ class Ui_NetAnalysis(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout)
 
-        self.shows = QTableWidget(NetAnalysis)
+        self.shows = QTabWidget(NetAnalysis)
         self.shows.setObjectName(u"shows")
 
         self.verticalLayout.addWidget(self.shows)
