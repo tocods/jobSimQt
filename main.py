@@ -13,13 +13,13 @@ import random
 from functools import partial
 import project
 import qdarktheme
-from qdarktheme.qtpy.QtCore import QDir, Qt, Slot, QRegularExpression, QUrl
+from qdarktheme.qtpy.QtCore import QDir, Qt, Slot, QRegularExpression, QUrl, QRectF
 from qdarktheme.qtpy.QtGui import *
 from qdarktheme.qtpy.QtWidgets import *
 from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtNetwork import QNetworkCookie
 from main_ui import UI
-from util.jobSim import sysSim, ParseUtil, HostInfo, CPUInfo, GPUInfo, VideoCardInfo, JobInfo, CPUTaskInfo, GPUTaskInfo, FaultGenerator, tranFromC2E, tranFromE2C
+from util.jobSim import sysSim, ParseUtil, HostInfo, CPUInfo, GPUInfo, VideoCardInfo, JobInfo, CPUTaskInfo, GPUTaskInfo, FaultGenerator, tranFromC2E, tranFromE2C, LinkNet, HostNet, SwtichNet, FlowNet
 from jobSimPage import JobSimPage
 from component.hostinfo import Ui_HostInfo
 from component.jobinfo import Ui_JobInfo
@@ -27,8 +27,13 @@ from component.faultinfo import Ui_FaultInfo
 from PySide6.QtCharts import QChart,QChartView,QLineSeries,QDateTimeAxis,QValueAxis, QPieSeries
 from jobSimPainter import Painter, XmlParser
 from util.table import NumericDelegate
-from resultUtil import getAverageRunTime, getAverageRunTimeInHost, getThroughput
+from resultUtil import getAverageRunTime, getAverageRunTimeInHost, getThroughput, getEfficiency
 import globaldata
+from item import GraphicItem
+from edge import Edge
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
+
 class JobSimQt(QMainWindow):
     def __init__(self, path) -> None:
         super().__init__()
@@ -51,6 +56,7 @@ class JobSimQt(QMainWindow):
         self._ui.action_change_dock.triggered.connect(self._change_page)
         self._ui.action_micro_service.triggered.connect(self._change_page)
         self._ui.action_net_safe.triggered.connect(self._change_page)
+        self._ui.action_refresh.triggered.connect(self._initAll)
         self._ui.action_open_folder.triggered.connect(self.loadFromProject
             #lambda: QFileDialog.getOpenFileName(self, "Open File", options=QFileDialog.Option.DontUseNativeDialog)
         )
@@ -62,7 +68,7 @@ class JobSimQt(QMainWindow):
         screen = QGuiApplication.screens()[0]
         screen_size = screen.availableGeometry()
         self.setGeometry(0, 0, screen_size.width() * 0.9, screen_size.height() * 0.9)
-        self._ui.resultui.layoutWidget.setGeometry(0, 0, screen_size.width() * 0.8, screen_size.height() * 0.8)
+        #self._ui.resultui.layoutWidget.setGeometry(0, 0, screen_size.width() * 0.8, screen_size.height() * 0.8)
         self._initAll()
 
     def center(self):
@@ -94,7 +100,7 @@ class JobSimQt(QMainWindow):
             self.webview.setGeometry(0, 0, screen_size.width() * 0.8, screen_size.height() * 0.8)
             self._ui.stack_widget.setCurrentIndex(2)
         if action_name == "网络安全评估":
-            os.popen("D:\\NetworkDataSecurityAssessment\\NetworkDataSecurityAssessment.exe")
+            os.popen("D:\\NetworkDataSecurityAssessment\\run.bat")
     
     # def load_cookies(self):
     #     profile = self.webview.page().profile()
@@ -138,12 +144,20 @@ class JobSimQt(QMainWindow):
         self._ui.resultui.hostTabs.clear()
         self._ui.resultui.jobTabs.clear()
         self._ui.resultui.faultTabs.clear()
-        self._ui.resultui.show.setChart(QChart())
-        self._ui.resultui.showCPU.setChart(QChart())
-        self._ui.resultui.showRam.setChart(QChart())
-        self._ui.resultui.showGPU.setChart(QChart())
-        self._ui.resultui.faultResultAnalysis.setChart(QChart())
-        self._ui.resultui.jobResultAnalysis.setChart(QChart())
+        #self._ui.resultui.show.setChart(QChart())
+        self.cpushow.setChart(QChart())
+        self.ramshow.setChart(QChart())
+        self.gpushow.setChart(QChart())
+        self.totalshow.setChart(QChart())
+        # self._ui.resultui.showCPU.setChart(QChart())
+        # self._ui.resultui.showRam.setChart(QChart())
+        # self._ui.resultui.showGPU.setChart(QChart())
+        # self._ui.resultui.faultResultAnalysis.setChart(QChart())
+        # self._ui.resultui.jobResultAnalysis.setChart(QChart())
+        self._ui.resultui.faultResult.clear()
+        self._ui.resultui.jobshow1.clear()
+        self._ui.resultui.jobshow2.clear()
+        self._ui.resultui.jobShow3.clear()
         self._initAll()
         #self.setClicked()
     
@@ -178,7 +192,148 @@ class JobSimQt(QMainWindow):
         self.faults = parser.parseFaults(path)
         for fault in self.faults:
             sysSim.faults[fault.name] = fault
+        self.__initNetAnalysis()
+        self._ui.stack_1.ui.netCalUi.chose.clicked.connect(self.__choseFlow)
+        self._ui.stack_1.ui.netCalUi.run.clicked.connect(self.__runNetAnalysis)
         self._initJobResult()
+
+        
+
+    def __choseFlow(self):
+        if self.chosing == False:
+            self.__printNet()
+            self._ui.stack_1.ui.netCal
+            self._ui.stack_1.ui.netCalUi.nets.setEnabled(True)
+            self._ui.stack_1.ui.netCalUi.run.setEnabled(False)
+            self.chosing = True
+            self._ui.stack_1.ui.netCalUi.chose.setText("添加")
+        else:
+            self._ui.stack_1.ui.netCalUi.nets.setEnabled(False)
+            self._ui.stack_1.ui.netCalUi.run.setEnabled(True)
+            self.chosing = False
+            self._ui.stack_1.ui.netCalUi.chose.setText("选择流")
+            row = self._ui.stack_1.ui.netCalUi.shows.rowCount()
+            self.nowFlow.name = "Flow_" + row.__str__()
+            self.flows.append(self.nowFlow)
+            self.nowFlow.printNodes()
+            self.nowFlow = None
+            self.lastChose = None
+           
+            
+            self._ui.stack_1.ui.netCalUi.shows.setRowCount(row+1)
+            self._ui.stack_1.ui.netCalUi.shows.setItem(row, 0, QTableWidgetItem("Flow_" + row.__str__()))
+            show = QPushButton()
+            show.setText("展示")
+            show.clicked.connect(self.showNetFlow)
+            self._ui.stack_1.ui.netCalUi.shows.setCellWidget(row, 1, show)
+            dels = QPushButton()
+            dels.setText("删除")
+            dels.clicked.connect(self.delNetFlow)
+            self._ui.stack_1.ui.netCalUi.shows.setCellWidget(row, 2, dels)
+            self.__printNet()
+            
+    def showNetFlow(self):
+        self.__printNet()
+        row = self._ui.stack_1.ui.netCalUi.shows.currentRow()
+        flow = self.flows[row]
+        for name in flow.nodes:
+            x = -1
+            y = -1
+            if name in self.netHosts:
+                x = self.netHosts[name].x
+                y = self.netHosts[name].y
+            if name in self.netSwtichs:
+                x = self.netSwtichs[name].x
+                y = self.netSwtichs[name].y
+            rect = QRectF()
+            rect.setX(float(x))
+            rect.setY(float(y))
+            rect.setWidth(100)
+            rect.setHeight(100)
+            self.screne.addRect(rect)
+    
+    def delNetFlow(self):
+        self.__printNet()
+        row = self._ui.stack_1.ui.netCalUi.shows.currentRow()
+        self.flows.pop(row)
+        self._ui.stack_1.ui.netCalUi.shows.removeRow(row)
+
+    def __runNetAnalysis(self):
+        root = ET.Element("Flows")
+
+        for flow in self.flows:
+            f = ET.SubElement(root, "Flow")
+            for node in flow.nodes:
+                n = ET.SubElement(f, "node")
+                n.set("name", node)
+
+        xml_str = ET.tostring(root, encoding="unicode")
+
+        parsed_xml_str = minidom.parseString(xml_str)
+        formatted_xml_str = parsed_xml_str.toprettyxml(indent="    ")
+        with open(project.projectPath + "/flow_data.xml", "w") as f:
+            f.write(formatted_xml_str)
+        self.__printNet()
+    
+    def __initNetAnalysis(self):
+        self._ui.stack_1.ui.netCalUi.shows.setRowCount(0)
+        self._ui.stack_1.ui.netCalUi.shows.setColumnCount(4)
+        self._ui.stack_1.ui.netCalUi.shows.setHorizontalHeaderLabels(["流", "数据大小(MB)", "", ""])
+        self._ui.stack_1.ui.netCalUi.shows.verticalHeader().setVisible(False)
+        self._ui.stack_1.ui.netCalUi.shows.horizontalHeader().setVisible(True)
+        self.chosing = False
+        self.nowFlow = None
+        self.lastChose = None
+        self.flows = []
+        self.netHosts = {}
+        self.netSwtichs = {}
+        self.netLinks = {}
+        self.netHostsPic = {}
+        self.netSwtichsPic = {}
+        self.netLinksPic = {}
+        parser = ParseUtil()
+        path = project.projectPath + "/network_data.xml"
+        hosts = parser.parse_nethost_xml(path)
+        switches = parser.parse_netswtich_xml(path)
+        links = parser.parse_netlink_xml(path)
+        for host in hosts:
+            self.netHosts[host.name] = host
+        for switch in switches:
+            self.netSwtichs[switch.name] = switch
+        for link in links:
+            self.netLinks[link.name] = link
+        self.__printNet()
+     
+    def __printNet(self):
+        self.screne = QGraphicsScene()
+        for host in self.netHosts.values():
+            p = GraphicItem(host.image, host.name, self)
+            self.netHostsPic[host.name] = p
+            self.screne.addItem(p)
+            p.setPos(float(host.x), float(host.y))
+        for switch in self.netSwtichs.values():
+            p = GraphicItem(switch.image, switch.name, self)
+            self.netSwtichsPic[switch.name] = p
+            self.screne.addItem(p)
+            p.setPos(float(switch.x), float(switch.y))
+        for link in self.netLinks.values():
+            e1 = None
+            e2 = None
+            if link.p1 in self.netHostsPic:
+                e1 = self.netHostsPic[link.p1]
+            elif link.p1 in self.netSwtichsPic:
+                e2 = self.netSwtichsPic[link.p1]
+            if link.p2 in self.netHostsPic:
+                e1 = self.netHostsPic[link.p2]
+            elif link.p2 in self.netSwtichsPic:
+                e2 = self.netSwtichsPic[link.p2]
+            if e1 != None and e2 != None:
+                new_edge = Edge(self.screne, e1, e2)
+                # 保存连接线
+                new_edge.store()
+        self._ui.stack_1.ui.netCalUi.nets.setScene(self.screne)
+        self._ui.stack_1.ui.netCalUi.nets.setEnabled(False)
+        
 
     def _initJobResult(self):
         print("init job result")
@@ -203,6 +358,7 @@ class JobSimQt(QMainWindow):
         self._ui.resultui.faultResult.clear()
         self._ui.resultui.jobshow1.clear()
         self._ui.resultui.jobshow2.clear()
+        self._ui.resultui.jobShow3.clear()
         # self._ui.resultui.jobResultAnalysis.setChart(QChart())
 
         # 绘制折线图
@@ -261,6 +417,15 @@ class JobSimQt(QMainWindow):
         self._ui.resultui.jobshow2.append(numFormat.format(str(self.throughput))) 
         self._ui.resultui.jobshow2.append(otherFormat.format('FLOPS/s')) 
 
+
+        self.efficiency = round(getEfficiency(self.job_results), 2)
+        # self._ui.resultui.jobshow3.setText(str(self.efficiency))
+        # 不可编辑
+        self._ui.resultui.jobShow3.setReadOnly(True)
+        self._ui.resultui.jobShow3.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # 字体大，天蓝色
+        self._ui.resultui.jobShow3.append(numFormat.format(str(self.efficiency * 100)))
+        self._ui.resultui.jobShow3.append(otherFormat.format('%'))
 
 
 

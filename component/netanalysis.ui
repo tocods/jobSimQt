@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NetAnalysis</class>
+ <widget class="QWidget" name="NetAnalysis">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>919</width>
+    <height>773</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_3">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,2,1">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1">
+         <item>
+          <widget class="QPushButton" name="chose">
+           <property name="text">
+            <string>选择流</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="run">
+           <property name="text">
+            <string>开始演算</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTabWidget" name="shows"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QGraphicsView" name="nets"/>
+     </item>
+     <item>
+      <widget class="QTabWidget" name="results"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -3,6 +3,42 @@ from terminaltables import AsciiTable
 import xml.etree.ElementTree as ET
 import json
 
+class HostNet:
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+        self.type = ""
+        self.name = ""
+        self.image = ""
+
+class SwtichNet:
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+        self.type = ""
+        self.name = ""
+        self.image = ""
+
+class LinkNet:
+    def __init__(self):
+        self.name = ""
+        self.type = ""
+        self.p1 = ""
+        self.p2 = ""
+
+class FlowNet:
+    def __init__(self):
+        self.nodes = []
+        self.size = 0
+        self.name = ""
+
+    def addNode(self, node):
+        self.nodes.append(node)
+
+    def printNodes(self):
+        for name in self.nodes:
+            print(name + " -> ")
+
 class CPUInfo:
     def __init__(self, cores: Optional[int] = None, mips: Optional[float] = None):
         self.cores = cores
@@ -23,6 +59,7 @@ class VideoCardInfo:
 
     def get_gpu_infos(self) -> List[GPUInfo]:
         return self.gpu_infos
+
 
 class HostInfo:
     def __init__(self, name: Optional[str] = None, video_card_infos: Optional[List[VideoCardInfo]] = [], cpu_infos: Optional[List[CPUInfo]] = None, ram: Optional[int] = None):
@@ -357,6 +394,107 @@ class ParseUtil:
                     kernel_info.thread_num = thread_num
                     gpu_task_info.kernels.append(kernel_info)
         return gpu_task_info
+    
+    def parse_nethost_xml(self, path):
+        try:
+            ret = []
+            tree = ET.parse(path)
+            root = tree.getroot()
+            for hosts in root:
+                if hosts.tag != "Hosts":
+                    continue
+                for host in hosts:
+                    type = "udp"
+                    if host.tag == "TcpHosts":
+                        type = "tcp"
+                    if host.tag == "RdmaHosts":
+                        type = "rdma"
+                    if host.tag == "TsnHosts":
+                        type = "tsn"
+                    if host.tag == "DdsHosts":
+                        type = "dds"
+                    for h in host:
+                        hn = HostNet()
+                        hn.name = h.attrib["name"]
+                        hn.type = type
+                        hn.x = h.attrib["graphic_pos_x"]
+                        hn.y = h.attrib["graphic_pos_y"]
+                        hn.image = h.attrib["graphic_image"]
+                        ret.append(hn)
+            return ret
+        except Exception as e:
+            print(e)
+            return []
+        
+    def parse_netswtich_xml(self, path):
+        try:
+            ret = []
+            tree = ET.parse(path)
+            root = tree.getroot()
+            for hosts in root:
+                if hosts.tag != "Switches":
+                    continue
+                for host in hosts:
+                    type = "udp"
+                    if host.tag == "TcpSwitches":
+                        type = "tcp"
+                    if host.tag == "RdmaSwtiches":
+                        type = "rdma"
+                    if host.tag == "TsnSwitches":
+                        type = "tsn"
+                    if host.tag == "DdsSwitches":
+                        type = "dds"
+                    for h in host:
+                        hn = SwtichNet()
+                        hn.name = h.attrib["name"]
+                        hn.type = type
+                        hn.x = h.attrib["graphic_pos_x"]
+                        hn.y = h.attrib["graphic_pos_y"]
+                        hn.image = h.attrib["graphic_image"]
+                        ret.append(hn)
+            return ret
+        except Exception as e:
+            print(e)
+            return []
+        
+    def parse_netlink_xml(self, path):
+        try:
+            ret = []
+            tree = ET.parse(path)
+            root = tree.getroot()
+            for hosts in root:
+                if hosts.tag != "Links":
+                    continue
+                for h in hosts:
+                    hn = LinkNet()
+                    hn.name = h.attrib["name"]
+                    hn.type = h.attrib["type"]
+                    hn.p1 = h.attrib["endpoint1"]
+                    hn.p2 = h.attrib["endpoint2"]
+                    ret.append(hn)
+            return ret
+        except Exception as e:
+            print(e)
+            return []
+        
+    def parse_netflow_xml(self, path):
+        try:
+            ret = []
+            tree = ET.parse(path)
+            root = tree.getroot()
+            for hosts in root:
+                if hosts.tag != "Flows":
+                    continue
+                for host in hosts:
+                    flow = FlowNet()
+                    flow.size = host.attrib["size"]
+                    for h in host:
+                        flow.addNode(h.attrib["name"])
+                    ret.append(flow)
+            return ret
+        except Exception as e:
+            print(e)
+            return []
 
     def parse_job_xml(self, file_path):
         try:
@@ -501,13 +639,13 @@ class jobSim:
 
     def getFLOPS(self) -> float:
         FLOPS = 0
-        for host in self.hosts:
+        for (name, host) in self.hosts.items():
             for cpu in host.cpu_infos:
-                FLOPS += cpu.mips * cpu.cores
+                FLOPS += (int)(cpu.mips) * (int)(cpu.cores)
             if host.video_card_infos != None:
                 for video_card in host.video_card_infos:
                     for gpu in video_card.gpu_infos:
-                        FLOPS += gpu.flops_per_core * gpu.cores
+                        FLOPS += (int)(gpu.flops_per_core) * (int)(gpu.cores)
         return FLOPS
 
 

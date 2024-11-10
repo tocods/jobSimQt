@@ -18,6 +18,7 @@ from qdarktheme.qtpy.QtWidgets import (
 from component.home import Ui_home
 from component.result import Ui_Result
 from ShowNetResultsWindow import ShowNetResultsWindow
+from component.netanalysis import Ui_NetAnalysis
 
 class UI:
     def setup_ui(self, main_win: QMainWindow) -> None:
@@ -31,6 +32,7 @@ class UI:
         # self.action_disable = QAction(QIcon("icons:clear_24dp.svg"), "Disable")
         self.actions_theme = [QAction(theme, main_win) for theme in ["黑色", "白色"]]
         self.action_out = QAction("退出")
+        self.action_refresh = QAction("刷新")
         action_group_toolbar = QActionGroup(main_win)
 
         # Widgets
@@ -82,7 +84,7 @@ class UI:
 
         menu_toggle = menubar.addMenu("系统管理评估平台")
         # menu_toggle.addActions((self.action_enable, self.action_disable))
-        menu_toggle.addActions((self.action_out,))
+        menu_toggle.addActions((self.action_out, self.action_refresh))
         menu_theme = menubar.addMenu("")
         menu_theme.addActions(self.actions_theme)
      
@@ -101,11 +103,11 @@ class UI:
         activitybar.setProperty("type", "activitybar")
 
         # layout
-        stack_1 = ShowNetResultsWindow()
-        # stack_1 = QWidget()
+        self.stack_1 = ShowNetResultsWindow()
+
         #self.homeui = Ui_home()
         #HomeUI().setup_ui(stack_1)
-        self.stack_widget.addWidget(stack_1)
+        self.stack_widget.addWidget(self.stack_1)
         stack_2 = QWidget()
         self.resultui = Ui_Result()
         #ResultUI().setup_ui(stack_2)

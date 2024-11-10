@@ -9,6 +9,7 @@
 from qdarktheme.qtpy import QtCore, QtGui, QtWidgets
 from realtime_draw.ResultPlot import LatencyResultPlot
 from realtime_draw.ResultPlot import BufferResultPlot
+from component.netanalysis import Ui_NetAnalysis
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -26,6 +27,7 @@ class Ui_Dialog(object):
         self.buffer.setObjectName("develop")
         self.tabWidget.addTab(self.buffer, "缓冲区曲线")
 
-        self.netCal = QtWidgets.QWidget(Dialog)
-        self.netCal.setObjectName("netCal")
+        self.netCal = QtWidgets.QWidget()
+        self.netCalUi = Ui_NetAnalysis()
+        self.netCalUi.setupUi(self.netCal)
         self.tabWidget.addTab(self.netCal, "网络演算")

@@ -1,0 +1,24 @@
+import inet.linklayer.configurator.gatescheduling.contract.IGateScheduleConfigurator;
+import inet.networklayer.configurator.contract.INetworkConfigurator;
+import inet.node.tsn.TsnDevice;
+import inet.node.tsn.TsnSwitch;
+import inet.networks.base.WiredNetworkBase;
+import inet.node.contract.IEthernetNetworkNode;
+import inet.node.ethernet.EthernetLink;
+import inet.node.ethernet.Eth100M;
+import inet.node.inet.StandardHost;
+import inet.node.ethernet.EthernetSwitch;
+import inet.node.inet.DDSStandardHost;
+network TargetNetwork extends WiredNetworkBase
+{
+    submodules:
+        udp_tcp: StandardHost {
+        }
+        udp_tcp2: StandardHost {
+        }
+        switch: EthernetSwitch {
+        }
+    connections:
+        udp_tcp.ethg++ <--> { datarate=100Mbps;} <--> switch.ethg++;
+        udp_tcp2.ethg++ <--> { datarate=100Mbps;} <--> switch.ethg++;
+}

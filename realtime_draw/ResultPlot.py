@@ -28,8 +28,6 @@ class ResultPlot(QMainWindow):
         self.canvas = FigureCanvasQTAgg(self.figure)
         self.ui.appLayout.addWidget(self.canvas)
 
-        plt.rcParams["toolbar"] = "toolmanager"
-
         plt.rcParams["font.sans-serif"] = ["SimHei"]
         plt.rcParams["axes.unicode_minus"] = False
         self.toolbar = CustomToolbar(self.canvas, self)
