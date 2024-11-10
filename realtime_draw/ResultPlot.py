@@ -144,7 +144,7 @@ class BufferResultPlot(ResultPlot):
             id = self.parent.parser.hostNameVector[plotName]
             x = self.parent.parser.bufferResultX[id]
             y = self.parent.parser.bufferResultY[id]
-            ax.scatter(x, y, label=plotName)
+            ax.plot(x, y, label=plotName)
             maxX = max(maxX, self.parent.parser.bufferResultMaxX[id])
             maxY = max(maxY, self.parent.parser.bufferResultMaxY[id])
         ax.set_xlim(0, maxX)

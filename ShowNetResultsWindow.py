@@ -29,17 +29,9 @@ class ShowNetResultsWindow(QWidget):
         self.ui.tabWidget.addTab(self.netCal, "网络演算")
         self.setWindowTitle("仿真结果曲线")
         path = globaldata.currentProjectInfo.path
-        with open(os.path.join(path, "Parameters.ini"), "r", encoding="utf-8") as file:
-            configText = file.read()
-            flowNameList = re.findall(r'\bflowName\s*=\s*"([^"]+)"', configText)
-        self.parser = ParserModule(
-            os.path.join(path, "results", "General-#0.vec"), flowNameList
-        )
+        self.parser = ParserModule(path)
+        
     def reload(self):
         path = globaldata.currentProjectInfo.path
-        with open(os.path.join(path, "Parameters.ini"), "r", encoding="utf-8") as file:
-            configText = file.read()
-            flowNameList = re.findall(r'\bflowName\s*=\s*"([^"]+)"', configText)
-        self.parser = ParserModule(
-            os.path.join(path, "results", "General-#0.vec"), flowNameList
-        )
+
+        self.parser = ParserModule(path)

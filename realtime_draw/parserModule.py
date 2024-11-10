@@ -1,9 +1,18 @@
-class ParserModule:
-    def __init__(self, path, flowNameList):
-        self.reload(path, flowNameList)
+import os
+import re
 
-    def reload(self, path, flowNameList):
+class ParserModule:
+    def __init__(self, path):
+        self.reopen(path)
+
+    def reopen(self, path):
         self.path = path
+        self.reload()
+
+    def reload(self):
+        with open(os.path.join(self.path, "Parameters.ini"), "r", encoding="utf-8") as file:
+            configText = file.read()
+            flowNameList = re.findall(r'\bflowName\s*=\s*"([^"]+)"', configText)
         self.flowNameList = flowNameList
         self.reset()
 
@@ -68,8 +77,9 @@ class ParserModule:
             )
 
     def loadData(self):
-        self.reset()
-        with open(self.path, "r", encoding="utf-8") as fp:
+        self.reload()
+        resultPath = os.path.join(self.path, "results", "General-#0.vec")
+        with open(resultPath, "r", encoding="utf-8") as fp:
             for line in fp:
                 if line == "":
                     continue
