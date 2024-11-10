@@ -1,29 +1,65 @@
 <?xml version="1.0" ?>
 <Network>
     <Hosts>
-        <NormalHosts>
-            <NormalHost name="udp_tcp" type="StandardHost" ip="0.0.0.0" numApps="1" appArgs="[{&quot;typename&quot;: &quot;UdpApp615&quot;, &quot;packetLength&quot;: &quot;1000B&quot;, &quot;productionInterval&quot;: &quot;100us&quot;, &quot;destAddress&quot;: &quot;udp_tcp2&quot;, &quot;destPort&quot;: &quot;1000&quot;}]" only_cpu="True" graphic_pos_x="-197.0" graphic_pos_y="-43.0" graphic_image="img/Normal_CPU_Host.png" graphic_width="100" graphic_height="100"/>
-            <NormalHost name="udp_tcp2" type="StandardHost" ip="0.0.0.0" numApps="1" appArgs="[{&quot;typename&quot;: &quot;UdpApp615&quot;, &quot;localPort&quot;: &quot;1000&quot;, &quot;flowName&quot;: &quot;default&quot;}]" only_cpu="True" graphic_pos_x="284.0" graphic_pos_y="138.0" graphic_image="img/Normal_CPU_Host.png" graphic_width="100" graphic_height="100"/>
-        </NormalHosts>
-        <UdpHosts/>
-        <TcpHosts/>
-        <RdmaHosts/>
-        <TsnHosts/>
-        <DdsHosts/>
+        <UdpHosts>
+            <UdpHost name="udp_cpu" type="StandardHost" ip="0.0.0.0" total_traffic="1000" packet_size="100" packet_interval="100" destination_host="udp_cpu2" only_cpu="True" graphic_pos_x="0.0" graphic_pos_y="0.0" graphic_image="img/UDP_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+            <UdpHost name="udp_cpu2" type="StandardHost" ip="0.0.0.0" total_traffic="1000" packet_size="100" packet_interval="100" destination_host="" only_cpu="True" graphic_pos_x="235.0" graphic_pos_y="-70.0" graphic_image="img/UDP_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+            <UdpHost name="udp_cpu3" type="StandardHost" ip="0.0.0.0" total_traffic="1000" packet_size="100" packet_interval="100" destination_host="" only_cpu="True" graphic_pos_x="-163.0" graphic_pos_y="265.0" graphic_image="img/UDP_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+        </UdpHosts>
+        <TcpHosts>
+            <TcpHost name="tcp_cpu" type="StandardHost" ip="0.0.0.0" total_traffic="1000" packet_size="100" packet_interval="100" destination_host="tcp_mix" only_cpu="True" graphic_pos_x="-177.0" graphic_pos_y="-196.0" graphic_image="img/TCP_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+            <TcpHost name="tcp_mix" type="StandardHost" ip="0.0.0.0" total_traffic="1000" packet_size="100" packet_interval="100" destination_host="" only_cpu="True" graphic_pos_x="27.0" graphic_pos_y="-223.0" graphic_image="img/TCP_CPU_GPU_Host.png" graphic_width="120" graphic_height="100"/>
+        </TcpHosts>
+        <RdmaHosts>
+            <RdmaHost name="rdma_cpu" type="RDMAHost" ip="0.0.0.0" total_traffic="1000" packet_size="100" packet_interval="100" destination_host="" only_cpu="True" graphic_pos_x="346.0" graphic_pos_y="153.0" graphic_image="img/RDMA_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+            <RdmaHost name="rdma_cpu2" type="RDMAHost" ip="0.0.0.0" total_traffic="1000" packet_size="100" packet_interval="100" destination_host="" only_cpu="True" graphic_pos_x="465.0" graphic_pos_y="125.0" graphic_image="img/RDMA_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+        </RdmaHosts>
+        <TsnHosts>
+            <TsnHost name="tsn_cpu" type="TSNHost" ip="0.0.0.0" total_traffic="1000" packet_size="100" packet_interval="100" destination_host="" only_cpu="True" graphic_pos_x="-174.0" graphic_pos_y="473.0" graphic_image="img/TSN_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+            <TsnHost name="tsn_cpu2" type="TSNHost" ip="0.0.0.0" total_traffic="1000" packet_size="100" packet_interval="100" destination_host="" only_cpu="True" graphic_pos_x="33.0" graphic_pos_y="500.0" graphic_image="img/TSN_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+        </TsnHosts>
+        <DdsHosts>
+            <DdsHost name="dds_cpu" type="DDSHost" ip="0.0.0.0" total_traffic="1000" packet_size="100" packet_interval="100" destination_host="" only_cpu="True" graphic_pos_x="190.0" graphic_pos_y="474.0" graphic_image="img/DDS_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+            <DdsHost name="dds_mix" type="DDSHost" ip="0.0.0.0" total_traffic="1000" packet_size="100" packet_interval="100" destination_host="" only_cpu="True" graphic_pos_x="331.0" graphic_pos_y="586.0" graphic_image="img/DDS_CPU_GPU_Host.png" graphic_width="120" graphic_height="100"/>
+        </DdsHosts>
     </Hosts>
     <Switches>
-        <NormalSwitches>
-            <NormalSwitch name="switch" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="22.0" graphic_pos_y="70.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
-        </NormalSwitches>
-        <UdpSwitches/>
-        <TcpSwitches/>
-        <RdmaSwitches/>
-        <TsnSwitches/>
-        <DdsSwitches/>
+        <UdpSwitches>
+            <UdpSwitch name="udp_switch" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="161.0" graphic_pos_y="156.0" graphic_image="img/UDP_Switch.png" graphic_width="100" graphic_height="100"/>
+            <UdpSwitch name="udp_switch2" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="0.0" graphic_pos_y="271.0" graphic_image="img/UDP_Switch.png" graphic_width="100" graphic_height="100"/>
+        </UdpSwitches>
+        <TcpSwitches>
+            <TcpSwitch name="tcp_switch" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="25.0" graphic_pos_y="-141.0" graphic_image="img/TCP_Switch.png" graphic_width="100" graphic_height="100"/>
+        </TcpSwitches>
+        <RdmaSwitches>
+            <RdmaSwitch name="rdma_switch" type="RDMASwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="327.0" graphic_pos_y="327.0" graphic_image="img/RDMA_Switch.png" graphic_width="100" graphic_height="100"/>
+        </RdmaSwitches>
+        <TsnSwitches>
+            <TsnSwitch name="tsn_switch" type="TSNSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="-94.0" graphic_pos_y="639.0" graphic_image="img/TSN_Switch.png" graphic_width="100" graphic_height="100"/>
+        </TsnSwitches>
+        <DdsSwitches>
+            <DdsSwitch name="dds_switch" type="DDSSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="184.0" graphic_pos_y="648.0" graphic_image="img/DDS_Switch.png" graphic_width="100" graphic_height="100"/>
+        </DdsSwitches>
     </Switches>
     <Links>
-        <Link name="Link" type="Eth100M" endpoint1="udp_tcp" endpoint2="switch" link_bandwidth="100"/>
-        <Link name="Link2" type="Eth100M" endpoint1="udp_tcp2" endpoint2="switch" link_bandwidth="100"/>
+        <Link name="Link" type="Eth100M" endpoint1="udp_cpu" endpoint2="udp_switch" link_bandwidth="100"/>
+        <Link name="Link2" type="Eth100M" endpoint1="udp_cpu2" endpoint2="udp_switch" link_bandwidth="100"/>
+        <Link name="Link3" type="Eth100M" endpoint1="udp_switch2" endpoint2="udp_switch" link_bandwidth="100"/>
+        <Link name="Link4" type="Eth100M" endpoint1="udp_cpu3" endpoint2="udp_switch2" link_bandwidth="100"/>
+        <Link name="Link5" type="Eth100M" endpoint1="rdma_cpu" endpoint2="rdma_switch" link_bandwidth="100"/>
+        <Link name="Link6" type="Eth100M" endpoint1="rdma_cpu2" endpoint2="rdma_switch" link_bandwidth="100"/>
+        <Link name="Link7" type="Eth100M" endpoint1="tsn_cpu2" endpoint2="tsn_switch" link_bandwidth="100"/>
+        <Link name="Link8" type="Eth100M" endpoint1="tsn_cpu" endpoint2="tsn_switch" link_bandwidth="100"/>
+        <Link name="Link9" type="Eth100M" endpoint1="dds_cpu" endpoint2="dds_switch" link_bandwidth="100"/>
+        <Link name="Link10" type="Eth100M" endpoint1="dds_switch" endpoint2="dds_mix" link_bandwidth="100"/>
+        <Link name="Link11" type="Eth100M" endpoint1="tcp_cpu" endpoint2="tcp_switch" link_bandwidth="100"/>
+        <Link name="Link12" type="Eth100M" endpoint1="tcp_mix" endpoint2="tcp_switch" link_bandwidth="100"/>
     </Links>
-    <GlobalSetting content="{&quot;Tcp&quot;: {&quot;forwarding&quot;: &quot;false&quot;, &quot;retryTimeout&quot;: &quot;1s&quot;, &quot;retryCount&quot;: &quot;3&quot;, &quot;cacheTimeout&quot;: &quot;100s&quot;, &quot;tcpAlgorithmClass&quot;: &quot;TcpReno&quot;}, &quot;Rdma&quot;: {&quot;connectionType&quot;: &quot;RELIABLE_CONNECTION&quot;, &quot;maxSendQueueSize&quot;: &quot;256&quot;, &quot;maxRecvQueueSize&quot;: &quot;256&quot;}, &quot;common&quot;: {&quot;queueTypename&quot;: &quot;DropTailQueue&quot;, &quot;queuePacketCapacity&quot;: &quot;20&quot;}}"/>
+    <Flows>
+        <Flow size="100">
+            <node name="udp_cpu1"/>
+            <node name="udp_switch"/>
+            <node name="udp_cpu2"/>
+        </Flow>
+    </Flows>
 </Network>

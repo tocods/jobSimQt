@@ -24,7 +24,7 @@ from jobSimPage import JobSimPage
 from component.hostinfo import Ui_HostInfo
 from component.jobinfo import Ui_JobInfo
 from component.faultinfo import Ui_FaultInfo
-from PySide6.QtCharts import QChart,QChartView,QLineSeries,QDateTimeAxis,QValueAxis, QPieSeries
+from PySide6.QtCharts import QChart,QChartView,QLineSeries,QDateTimeAxis,QValueAxis, QPieSeries, QScatterSeries, QBarSeries, QBarSet
 from jobSimPainter import Painter, XmlParser
 from util.table import NumericDelegate
 from resultUtil import getAverageRunTime, getAverageRunTimeInHost, getThroughput, getEfficiency
@@ -33,6 +33,22 @@ from item import GraphicItem
 from edge import Edge
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
+
+
+class NetResultType:
+    def __init__(self):
+        self.type = ""
+        self.backlog_bound = 0
+        self.delay_bound = 0
+
+class NetResult:
+    def __init__(self):
+        self.nresults = []
+
+    def addResultType(self, r):
+        self.nresults.append(r)
+
+    
 
 class JobSimQt(QMainWindow):
     def __init__(self, path) -> None:
@@ -119,8 +135,6 @@ class JobSimQt(QMainWindow):
     def _toggle_state(self) -> None:
         state = self.sender().text()
         self._ui.central_window.centralWidget().setEnabled(state == "Enable")
-        self._ui.action_enable.setEnabled(state == "Disable")
-        self._ui.action_disable.setEnabled(state == "Enable")
         self.statusBar().showMessage(state)
 
     @Slot()
@@ -162,15 +176,24 @@ class JobSimQt(QMainWindow):
         #self.setClicked()
     
     def _initOutputFiles(self):
+        if not os.path.isdir(project.projectPath + "/OutputFiles"):
+            os.mkdir(project.projectPath + "/OutputFiles")
         if not os.path.exists(project.projectPath + "/OutputFiles/hostUtils.xml"):
             with open(project.projectPath + "/OutputFiles/hostUtils.xml", "w") as f:
-                f.write("")
+                f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+                f.write("<hostUtilization>")
+                f.write("</hostUtilization>")
         if not os.path.exists(project.projectPath + "/OutputFiles/jobRun.xml"):
             with open(project.projectPath + "/OutputFiles/jobRun.xml", "w") as f:
-                f.write("")
+                f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+                f.write("<jobRun>")
+                f.write("</jobRun>")
         if not os.path.exists(project.projectPath + "/OutputFiles/faultRecords.xml"):
             with open(project.projectPath + "/OutputFiles/faultRecords.xml", "w") as f:
-                f.write("")
+                f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+                f.write("<faultRecord>")
+                f.write("  <reliability value=\"1\" />")
+                f.write("</faultRecord>")
     
     def _initAll(self):
         print("init all")
@@ -202,7 +225,6 @@ class JobSimQt(QMainWindow):
     def __choseFlow(self):
         if self.chosing == False:
             self.__printNet()
-            self._ui.stack_1.ui.netCal
             self._ui.stack_1.ui.netCalUi.nets.setEnabled(True)
             self._ui.stack_1.ui.netCalUi.run.setEnabled(False)
             self.chosing = True
@@ -218,7 +240,7 @@ class JobSimQt(QMainWindow):
             self.nowFlow.printNodes()
             self.nowFlow = None
             self.lastChose = None
-           
+            self.lastlastChose = None
             
             self._ui.stack_1.ui.netCalUi.shows.setRowCount(row+1)
             self._ui.stack_1.ui.netCalUi.shows.setItem(row, 0, QTableWidgetItem("Flow_" + row.__str__()))
@@ -250,7 +272,8 @@ class JobSimQt(QMainWindow):
             rect.setY(float(y))
             rect.setWidth(100)
             rect.setHeight(100)
-            self.screne.addRect(rect)
+            c = QColor(Qt.red)
+            self.screne.addRect(rect, c)
     
     def delNetFlow(self):
         self.__printNet()
@@ -273,8 +296,124 @@ class JobSimQt(QMainWindow):
         formatted_xml_str = parsed_xml_str.toprettyxml(indent="    ")
         with open(project.projectPath + "/flow_data.xml", "w") as f:
             f.write(formatted_xml_str)
+        # subprocess.run("cd java; cd bin; java.exe -jar discoDNCxin.jar " + project.projectPath + "/network_data.xml " + project.projectPath + "/flow_data.xml " + project.projectPath + "/OutputFiles")
+        self.readNetResult()
         self.__printNet()
+
     
+    def readNetResult(self):
+        print("read")
+        if not os.path.isdir(project.projectPath + "/OutputFiles"):
+            return
+        if not os.path.isfile(project.projectPath + "/OutputFiles/NetworkAnalysisResults.xml"):
+            return
+        print("lala")
+        root = ET.parse(project.projectPath + "/OutputFiles/NetworkAnalysisResults.xml").getroot()
+        self.netResults = []
+        for element in root.findall("NetworkAnalysisResult"):
+            result = NetResult()
+            for e1 in element.findall("TotalFlowAnalysis"):
+                r = NetResultType()
+                r.type = "TFA"
+                r.backlog_bound = round((float)(e1.attrib['backlog_bound']), 2)
+                r.delay_bound = round((float)(e1.attrib['delay_bound']), 2)
+                result.addResultType(r)
+                break
+            for e1 in element.findall("SeparatedFlowAnalysis"):
+                r = NetResultType()
+                r.type = "SFA"
+                r.backlog_bound = round((float)(e1.attrib['backlog_bound']), 2)
+                r.delay_bound = round((float)(e1.attrib['delay_bound']), 2)
+                result.addResultType(r)
+                break
+            for e1 in element.findall("PMOOAnalysis"):
+                r = NetResultType()
+                r.type = "PMO"
+                r.backlog_bound = round((float)(e1.attrib['backlog_bound']), 2)
+                r.delay_bound = round((float)(e1.attrib['delay_bound']), 2)
+                result.addResultType(r)
+                break
+            for e1 in element.findall("TandemMatchingAnalysis"):
+                r = NetResultType()
+                r.type = "TMA"
+                r.backlog_bound = round((float)(e1.attrib['backlog_bound']), 2)
+                r.delay_bound = round((float)(e1.attrib['delay_bound']), 2)
+                result.addResultType(r)
+                break
+            self.netResults.append(result)
+        self.netResultTable = QTableWidget()
+        self.delayChart = QChartView()
+        self.backChart = QChartView()
+        self.netResultTable.verticalHeader().setVisible(False)
+        self.netResultTable.horizontalHeader().setVisible(False)
+        self.netResultTable.setColumnCount(3)
+        self.netResultTable.setRowCount(len(self.netResults) + 1)
+        self.netResultTable.setItem(0, 0, QTableWidgetItem("流"))
+        self.netResultTable.setItem(0, 1, QTableWidgetItem("端到端总延迟"))
+        self.netResultTable.setItem(0, 2, QTableWidgetItem("最大缓冲区上界"))
+        i = 0
+        for result in self.netResults:
+            i = i + 1
+            self.netResultTable.setItem(i, 0, QTableWidgetItem("Flow_" + i.__str__()))
+            p = QPushButton("查看")
+            p.clicked.connect(self.showDelay)
+            self.netResultTable.setCellWidget(i, 1, p)
+            q = QPushButton("查看")
+            q.clicked.connect(self.showBack)
+            self.netResultTable.setCellWidget(i, 2, q)
+        self._ui.stack_1.ui.netCalUi.results.clear()
+        self._ui.stack_1.ui.netCalUi.results.addTab(self.netResultTable, "结果")
+        self._ui.stack_1.ui.netCalUi.results.addTab(self.delayChart, "端到端总延迟")
+        self._ui.stack_1.ui.netCalUi.results.addTab(self.backChart, "最大缓冲区上界")
+        
+    def showDelay(self):
+        bar1 = QBarSet("TFA")
+        bar2 = QBarSet("SFA")
+        bar3 = QBarSet("PMO")
+        bar4 = QBarSet("TMA")
+        index = self.netResultTable.currentRow() - 1
+        result = self.netResults[index]
+        bar1.append(result.nresults[0].delay_bound)
+        bar2.append(result.nresults[1].delay_bound)
+        bar3.append(result.nresults[2].delay_bound)
+        bar4.append(result.nresults[3].delay_bound)
+        ser = QBarSeries()
+        ser.append(bar1)
+        ser.append(bar2)
+        ser.append(bar3)
+        ser.append(bar4)
+        chart = QChart()
+        chart.addSeries(ser)
+        # chart.setTitle('CPU利用率')
+        chart.createDefaultAxes()
+        chart.axisY().setTitleText("端到端总延迟")
+        self.delayChart.setChart(chart)
+        self._ui.stack_1.ui.netCalUi.results.setCurrentIndex(1)
+
+    def showBack(self):
+        bar1 = QBarSet("TFA")
+        bar2 = QBarSet("SFA")
+        bar3 = QBarSet("PMO")
+        bar4 = QBarSet("TMA")
+        index = self.netResultTable.currentRow() - 1
+        result = self.netResults[index]
+        bar1.append(result.nresults[0].backlog_bound)
+        bar2.append(result.nresults[1].backlog_bound)
+        bar3.append(result.nresults[2].backlog_bound)
+        bar4.append(result.nresults[3].backlog_bound)
+        ser = QBarSeries()
+        ser.append(bar1)
+        ser.append(bar2)
+        ser.append(bar3)
+        ser.append(bar4)
+        chart = QChart()
+        chart.addSeries(ser)
+        # chart.setTitle('CPU利用率')
+        chart.createDefaultAxes()
+        chart.axisY().setTitleText("最大缓冲区上界")
+        self.backChart.setChart(chart)
+        self._ui.stack_1.ui.netCalUi.results.setCurrentIndex(2)
+
     def __initNetAnalysis(self):
         self._ui.stack_1.ui.netCalUi.shows.setRowCount(0)
         self._ui.stack_1.ui.netCalUi.shows.setColumnCount(4)
@@ -284,6 +423,7 @@ class JobSimQt(QMainWindow):
         self.chosing = False
         self.nowFlow = None
         self.lastChose = None
+        self.lastlastChose = None
         self.flows = []
         self.netHosts = {}
         self.netSwtichs = {}
@@ -393,7 +533,8 @@ class JobSimQt(QMainWindow):
         self.avergaeRunTime = 0.0
         for job in self.job_results:
             self.avergaeRunTime += getAverageRunTime(job)
-        self.avergaeRunTime /= len(self.job_results)
+        if len(self.job_results) > 0:
+            self.avergaeRunTime /= len(self.job_results)
         self.avergaeRunTime = round(self.avergaeRunTime, 2)
         # 不可编辑
         self._ui.resultui.jobshow1.setReadOnly(True)

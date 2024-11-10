@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <Flows>
     <Flow>
-        <node name="udp_tcp"/>
-        <node name="switch"/>
-        <node name="udp_tcp2"/>
+        <node name="udp_switch"/>
+        <node name="udp_cpu"/>
+        <node name="udp_switch"/>
     </Flow>
 </Flows>

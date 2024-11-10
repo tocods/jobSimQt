@@ -2,7 +2,7 @@
 # from PyQt5.QtGui import QPixmap
 # from PyQt5.QtCore import Qt
 from qdarktheme.qtpy.QtWidgets import QGraphicsItem, QGraphicsPixmapItem
-from qdarktheme.qtpy.QtGui import QPixmap
+from qdarktheme.qtpy.QtGui import QPixmap, QColor
 from qdarktheme.qtpy.QtCore import Qt, QSize, QRectF
 import globaldata
 from util.jobSim import FlowNet
@@ -56,7 +56,8 @@ class GraphicItem(QGraphicsPixmapItem):
             rect.setY(float(y))
             rect.setWidth(100)
             rect.setHeight(100)
-            self.see.screne.addRect(rect)
+            c = QColor(Qt.red)
+            self.see.screne.addRect(rect, c)
             return
         ifHasLink = False
         for link in self.see.netLinks.values():
@@ -66,6 +67,8 @@ class GraphicItem(QGraphicsPixmapItem):
             if link.p2 == self.see.lastChose and link.p1 == self.name :
                 ifHasLink = True
                 break
+        if self.see.lastlastChose == self.name:
+            ifHasLink = False
         if ifHasLink:
             x = -1
             y = -1
@@ -77,12 +80,13 @@ class GraphicItem(QGraphicsPixmapItem):
                 y = self.see.netSwtichs[self.name].y
             rect = QRectF()
             self.see.nowFlow.addNode(self.name)
-        
             rect.setX(float(x))
             rect.setY(float(y))
             rect.setWidth(100)
             rect.setHeight(100)
-            self.see.screne.addRect(rect)
+            c = QColor(Qt.red)
+            self.see.screne.addRect(rect, c)
+            self.see.lastlastChose = self.see.lastChose
             self.see.lastChose = self.name
         return super().mouseDoubleClickEvent(event)
         

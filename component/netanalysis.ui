@@ -15,7 +15,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_3">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,2,1">
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,2">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -39,14 +39,23 @@
        <item>
         <widget class="QTabWidget" name="shows"/>
        </item>
+<<<<<<< HEAD
+=======
+       <item>
+        <widget class="QTabWidget" name="results"/>
+       </item>
+>>>>>>> 系统管理评估平台
       </layout>
      </item>
      <item>
       <widget class="QGraphicsView" name="nets"/>
      </item>
+<<<<<<< HEAD
      <item>
       <widget class="QTabWidget" name="results"/>
      </item>
+=======
+>>>>>>> 系统管理评估平台
     </layout>
    </item>
   </layout>
