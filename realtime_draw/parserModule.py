@@ -1,5 +1,8 @@
 class ParserModule:
     def __init__(self, path, flowNameList):
+        self.reload(path, flowNameList)
+
+    def reload(self, path, flowNameList):
         self.path = path
         self.flowNameList = flowNameList
         self.reset()

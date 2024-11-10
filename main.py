@@ -153,6 +153,7 @@ class JobSimQt(QMainWindow):
         file_name = QFileDialog.getExistingDirectory(None, "Open File", "")
         print(file_name)
         globaldata.currentProjectInfo.setFullPath(file_name)
+        self._ui.stack_1.reload()
         project.projectPath = file_name
         self._initOutputFiles()
         self._ui.stack_widget.setCurrentIndex(1)
