@@ -12,13 +12,16 @@ import inet.node.inet.DDSStandardHost;
 network TargetNetwork extends WiredNetworkBase
 {
     submodules:
-        udp_tcp: StandardHost {
+        tsn: <default("TsnDevice")> like IEthernetNetworkNode {
         }
-        udp_tcp2: StandardHost {
+        tsn2: <default("TsnDevice")> like IEthernetNetworkNode {
         }
-        switch: EthernetSwitch {
+        tsn3: <default("TsnDevice")> like IEthernetNetworkNode {
+        }
+        tsn_switch: <default("TsnSwitch")> like IEthernetNetworkNode {
         }
     connections:
-        udp_tcp.ethg++ <--> { datarate=100Mbps;} <--> switch.ethg++;
-        udp_tcp2.ethg++ <--> { datarate=100Mbps;} <--> switch.ethg++;
+        tsn.ethg++ <--> { datarate=100Mbps;} <--> tsn_switch.ethg++;
+        tsn_switch.ethg++ <--> { datarate=100Mbps;} <--> tsn2.ethg++;
+        tsn_switch.ethg++ <--> { datarate=100Mbps;} <--> tsn3.ethg++;
 }

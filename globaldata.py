@@ -6,6 +6,9 @@ from entity.switch import *
 
 from PySide6.QtGui import QFont
 
+global targetPath
+targetPath = []
+
 global scheduler
 scheduler = 0
 
@@ -77,8 +80,14 @@ networkGlobalConfig = {
     "common": {
         "queueTypename": "DropTailQueue",
         "queuePacketCapacity": "20",
+        "TsnQueue": []
     },
 }
+
+def readPath():
+    with open("path.ini", "r", encoding="utf-8") as fp:
+        for line in fp:
+            targetPath.append(line)
 
 
 def create_xml():

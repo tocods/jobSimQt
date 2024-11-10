@@ -36,6 +36,7 @@ class JobSimQt(QMainWindow):
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.center()
         self.history = []
+        globaldata.readPath()
         i = 0
         f = QFont()
         f.setPointSize(13)
@@ -128,7 +129,7 @@ class JobSimQt(QMainWindow):
         self.wfont = QFont()
         self.wfont.setPointSize(30)
         self.setFont(self.wfont)
-        project.projectPath = path
+        project.projectPath = path[:]
         self._initJsonFiles()
         # 取消标题栏
         # self.setWindowFlags(Qt.FramelessWindowHint)
@@ -178,7 +179,10 @@ class JobSimQt(QMainWindow):
         action_name = self.sender().text()
         #self._ui.stack_widget.setCurrentIndex(0 if action_name == "运行仿真" else 1)
         if action_name == "系统管理评估平台":
-            os.popen("python d:/analysis/main.py " + project.projectPath)
+            print(globaldata.targetPath[0])
+            print(project.projectPath)
+            
+            os.popen(f"python {globaldata.targetPath[0]} " + project.projectPath)
         if action_name == "系统管理集成开发平台":
             self._startSoftware()
 
@@ -200,7 +204,7 @@ class JobSimQt(QMainWindow):
         QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(theme))
 
     def _startSoftware(self):
-        os.popen("mingwenv.cmd ide")
+        os.popen(f"{globaldata.targetPath[1]} ide")
         return
 
     def setClicked(self):

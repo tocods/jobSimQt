@@ -6,7 +6,9 @@ from qdarktheme.qtpy.QtWidgets import (
     QTableWidgetItem,
     QPushButton,
     QMessageBox,
+    QDialog
 )
+from Window.JsonArrayEditor import JsonArrayEditor
 import globaldata
 
 
@@ -18,10 +20,6 @@ class NetworkGlobalConfig(QWidget):
             "connectionType": ["RELIABLE_CONNECTION", "UNRELIABLE_CONNECTION"],
             "tcpAlgorithmClass": [
                 "TcpReno",
-                "TcpTahoe",
-                "TcpNewReno",
-                "TcpNoCongestionControl",
-                "DumbTcp",
             ],
         }
         self.tmp_data = globaldata.networkGlobalConfig.copy()
@@ -69,8 +67,26 @@ class NetworkGlobalConfig(QWidget):
                 combo_box.addItems(self.option[key])
                 combo_box.setCurrentText(value)
                 self.table_widget.setCellWidget(row_position, 1, combo_box)
+            elif key == "TsnQueue":
+                button = QPushButton("编辑tsn队列信息")
+                button.clicked.connect(self.open_json_object_array_editor)
+                self.table_widget.setCellWidget(row_position, 1, button)
             else:
                 self.table_widget.setItem(row_position, 1, QTableWidgetItem(value))
+
+    def open_json_object_array_editor(self):
+        json_data = self.tmp_data["common"]["TsnQueue"].copy()
+
+        editor = JsonArrayEditor(
+            json_data,
+            ["stream", "pcp"],
+            ["default", "0"],
+        )
+        if editor.exec() == QDialog.DialogCode.Accepted:
+            updated_data = editor.get_json_data()
+            self.tmp_data["common"]["TsnQueue"] = updated_data
+            QMessageBox.information(self, "Success", "编辑完成")
+
 
     def save_data(self):
         data = {}
@@ -83,14 +99,17 @@ class NetworkGlobalConfig(QWidget):
             value_item = self.table_widget.cellWidget(row, 1)
 
             if value_item:  # 如果是 QComboBox
-                value = value_item.currentText()
+                if not isinstance(value_item, QPushButton):
+                    value = value_item.currentText()
+                    data[key] = value
             else:  # 否则是普通的 QTableWidgetItem
                 value = (
                     self.table_widget.item(row, 1).text()
                     if self.table_widget.item(row, 1)
                     else ""
                 )
-            data[key] = value
+                data[key] = value
+        data["TsnQueue"] = self.tmp_data["common"]["TsnQueue"]
         globaldata.networkGlobalConfig[self.combo_box.currentText()] = data
         # 显示保存内容（你可以将其写入文件或数据库）
         QMessageBox.information(self, "Success", "保存成功")

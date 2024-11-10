@@ -244,17 +244,17 @@ class TsnHost(Host):
                 if index < len(self.tsnArgs) - 1:
                     f.write(",")
             f.write("]\n")
-        if self.tsnArgs != "":
-            f.write(f"*.{self.name}.bridging.streamCoder.encoder.mapping = [")
-            for index in range(0, len(self.tsnArgs)):
-                tmp = self.tsnArgs[index]
-                f.write("{")
-                f.write(f'stream: "{tmp["stream"]}", ')
-                f.write(f'pcp: {tmp["pcp"]}')
-                f.write("}")
-                if index < len(self.tsnArgs) - 1:
-                    f.write(",")
-            f.write("]\n")
+        f.write(f"*.{self.name}.bridging.streamCoder.encoder.mapping = [")
+        tsnQueue = globaldata.networkGlobalConfig['common']['TsnQueue']
+        for index in range(0, len(tsnQueue)):
+            tmp = tsnQueue[index]
+            f.write("{")
+            f.write(f'stream: "{tmp["stream"]}", ')
+            f.write(f'pcp: {tmp["pcp"]}')
+            f.write("}")
+            if index < len(tsnQueue) - 1:
+                f.write(",")
+        f.write("]\n")
         f.write("\n")
 
     def generateNED(self, f):

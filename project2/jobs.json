@@ -1,12 +1,1 @@
-[
-    {
-        "name": "host_1446",
-        "period": 10,
-        "cpu_task": {
-            "ram": 100,
-            "pes_number": 1,
-            "length": 1000
-        },
-        "gpu_task": null
-    }
-]
+[]
