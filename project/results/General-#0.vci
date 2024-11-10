@@ -1,9 +1,9 @@
-file 2085455 1731232992                                         
+file 12148894 1731249790                                        
 version 3
-run General-0-20241110-18:03:09-18960
+run General-0-20241110-22:43:05-15600
 attr configname General
-attr datetime 20241110-18:03:09
-attr datetimef 20241110-180309
+attr datetime 20241110-22:43:05
+attr datetimef 20241110-224305
 attr experiment General
 attr inifile D:/jobSimQt/project/Parameters.ini
 attr iterationvars ""
@@ -11,14 +11,14 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network TargetNetwork
-attr processid 18960
+attr processid 15600
 attr repetition 0
 attr replication #0
 attr resultdir results
 attr runnumber 0
 attr seedset 0
 config network TargetNetwork
-config sim-time-limit 1.0s
+config sim-time-limit 1.5s
 config **.statistic-recording false
 config *.*.ethernet.typename EthernetLayer
 config *.*.eth[*].typename LayeredEthernetInterface
@@ -41,70 +41,180 @@ config **.tcp.windowScalingSupport false
 config **.tcp.timestampSupport false
 config **.tcp.mss 1452
 config *.configurator.config "xml(\"<config><interface hosts='**' address='192.x.x.x' netmask='255.x.x.x'/></config>\")"
-config *.tsn.numApps 1
-config *.tsn.app[0].typename UdpApp615
-config *.tsn.app[0].source.packetLength 1000B
-config *.tsn.app[0].source.productionInterval exponential(100us)
-config *.tsn.app[0].io.destAddress "\"tsn3\""
-config *.tsn.app[0].io.destPort 1000
-config *.tsn.app[0].sink.typename ""
-config *.tsn.hasOutgoingStreams true
-config *.tsn.bridging.streamIdentifier.identifier.mapping "[{stream: \"best-effort\", packetfilter: expr(udp.destPort == 1000)}]"
-config *.tsn.bridging.streamCoder.encoder.mapping "[{stream: \"best-effort\", pcp: 0},{stream: \"time-triggered\", pcp: 4},{stream: \"ack\", pcp: 5}]"
-config *.tsn2.numApps 1
-config *.tsn2.app[0].typename TcpSessionApp
-config *.tsn2.app[0].sendBytes 100MiB
-config *.tsn2.app[0].active true
-config *.tsn2.app[0].localPort 1000
-config *.tsn2.app[0].connectAddress "\"tsn3\""
-config *.tsn2.app[0].connectPort 1002
-config *.tsn2.app[0].tOpen 0s
-config *.tsn2.app[0].tSend 0s
-config *.tsn2.app[0].tClose 0s
-config *.tsn2.app[0].sendScript "\"\""
-config *.tsn2.hasOutgoingStreams true
-config *.tsn2.bridging.streamIdentifier.identifier.mapping "[{stream: \"time-triggered\", packetfilter: expr(tcp.destPort == 1002)}]"
-config *.tsn2.bridging.streamCoder.encoder.mapping "[{stream: \"best-effort\", pcp: 0},{stream: \"time-triggered\", pcp: 4},{stream: \"ack\", pcp: 5}]"
-config *.tsn3.numApps 2
-config *.tsn3.app[0].typename UdpApp615
-config *.tsn3.app[0].source.typename ""
-config *.tsn3.app[0].io.destPort -1
-config *.tsn3.app[0].io.localPort 1000
-config *.tsn3.app[0].sink.flowName "\"BE_testflow\""
-config *.tsn3.app[1].typename TcpSinkApp
-config *.tsn3.app[1].localPort 1002
-config *.tsn3.app[1].flowName "\"TT_testflow\""
-config *.tsn3.hasOutgoingStreams true
-config *.tsn3.bridging.streamCoder.encoder.mapping "[{stream: \"best-effort\", pcp: 0},{stream: \"time-triggered\", pcp: 4},{stream: \"ack\", pcp: 5}]"
+config *.udp_sender.numApps 1
+config *.udp_sender.app[0].typename UdpApp615
+config *.udp_sender.app[0].source.packetLength 1200B
+config *.udp_sender.app[0].source.productionInterval exponential(100us)
+config *.udp_sender.app[0].io.destAddress "\"udp_receiver\""
+config *.udp_sender.app[0].io.destPort 1000
+config *.udp_sender.app[0].sink.typename ""
+config *.tcp_sender.numApps 1
+config *.tcp_sender.app[0].typename TcpSessionApp
+config *.tcp_sender.app[0].sendBytes 20MiB
+config *.tcp_sender.app[0].active true
+config *.tcp_sender.app[0].localPort 1000
+config *.tcp_sender.app[0].connectAddress "\"tcp_receiver\""
+config *.tcp_sender.app[0].connectPort 1001
+config *.tcp_sender.app[0].tOpen 0s
+config *.tcp_sender.app[0].tSend 0s
+config *.tcp_sender.app[0].tClose 0s
+config *.tcp_sender.app[0].sendScript "\"\""
+config *.udp_receiver.numApps 1
+config *.udp_receiver.app[0].typename UdpApp615
+config *.udp_receiver.app[0].source.typename ""
+config *.udp_receiver.app[0].io.destPort -1
+config *.udp_receiver.app[0].io.localPort 1000
+config *.udp_receiver.app[0].sink.flowName "\"udp\""
+config *.tcp_receiver.numApps 1
+config *.tcp_receiver.app[0].typename TcpSinkApp
+config *.tcp_receiver.app[0].localPort 1001
+config *.tcp_receiver.app[0].flowName "\"tcp\""
+config *.tsn_sender1.numApps 1
+config *.tsn_sender1.app[0].typename UdpApp615
+config *.tsn_sender1.app[0].source.packetLength 946B
+config *.tsn_sender1.app[0].source.productionInterval exponential(200us)
+config *.tsn_sender1.app[0].io.destAddress "\"tsn_receiver\""
+config *.tsn_sender1.app[0].io.destPort 1000
+config *.tsn_sender1.app[0].sink.typename ""
+config *.tsn_sender1.hasOutgoingStreams true
+config *.tsn_sender1.bridging.streamIdentifier.identifier.mapping "[{stream: \"best-effort\", packetfilter: expr(udp.destPort == 1000)}]"
+config *.tsn_sender1.bridging.streamCoder.encoder.mapping "[{stream: \"best-effort\", pcp: 0},{stream: \"time-triggered\", pcp: 4},{stream: \"ack\", pcp: 5}]"
+config *.tsn_sender2.numApps 1
+config *.tsn_sender2.app[0].typename TcpSessionApp
+config *.tsn_sender2.app[0].sendBytes 20MiB
+config *.tsn_sender2.app[0].active true
+config *.tsn_sender2.app[0].localPort 1000
+config *.tsn_sender2.app[0].connectAddress "\"tsn_receiver\""
+config *.tsn_sender2.app[0].connectPort 1001
+config *.tsn_sender2.app[0].tOpen 0s
+config *.tsn_sender2.app[0].tSend 0s
+config *.tsn_sender2.app[0].tClose 0s
+config *.tsn_sender2.app[0].sendScript "\"\""
+config *.tsn_sender2.hasOutgoingStreams true
+config *.tsn_sender2.bridging.streamIdentifier.identifier.mapping "[{stream: \"time-triggered\", packetfilter: expr(tcp.destPort == 1001)}]"
+config *.tsn_sender2.bridging.streamCoder.encoder.mapping "[{stream: \"best-effort\", pcp: 0},{stream: \"time-triggered\", pcp: 4},{stream: \"ack\", pcp: 5}]"
+config *.tsn_receiver.numApps 2
+config *.tsn_receiver.app[0].typename UdpApp615
+config *.tsn_receiver.app[0].source.typename ""
+config *.tsn_receiver.app[0].io.destPort -1
+config *.tsn_receiver.app[0].io.localPort 1000
+config *.tsn_receiver.app[0].sink.flowName "\"tsn_udp\""
+config *.tsn_receiver.app[1].typename TcpSinkApp
+config *.tsn_receiver.app[1].localPort 1001
+config *.tsn_receiver.app[1].flowName "\"tsn_tcp\""
+config *.tsn_receiver.hasOutgoingStreams true
+config *.tsn_receiver.bridging.streamIdentifier.identifier.mapping "[{stream: \"time-triggered\", packetfilter: expr(tcp.destPort == 1000)}]"
+config *.tsn_receiver.bridging.streamCoder.encoder.mapping "[{stream: \"best-effort\", pcp: 0},{stream: \"time-triggered\", pcp: 4},{stream: \"ack\", pcp: 5}]"
+config *.publisher1.numApps 1
+config *.publisher1.app[0].typename DDSPublishApp
+config *.publisher1.app[0].io.receiveBroadcast true
+config *.publisher1.app[0].io.publish "\"Topic1\""
+config *.publisher1.app[0].io.destPort 1000
+config *.publisher1.ipv4.ip.limitedBroadcast true
+config *.publisher1.app[0].source.packetLength 5000B
+config *.publisher1.app[0].source.productionInterval exponential(0.5ms)
+config *.publisher1.app[0].sink.typename ""
+config *.subscriber3.numApps 1
+config *.subscriber3.app[0].typename DDSSubscribeApp
+config *.subscriber3.app[0].source.subscribe "\"Topic1@1000\""
+config *.subscriber3.app[0].io.localPort 1000
+config *.subscriber3.app[0].io.nackCountdown 0.25ms
+config *.subscriber3.app[0].source.packetLength 20B
+config *.subscriber3.ipv4.ip.limitedBroadcast true
+config *.subscriber3.app[0].sink.flowName "\"dds3\""
+config *.subscriber2.numApps 1
+config *.subscriber2.app[0].typename DDSSubscribeApp
+config *.subscriber2.app[0].source.subscribe "\"Topic1@1000\""
+config *.subscriber2.app[0].io.localPort 1000
+config *.subscriber2.app[0].io.nackCountdown 0.25ms
+config *.subscriber2.app[0].source.packetLength 20B
+config *.subscriber2.ipv4.ip.limitedBroadcast true
+config *.subscriber2.app[0].sink.flowName "\"dds2\""
+config *.subscriber1.numApps 1
+config *.subscriber1.app[0].typename DDSSubscribeApp
+config *.subscriber1.app[0].source.subscribe "\"Topic1@1000\""
+config *.subscriber1.app[0].io.localPort 1000
+config *.subscriber1.app[0].io.nackCountdown 0.25ms
+config *.subscriber1.app[0].source.packetLength 20B
+config *.subscriber1.ipv4.ip.limitedBroadcast true
+config *.subscriber1.app[0].sink.flowName "\"dds1\""
+config *.switch.eth[*].bitrate 100Mbps
 config *.tsn_switch.eth[*].bitrate 100Mbps
 config *.tsn_switch.hasEgressTrafficShaping true
 config *.tsn_switch.bridging.directionReverser.reverser.excludeEncapsulationProtocols "[\"ieee8021qctag\"]"
 config *.tsn_switch.eth[*].macLayer.queue.numTrafficClasses 2
 config *.tsn_switch.eth[*].macLayer.queue.*[0].display-name best-effort
 config *.tsn_switch.eth[*].macLayer.queue.transmissionGate[0].offset 0ms
-config *.tsn_switch.eth[*].macLayer.queue.transmissionGate[0].durations "[1ms, 1ms, 0.1ms, 1.9ms]"
+config *.tsn_switch.eth[*].macLayer.queue.transmissionGate[0].durations [8ms,2ms]
 config *.tsn_switch.eth[*].macLayer.queue.transmissionGate[0].initiallyOpen false
 config *.tsn_switch.eth[*].macLayer.queue.queue[0].packetCapacity 100
 config *.tsn_switch.eth[*].macLayer.queue.*[1].display-name time-triggered
 config *.tsn_switch.eth[*].macLayer.queue.transmissionGate[1].offset 0ms
-config *.tsn_switch.eth[*].macLayer.queue.transmissionGate[1].durations [1ms,1ms]
+config *.tsn_switch.eth[*].macLayer.queue.transmissionGate[1].durations [8ms,2ms]
 config *.tsn_switch.eth[*].macLayer.queue.transmissionGate[1].initiallyOpen true
 config *.tsn_switch.eth[*].macLayer.queue.queue[1].packetCapacity 100
 
-vector 0 TargetNetwork.tsn.eth[0].macLayer.queue 615.tsn.eth[0].macLayer.queue ETV
-vector 1 TargetNetwork.tsn2.eth[0].macLayer.queue 615.tsn2.eth[0].macLayer.queue ETV
-vector 2 TargetNetwork.tsn_switch.eth[2].macLayer.queue.queue[1] 615.tsn_switch.eth[2].macLayer.queue.queue[1] ETV
-vector 3 TargetNetwork.tsn3.eth[0].macLayer.queue 615.tsn3.eth[0].macLayer.queue ETV
-vector 4 TargetNetwork.tsn_switch.eth[1].macLayer.queue.queue[0] 615.tsn_switch.eth[1].macLayer.queue.queue[0] ETV
-vector 5 TargetNetwork.tsn_switch.eth[2].macLayer.queue.queue[0] 615.tsn_switch.eth[2].macLayer.queue.queue[0] ETV
-vector 6 TargetNetwork.tsn3.app[0].sink BE_testflow ETV
-vector 7 TargetNetwork.tsn3.app[1] TT_testflow ETV
-0	5094 576759 17 272378 0 0.999831331787 19924 0 0.17 578.81999999992 33.567799999999
-1	581853 197263 18 272196 0 0.998992 8072 0 0.15 156.18 7.1463999999997
-2	779116 197758 21 272402 0.00000592 1 8028 0 0.45 3330.52 1395.8466
-3	976874 192257 31 272175 0.00001168 0.99897824 7980 0 0.01 39.900000000001 0.39899999999997
-4	1169131 188536 35 272180 0.00001744 0.998984 7980 0 0.08 179.2 8.7541999999997
-5	1357667 408051 45 272381 0.00008464 0.999915971787 15465 0.01 1 15149.379999999 14965.663600001
-6	1765718 193961 154 272389 0.00108432 0.99991632 5503 0.000731469648 0.020479478241 99.28886616869 1.8182903922321
-7	1959679 125774 385 272172 0.00212816 0.99897824 3989 0.00028144 0.01162128 43.40478368 0.47757601047199
+vector 0 TargetNetwork.udp_sender.eth[0].macLayer.queue 615.udp_sender.eth[0].macLayer.queue ETV
+vector 1 TargetNetwork.tsn_sender1.eth[0].macLayer.queue 615.tsn_sender1.eth[0].macLayer.queue ETV
+vector 2 TargetNetwork.subscriber3.eth[0].macLayer.queue 615.subscriber3.eth[0].macLayer.queue ETV
+vector 3 TargetNetwork.subscriber2.eth[0].macLayer.queue 615.subscriber2.eth[0].macLayer.queue ETV
+vector 4 TargetNetwork.subscriber1.eth[0].macLayer.queue 615.subscriber1.eth[0].macLayer.queue ETV
+vector 5 TargetNetwork.tcp_sender.eth[0].macLayer.queue 615.tcp_sender.eth[0].macLayer.queue ETV
+vector 6 TargetNetwork.tsn_sender2.eth[0].macLayer.queue 615.tsn_sender2.eth[0].macLayer.queue ETV
+vector 7 TargetNetwork.switch.eth[4].macLayer.queue 615.switch.eth[4].macLayer.queue ETV
+vector 8 TargetNetwork.tsn_switch.eth[2].macLayer.queue.queue[1] 615.tsn_switch.eth[2].macLayer.queue.queue[1] ETV
+vector 9 TargetNetwork.switch.eth[0].macLayer.queue 615.switch.eth[0].macLayer.queue ETV
+vector 10 TargetNetwork.switch.eth[1].macLayer.queue 615.switch.eth[1].macLayer.queue ETV
+vector 11 TargetNetwork.switch.eth[2].macLayer.queue 615.switch.eth[2].macLayer.queue ETV
+vector 12 TargetNetwork.switch.eth[3].macLayer.queue 615.switch.eth[3].macLayer.queue ETV
+vector 13 TargetNetwork.switch.eth[5].macLayer.queue 615.switch.eth[5].macLayer.queue ETV
+vector 14 TargetNetwork.switch.eth[6].macLayer.queue 615.switch.eth[6].macLayer.queue ETV
+vector 15 TargetNetwork.switch.eth[8].macLayer.queue 615.switch.eth[8].macLayer.queue ETV
+vector 16 TargetNetwork.switch.eth[7].macLayer.queue 615.switch.eth[7].macLayer.queue ETV
+vector 17 TargetNetwork.tcp_receiver.eth[0].macLayer.queue 615.tcp_receiver.eth[0].macLayer.queue ETV
+vector 18 TargetNetwork.tsn_receiver.eth[0].macLayer.queue 615.tsn_receiver.eth[0].macLayer.queue ETV
+vector 19 TargetNetwork.tsn_switch.eth[0].macLayer.queue.queue[0] 615.tsn_switch.eth[0].macLayer.queue.queue[0] ETV
+vector 20 TargetNetwork.tsn_switch.eth[1].macLayer.queue.queue[0] 615.tsn_switch.eth[1].macLayer.queue.queue[0] ETV
+vector 21 TargetNetwork.tsn_switch.eth[2].macLayer.queue.queue[0] 615.tsn_switch.eth[2].macLayer.queue.queue[0] ETV
+vector 22 TargetNetwork.tsn_switch.eth[1].macLayer.queue.queue[1] 615.tsn_switch.eth[1].macLayer.queue.queue[1] ETV
+vector 23 TargetNetwork.udp_receiver.app[0].sink udp ETV
+vector 24 TargetNetwork.tsn_receiver.app[1] tsn_tcp ETV
+vector 25 TargetNetwork.tcp_receiver.app[0] tcp ETV
+vector 26 TargetNetwork.publisher1.eth[0].macLayer.queue 615.publisher1.eth[0].macLayer.queue ETV
+vector 27 TargetNetwork.subscriber1.app[0].sink dds1 ETV
+vector 28 TargetNetwork.subscriber2.app[0].sink dds2 ETV
+vector 29 TargetNetwork.subscriber3.app[0].sink dds3 ETV
+vector 30 TargetNetwork.tsn_receiver.app[0].sink tsn_udp ETV
+26	10593 962495 676 1125357 0.000627965379 1.020440355402 32768 0.01 1 31812.650000001 31011.982700003
+0	973088 896388 71 1656947 0 1.499979215064 29783 0 1 18982.659999999 15507.3382
+1	1869476 438644 72 1656779 0 1.499803330479 15190 0 0.05 97.43000000001 1.2838999999999
+2	2308120 254634 74 1656696 0 1.499781005379 8832 0 0.01 44.16 0.44159999999997
+3	2562754 232152 76 1656872 0 1.499907965379 8052 0 0.01 40.260000000001 0.40259999999997
+4	2794906 213322 78 1656703 0 1.499784925379 7400 0 0.01 37.000000000001 0.36999999999998
+5	3008228 646341 79 1656939 0 1.49995744 24555 0 0.43 10404.000000003 4418.4358000006
+6	3654569 484140 80 1654971 0 1.49798704 19588 0 0.43 192.57999999996 27.335799999998
+7	4138709 608680 97 1656924 0.00000576 1.49994688 24516 0 0.03 122.64000000003 1.2273999999999
+8	4747389 499152 105 1656959 0.00000592 1.5 19544 0 0.45 8207.7600000015 3481.5984000001
+9	5246541 700173 111 1656877 0.00000592 1.499913885379 24284 0 0.03 121.48000000003 1.2157999999999
+10	5946714 140 112 284 0.00000592 0.00001968 6 0 0.03 0.09 0.0019
+11	5946854 633112 113 1656931 0.00000592 1.49995168 24512 0 0.03 122.64000000003 1.2275999999999
+12	6579966 878346 114 1656899 0.00000592 1.499935404395 29446 0 0.03 147.29000000001 1.4738999999999
+13	7458312 248641 116 1656533 0.00000592 1.499655005379 8338 0 0.02 41.71 0.41729999999997
+14	7706953 309455 117 1656865 0.00000592 1.499901085379 10374 0 0.02 51.889999999998 0.51909999999996
+15	8016408 140 118 289 0.00000592 0.00001968 6 0 0.03 0.09 0.0019
+16	8016548 202341 125 1656683 0.00000592 1.499778045379 6786 0 0.02 33.950000000002 0.33969999999998
+17	8218889 632967 159 1656917 0.00001152 1.49994592 24506 0 0.01 122.53000000003 1.2252999999999
+18	8851856 503494 166 1654938 0.00001168 1.49795504 19496 0 0.01 97.480000000013 0.97479999999991
+19	9355350 138 182 9301 0.00001184 0.00801376 6 0 0.03 0.09 0.0019
+20	9355488 138 182 9302 0.00001184 0.00801376 6 0 0.03 0.09 0.0019
+21	9355626 321113 182 1656842 0.00001184 1.499883650479 11201 0.01 1 10569.12 10057.12
+22	9676739 479652 227 1654943 0.0000176 1.4979608 19496 0 0.01 97.480000000013 0.97479999999991
+23	10156391 606449 438 1656892 0.00020064 1.499934444395 14719 0.00020064 0.010328458159 97.150139852457 0.81402136889782
+24	10762840 324798 463 1654935 0.00027328 1.49795504 9747 0.0002432 0.0076008 67.040329600008 0.4713061707099
+25	11087638 408350 478 1656914 0.00028192 1.49994592 12252 0.00024288 0.00549648 67.100962079994 0.3683648205045
+26	11495988 480231 1125358 1656867 1.020440355402 1.499902045379 15856 0.61 1 15484.749999999 15150.2483
+27	11976219 15752 1984 1655622 0.001837405379 1.498617725379 383 0.00120944 0.012381646245 4.254925273223 0.047935732778183
+28	11991971 12992 2067 1655688 0.001889405379 1.498669725379 316 0.00126144 0.012222595473 3.478844705633 0.038917196549217
+29	12004963 10971 2219 1655718 0.001941405379 1.498721725379 267 0.00131344 0.012255261413 2.912137270001 0.032337454480248
+30	12015934 132958 9416 1656907 0.00810064 1.49994208 3600 0.005150923302 0.048494737121 142.06292015181 5.7015453543776
 

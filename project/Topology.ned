@@ -12,16 +12,43 @@ import inet.node.inet.DDSStandardHost;
 network TargetNetwork extends WiredNetworkBase
 {
     submodules:
-        tsn: <default("TsnDevice")> like IEthernetNetworkNode {
+        udp_sender: StandardHost {
         }
-        tsn2: <default("TsnDevice")> like IEthernetNetworkNode {
+        tcp_sender: StandardHost {
         }
-        tsn3: <default("TsnDevice")> like IEthernetNetworkNode {
+        udp_receiver: StandardHost {
+        }
+        tcp_receiver: StandardHost {
+        }
+        tsn_sender1: <default("TsnDevice")> like IEthernetNetworkNode {
+        }
+        tsn_sender2: <default("TsnDevice")> like IEthernetNetworkNode {
+        }
+        tsn_receiver: <default("TsnDevice")> like IEthernetNetworkNode {
+        }
+        publisher1: DDSStandardHost {
+        }
+        subscriber3: DDSStandardHost {
+        }
+        subscriber2: DDSStandardHost {
+        }
+        subscriber1: DDSStandardHost {
+        }
+        switch: EthernetSwitch {
         }
         tsn_switch: <default("TsnSwitch")> like IEthernetNetworkNode {
         }
     connections:
-        tsn.ethg++ <--> { datarate=100Mbps;} <--> tsn_switch.ethg++;
-        tsn_switch.ethg++ <--> { datarate=100Mbps;} <--> tsn2.ethg++;
-        tsn_switch.ethg++ <--> { datarate=100Mbps;} <--> tsn3.ethg++;
+        tsn_sender1.ethg++ <--> { datarate=100Mbps;} <--> tsn_switch.ethg++;
+        tsn_sender2.ethg++ <--> { datarate=100Mbps;} <--> tsn_switch.ethg++;
+        tsn_receiver.ethg++ <--> { datarate=100Mbps;} <--> tsn_switch.ethg++;
+        publisher1.ethg++ <--> { datarate=100Mbps;} <--> switch.ethg++;
+        udp_sender.ethg++ <--> { datarate=100Mbps;} <--> switch.ethg++;
+        tcp_sender.ethg++ <--> { datarate=100Mbps;} <--> switch.ethg++;
+        switch.ethg++ <--> { datarate=100Mbps;} <--> udp_receiver.ethg++;
+        tcp_receiver.ethg++ <--> { datarate=100Mbps;} <--> switch.ethg++;
+        switch.ethg++ <--> { datarate=100Mbps;} <--> subscriber2.ethg++;
+        switch.ethg++ <--> { datarate=100Mbps;} <--> subscriber1.ethg++;
+        switch.ethg++ <--> { datarate=100Mbps;} <--> subscriber3.ethg++;
+        switch.ethg++ <--> { datarate=100Mbps;} <--> tsn_switch.ethg++;
 }

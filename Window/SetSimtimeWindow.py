@@ -44,13 +44,13 @@ class SetSimtimeWindow(QDialog):
         print(project)
         if os_type == "Windows":
             omnetpp_src = "D:/omnetpp-6.0/samples/inet4.5/src"
-            command = f"omnet_tools\\opp_run.exe -r 0 -m -u Cmdenv -c General -n {project};{omnetpp_src}; -l {omnetpp_src}/INET {project}Parameters.ini"
+            command = f"omnet_tools\\opp_run.exe -r 0 -m -u Cmdenv -c General -n {project};{omnetpp_src}; -l {omnetpp_src}/INET {project}/Parameters.ini"
             print(command)
             exit_code = os.system(command)
             print(f"仿真完毕 exit_code:{exit_code}")
         else:
             omnetpp_src = "/Users/shi/omnetpp_new/samples/inet4.5/src"
-            command = f"opp_run -r 0 -m -u Cmdenv -c General -n {project}:{omnetpp_src} -l {omnetpp_src}/INET {project}Parameters.ini"
+            command = f"opp_run -r 0 -m -u Cmdenv -c General -n {project}:{omnetpp_src} -l {omnetpp_src}/INET {project}/Parameters.ini"
             exit_code = os.system(command)
             print(f"仿真完毕 exit_code:{exit_code}")
         self.hide()

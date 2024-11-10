@@ -48,7 +48,7 @@ class ProjectInfo:
         self.directory = directory
         self.name = name
         self.fullname = directory + "/" + name
-        self.path = directory + "/" + name + "/"
+        self.path = directory + "/" + name
 
     def setPath(self, path):  # 比如 D:/fe/omnet_template/
         self.directory = path
