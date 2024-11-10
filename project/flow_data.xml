@@ -1,2 +1,8 @@
 <?xml version="1.0" ?>
-<Flows/>
+<Flows>
+    <Flow>
+        <node name="udp_cpu2"/>
+        <node name="udp_switch"/>
+        <node name="udp_cpu"/>
+    </Flow>
+</Flows>
