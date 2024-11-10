@@ -107,6 +107,7 @@ class JobSimQt(QMainWindow):
         QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(theme))
 
     def _startSoftware(self):
+        os.popen("mingwenv.cmd ide")
         return
 
     def setClicked(self):
