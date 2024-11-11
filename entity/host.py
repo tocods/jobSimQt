@@ -144,10 +144,31 @@ class TcpHost(Host):
 # 不同类型的Host类
 class RdmaHost(Host):
     def __init__(self, name):
-        super().__init__(name, "StandardHost")
+        super().__init__(name, "RoceHostNew")
 
     def generateINI(self, f):
-        return super().generateINI(f)
+        f.write(f"*.{self.name}.numApps = {len(self.appArgs)}\n")
+        for index, appArg in enumerate(self.appArgs):
+            f.write(f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n')
+            if appArg.get("source", False):
+                # 源主机配置
+                f.write(f'*.{self.name}.app[{index}].source.packetLength = {appArg["packetLength"]}B\n')
+                f.write(f'*.{self.name}.app[{index}].source.productionInterval = exponential({appArg["productionInterval"]})\n')
+                f.write(f'*.{self.name}.app[{index}].io.destAddress = "{appArg["destAddress"]}"\n')
+                f.write(f'*.{self.name}.app[{index}].io.destinationQueuePairNumber = {appArg["destinationQueuePairNumber"]}\n')
+                f.write(f'*.{self.name}.app[{index}].io.localQueuePairNumber = {appArg["localQueuePairNumber"]}\n')
+                f.write(f'*.{self.name}.app[{index}].io.pcp = {appArg["pcp"]}\n')
+                f.write(f'*.{self.name}.app[{index}].io.messageType = "{appArg["messageType"]}"\n')
+                f.write(f'*.{self.name}.app[{index}].sink.typename = ""\n')
+            else:
+                # 目的主机配置
+                f.write(f'*.{self.name}.app[{index}].io.localQueuePairNumber = {appArg["localQueuePairNumber"]}\n')
+                f.write(f'*.{self.name}.app[{index}].source.typename = ""\n')
+        f.write("\n")
+
+    def generateNED(self, f):
+        f.write(f"        {self.name}: {self.type} {{\n")
+        f.write("        }\n")
 
 
 class TsnHost(Host):

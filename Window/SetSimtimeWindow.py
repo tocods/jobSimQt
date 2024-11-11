@@ -93,6 +93,17 @@ class SetSimtimeWindow(QDialog):
                 f.write("import inet.node.ethernet.EthernetSwitch;\n")
                 f.write("network TargetNetwork extends WiredNetworkBase\n")
                 f.write("{\n")
+
+            if self.type_combo.currentText() == "Rdma":
+                f.write("import inet.node.rocev2.RoceHost;\n")
+                f.write("import inet.node.ethernet.Eth100M;\n")
+                f.write("import inet.node.rocev2.RoceHostNew;\n")
+                f.write("import inet.node.inet.StandardHost;\n")
+                f.write("import inet.node.rocev2.RoceSwitch;\n")
+                f.write("import inet.node.ethernet.EthernetSwitch;\n")
+                f.write("network TargetNetwork extends WiredNetworkBase\n")
+                f.write("{\n")
+            
             f.write("    submodules:\n")
             if self.type_combo.currentText() == "Tcp":
                 f.write("configurator: Ipv4NetworkConfigurator {}\n")
@@ -135,6 +146,8 @@ class SetSimtimeWindow(QDialog):
                 f.write(
                     "*.configurator.config = xml(\"<config><interface hosts='**' address='192.x.x.x' netmask='255.x.x.x'/></config>\")\n"
                 )
+            if self.type_combo.currentText() == "Rdma":
+                self.generateRdmaHeader(f)
             # TODO: 考虑source向多个destinations发包
             for i, host in enumerate(globaldata.hostList):
                 # hostAttr = host.hostAttr
@@ -175,3 +188,30 @@ class SetSimtimeWindow(QDialog):
         f.write("**.tcp.windowScalingSupport = false\n")
         f.write("**.tcp.timestampSupport = false\n")
         f.write("**.tcp.mss = 1452\n")
+
+    
+    def generateRdmaHeader(self, f):
+        f.write("*.rdma*.bridging.typename = \"BridgingLayer\"\n")
+        f.write("*.rdma*.bridging.macTableModule = \"\"\n")
+        f.write("*.rdma_switch*.bridging.directionReverser.reverser.forwardVlan = true\n")
+        f.write("*.rdma_switch*.bridging.directionReverser.reverser.forwardPcp = true\n")
+        f.write("*.rdma_host*.bridging.directionReverser.typename = \"\"\n")
+        f.write("*.rdma_host*.bridging.interfaceRelay.typename = \"\"\n")
+        f.write("*.rdma*.ieee8021q.typename = \"Ieee8021qProtocol\"\n")
+        f.write("*.rdma*.bridging.vlanPolicy.typename = \"VlanPolicyLayer\"\n")
+        f.write("*.rdma*.bridging.vlanPolicy.inboundFilter.acceptedVlanIds = {\"*\" : [-1]}\n")
+        f.write("*.rdma*.bridging.vlanPolicy.outboundFilter.acceptedVlanIds = {\"*\" : [-1]}\n")
+        f.write("*.rdma*.eth[*].macLayer.queue.typename = \"Ieee8021qTimeAwareShaper\"\n")
+        f.write("*.rdma*.eth[*].macLayer.queue.numTrafficClasses = 8\n")
+        f.write("*.rdma*.eth[*].macLayer.queue.transmissionGate[*] = \"\"\n")
+        f.write("*.rdma*.eth[*].macLayer.queue.transmissionSelectionAlgorithm[*] = \"QbbGate\"\n")
+        f.write("*.rdma_host*.eth[*].macLayer.queue.queue[*].dataCapacity = 16384b\n")
+        f.write("*.rdma_switch*.eth[*].macLayer.queue.queue[*].typename  = \"RedDropperQueue\"\n")
+        f.write("*.rdma_switch*.eth[*].macLayer.queue.queue[*].red.useEcn = true\n")
+        f.write("*.rdma_switch*.eth[*].macLayer.queue.queue[*].red.wq = 1.0\n")
+        f.write("*.rdma_switch*.eth[*].macLayer.queue.queue[*].red.minth = 0\n")
+        f.write("*.rdma_switch*.eth[*].macLayer.queue.queue[*].red.maxth = 6\n")
+        f.write("*.rdma_switch*.eth[*].macLayer.queue.queue[*].red.maxp = 1.0\n")
+        f.write("*.rdma_switch*.eth[*].macLayer.queue.queue[*].red.pkrate = 833.3333\n")
+        f.write("*.rdma_switch*.eth[*].macLayer.queue.queue[*].red.packetCapacity = 500\n")
+        f.write("*.rdma_switch*.eth[*].macLayer.queue.queue[*].fifo.dataCapacity = 16384b\n")
