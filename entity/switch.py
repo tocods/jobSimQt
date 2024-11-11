@@ -74,7 +74,7 @@ class TcpSwitch(Switch):
 # 不同类型的Switch类
 class RdmaSwitch(Switch):
     def __init__(self, name):
-        super().__init__(name, "EthernetSwitch")
+        super().__init__(name, "RoceSwitch")
 
 
 class TsnSwitch(Switch):

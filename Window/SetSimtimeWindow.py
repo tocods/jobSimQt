@@ -99,6 +99,12 @@ class SetSimtimeWindow(QDialog):
         f.write(f"import inet.node.inet.StandardHost;\n")
         f.write(f"import inet.node.ethernet.EthernetSwitch;\n")
         f.write(f"import inet.node.inet.DDSStandardHost;\n")
+
+        f.write("import inet.node.rocev2.RoceHost;\n")
+        f.write("import inet.node.rocev2.RoceHostNew;\n")
+        f.write("import inet.node.rocev2.RoceSwitch;\n")
+        f.write("import inet.transportLayer.contract.IRoce;\n")
+
         f.write(f'network TargetNetwork extends WiredNetworkBase\n')
         f.write(f'{"{"}\n')
         f.write('    submodules:\n')

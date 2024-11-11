@@ -197,7 +197,7 @@ class RdmaHost(Host):
             )
             f.write(f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n')
             f.write(
-                f'*.{self.name}.app[{index}].io.localQueuePairNumber = "{appArg["localQueuePairNumber"]}"\n'
+                f'*.{self.name}.app[{index}].io.localQueuePairNumber = {appArg["localQueuePairNumber"]}\n'
             )
             if len(appArg) > 2:
                 f.write(
@@ -214,13 +214,20 @@ class RdmaHost(Host):
                 )
                 f.write(f'*.{self.name}.app[{index}].io.pcp = {appArg["pcp"]}\n')
                 f.write(
-                    f'*.{self.name}.app[{index}].io.messageType = {appArg["messageType"]}\n'
+                    f'*.{self.name}.app[{index}].io.messageType = "{appArg["messageType"]}"\n'
+                )
+            else:
+                f.write(f'*.{self.name}.app[{index}].source.typename = ""\n')
+                f.write(
+                    f'*.{self.name}.app[{index}].sink.flowName = "QPN{appArg["localQueuePairNumber"]}"\n'
                 )
             f.write("\n")
 
     def generateNED(self, f):
         f.write(
-            f'        {self.name}: <default("rdmaDevice")> like IEthernetNetworkNode {{\n'
+            # f'        {self.name}: <default("RoceHostNew")> like IRoce {{\n'
+            
+            f'        {self.name}: RoceHostNew {{\n'
         )
         f.write("        }\n")
 
