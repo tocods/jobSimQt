@@ -54,6 +54,15 @@ class Host(NetworkDevice):
                 )
             f.write("\n")
 
+    def getNumber(self, s: str):
+        i = 0
+        while i < len(s):
+            if not str(s[i]).isdigit():
+                break
+            i = i + 1
+
+        return s[:i]
+
     def generateINIUdp(self, f, index):
         appArg = self.appArgs[index]
         if len(appArg) > 3:
@@ -86,9 +95,19 @@ class Host(NetworkDevice):
         f.write("        }\n")
 
     def setXMLElement(self, element):
+        packet_size = "100"
+        packet_interval = "100"
+        total_traffic = "1000"
+        for appArg in self.appArgs:
+            if appArg["typename"] == "UdpApp615" and len(appArg) > 3:
+                packet_interval = self.getNumber(appArg["productionInterval"])
+                packet_size = self.getNumber(appArg["packetLength"])
         element.set("name", self.name)
         element.set("type", self.type)
         element.set("ip", self.ip)
+        element.set("packet_size", packet_size)
+        element.set("packet_interval", packet_interval)
+        element.set("total_traffic", total_traffic)
         element.set("numApps", str(self.numApps))
         element.set("appArgs", json.dumps(self.appArgs))
         element.set("only_cpu", str(self.only_cpu))
@@ -206,13 +225,8 @@ class RdmaHost(Host):
         f.write("        }\n")
 
     def setXMLElement(self, element):
-        element.set("name", self.name)
-        element.set("type", self.type)
-        element.set("ip", self.ip)
-        element.set("numApps", str(self.numApps))
-        element.set("appArgs", json.dumps(self.appArgs))
+        super().setXMLElement(element)
         element.set("rdmaArgs", json.dumps(self.rdmaArgs))
-        element.set("only_cpu", str(self.only_cpu))
 
     def readXMLElement(self, element):
         self.ip = element.get("ip")
@@ -264,13 +278,8 @@ class TsnHost(Host):
         f.write("        }\n")
 
     def setXMLElement(self, element):
-        element.set("name", self.name)
-        element.set("type", self.type)
-        element.set("ip", self.ip)
-        element.set("numApps", str(self.numApps))
-        element.set("appArgs", json.dumps(self.appArgs))
+        super().setXMLElement(element)
         element.set("tsnArgs", json.dumps(self.tsnArgs))
-        element.set("only_cpu", str(self.only_cpu))
 
     def readXMLElement(self, element):
         self.ip = element.get("ip")
@@ -335,12 +344,7 @@ class DdsHost(Host):
         f.write("        }\n")
 
     def setXMLElement(self, element):
-        element.set("name", self.name)
-        element.set("type", self.type)
-        element.set("ip", self.ip)
-        element.set("numApps", str(self.numApps))
-        element.set("appArgs", json.dumps(self.appArgs))
-        element.set("only_cpu", str(self.only_cpu))
+        super().setXMLElement(element)
 
     def readXMLElement(self, element):
         self.ip = element.get("ip")

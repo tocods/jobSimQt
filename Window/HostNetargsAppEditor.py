@@ -452,7 +452,7 @@ class HostNetargsAppEditorDds(HostNetargsAppEditor):
 
     def add_source(self, source_type):
         udp_source = {
-            "typename": "UdpSourceApp",
+            "typename": "UdpApp615",
             "packetLength": "1000B",
             "productionInterval": "100us",
             "destAddress": "",
@@ -479,8 +479,8 @@ class HostNetargsAppEditorDds(HostNetargsAppEditor):
         self.update_table()
 
     def add_sink(self, sink_type):
-        udp_sink = {"typename": "UdpSinkApp", "localPort": ""}
-        tcp_sink = {"typename": "TcpSinkApp", "localPort": ""}
+        udp_sink = {"typename": "UdpApp615", "localPort": "", "flowName": "default"}
+        tcp_sink = {"typename": "TcpSinkApp", "localPort": "", "flowName": "default"}
         dds_sink = {
             "typename": "DDSSubscribeApp",
             "subscribeTopic": "Topic1",

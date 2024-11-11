@@ -133,15 +133,15 @@ def create_xml():
         host_element.set("graphic_pos_x", str(host_graphic_item.pos().x()))
         host_element.set("graphic_pos_y", str(host_graphic_item.pos().y()))
         host_element.set("graphic_image", host_graphic_item.para)
-        host_element.set("graphic_width", str(host_graphic_item.width))
-        host_element.set("graphic_height", str(host_graphic_item.height))
+        host_element.set("graphic_width", str(int(host_graphic_item.width)))
+        host_element.set("graphic_height", str(int(host_graphic_item.height)))
 
         host_graphic_item.hostAttr.setXMLElement(all_host_element)
         all_host_element.set("graphic_pos_x", str(host_graphic_item.pos().x()))
         all_host_element.set("graphic_pos_y", str(host_graphic_item.pos().y()))
         all_host_element.set("graphic_image", host_graphic_item.para)
-        all_host_element.set("graphic_width", str(host_graphic_item.width))
-        all_host_element.set("graphic_height", str(host_graphic_item.height))
+        all_host_element.set("graphic_width", str(int(host_graphic_item.width)))
+        all_host_element.set("graphic_height", str(int(host_graphic_item.height)))
 
     # Add switches
     switches_element = ET.SubElement(root, "Switches")
@@ -177,8 +177,8 @@ def create_xml():
         switch_element.set("graphic_pos_x", str(switch_graphic_item.pos().x()))
         switch_element.set("graphic_pos_y", str(switch_graphic_item.pos().y()))
         switch_element.set("graphic_image", switch_graphic_item.para)
-        switch_element.set("graphic_width", str(switch_graphic_item.width))
-        switch_element.set("graphic_height", str(switch_graphic_item.height))
+        switch_element.set("graphic_width", str(int(switch_graphic_item.width)))
+        switch_element.set("graphic_height", str(int(switch_graphic_item.height)))
 
     # Add links
     links_element = ET.SubElement(root, "Links")

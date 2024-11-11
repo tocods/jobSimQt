@@ -112,6 +112,7 @@ class UI:
         stack1.addTab(stack_1, "系统仿真")
         self.network_editor = NetworkEditorWindow()
         stack1.addTab(self.network_editor, "网络仿真")
+        stack1.setCurrentIndex(1)
         self.stack_widget.addWidget(stack1)
         stack2 = QWidget()
         self.resultui = Ui_Result()
