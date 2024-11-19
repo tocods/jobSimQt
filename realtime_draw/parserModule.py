@@ -1,6 +1,7 @@
 import os
 import re
 
+
 class ParserModule:
     def __init__(self, path):
         self.reopen(path)
@@ -10,17 +11,24 @@ class ParserModule:
         self.reload()
 
     def reload(self):
-        with open(os.path.join(self.path, "Parameters.ini"), "r", encoding="utf-8") as file:
+        with open(
+            os.path.join(self.path, "Parameters.ini"), "r", encoding="utf-8"
+        ) as file:
             configText = file.read()
             flowNameList = re.findall(r'\bflowName\s*=\s*"([^"]+)"', configText)
         self.flowNameList = flowNameList
+        self.flowNameLossList = []
+        for name in self.flowNameList:
+            self.flowNameLossList.append(name + "_loss")
         self.reset()
 
     def reset(self):
         self.latencyVectorList = []
         self.bufferVectorList = []
+        self.lossVectorList = []
         self.flowNameVector = {}
         self.hostNameVector = {}
+        self.flowNameLossVector = {}
         self.latencyResultX = {}
         self.latencyResultY = {}
         self.latencyResultMaxX = {}
@@ -31,6 +39,8 @@ class ParserModule:
         self.bufferResultMaxX = {}
         self.bufferResultMaxY = {}
         self.maxBuffer = 0.0
+
+        self.lossResult = {}
 
     def loadVectorConfigLine(self, line):
         strlist = line.split(" ")
@@ -45,12 +55,17 @@ class ParserModule:
                 self.latencyResultMaxY[id] = 0.0
             if strlist[3][:4] == "615.":
                 self.bufferVectorList.append(id)
-                host_name = strlist[3].split('.')[1]
+                host_name = strlist[3].split(".")[1]
                 self.hostNameVector[host_name] = id
                 self.bufferResultX[id] = []
                 self.bufferResultY[id] = []
                 self.bufferResultMaxX[id] = 0.0
                 self.bufferResultMaxY[id] = 0.0
+            if strlist[3] in self.flowNameLossList:
+                self.lossVectorList.append(id)
+                self.flowNameLossVector[strlist[3]] = id
+                self.lossResult[id] = 0.0
+                
 
     def loadDataLine(self, line):
         line_list = line.strip("\n").split("\t")
@@ -75,6 +90,9 @@ class ParserModule:
             self.bufferResultMaxY[id] = max(
                 self.bufferResultMaxY[id], float(line_list[3])
             )
+        elif id in self.lossVectorList:
+            self.lossResult[id] = max(self.lossResult[id], float(line_list[3]))
+
 
     def loadData(self):
         self.reload()

@@ -152,3 +152,40 @@ class BufferResultPlot(ResultPlot):
 
         ax.legend()
         self.canvas.draw()
+
+class LossResultPlot(ResultPlot):
+    def loadData(self):
+        self.parent.parser.loadData()
+        self.ui.listWidgetCheck.clear()
+        for flowName in self.parent.parser.flowNameLossList:
+            item = QListWidgetItem(self.ui.listWidgetCheck)
+            checkbox = QCheckBox(flowName)
+            item.setSizeHint(checkbox.sizeHint())
+            self.ui.listWidgetCheck.addItem(item)
+            self.ui.listWidgetCheck.setItemWidget(item, checkbox)
+
+    def display(self):
+        plotSelectedList = []
+        for i in range(self.ui.listWidgetCheck.count()):
+            item = self.ui.listWidgetCheck.item(i)
+            checkbox = self.ui.listWidgetCheck.itemWidget(item)
+            plotName = checkbox.text()
+            if checkbox.isChecked():
+                plotSelectedList.append(plotName)
+
+        self.figure.clear()
+        ax = self.figure.add_subplot(111)
+        ax.set_xlabel("flowName")
+        ax.set_ylabel("丢包率(%)")
+        ax.grid(True)
+
+        y = []
+        for plotName in plotSelectedList:
+            id = self.parent.parser.flowNameLossVector[plotName]
+            y.append(self.parent.parser.lossResult[id])
+        ax.set_ylim(0, 1)
+
+        ax.bar(plotSelectedList, y)
+
+        ax.legend()
+        self.canvas.draw()
