@@ -13,6 +13,7 @@ from Window.JsonArrayEditor import JsonArrayEditor
 class EditSwitchNetargsWindow(QDialog):
     def __init__(self, parent=None, type="Udp"):
         QDialog.__init__(self)
+        self.parent = parent
         self.ui = Ui_Dialog()
         self.type = type
         self.ui.setupUi(self)
@@ -57,6 +58,7 @@ class EditSwitchNetargsWindow(QDialog):
             f"Switch {self.switchGraphicItem.switchAttr.name} transmission_rate change to {item.text()}"
         )
         self.switchGraphicItem.switchAttr.transmission_rate = int(item.text())
+        self.parent.parent.update_tree_view()
         self.hide()
 
 
