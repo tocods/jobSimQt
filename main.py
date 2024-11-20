@@ -33,7 +33,7 @@ class JobSimQt(QMainWindow):
         super().__init__()
         self.start = Ui_start()
         self.start.setupUi(self)
-        self.setWindowFlags(Qt.FramelessWindowHint)
+        # self.setWindowFlags(Qt.FramelessWindowHint)
         self.center()
         self.history = []
         globaldata.readPath()

@@ -3,12 +3,18 @@ class NetworkDevice:
     name_registry = {}
 
     def __init__(self, name, device_type):
+        self.name = ""
         self.set_name(name)
         self.type = device_type
+
+    def del_name(self, name):
+        NetworkDevice.name_registry.pop(name)
 
     def set_name(self, name):
         # TODO: 检查名字是否符合omnet规范
         # 检查是否重名
+        if self.name in NetworkDevice.name_registry:
+            self.del_name(self.name)
         if name in NetworkDevice.name_registry:
             NetworkDevice.name_registry[name] += 1
             if not name + str(NetworkDevice.name_registry[name]) in NetworkDevice.name_registry:
