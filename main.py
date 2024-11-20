@@ -179,7 +179,8 @@ class JobSimQt(QMainWindow):
         action_name = self.sender().text()
         #self._ui.stack_widget.setCurrentIndex(0 if action_name == "运行仿真" else 1)
         if action_name == "系统管理评估平台":
-            os.popen(f"C:/Users/lenovo/AppData/Local/Microsoft/WindowsApps/python3.11.exe {globaldata.targetPath[0]} {project.projectPath}")
+            print(f"{globaldata.targetPath[0]} {project.projectPath}")
+            os.popen(f"{globaldata.targetPath[0]} {project.projectPath}")
         if action_name == "系统管理集成开发平台":
             self._startSoftware()
 

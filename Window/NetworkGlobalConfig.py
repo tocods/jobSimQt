@@ -79,8 +79,7 @@ class NetworkGlobalConfig(QWidget):
 
         editor = JsonArrayEditor(
             json_data,
-            ["stream", "pcp"],
-            ["default", "0"],
+            {"stream": "default", "pcp":"0"}
         )
         if editor.exec() == QDialog.DialogCode.Accepted:
             updated_data = editor.get_json_data()

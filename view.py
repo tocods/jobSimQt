@@ -7,7 +7,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QGraphicsView,
     QGraphicsLineItem,
     QGraphicsPathItem,
-    QGraphicsPixmapItem,
+    QGraphicsItemGroup,
 )
 from qdarktheme.qtpy.QtCore import Qt, QRect
 from qdarktheme.qtpy.QtGui import QPainter, QPen
@@ -128,10 +128,11 @@ class GraphicView(QGraphicsView):
         super().mousePressEvent(event)
         self.mouse_pos = event.pos()
         self.mouse_pos_item = self.get_item_at_pos(event)  # self.itemAt(self.mouse_pos)
-        # 如果是右键鼠标，弹出配置页
+        #  如果是右键鼠标，弹出配置页
         if event.button() == Qt.MouseButton.RightButton:
             # TODO：可判断更多类型的主机，引导至不同类型主机的配置界面
             # 主机
+            print(self.mouse_pos_item)
             if isinstance(self.mouse_pos_item, HostGraphicItem):
                 # self.edit_form = HostInfoForm(self.mouse_pos_item, self.jobSim)
                 self.setHostArgsWindow.binGraphicsItem(self.mouse_pos_item)
@@ -171,7 +172,10 @@ class GraphicView(QGraphicsView):
         area = QRect(pos.x() - 5, pos.y() - 5, 10, 10)
         if len(self.items(area)) == 0:
             return None
-        return self.items(area)[0]
+        result = self.items(area)[0]
+        # if result.type() == GraphicItem.type or result.type() == QGraphicsPathItem
+        result = result if result.type() == GraphicItem.type or isinstance(result, QGraphicsPathItem) else result.parentItem()
+        return result
 
     def get_items_at_rubber(self):
         """Get group select items."""
@@ -199,18 +203,29 @@ class GraphicView(QGraphicsView):
             else:
                 # 终点图元不能是起点图元，即无环图
                 if item is not self.drag_start_item:
-                    new_edge = Edge(self.gr_scene, self.drag_start_item, item)
-                    # 保存连接线
-                    new_edge.store()
-                    self.drag_start_item = None
-                    self.lineToolEnable()
+                    # 检查是否已经存在一条线
+                    existed = False
+                    for link in globaldata.linkList:
+                        if (
+                            link.start_item == self.drag_start_item
+                            and link.end_item == item
+                            or link.end_item == self.drag_start_item
+                            and link.start_item == item
+                        ):
+                            existed = True
+                    if not existed:
+                        new_edge = Edge(self.gr_scene, self.drag_start_item, item)
+                        # 保存连接线
+                        new_edge.store()
+                        self.drag_start_item = None
+                        # self.lineToolEnable()
                 else:
                     self.drag_start_item = None
 
     def delete_node(self):
         # 删除键
         item = self.mouse_pos_item
-        if isinstance(item, QGraphicsPixmapItem):
+        if isinstance(item, QGraphicsItemGroup):
             self.gr_scene.remove_node(item)
         if isinstance(item, QGraphicsPathItem):
             self.gr_scene.remove_edge(item)

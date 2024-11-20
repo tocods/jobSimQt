@@ -10,6 +10,7 @@ class Host(NetworkDevice):
         self.numApps = 0
         self.appArgs = []
         self.ip = "0.0.0.0"
+        self.mac = "00:1A:2B:3C:4D:5E"
         self.type = host_type
         self.only_cpu = True
 
@@ -105,6 +106,7 @@ class Host(NetworkDevice):
         element.set("name", self.name)
         element.set("type", self.type)
         element.set("ip", self.ip)
+        element.set("mac", self.mac)
         element.set("packet_size", packet_size)
         element.set("packet_interval", packet_interval)
         element.set("total_traffic", total_traffic)
@@ -114,6 +116,7 @@ class Host(NetworkDevice):
 
     def readXMLElement(self, element):
         self.ip = element.get("ip")
+        self.mac = element.get("mac")
         self.numApps = int(element.get("numApps"))
         self.appArgs = json.loads(element.get("appArgs"))
 
@@ -316,6 +319,9 @@ class DdsHost(Host):
                 f.write(
                     f'*.{self.name}.app[{index}].io.destPort = {appArg["destPort"]}\n'
                 )
+                f.write(
+                    f'*.{self.name}.app[{index}].io.historyCacheLength = {appArg["historyCacheLength"]}\n'
+                )
                 f.write(f"*.{self.name}.ipv4.ip.limitedBroadcast = true\n")
 
                 f.write(
@@ -335,6 +341,9 @@ class DdsHost(Host):
                 )
                 f.write(
                     f'*.{self.name}.app[{index}].io.localPort = {appArg["localPort"]}\n'
+                )
+                f.write(
+                    f'*.{self.name}.app[{index}].io.receiverBufferLength = {appArg["receiverBufferLength"]}\n'
                 )
                 f.write(
                     f'*.{self.name}.app[{index}].io.nackCountdown = {appArg["nackCountdown"]}\n'

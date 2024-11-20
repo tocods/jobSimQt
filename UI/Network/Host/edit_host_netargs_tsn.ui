@@ -67,6 +67,16 @@
         <string>TSN参数配置</string>
        </property>
       </row>
+      <row>
+       <property name="text">
+        <string>IP</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>MAC</string>
+       </property>
+      </row>
       <column>
        <property name="text">
         <string>值</string>

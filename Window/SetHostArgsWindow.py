@@ -13,7 +13,7 @@ class SetHostArgsWindow(QDialog):
         self.ui.setupUi(self)
         self.setWindowTitle("设置主机属性")
         # 编辑对象名称
-        self.ui.lineEdit_name.returnPressed.connect(self.lineEdit_name_cb)
+        self.ui.lineEdit_name.textEdited.connect(self.lineEdit_name_cb)
         # 编辑网络属性
         self.ui.netButton.clicked.connect(self.netButton_cb)
 
@@ -42,10 +42,13 @@ class SetHostArgsWindow(QDialog):
             self.ui.lineEdit_name.setText(self.hostGraphicItem.hostAttr.name)
 
         print("Host name: " + self.hostGraphicItem.hostAttr.name)
+        self.hostGraphicItem.setName(name)
 
         # 主机属性
         self.jobSim.hosts[self.item].name = name
         print("名称：" + name)
+
+        self.parent.parent.update_tree_view()
 
     def netButton_cb(self):
         self.hide()

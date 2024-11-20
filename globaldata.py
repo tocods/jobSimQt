@@ -214,7 +214,7 @@ def create_xml():
 def save_data():
     # Save the data to a file
     xml_str = create_xml()
-    with open(os.path.join(currentProjectInfo.path, "network_data.xml"), "w") as f:
+    with open(os.path.join(currentProjectInfo.path, "network_data.xml"), "w", encoding="utf-8") as f:
         f.write(xml_str)
 
 

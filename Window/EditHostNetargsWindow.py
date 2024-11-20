@@ -72,6 +72,12 @@ class EditHostNetargsWindowNormal(EditHostNetargsWindow):
         self.ui.tableWidget_netargs.item(0, 0).setFlags(
             Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
         )
+        self.ui.tableWidget_netargs.setItem(
+            2, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
+        )
+        self.ui.tableWidget_netargs.setItem(
+            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
+        )
 
     def open_json_object_array_editor(self):
         """打开 JSON 对象数组编辑器窗口"""
@@ -84,6 +90,7 @@ class EditHostNetargsWindowNormal(EditHostNetargsWindow):
             # 更新 JSON 数据
             self.tmp_appArgs = editor.get_json_data()
             self.tmp_numApps = len(self.tmp_appArgs)
+            print("111" + str(self.tmp_numApps))
             self.ui.tableWidget_netargs.setItem(
                 0, 0, QTableWidgetItem(str(self.tmp_numApps))
             )
@@ -132,6 +139,12 @@ class EditHostNetargsWindowUdp(EditHostNetargsWindow):
         self.ui.tableWidget_netargs.setCellWidget(1, 0, button)
         self.ui.tableWidget_netargs.item(0, 0).setFlags(
             Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
+        )
+        self.ui.tableWidget_netargs.setItem(
+            2, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
+        )
+        self.ui.tableWidget_netargs.setItem(
+            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
         )
 
     def open_json_object_array_editor(self):
@@ -190,6 +203,12 @@ class EditHostNetargsWindowTcp(EditHostNetargsWindow):
         self.ui.tableWidget_netargs.setCellWidget(1, 0, button)
         self.ui.tableWidget_netargs.item(0, 0).setFlags(
             Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
+        )
+        self.ui.tableWidget_netargs.setItem(
+            2, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
+        )
+        self.ui.tableWidget_netargs.setItem(
+            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
         )
 
     def open_json_object_array_editor(self):
@@ -253,6 +272,12 @@ class EditHostNetargsWindowRdma(EditHostNetargsWindow):
         self.ui.tableWidget_netargs.setCellWidget(1, 0, app_button)
         self.ui.tableWidget_netargs.item(0, 0).setFlags(
             Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
+        )
+        self.ui.tableWidget_netargs.setItem(
+            2, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
+        )
+        self.ui.tableWidget_netargs.setItem(
+            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
         )
 
     def open_appArgs_editor(self):
@@ -321,6 +346,12 @@ class EditHostNetargsWindowTsn(EditHostNetargsWindow):
         identifier_button.clicked.connect(lambda _: self.open_tsnArgs_editor())
         self.ui.tableWidget_netargs.setCellWidget(2, 0, identifier_button)
 
+        self.ui.tableWidget_netargs.setItem(
+            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
+        )
+        self.ui.tableWidget_netargs.setItem(
+            4, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
+        )
     def open_appArgs_editor(self):
         """打开 JSON 对象数组编辑器窗口"""
         json_data = self.tmp_appArgs.copy()
@@ -340,8 +371,11 @@ class EditHostNetargsWindowTsn(EditHostNetargsWindow):
 
         editor = JsonArrayEditor(
             json_data,
-            ["stream", "packetFilter", "pcp"],
-            ["best-effort", "expr(udp.destPort == 1000)", "0"],
+            {
+                "stream": "default",
+                "packetFilter": "expr(udp.destPort == 1000)",
+                "pcp": "0",
+            },
         )
         if editor.exec() == QDialog.DialogCode.Accepted:
             # 更新 JSON 数据
@@ -391,6 +425,12 @@ class EditHostNetargsWindowDds(EditHostNetargsWindow):
         self.ui.tableWidget_netargs.setCellWidget(1, 0, button)
         self.ui.tableWidget_netargs.item(0, 0).setFlags(
             Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
+        )
+        self.ui.tableWidget_netargs.setItem(
+            2, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
+        )
+        self.ui.tableWidget_netargs.setItem(
+            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
         )
 
     def open_json_object_array_editor(self):

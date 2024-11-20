@@ -20,7 +20,7 @@ class EditSwitchNetargsWindow(QDialog):
 
         self.switchGraphicItem = None
 
-        self.ui.lineEdit_name.returnPressed.connect(self.lineEdit_name_cb)
+        self.ui.lineEdit_name.textEdited.connect(self.lineEdit_name_cb)
 
         self.ui.applyButton.clicked.connect(self.apply_settings)
         self.hide()
@@ -45,6 +45,7 @@ class EditSwitchNetargsWindow(QDialog):
             # 若重名自动添加编号后缀时，更新画布上的交换机名称
             self.ui.lineEdit_name.setText(self.switchGraphicItem.switchAttr.name)
 
+        self.switchGraphicItem.setName(name)
         print("Switch name: " + self.switchGraphicItem.switchAttr.name)
 
     def on_cell_edited(self, row, col):
@@ -88,7 +89,7 @@ class EditSwitchNetargsWindowTsn(EditSwitchNetargsWindow):
         self.setWindowTitle("编辑交换机网络属性")
 
         self.switchGraphicItem = None
-        self.ui.lineEdit_name.returnPressed.connect(self.lineEdit_name_cb)
+        self.ui.lineEdit_name.textEdited.connect(self.lineEdit_name_cb)
 
         self.ui.applyButton.clicked.connect(self.apply_settings)
         self.hide()
@@ -125,8 +126,13 @@ class EditSwitchNetargsWindowTsn(EditSwitchNetargsWindow):
         # 打开编辑窗口
         editor = JsonArrayEditor(
             json_data,
-            ["display-name", "offset", "durations", "initiallyOpen", "packetCapacity"],
-            ["default", "0ms", "[0ms,10ms]", "true", "10000"],
+            {
+                "display-name": "default",
+                "offset": "0ms",
+                "durations": "[1ms, 10ms]",
+                "initiallyOpen": "true",
+                "packetCapacity": "100",
+            },
         )
         if editor.exec() == QDialog.DialogCode.Accepted:
             # 更新 JSON 数据

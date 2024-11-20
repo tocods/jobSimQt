@@ -68,6 +68,7 @@ class NetworkEditorWindow(QWidget):
         self.add_switch_menu = QMenu(self)
         menu_item_names = [
             "通用交换机",
+            "Rdma型交换机",
             "Tsn型交换机",
         ]
 
@@ -133,14 +134,17 @@ class NetworkEditorWindow(QWidget):
     def add_switch_menu_item_selected(self, index):
         name_list = [
             "switch",
+            "rdma_switch"
             "tsn_switch",
         ]
         type_list = [
             "EthernetSwitch",
             "EthernetSwitch",
+            "EthernetSwitch",
         ]
         img_list = [
             "img/Normal_Switch.png",
+            "img/RDMA_Switch.png",
             "img/TSN_Switch.png",
         ]
         class_list = [

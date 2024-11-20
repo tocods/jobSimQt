@@ -1,5 +1,7 @@
+D:/p7
 D:/project3
-D:/jobSimQt/project
+D:/project2
 D:/project6
+D:/jobSimQt/project
 D:/jobSimQt/project2
 D:/project
