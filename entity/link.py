@@ -1,6 +1,7 @@
 class Link:
     name_registry = {}
     def __init__(self, endpoint1, endpoint2, type):
+        self.name = ""
         self.set_name('Link')
 
         # 连接属性，初始化为默认值
@@ -13,6 +14,8 @@ class Link:
     def set_name(self, name):
         # TODO: 检查名字是否符合omnet规范
         # 检查是否重名
+        if self.name in Link.name_registry:
+            self.del_name(self.name)
         if name in Link.name_registry:         
             Link.name_registry[name] += 1
             # 当重名时，自动加上编号

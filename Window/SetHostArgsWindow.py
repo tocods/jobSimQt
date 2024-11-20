@@ -36,6 +36,7 @@ class SetHostArgsWindow(QDialog):
 
         # 网络属性，更新主机名称
         if name != self.hostGraphicItem.hostAttr.name:
+            #self.hostGraphicItem.hostAttr.del_name(self.hostGraphicItem.hostAttr.name)
             self.hostGraphicItem.hostAttr.set_name(name)
 
             # 若重名自动添加编号后缀时，更新画布上的主机名称
