@@ -61,6 +61,28 @@ class JobSimQt(QMainWindow):
         project.projectPath = path
         globaldata.currentProjectInfo.setFullPath(path)
         self._initOutputFiles()
+        # 保存当前文件路径
+        self.selfPath = os.path.dirname(os.path.abspath(__file__))
+        self.pathTxt = self.selfPath + "/path.txt"
+        if not os.path.isfile(self.pathTxt):
+            QMessageBox.information(self, "提示", "请先设置仿真工具路径", QMessageBox.Ok)
+            return
+        self.netSecruityPath = ""
+        self.grafanaPath = ""
+        self.javaPath = ""
+        with open(self.pathTxt, "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                # 移除换行符
+                line = line.strip('\n')
+                if line == "":
+                    continue
+                if line.startswith("netSecruity="):
+                    self.netSecruityPath = line.split("=")[1]
+                if line.startswith("grafana="):
+                    self.grafanaPath = line.split("=")[1]
+                if line.startswith("java="):
+                    self.javaPath = line.split("=")[1]
         # 取消标题栏
         #self.setWindowFlags(Qt.FramelessWindowHint)
         self.setWindowTitle("系统管理评估平台")
@@ -103,12 +125,12 @@ class JobSimQt(QMainWindow):
         if action_name == "微服务指标采集":
                     # 初始化一个page
             self.webview = QWebEngineView(self._ui.stack_3)
-            self.weburl="http://localhost:3000/d/IV0hu1m7z/windows-exporter-dashboard?var-interval=60s&from=now-2d&to=now&timezone=browser&var-server=localhost:9182&refresh=5s"
-            webbrowser.open("http://localhost:3000/d/IV0hu1m7z/windows-exporter-dashboard?var-interval=60s&from=now-2d&to=now&timezone=browser&var-server=localhost:9182&refresh=5s")
+            #self.weburl="http://localhost:3000/d/IV0hu1m7z/windows-exporter-dashboard?var-interval=60s&from=now-2d&to=now&timezone=browser&var-server=localhost:9182&refresh=5s"
+            webbrowser.open(self.grafanaPath)
             #self.save_cookies()
             #self.load_cookies()
             # 加载一个网页，以便产生一些 cookies
-            self.webview.page().load(QUrl(self.weburl))
+            self.webview.page().load(QUrl(self.grafanaPath))
             self.webview.show()
             #self.cookie_store.cookieAdded.connect(self.handlecookie))
             #页面加载完成执行
@@ -119,7 +141,7 @@ class JobSimQt(QMainWindow):
             self.webview.setGeometry(0, 0, screen_size.width() * 0.8, screen_size.height() * 0.8)
             #self._ui.stack_widget.setCurrentIndex(2)
         if action_name == "网络安全评估":
-            os.popen("D:\\NetworkDataSecurityAssessment\\run.bat")
+            os.popen(self.netSecruityPath)
     
     # def load_cookies(self):
     #     profile = self.webview.page().profile()
@@ -736,10 +758,14 @@ class JobSimQt(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv+["--no-sandbox"])
     print(sys.argv)
+    win = None
     # if hasattr(Qt.ApplicationAttribute, "AA_UseHighDpiPixmaps"):  # Enable High DPI display with Qt5
     #     app.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps)
     # QDir.addSearchPath("icons", f"{get_project_root_path().as_posix()}/widget_gallery/ui/svg")
-    win = JobSimQt(sys.argv[1])
+    if len(sys.argv) < 2:
+        win = JobSimQt(os.path.dirname(os.path.abspath(__file__)) + "/project")
+    else:
+        win = JobSimQt(sys.argv[1])
     win.menuBar().setNativeMenuBar(False)
     app.setStyleSheet(qdarktheme.load_stylesheet())
     win.show()

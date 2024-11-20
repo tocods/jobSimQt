@@ -1,0 +1,3 @@
+netSecurity=D:/可执行软件/网络安全分析软件/run.bat
+grafana=localhost:9090
+java=java
