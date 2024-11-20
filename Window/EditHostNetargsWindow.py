@@ -14,8 +14,10 @@ from qdarktheme.qtpy.QtCore import Qt
 
 
 class EditHostNetargsWindow(QDialog):
-    def __init__(self, parent=None, type="Udp"):
+    def __init__(self, parent=None, jobSim=None, type="Udp"):
         QDialog.__init__(self)
+        self.parent = parent
+        self.jobSim = jobSim
         self.ui = udp_ui()
         self.type = type
 
@@ -28,10 +30,28 @@ class EditHostNetargsWindow(QDialog):
     def apply_setting(self):
         print("Error:未指定类型")
 
+    def lineEdit_name_cb(self):
+        name = self.ui.tableWidget_netargs.item(0, 0).text()
+
+        # 网络属性，更新主机名称
+        if name != self.hostGraphicItem.hostAttr.name:
+            #self.hostGraphicItem.hostAttr.del_name(self.hostGraphicItem.hostAttr.name)
+            self.hostGraphicItem.hostAttr.set_name(name)
+
+        print("Host name: " + self.hostGraphicItem.hostAttr.name)
+        self.hostGraphicItem.setName(name)
+
+        # 主机属性
+        self.jobSim.hosts[self.hostGraphicItem].name = name
+        print("名称：" + name)
+
+        self.parent.parent.update_tree_view()
+
+
 
 class EditHostNetargsWindowNormal(EditHostNetargsWindow):
-    def __init__(self, parent=None, type="Udp"):
-        super().__init__(parent, type)
+    def __init__(self, parent=None, jobSim=None, type="Udp"):
+        super().__init__(parent, jobSim, type)
         self.ui = udp_ui()
         self.ui.setupUi(self)
         self.setWindowTitle("编辑主机网络属性")
@@ -45,7 +65,7 @@ class EditHostNetargsWindowNormal(EditHostNetargsWindow):
 
     def apply_setting(self):
         """app数量"""
-        item = self.ui.tableWidget_netargs.item(0, 0)
+        item = self.ui.tableWidget_netargs.item(1, 0)
         # 判断是否为整数
         if not item.text().isdigit():
             item.setText("0")
@@ -54,6 +74,7 @@ class EditHostNetargsWindowNormal(EditHostNetargsWindow):
         )
         self.hostGraphicItem.hostAttr.numApps = self.tmp_numApps
         self.hostGraphicItem.hostAttr.appArgs = self.tmp_appArgs
+        self.lineEdit_name_cb()
         self.hide()
 
     def setHostGraphicItem(self, hostGraphicItem):
@@ -64,19 +85,22 @@ class EditHostNetargsWindowNormal(EditHostNetargsWindow):
 
         # 将当前主机的属性显示在界面上
         self.ui.tableWidget_netargs.setItem(
-            0, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.numApps))
+            0, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.name))
+        )
+        self.ui.tableWidget_netargs.setItem(
+            1, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.numApps))
         )
         button = QPushButton("编辑应用参数")
         button.clicked.connect(self.open_json_object_array_editor)
-        self.ui.tableWidget_netargs.setCellWidget(1, 0, button)
-        self.ui.tableWidget_netargs.item(0, 0).setFlags(
+        self.ui.tableWidget_netargs.setCellWidget(2, 0, button)
+        self.ui.tableWidget_netargs.item(1, 0).setFlags(
             Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
         )
         self.ui.tableWidget_netargs.setItem(
-            2, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
+            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
         )
         self.ui.tableWidget_netargs.setItem(
-            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
+            4, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
         )
 
     def open_json_object_array_editor(self):
@@ -92,14 +116,14 @@ class EditHostNetargsWindowNormal(EditHostNetargsWindow):
             self.tmp_numApps = len(self.tmp_appArgs)
             print("111" + str(self.tmp_numApps))
             self.ui.tableWidget_netargs.setItem(
-                0, 0, QTableWidgetItem(str(self.tmp_numApps))
+                1, 0, QTableWidgetItem(str(self.tmp_numApps))
             )
             QMessageBox.information(self, "Success", "成功修改app参数")
 
 
 class EditHostNetargsWindowUdp(EditHostNetargsWindow):
-    def __init__(self, parent=None, type="Udp"):
-        super().__init__(parent, type)
+    def __init__(self, parent=None, jobSim=None, type="Udp"):
+        super().__init__(parent, jobSim, type)
         self.ui = udp_ui()
         self.ui.setupUi(self)
         self.setWindowTitle("编辑主机网络属性")
@@ -113,7 +137,7 @@ class EditHostNetargsWindowUdp(EditHostNetargsWindow):
 
     def apply_setting(self):
         """app数量"""
-        item = self.ui.tableWidget_netargs.item(0, 0)
+        item = self.ui.tableWidget_netargs.item(1, 0)
         # 判断是否为整数
         if not item.text().isdigit():
             item.setText("0")
@@ -122,6 +146,7 @@ class EditHostNetargsWindowUdp(EditHostNetargsWindow):
         )
         self.hostGraphicItem.hostAttr.numApps = self.tmp_numApps
         self.hostGraphicItem.hostAttr.appArgs = self.tmp_appArgs
+        self.lineEdit_name_cb()
         self.hide()
 
     def setHostGraphicItem(self, hostGraphicItem):
@@ -132,19 +157,22 @@ class EditHostNetargsWindowUdp(EditHostNetargsWindow):
 
         # 将当前主机的属性显示在界面上
         self.ui.tableWidget_netargs.setItem(
-            0, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.numApps))
+            0, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.name))
+        )
+        self.ui.tableWidget_netargs.setItem(
+            1, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.numApps))
         )
         button = QPushButton("编辑应用参数")
         button.clicked.connect(lambda _: self.open_json_object_array_editor())
-        self.ui.tableWidget_netargs.setCellWidget(1, 0, button)
-        self.ui.tableWidget_netargs.item(0, 0).setFlags(
+        self.ui.tableWidget_netargs.setCellWidget(2, 0, button)
+        self.ui.tableWidget_netargs.item(1, 0).setFlags(
             Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
         )
         self.ui.tableWidget_netargs.setItem(
-            2, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
+            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
         )
         self.ui.tableWidget_netargs.setItem(
-            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
+            4, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
         )
 
     def open_json_object_array_editor(self):
@@ -159,14 +187,14 @@ class EditHostNetargsWindowUdp(EditHostNetargsWindow):
             self.tmp_appArgs = editor.get_json_data()
             self.tmp_numApps = len(self.tmp_appArgs)
             self.ui.tableWidget_netargs.setItem(
-                0, 0, QTableWidgetItem(str(self.tmp_numApps))
+                1, 0, QTableWidgetItem(str(self.tmp_numApps))
             )
             QMessageBox.information(self, "Success", "成功修改app参数")
 
 
 class EditHostNetargsWindowTcp(EditHostNetargsWindow):
-    def __init__(self, parent=None, type="Tcp"):
-        super().__init__(parent, type)
+    def __init__(self, parent=None, jobSim=None, type="Tcp"):
+        super().__init__(parent, jobSim, type)
         self.ui = udp_ui()
         self.ui.setupUi(self)
         self.setWindowTitle("编辑主机网络属性")
@@ -179,7 +207,7 @@ class EditHostNetargsWindowTcp(EditHostNetargsWindow):
         self.hide()
 
     def apply_setting(self):
-        item = self.ui.tableWidget_netargs.item(0, 0)
+        item = self.ui.tableWidget_netargs.item(1, 0)
         if not item.text().isdigit():
             item.setText("0")
         print(
@@ -187,6 +215,7 @@ class EditHostNetargsWindowTcp(EditHostNetargsWindow):
         )
         self.hostGraphicItem.hostAttr.numApps = self.tmp_numApps
         self.hostGraphicItem.hostAttr.appArgs = self.tmp_appArgs
+        self.lineEdit_name_cb()
         self.hide()
 
     def setHostGraphicItem(self, hostGraphicItem):
@@ -196,19 +225,22 @@ class EditHostNetargsWindowTcp(EditHostNetargsWindow):
         self.hostGraphicItem = hostGraphicItem
 
         self.ui.tableWidget_netargs.setItem(
-            0, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.numApps))
+            0, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.name))
+        )
+        self.ui.tableWidget_netargs.setItem(
+            1, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.numApps))
         )
         button = QPushButton("编辑应用参数")
         button.clicked.connect(lambda _: self.open_json_object_array_editor())
-        self.ui.tableWidget_netargs.setCellWidget(1, 0, button)
-        self.ui.tableWidget_netargs.item(0, 0).setFlags(
+        self.ui.tableWidget_netargs.setCellWidget(2, 0, button)
+        self.ui.tableWidget_netargs.item(1, 0).setFlags(
             Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
         )
         self.ui.tableWidget_netargs.setItem(
-            2, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
+            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
         )
         self.ui.tableWidget_netargs.setItem(
-            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
+            4, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
         )
 
     def open_json_object_array_editor(self):
@@ -221,14 +253,14 @@ class EditHostNetargsWindowTcp(EditHostNetargsWindow):
             self.tmp_appArgs = editor.get_json_data()
             self.tmp_numApps = len(self.tmp_appArgs)
             self.ui.tableWidget_netargs.setItem(
-                0, 0, QTableWidgetItem(str(self.tmp_numApps))
+                1, 0, QTableWidgetItem(str(self.tmp_numApps))
             )
             QMessageBox.information(self, "Success", "成功修改app参数")
 
 
 class EditHostNetargsWindowRdma(EditHostNetargsWindow):
-    def __init__(self, parent=None, type="Rdma"):
-        super().__init__(parent, type)
+    def __init__(self, parent=None, jobSim=None, type="Rdma"):
+        super().__init__(parent, jobSim, type)
         self.ui = rdma_ui()
         self.ui.setupUi(self)
         self.setWindowTitle("编辑主机网络属性")
@@ -243,7 +275,7 @@ class EditHostNetargsWindowRdma(EditHostNetargsWindow):
 
     def apply_setting(self):
         """app数量"""
-        item = self.ui.tableWidget_netargs.item(0, 0)
+        item = self.ui.tableWidget_netargs.item(1, 0)
         # 判断是否为整数
         if not item.text().isdigit():
             item.setText("0")
@@ -253,6 +285,7 @@ class EditHostNetargsWindowRdma(EditHostNetargsWindow):
         self.hostGraphicItem.hostAttr.numApps = self.tmp_numApps
         self.hostGraphicItem.hostAttr.appArgs = self.tmp_appArgs
         self.hostGraphicItem.hostAttr.rdmaArgs = self.tmp_rdmaArgs
+        self.lineEdit_name_cb()
 
         self.hide()
 
@@ -265,19 +298,22 @@ class EditHostNetargsWindowRdma(EditHostNetargsWindow):
 
         # 将当前主机的属性显示在界面上
         self.ui.tableWidget_netargs.setItem(
-            0, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.numApps))
+            0, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.name))
+        )
+        self.ui.tableWidget_netargs.setItem(
+            1, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.numApps))
         )
         app_button = QPushButton("编辑应用参数")
         app_button.clicked.connect(lambda _: self.open_appArgs_editor())
-        self.ui.tableWidget_netargs.setCellWidget(1, 0, app_button)
-        self.ui.tableWidget_netargs.item(0, 0).setFlags(
+        self.ui.tableWidget_netargs.setCellWidget(2, 0, app_button)
+        self.ui.tableWidget_netargs.item(1, 0).setFlags(
             Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
         )
         self.ui.tableWidget_netargs.setItem(
-            2, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
+            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
         )
         self.ui.tableWidget_netargs.setItem(
-            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
+            4, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
         )
 
     def open_appArgs_editor(self):
@@ -289,14 +325,14 @@ class EditHostNetargsWindowRdma(EditHostNetargsWindow):
             self.tmp_appArgs = editor.get_json_data()
             self.tmp_numApps = len(self.tmp_appArgs)
             self.ui.tableWidget_netargs.setItem(
-                0, 0, QTableWidgetItem(str(self.tmp_numApps))
+                1, 0, QTableWidgetItem(str(self.tmp_numApps))
             )
             QMessageBox.information(self, "Success", "应用参数已保存")
 
 
 class EditHostNetargsWindowTsn(EditHostNetargsWindow):
-    def __init__(self, parent=None, type="Tsn"):
-        super().__init__(parent, type)
+    def __init__(self, parent=None, jobSim=None, type="Tsn"):
+        super().__init__(parent, jobSim, type)
         self.ui = tsn_ui()
         self.ui.setupUi(self)
         self.setWindowTitle("编辑主机网络属性")
@@ -311,7 +347,7 @@ class EditHostNetargsWindowTsn(EditHostNetargsWindow):
 
     def apply_setting(self):
         """app数量"""
-        item = self.ui.tableWidget_netargs.item(0, 0)
+        item = self.ui.tableWidget_netargs.item(1, 0)
         # 判断是否为整数
         if not item.text().isdigit():
             item.setText("0")
@@ -321,6 +357,7 @@ class EditHostNetargsWindowTsn(EditHostNetargsWindow):
         self.hostGraphicItem.hostAttr.numApps = self.tmp_numApps
         self.hostGraphicItem.hostAttr.appArgs = self.tmp_appArgs
         self.hostGraphicItem.hostAttr.tsnArgs = self.tmp_tsnArgs
+        self.lineEdit_name_cb()
 
         self.hide()
 
@@ -333,24 +370,27 @@ class EditHostNetargsWindowTsn(EditHostNetargsWindow):
 
         # 将当前主机的属性显示在界面上
         self.ui.tableWidget_netargs.setItem(
-            0, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.numApps))
+            0, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.name))
+        )
+        self.ui.tableWidget_netargs.setItem(
+            1, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.numApps))
         )
         app_button = QPushButton("编辑应用参数")
         app_button.clicked.connect(lambda _: self.open_appArgs_editor())
-        self.ui.tableWidget_netargs.setCellWidget(1, 0, app_button)
-        self.ui.tableWidget_netargs.item(0, 0).setFlags(
+        self.ui.tableWidget_netargs.setCellWidget(2, 0, app_button)
+        self.ui.tableWidget_netargs.item(1, 0).setFlags(
             Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
         )
 
         identifier_button = QPushButton("编辑TSN参数")
         identifier_button.clicked.connect(lambda _: self.open_tsnArgs_editor())
-        self.ui.tableWidget_netargs.setCellWidget(2, 0, identifier_button)
+        self.ui.tableWidget_netargs.setCellWidget(3, 0, identifier_button)
 
         self.ui.tableWidget_netargs.setItem(
-            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
+            4, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
         )
         self.ui.tableWidget_netargs.setItem(
-            4, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
+            5, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
         )
     def open_appArgs_editor(self):
         """打开 JSON 对象数组编辑器窗口"""
@@ -362,7 +402,7 @@ class EditHostNetargsWindowTsn(EditHostNetargsWindow):
             self.tmp_appArgs = editor.get_json_data()
             self.tmp_numApps = len(self.tmp_appArgs)
             self.ui.tableWidget_netargs.setItem(
-                0, 0, QTableWidgetItem(str(self.tmp_numApps))
+                1, 0, QTableWidgetItem(str(self.tmp_numApps))
             )
             QMessageBox.information(self, "Success", "应用参数已保存")
 
@@ -384,8 +424,8 @@ class EditHostNetargsWindowTsn(EditHostNetargsWindow):
 
 
 class EditHostNetargsWindowDds(EditHostNetargsWindow):
-    def __init__(self, parent=None, type="Dds"):
-        super().__init__(parent, type)
+    def __init__(self, parent=None, jobSim=None, type="Dds"):
+        super().__init__(parent, jobSim, type)
         self.ui = dds_ui()
         self.ui.setupUi(self)
         self.setWindowTitle("编辑主机网络属性")
@@ -399,7 +439,7 @@ class EditHostNetargsWindowDds(EditHostNetargsWindow):
 
     def apply_setting(self):
         """app数量"""
-        item = self.ui.tableWidget_netargs.item(0, 0)
+        item = self.ui.tableWidget_netargs.item(1, 0)
         # 判断是否为整数
         if not item.text().isdigit():
             item.setText("0")
@@ -408,6 +448,7 @@ class EditHostNetargsWindowDds(EditHostNetargsWindow):
         )
         self.hostGraphicItem.hostAttr.numApps = self.tmp_numApps
         self.hostGraphicItem.hostAttr.appArgs = self.tmp_appArgs
+        self.lineEdit_name_cb()
         self.hide()
 
     def setHostGraphicItem(self, hostGraphicItem):
@@ -418,19 +459,22 @@ class EditHostNetargsWindowDds(EditHostNetargsWindow):
 
         # 将当前主机的属性显示在界面上
         self.ui.tableWidget_netargs.setItem(
-            0, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.numApps))
+            0, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.name))
+        )
+        self.ui.tableWidget_netargs.setItem(
+            1, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.numApps))
         )
         button = QPushButton("编辑应用参数")
         button.clicked.connect(lambda _: self.open_json_object_array_editor())
-        self.ui.tableWidget_netargs.setCellWidget(1, 0, button)
-        self.ui.tableWidget_netargs.item(0, 0).setFlags(
+        self.ui.tableWidget_netargs.setCellWidget(2, 0, button)
+        self.ui.tableWidget_netargs.item(1, 0).setFlags(
             Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
         )
         self.ui.tableWidget_netargs.setItem(
-            2, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
+            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.ip))
         )
         self.ui.tableWidget_netargs.setItem(
-            3, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
+            4, 0, QTableWidgetItem(str(self.hostGraphicItem.hostAttr.mac))
         )
 
     def open_json_object_array_editor(self):
@@ -445,6 +489,6 @@ class EditHostNetargsWindowDds(EditHostNetargsWindow):
             self.tmp_appArgs = editor.get_json_data()
             self.tmp_numApps = len(self.tmp_appArgs)
             self.ui.tableWidget_netargs.setItem(
-                0, 0, QTableWidgetItem(str(self.tmp_numApps))
+                1, 0, QTableWidgetItem(str(self.tmp_numApps))
             )
             QMessageBox.information(self, "Success", "成功修改app参数")

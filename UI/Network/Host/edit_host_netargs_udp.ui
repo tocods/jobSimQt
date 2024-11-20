@@ -67,6 +67,11 @@
    </attribute>
    <row>
     <property name="text">
+     <string>名称</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
      <string>app数量</string>
     </property>
    </row>
@@ -90,7 +95,7 @@
      <string>值</string>
     </property>
    </column>
-   <item row="0" column="0">
+   <item row="1" column="0">
     <property name="text">
      <string/>
     </property>
@@ -98,7 +103,7 @@
      <set>AlignCenter</set>
     </property>
    </item>
-   <item row="1" column="0">
+   <item row="2" column="0">
     <property name="text">
      <string/>
     </property>

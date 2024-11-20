@@ -2,7 +2,6 @@ from Window.EditHostNetargsWindow import *
 from Window.EditLinkArgsWindow import EditLinkArgsWindow
 from Window.EditSwitchNetargsWindow import *
 import globaldata
-from Window.SetHostArgsWindow import SetHostArgsWindow
 from qdarktheme.qtpy.QtWidgets import (
     QGraphicsView,
     QGraphicsLineItem,
@@ -32,13 +31,12 @@ class GraphicView(QGraphicsView):
         # self.edge_enable = False # 用来记录目前是否可以画线条
         self.drag_start_item = None
         # 子界面
-        self.setHostArgsWindow = SetHostArgsWindow(self, sysSim)  # 将自己作为parent传入
-        self.editHostNetargsWindowNormal = EditHostNetargsWindowNormal(self)
-        self.editHostNetargsWindowUdp = EditHostNetargsWindowUdp(self)
-        self.editHostNetargsWindowTcp = EditHostNetargsWindowTcp(self)
-        self.editHostNetargsWindowRdma = EditHostNetargsWindowRdma(self)
-        self.editHostNetargsWindowTsn = EditHostNetargsWindowTsn(self)
-        self.editHostNetargsWindowDds = EditHostNetargsWindowDds(self)
+        self.editHostNetargsWindowNormal = EditHostNetargsWindowNormal(self, sysSim)
+        self.editHostNetargsWindowUdp = EditHostNetargsWindowUdp(self, sysSim)
+        self.editHostNetargsWindowTcp = EditHostNetargsWindowTcp(self, sysSim)
+        self.editHostNetargsWindowRdma = EditHostNetargsWindowRdma(self, sysSim)
+        self.editHostNetargsWindowTsn = EditHostNetargsWindowTsn(self, sysSim)
+        self.editHostNetargsWindowDds = EditHostNetargsWindowDds(self, sysSim)
 
         self.editSwitchNetargsWindowUdp = EditSwitchNetargsWindowUdp(self)
         self.editSwitchNetargsWindowTsn = EditSwitchNetargsWindowTsn(self)
@@ -123,6 +121,26 @@ class GraphicView(QGraphicsView):
         else:
             super().keyPressEvent(event)
 
+    def openHostEditor(self, item):
+        if isinstance(item.hostAttr, NormalHost):
+            self.editHostNetargsWindowNormal.setHostGraphicItem(item)
+            self.editHostNetargsWindowNormal.show()
+        if isinstance(item.hostAttr, UdpHost):
+            self.editHostNetargsWindowUdp.setHostGraphicItem(item)
+            self.editHostNetargsWindowUdp.show()
+        if isinstance(item.hostAttr, TsnHost):
+            self.editHostNetargsWindowTsn.setHostGraphicItem(item)
+            self.editHostNetargsWindowTsn.show()
+        if isinstance(item.hostAttr, TcpHost):
+            self.editHostNetargsWindowTcp.setHostGraphicItem(item)
+            self.editHostNetargsWindowTcp.show()
+        if isinstance(item.hostAttr, DdsHost):
+            self.editHostNetargsWindowDds.setHostGraphicItem(item)
+            self.editHostNetargsWindowDds.show()
+        if isinstance(item.hostAttr, RdmaHost):
+            self.editHostNetargsWindowRdma.setHostGraphicItem(item)
+            self.editHostNetargsWindowRdma.show()
+
     def mousePressEvent(self, event):
         # 点击鼠标时更新“位置”和“鼠标所在图元”
         super().mousePressEvent(event)
@@ -134,11 +152,8 @@ class GraphicView(QGraphicsView):
             # 主机
             print(self.mouse_pos_item)
             if isinstance(self.mouse_pos_item, HostGraphicItem):
-                # self.edit_form = HostInfoForm(self.mouse_pos_item, self.jobSim)
-                self.setHostArgsWindow.binGraphicsItem(self.mouse_pos_item)
-                # 将 主机图形对象 和 其中包含的主机属性信息对象 传递至属性设置界面
-                self.setHostArgsWindow.setHostGraphicItem(self.mouse_pos_item)
-                self.setHostArgsWindow.show()
+                self.openHostEditor(self.mouse_pos_item)
+
                 return
             # 交换机
             elif isinstance(self.mouse_pos_item, SwitchGraphicItem):
@@ -174,7 +189,12 @@ class GraphicView(QGraphicsView):
             return None
         result = self.items(area)[0]
         # if result.type() == GraphicItem.type or result.type() == QGraphicsPathItem
-        result = result if result.type() == GraphicItem.type or isinstance(result, QGraphicsPathItem) else result.parentItem()
+        result = (
+            result
+            if result.type() == GraphicItem.type
+            or isinstance(result, QGraphicsPathItem)
+            else result.parentItem()
+        )
         return result
 
     def get_items_at_rubber(self):
