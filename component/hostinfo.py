@@ -302,7 +302,7 @@ class Ui_HostInfo(object):
         self.label_7.setText(QCoreApplication.translate("HostInfo", u"CPU\u4fe1\u606f", None))
         self.label_8.setText(QCoreApplication.translate("HostInfo", u"CPU\u6570:", None))
         self.label_9.setText(QCoreApplication.translate("HostInfo", u"CPU\u6838\u6570:", None))
-        self.label_10.setText(QCoreApplication.translate("HostInfo", u"\u6838FLOPS:", None))
+        self.label_10.setText(QCoreApplication.translate("HostInfo", u"\u6838GFLOPS:", None))
         self.label_11.setText(QCoreApplication.translate("HostInfo", u"GPU\u4fe1\u606f", None))
         self.label_12.setText("")
         self.pushButton.setText("")
