@@ -61,12 +61,35 @@ class JobSimQt(QMainWindow):
         project.projectPath = path
         globaldata.currentProjectInfo.setFullPath(path)
         self._initOutputFiles()
+        # 保存当前文件路径
+        self.selfPath = os.path.dirname(os.path.abspath(__file__))
+        self.pathTxt = self.selfPath + "/path.txt"
+        if not os.path.isfile(self.pathTxt):
+            QMessageBox.information(self, "提示", "请先设置仿真工具路径", QMessageBox.Ok)
+            return
+        self.netSecruityPath = ""
+        self.grafanaPath = ""
+        self.javaPath = ""
+        with open(self.pathTxt, "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                # 移除换行符
+                line = line.strip('\n')
+                if line == "":
+                    continue
+                if line.startswith("netSecurity="):
+                    self.netSecurityPath = line.split("=")[1]
+                if line.startswith("grafana="):
+                    self.grafanaPath = line.split("=")[1]
+                if line.startswith("java="):
+                    self.javaPath = line.split("=")[1]
         # 取消标题栏
         #self.setWindowFlags(Qt.FramelessWindowHint)
         self.setWindowTitle("系统管理评估平台")
+        self.setWindowIcon(QIcon(self.selfPath + "/img/数据.png"))
         self.nowClect = None
         self._ui = UI()
-        self._ui.setup_ui(self)
+        self._ui.setup_ui(self, self.selfPath)
         self._ui.stack_widget.setCurrentIndex(0)
         # Signal
         self._ui.action_change_home.triggered.connect(self._change_page)
@@ -102,13 +125,16 @@ class JobSimQt(QMainWindow):
             self._ui.stack_widget.setCurrentIndex(1)
         if action_name == "微服务指标采集":
                     # 初始化一个page
+            if self.grafanaPath == "":
+                QMessageBox.information(self, "提示", "缺少微服务指标采集页面路径", QMessageBox.Ok)
+                return
             self.webview = QWebEngineView(self._ui.stack_3)
-            self.weburl="http://localhost:3000/d/IV0hu1m7z/windows-exporter-dashboard?var-interval=60s&from=now-2d&to=now&timezone=browser&var-server=localhost:9182&refresh=5s"
-            webbrowser.open("http://localhost:3000/d/IV0hu1m7z/windows-exporter-dashboard?var-interval=60s&from=now-2d&to=now&timezone=browser&var-server=localhost:9182&refresh=5s")
+            #self.weburl="http://localhost:3000/d/IV0hu1m7z/windows-exporter-dashboard?var-interval=60s&from=now-2d&to=now&timezone=browser&var-server=localhost:9182&refresh=5s"
+            webbrowser.open(self.grafanaPath)
             #self.save_cookies()
             #self.load_cookies()
             # 加载一个网页，以便产生一些 cookies
-            self.webview.page().load(QUrl(self.weburl))
+            self.webview.page().load(QUrl(self.grafanaPath))
             self.webview.show()
             #self.cookie_store.cookieAdded.connect(self.handlecookie))
             #页面加载完成执行
@@ -315,7 +341,10 @@ class JobSimQt(QMainWindow):
         formatted_xml_str = parsed_xml_str.toprettyxml(indent="    ")
         with open(project.projectPath + "/flow_data.xml", "w") as f:
             f.write(formatted_xml_str)
-        # subprocess.run("cd java; cd bin; java.exe -jar discoDNCxin.jar " + project.projectPath + "/network_data.xml " + project.projectPath + "/flow_data.xml " + project.projectPath + "/OutputFiles")
+        if self.javaPath == "":
+            QMessageBox.information(self, "提示", "缺少java路径", QMessageBox.Ok)
+            return
+        subprocess.run(self.javaPath + " -jar discoDNCxin.jar " + project.projectPath + "/network_data.xml " + project.projectPath + "/flow_data.xml " + project.projectPath + "/OutputFiles")
         self.readNetResult()
         self.__printNet()
 
@@ -466,12 +495,12 @@ class JobSimQt(QMainWindow):
     def __printNet(self):
         self.screne = QGraphicsScene()
         for host in self.netHosts.values():
-            p = GraphicItem(host.image, host.name, self)
+            p = GraphicItem(self.selfPath + "/" + host.image, host.name, self)
             self.netHostsPic[host.name] = p
             self.screne.addItem(p)
             p.setPos(float(host.x), float(host.y))
         for switch in self.netSwtichs.values():
-            p = GraphicItem(switch.image, switch.name, self)
+            p = GraphicItem(self.selfPath + "/" + switch.image, switch.name, self)
             self.netSwtichsPic[switch.name] = p
             self.screne.addItem(p)
             p.setPos(float(switch.x), float(switch.y))
@@ -617,6 +646,12 @@ class JobSimQt(QMainWindow):
             self.hostTable.setCellWidget(i, 4, seeMore)
             i += 1
         self._ui.resultui.hostTabs.addTab(self.hostTable, "主机利用率")
+        self.hostMore = QTableWidget()
+        self.hostMore.verticalHeader().setVisible(False)
+        self.hostMore.horizontalHeader().setVisible(True)
+        self.hostMore.setColumnCount(4)
+        self.hostMore.setHorizontalHeaderLabels(["时间", "CPU(%)", "内存(%)", "GPU(%)"])
+        self._ui.resultui.hostTabs.addTab(self.hostMore, "主机详细信息")
 
         # 填充任务信息表格
         job_num = len(self.job_results)
@@ -701,6 +736,24 @@ class JobSimQt(QMainWindow):
         self.ramshow.setChart(chartRam)
         chartGPU = self.painter.plotGpuUtilization(hostName, -1, -1, float("inf"))
         self.gpushow.setChart(chartGPU)
+        hostR = None
+        for hostRecord in self.cluster_result.hostRecords:
+            if hostRecord.hostName == hostName:
+                hostR = hostRecord
+                break
+        if hostR == None:
+            return
+        self.hostMore.setRowCount(len(hostR.hostUtilizations))
+        for i in range(len(hostR.hostUtilizations)):
+            self.hostMore.setItem(i, 0, QTableWidgetItem(hostR.hostUtilizations[i].time))
+
+            self.hostMore.setItem(i, 1, QTableWidgetItem(str(100 * float(hostR.hostUtilizations[i].cpuUtilization))))
+            self.hostMore.setItem(i, 2, QTableWidgetItem(str(100 *float(hostR.hostUtilizations[i].ramUtilization))))
+            gpuStr = ""
+            for gpu in hostR.hostUtilizations[i].gpuUtilizations:
+                gpuStr += str(100 * float(gpu.utilization)) + "/"
+            self.hostMore.setItem(i, 3, QTableWidgetItem(gpuStr))
+        self._ui.resultui.hostTabs.setCurrentIndex(1)
 
     def _initJobChartView(self, jobRecord):
         # 清除jobRunTable表格
@@ -749,10 +802,14 @@ class JobSimQt(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv+["--no-sandbox"])
     print(sys.argv)
+    win = None
     # if hasattr(Qt.ApplicationAttribute, "AA_UseHighDpiPixmaps"):  # Enable High DPI display with Qt5
     #     app.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps)
     # QDir.addSearchPath("icons", f"{get_project_root_path().as_posix()}/widget_gallery/ui/svg")
-    win = JobSimQt(sys.argv[1])
+    if len(sys.argv) < 2:
+        win = JobSimQt(os.path.dirname(os.path.abspath(__file__)) + "/project")
+    else:
+        win = JobSimQt(sys.argv[1])
     win.menuBar().setNativeMenuBar(False)
     app.setStyleSheet(qdarktheme.load_stylesheet())
     win.show()

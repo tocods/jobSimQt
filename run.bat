@@ -1,1 +1,1 @@
-python main.py D:/project
+python main.py
