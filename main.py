@@ -1224,7 +1224,7 @@ class JobSimQt(QMainWindow):
             QMessageBox.information(self, "", "未设置任务信息")
             self._ui.central_window.centralWidget().setEnabled(True)
             return
-        execute = globaldata.targetPath[3] + " -jar ./jobSim/gpuworkflowsim.jar " + project.projectPath + "/OutputFiles " + project.projectPath + "/hosts.json " + project.projectPath + "/jobs.json " + project.projectPath + "/faults.json " + str(0) + " " + str(self.duration)
+        execute = globaldata.targetPath[2] + " -jar ./jobSim/gpuworkflowsim.jar " + project.projectPath + "/OutputFiles " + project.projectPath + "/hosts.json " + project.projectPath + "/jobs.json " + project.projectPath + "/faults.json " + str(0) + " " + str(self.duration)
         print(execute)
         popen = subprocess.Popen(execute, shell=True, stdout=subprocess.PIPE,  universal_newlines=True, stderr=subprocess.STDOUT)
         out,err = popen.communicate()
