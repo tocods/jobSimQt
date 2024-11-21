@@ -202,7 +202,7 @@ class JobSimQt(QMainWindow):
         QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(theme))
 
     def _startSoftware(self):
-        os.popen(f"{globaldata.targetPath[1]} ide")
+        os.popen(f"{globaldata.targetPath[1]} {globaldata.targetPath[2]}")
         return
 
     def setClicked(self):
@@ -1224,7 +1224,7 @@ class JobSimQt(QMainWindow):
             QMessageBox.information(self, "", "未设置任务信息")
             self._ui.central_window.centralWidget().setEnabled(True)
             return
-        execute = "jdk1.8.0_321\\bin\\java.exe -jar ./jobSim/gpuworkflowsim.jar " + project.projectPath + "/OutputFiles " + project.projectPath + "/hosts.json " + project.projectPath + "/jobs.json " + project.projectPath + "/faults.json " + str(0) + " " + str(self.duration)
+        execute = globaldata.targetPath[3] + " -jar ./jobSim/gpuworkflowsim.jar " + project.projectPath + "/OutputFiles " + project.projectPath + "/hosts.json " + project.projectPath + "/jobs.json " + project.projectPath + "/faults.json " + str(0) + " " + str(self.duration)
         print(execute)
         popen = subprocess.Popen(execute, shell=True, stdout=subprocess.PIPE,  universal_newlines=True, stderr=subprocess.STDOUT)
         out,err = popen.communicate()
