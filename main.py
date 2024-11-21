@@ -58,27 +58,8 @@ class JobSimQt(QMainWindow):
         print(path)
         if not os.path.isabs(path):
             path = os.path.abspath(path)
-        self.selfPath = os.path.dirname(os.path.abspath(__file__))
         project.projectPath = path
         globaldata.currentProjectInfo.setFullPath(path)
-        if not os.path.isfile(self.selfPath+ "/path.txt"):
-            QMessageBox.information(self, "提示", "缺少path.txt文件", QMessageBox.Ok)
-            return
-        self.javaPath = "" 
-        self.grafanaPath = ""
-        self.netSecurityPath = ""
-        with open(self.selfPath + "/path.txt", "r") as f:
-            lines = f.readlines()
-            for line in lines:
-                line = line.strip()
-                if line == "":
-                    continue
-                if line.startswith("java"):
-                    self.javaPath = line.split("=")[1]
-                if line.startswith("grafana"):
-                    self.grafanaPath = line.split("=")[1]
-                if line.startswith("netSecurity"):
-                    self.netSecurityPath = line.split("=")[1]
         self._initOutputFiles()
         # 保存当前文件路径
         self.selfPath = os.path.dirname(os.path.abspath(__file__))
@@ -96,8 +77,8 @@ class JobSimQt(QMainWindow):
                 line = line.strip('\n')
                 if line == "":
                     continue
-                if line.startswith("netSecruity="):
-                    self.netSecruityPath = line.split("=")[1]
+                if line.startswith("netSecurity="):
+                    self.netSecurityPath = line.split("=")[1]
                 if line.startswith("grafana="):
                     self.grafanaPath = line.split("=")[1]
                 if line.startswith("java="):
@@ -105,9 +86,10 @@ class JobSimQt(QMainWindow):
         # 取消标题栏
         #self.setWindowFlags(Qt.FramelessWindowHint)
         self.setWindowTitle("系统管理评估平台")
+        self.setWindowIcon(QIcon(self.selfPath + "/img/数据.png"))
         self.nowClect = None
         self._ui = UI()
-        self._ui.setup_ui(self)
+        self._ui.setup_ui(self, self.selfPath)
         self._ui.stack_widget.setCurrentIndex(0)
         # Signal
         self._ui.action_change_home.triggered.connect(self._change_page)
@@ -503,12 +485,12 @@ class JobSimQt(QMainWindow):
     def __printNet(self):
         self.screne = QGraphicsScene()
         for host in self.netHosts.values():
-            p = GraphicItem(host.image, host.name, self)
+            p = GraphicItem(self.selfPath + "/" + host.image, host.name, self)
             self.netHostsPic[host.name] = p
             self.screne.addItem(p)
             p.setPos(float(host.x), float(host.y))
         for switch in self.netSwtichs.values():
-            p = GraphicItem(switch.image, switch.name, self)
+            p = GraphicItem(self.selfPath + "/" + switch.image, switch.name, self)
             self.netSwtichsPic[switch.name] = p
             self.screne.addItem(p)
             p.setPos(float(switch.x), float(switch.y))

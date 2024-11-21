@@ -21,13 +21,13 @@ from ShowNetResultsWindow import ShowNetResultsWindow
 from component.netanalysis import Ui_NetAnalysis
 
 class UI:
-    def setup_ui(self, main_win: QMainWindow) -> None:
+    def setup_ui(self, main_win: QMainWindow, path) -> None:
         # Actions
-        self.action_change_home = QAction(QIcon("D:/analysis/img/网络.png"), "网络仿真结果分析")
-        self.action_change_dock = QAction(QIcon("D:/analysis/img/应用软件集群.png"), "系统管理仿真结果分析")
-        self.action_micro_service = QAction(QIcon("D:/analysis/img/微服务.png"), "微服务指标采集")
-        self.action_net_safe = QAction(QIcon("D:/analysis/img/网络安全.png"), "网络安全评估")
-        self.action_open_folder = QAction(QIcon("img/打开文件.png"), "打开项目")
+        self.action_change_home = QAction(QIcon(path + "/img/网络.png"), "网络仿真结果分析")
+        self.action_change_dock = QAction(QIcon(path + "/img/应用软件集群.png"), "系统管理仿真结果分析")
+        self.action_micro_service = QAction(QIcon(path + "/img/微服务.png"), "微服务指标采集")
+        self.action_net_safe = QAction(QIcon(path + "/img/网络安全.png"), "网络安全评估")
+        self.action_open_folder = QAction(QIcon(path + "/img/打开文件.png"), "打开项目")
         # self.action_enable = QAction(QIcon("icons:circle_24dp.svg"), "Enable")
         # self.action_disable = QAction(QIcon("icons:clear_24dp.svg"), "Disable")
         self.actions_theme = [QAction(theme, main_win) for theme in ["黑色", "白色"]]
@@ -71,7 +71,7 @@ class UI:
         # tool_btn_settings.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
         # tool_btn_enable.setDefaultAction(self.action_enable)
         # tool_btn_disable.setDefaultAction(self.action_disable)
-        tool_btn_theme.setIcon(QIcon("img/样式设置.png"))
+        tool_btn_theme.setIcon(QIcon(path + "/img/样式设置.png"))
         tool_btn_theme.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
 
         toolbar.addAction(self.action_open_folder)
