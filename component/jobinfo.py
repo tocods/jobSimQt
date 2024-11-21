@@ -311,7 +311,7 @@ class Ui_JobInfo(object):
         self.label_14.setText(QCoreApplication.translate("JobInfo", u"\u4e3b\u673a:", None))
         self.label_7.setText(QCoreApplication.translate("JobInfo", u"CPU\u9700\u6c42", None))
         self.label_9.setText(QCoreApplication.translate("JobInfo", u"\u9700\u6c42\u6838\u6570:", None))
-        self.label_10.setText(QCoreApplication.translate("JobInfo", u"FLOP:", None))
+        self.label_10.setText(QCoreApplication.translate("JobInfo", u"GFLOP:", None))
         self.label_11.setText(QCoreApplication.translate("JobInfo", u"GPU\u9700\u6c42", None))
         self.label_12.setText("")
         self.pushButton.setText("")

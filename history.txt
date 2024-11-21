@@ -1,8 +1,6 @@
 D:/project2
 D:/project3
-D:/project1/ÖÐÎÄÄ¿Â¼
-D:/ÏµÍ³¹ÜÀí½¨Ä£Óë·ÂÕæÈí¼þ/UDPÓÃÀý
+D:/project1/ï¿½ï¿½ï¿½ï¿½Ä¿Â¼
+D:/ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/UDPï¿½ï¿½ï¿½ï¿½
 D:/project6
-D:/jobSimQt/project
 D:/jobSimQt/project2
-D:/project

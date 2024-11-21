@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <faultRecord>
-  <faultRecord time="3.16" type="rebuild" object="host1" isFalseAlarm="False" isSuccessRebuild="False" redundancyBefore="9.25" redundancyAfter="0" faultType="RAM" />
-  <faultRecord time="10" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <faultRecord time="12.22" type="rebuild" object="host1" isFalseAlarm="False" isSuccessRebuild="False" redundancyBefore="9.25" redundancyAfter="0" faultType="RAM" />
-  <faultRecord time="20" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <faultRecord time="26.47" type="rebuild" object="host1" isFalseAlarm="True" isSuccessRebuild="True" redundancyBefore="10" redundancyAfter="0" faultType="RAM" />
-  <faultRecord time="58.42" type="rebuild" object="host1" isFalseAlarm="True" isSuccessRebuild="True" redundancyBefore="10" redundancyAfter="0" faultType="RAM" />
-  <faultRecord time="83.08" type="rebuild" object="host1" isFalseAlarm="True" isSuccessRebuild="True" redundancyBefore="10" redundancyAfter="0" faultType="RAM" />
-  <faultRecord time="92.38" type="rebuild" object="host1" isFalseAlarm="False" isSuccessRebuild="False" redundancyBefore="9.25" redundancyAfter="0" faultType="RAM" />
-  <faultRecord time="98.73" type="rebuild" object="host1" isFalseAlarm="True" isSuccessRebuild="True" redundancyBefore="10" redundancyAfter="0" faultType="RAM" />
+  <faultRecord time="14.96" type="rebuild" object="host1" isFalseAlarm="True" isSuccessRebuild="True" redundancyBefore="10" redundancyAfter="0" faultType="RAM" />
+  <faultRecord time="24.84" type="rebuild" object="host1" isFalseAlarm="True" isSuccessRebuild="True" redundancyBefore="10" redundancyAfter="0" faultType="RAM" />
+  <faultRecord time="48.68" type="rebuild" object="host1" isFalseAlarm="True" isSuccessRebuild="True" redundancyBefore="10" redundancyAfter="0" faultType="RAM" />
+  <faultRecord time="70.8" type="rebuild" object="host1" isFalseAlarm="False" isSuccessRebuild="False" redundancyBefore="9.25" redundancyAfter="0" faultType="RAM" />
+  <faultRecord time="80" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
+  <faultRecord time="84.58" type="rebuild" object="host1" isFalseAlarm="True" isSuccessRebuild="True" redundancyBefore="10" redundancyAfter="0" faultType="RAM" />
   <reliability value="0" />
 </faultRecord>

@@ -7,7 +7,7 @@
     <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="2">
-    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
+    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
   </Util>
   <Util time="3">
     <Host name="host1" cpuUtilization="0" ramUtilization="0" />
@@ -97,10 +97,10 @@
     <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="32">
-    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
+    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="33">
-    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
+    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
   </Util>
   <Util time="34">
     <Host name="host1" cpuUtilization="0" ramUtilization="0" />
@@ -211,10 +211,10 @@
     <Host name="host1" cpuUtilization="0" ramUtilization="0" />
   </Util>
   <Util time="70">
-    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
+    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
   </Util>
   <Util time="71">
-    <Host name="host1" cpuUtilization="0.25" ramUtilization="0.02" />
+    <Host name="host1" cpuUtilization="0" ramUtilization="0" />
   </Util>
   <Util time="72">
     <Host name="host1" cpuUtilization="0" ramUtilization="0" />
