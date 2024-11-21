@@ -1,0 +1,3 @@
+netSecurity=D:\\ÍøÂç°²È«ÆÀ¹ÀÈí¼ş\\run.bat
+grafana=http://localhost:3000/d/IV0hu1m7z/windows-exporter-dashboard?var-interval=60s&from=now-2d&to=now&timezone=browser&var-server=localhost:9182&refresh=5s
+java=java
