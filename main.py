@@ -119,7 +119,20 @@ class JobSimQt(QMainWindow):
             self.webview.setGeometry(0, 0, screen_size.width() * 0.8, screen_size.height() * 0.8)
             #self._ui.stack_widget.setCurrentIndex(2)
         if action_name == "网络安全评估":
-            os.popen("D:\\NetworkDataSecurityAssessment\\run.bat")
+            working_directory = r"D:\可执行软件\网络安全评估软件"
+
+            command = r".\NetworkDataSecurityAssessment.exe"
+
+            subprocess.Popen(
+                f"cd {working_directory} && {command}",  # 使用 && 连接命令
+                shell=True,
+            )
+            # subprocess.Popen("D:\\NetworkDataSecurityAssessment\\run.bat")
+            # result = ""
+            # for s in resultList.readline():
+                # result = result + s
+            # print(resultList.readline())
+            # QMessageBox.information(None, "", result)
     
     # def load_cookies(self):
     #     profile = self.webview.page().profile()
