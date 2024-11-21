@@ -1,0 +1,4 @@
+D:/execute/22/main.exe
+D:/omnetpp-6.0/mingwenv.cmd
+java
+python D:/analysis/main.py

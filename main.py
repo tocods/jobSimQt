@@ -34,6 +34,8 @@ class JobSimQt(QMainWindow):
         self.start = Ui_start()
         self.start.setupUi(self)
         # self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setWindowIcon(QIcon("img/仿真.png"))
+        self.setWindowTitle("系统管理建模和仿真工具")
         self.center()
         self.history = []
         globaldata.readPath()
@@ -179,8 +181,8 @@ class JobSimQt(QMainWindow):
         action_name = self.sender().text()
         #self._ui.stack_widget.setCurrentIndex(0 if action_name == "运行仿真" else 1)
         if action_name == "系统管理评估平台":
-            print(f"{globaldata.targetPath[0]} {project.projectPath}")
-            os.popen(f"{globaldata.targetPath[0]} {project.projectPath}")
+            print(f"{globaldata.targetPath[3]} {project.projectPath}")
+            os.popen(f"{globaldata.targetPath[3]} {project.projectPath}")
         if action_name == "系统管理集成开发平台":
             self._startSoftware()
 
@@ -1224,7 +1226,7 @@ class JobSimQt(QMainWindow):
             QMessageBox.information(self, "", "未设置任务信息")
             self._ui.central_window.centralWidget().setEnabled(True)
             return
-        execute = "jdk1.8.0_321\\bin\\java.exe -jar ./jobSim/gpuworkflowsim.jar " + project.projectPath + "/OutputFiles " + project.projectPath + "/hosts.json " + project.projectPath + "/jobs.json " + project.projectPath + "/faults.json " + str(0) + " " + str(self.duration)
+        execute = globaldata.targetPath[2] + " -jar ./jobSim/gpuworkflowsim.jar " + project.projectPath + "/OutputFiles " + project.projectPath + "/hosts.json " + project.projectPath + "/jobs.json " + project.projectPath + "/faults.json " + str(0) + " " + str(self.duration)
         print(execute)
         popen = subprocess.Popen(execute, shell=True, stdout=subprocess.PIPE,  universal_newlines=True, stderr=subprocess.STDOUT)
         out,err = popen.communicate()
@@ -1232,7 +1234,7 @@ class JobSimQt(QMainWindow):
         #将日志信息显示在文本框中
         self._ui.homeui.textEdit.setText(out)
         if "任务群总完成时间" in out:
-            QMessageBox.information(self, "", "仿真完成")
+            QMessageBox.information(self, "提示", "仿真完成")
         self._ui.central_window.centralWidget().setEnabled(True)
         # self._initResult()
         # self._ui.stack_widget.setCurrentIndex(1)

@@ -85,7 +85,7 @@ networkGlobalConfig = {
 }
 
 def readPath():
-    with open("path.ini", "r", encoding="utf-8") as fp:
+    with open("path.txt", "r") as fp:
         for line in fp:
             targetPath.append(line.strip("\n"))
 
