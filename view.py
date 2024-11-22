@@ -1,3 +1,4 @@
+from PyQt5.QtGui import QMouseEvent
 from Window.EditHostNetargsWindow import *
 from Window.EditLinkArgsWindow import EditLinkArgsWindow
 from Window.EditSwitchNetargsWindow import *
@@ -30,16 +31,17 @@ class GraphicView(QGraphicsView):
         self.gr_scene = graphic_scene
         self.parent = parent
         self.drag_start_item = None
-
+        # item menu
         self.item_clicked = None
-        # 子界面
         self.menu = QMenu(self)
         self.editAction = QAction(text="编辑")
         self.editAction.triggered.connect(self.showEditor)
         self.deleteAction = QAction(text="删除")
-        self.deleteAction.triggered.connect(self.delete_node)
+        self.deleteAction.triggered.connect(self.deleteItem)
         self.menu.addAction(self.editAction)
         self.menu.addAction(self.deleteAction)
+        
+        # 子界面
         self.editHostNetargsWindowNormal = EditHostNetargsWindowNormal(self, sysSim)
         self.editHostNetargsWindowUdp = EditHostNetargsWindowUdp(self, sysSim)
         self.editHostNetargsWindowTcp = EditHostNetargsWindowTcp(self, sysSim)
@@ -160,7 +162,6 @@ class GraphicView(QGraphicsView):
         if event.key() == Qt.Key.Key_N:
             event.ignore()  # 忽略默认行为
             self.createGraphicHostItem("Model.png")
-
         else:
             super().keyPressEvent(event)
 
@@ -195,11 +196,13 @@ class GraphicView(QGraphicsView):
     
     
     def linkClicked(self, link, event: QGraphicsSceneMouseEvent):
+        self.item_clicked = link
+        if event.button() == Qt.MouseButton.RightButton:
+            self.menu.popup(QCursor.pos())
         return
 
-    # 当前鼠标所在图元
-    def get_item_at_pos(self, event):
-        """Return the object that clicked on."""
+    # 获取点击的link
+    def get_link_at_pos(self, event):
         pos = event.pos()
         # item = self.itemAt(pos)
         """ 鼠标所在的10*10内都是选中范围 """
@@ -208,13 +211,10 @@ class GraphicView(QGraphicsView):
             return None
         result = self.items(area)[0]
         # if result.type() == GraphicItem.type or result.type() == QGraphicsPathItem
-        result = (
-            result
-            if result.type() == GraphicItem.type
-            or isinstance(result, QGraphicsPathItem)
-            else result.parentItem()
-        )
-        return result
+        if isinstance(result, QGraphicsPathItem):
+            return result
+        else:
+            return None
 
     def get_items_at_rubber(self):
         """Get group select items."""
@@ -223,6 +223,16 @@ class GraphicView(QGraphicsView):
 
     def mouseMoveEvent(self, event):
         super().mouseMoveEvent(event)
+
+    def mousePressEvent(self, event: QMouseEvent):
+        super().mousePressEvent(event)
+        if event.button() != Qt.MouseButton.RightButton:
+            return
+        link = self.get_link_at_pos(event)
+        if link == None:
+            return
+        
+        self.linkClicked(link, event)
 
     def lineToolEnable(self):
         if not self.lineToolEnabled:
@@ -261,7 +271,7 @@ class GraphicView(QGraphicsView):
                 else:
                     self.drag_start_item = None
 
-    def delete_node(self):
+    def deleteItem(self):
         # 删除键
         item = self.item_clicked
         if isinstance(item, QGraphicsItemGroup):
