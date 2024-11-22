@@ -1,1 +1,2 @@
+D:/gpuworkflowsim/src/test/Test1a/CPUTest/input
 D:/jobSimQt/project

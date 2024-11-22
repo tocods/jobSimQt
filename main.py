@@ -34,6 +34,8 @@ class JobSimQt(QMainWindow):
         self.start = Ui_start()
         self.start.setupUi(self)
         # self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setWindowTitle("系统管理仿真与建模平台")
+        self.setWindowIcon(QIcon("img/仿真.png"))
         self.center()
         self.history = []
         globaldata.readPath()
@@ -251,8 +253,8 @@ class JobSimQt(QMainWindow):
         action_name = self.sender().text()
         #self._ui.stack_widget.setCurrentIndex(0 if action_name == "运行仿真" else 1)
         if action_name == "系统管理评估平台":
-            print(f"{globaldata.targetPath[0]} {project.projectPath}")
-            os.popen(f"{globaldata.targetPath[0]} {project.projectPath}")
+            print(f"{globaldata.targetPath[3]} {project.projectPath}")
+            os.popen(f"{globaldata.targetPath[3]} {project.projectPath}")
         if action_name == "系统管理集成开发平台":
             self._startSoftware()
 
@@ -580,7 +582,7 @@ class JobSimQt(QMainWindow):
             QMessageBox.information(self, "", "主机CPU核数不能为0")
             self._initHostInfo(self.nowHost)
             return
-        if self.hostInfoPage.cpuflops.text() == "" or int(self.hostInfoPage.cpuflops.text()) == 0:
+        if self.hostInfoPage.cpuflops.text() == "" or float(self.hostInfoPage.cpuflops.text()) == 0.0:
             QMessageBox.information(self, "", "主机核FLOPs不能为0")
             self._initHostInfo(self.nowHost)
             return
@@ -618,13 +620,14 @@ class JobSimQt(QMainWindow):
                     continue
                 gpu = GPUInfo(int(self.hostInfoPage.gputable.item(i + 1, 1).text()), (int)(self.hostInfoPage.gputable.item(i + 1, 2).text()), (int)(self.hostInfoPage.gputable.item(i+ 1, 3).text()), (int)(self.hostInfoPage.gputable.item(i+1, 5).text()), (int)(self.hostInfoPage.gputable.item(i+1, 4).text()))
                 gpus.append(gpu)
+            if len(gpus) > 0:
                 videoCardInfo = VideoCardInfo(gpus)
                 if (int)(self.hostInfoPage.pcie.value()) == 0:
                     QMessageBox.information(self, "", "PCIe带宽不能为0")
                     return
                 videoCardInfo.pcie_bw = (int)(self.hostInfoPage.pcie.value()) 
                 print("apply: " + videoCardInfo.pcie_bw.__str__())
-            self.nowHost.video_card_infos.append(videoCardInfo)
+                self.nowHost.video_card_infos.append(videoCardInfo)
         self.nowHost.print()
         sysSim.hosts.pop(name_before)
         sysSim.hosts[self.nowHost.name] = self.nowHost
@@ -784,7 +787,8 @@ class JobSimQt(QMainWindow):
         self.hostInfoPage.corenum.setValue(cpucore)
         self.hostInfoPage.cpunum.setValue(cpunum)
         self.hostInfoPage.cpuflops.setText(str(host.cpu_infos[0].mips))
-        reg_ex =  QRegularExpression("[0-9]+")
+        # 设置正则表达式为运行2位小鼠数
+        reg_ex =  QRegularExpression("^([0-9]{1,}[.]{0,1}[0-9]{0,2})$")
         validator = QRegularExpressionValidator(reg_ex, self.hostInfoPage.cpuflops)
         self.hostInfoPage.cpuflops.setValidator(validator)
         self._ui.homeui.tabWidget.setCurrentIndex(0)
@@ -833,7 +837,7 @@ class JobSimQt(QMainWindow):
         item4 = QTableWidgetItem("SM最大线程块")
         item4.setBackground(QColor(192, 192, 192))
         self.hostInfoPage.gputable.setItem(i, 3, item4)
-        item5 = QTableWidgetItem("核心FLOPs")
+        item5 = QTableWidgetItem("TFLOPS")
         item5.setBackground(QColor(192, 192, 192))
         self.hostInfoPage.gputable.setItem(i, 4, item5)
         item6 = QTableWidgetItem("显存(GB)")
@@ -882,7 +886,7 @@ class JobSimQt(QMainWindow):
             item4 = QTableWidgetItem("SM最大线程块")
             item4.setBackground(QColor(192, 192, 192))
             self.hostInfoPage.gputable.setItem(0, 3, item4)
-            item5 = QTableWidgetItem("核心FLOPs")
+            item5 = QTableWidgetItem("TFLOPS")
             item5.setBackground(QColor(192, 192, 192))
             self.hostInfoPage.gputable.setItem(0, 4, item5)
             item6 = QTableWidgetItem("显存(GB)")
@@ -965,7 +969,7 @@ class JobSimQt(QMainWindow):
         item3 = QTableWidgetItem("线程数")
         item3.setBackground(QColor(192, 192, 192))
         self.jobInfoPage.gputable.setItem(i, 2, item3)
-        item4 = QTableWidgetItem("每线程FLOP")
+        item4 = QTableWidgetItem("TFLOP")
         item4.setBackground(QColor(192, 192, 192))
         self.jobInfoPage.gputable.setItem(i, 3, item4)
         item5 = QTableWidgetItem("需求显存(MB)")    
@@ -1020,7 +1024,7 @@ class JobSimQt(QMainWindow):
             item3 = QTableWidgetItem("线程数")
             item3.setBackground(QColor(192, 192, 192))
             self.jobInfoPage.gputable.setItem(0, 2, item3)
-            item4 = QTableWidgetItem("每线程FLOP")
+            item4 = QTableWidgetItem("TFLOP")
             item4.setBackground(QColor(192, 192, 192))
             self.jobInfoPage.gputable.setItem(0, 3, item4)
             item5 = QTableWidgetItem("需求显存(MB)")    
