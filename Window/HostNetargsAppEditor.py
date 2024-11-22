@@ -5,8 +5,6 @@ from qdarktheme.qtpy.QtWidgets import (
     QPushButton,
     QHBoxLayout,
 )
-from qdarktheme.qtpy.QtGui import QAction
-from qdarktheme.qtpy.QtCore import Qt
 from Window.JsonArrayEditor import JsonArrayEditor
 
 DEFAULT_SOURCE = {

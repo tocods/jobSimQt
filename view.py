@@ -4,12 +4,13 @@ from Window.EditSwitchNetargsWindow import *
 import globaldata
 from qdarktheme.qtpy.QtWidgets import (
     QGraphicsView,
-    QGraphicsLineItem,
+    QMenu,
     QGraphicsPathItem,
     QGraphicsItemGroup,
+    QGraphicsSceneMouseEvent
 )
 from qdarktheme.qtpy.QtCore import Qt, QRect
-from qdarktheme.qtpy.QtGui import QPainter, QPen
+from qdarktheme.qtpy.QtGui import QPainter, QAction, QCursor
 
 from item import GraphicItem, HostGraphicItem, SwitchGraphicItem
 from edge import Edge, GraphicEdge
@@ -28,9 +29,17 @@ class GraphicView(QGraphicsView):
         self.jobSim = sysSim
         self.gr_scene = graphic_scene
         self.parent = parent
-        # self.edge_enable = False # 用来记录目前是否可以画线条
         self.drag_start_item = None
+
+        self.item_clicked = None
         # 子界面
+        self.menu = QMenu(self)
+        self.editAction = QAction(text="编辑")
+        self.editAction.triggered.connect(self.showEditor)
+        self.deleteAction = QAction(text="删除")
+        self.deleteAction.triggered.connect(self.delete_node)
+        self.menu.addAction(self.editAction)
+        self.menu.addAction(self.deleteAction)
         self.editHostNetargsWindowNormal = EditHostNetargsWindowNormal(self, sysSim)
         self.editHostNetargsWindowUdp = EditHostNetargsWindowUdp(self, sysSim)
         self.editHostNetargsWindowTcp = EditHostNetargsWindowTcp(self, sysSim)
@@ -40,12 +49,46 @@ class GraphicView(QGraphicsView):
 
         self.editSwitchNetargsWindowUdp = EditSwitchNetargsWindowUdp(self)
         self.editSwitchNetargsWindowTsn = EditSwitchNetargsWindowTsn(self)
-        self.editSwitchNetargsWindowDds = EditSwitchNetargsWindowDds(self)
+        self.editSwitchNetargsWindowRdma = EditSwitchNetargsWindowRdma(self)
         self.editLinkArgsWindow = EditLinkArgsWindow(self)
         self.hostInform = HostInfoForm(self.jobSim)
         self.init_ui()
 
         self.lineToolEnabled = False
+
+    def showEditor(self):
+        if self.item_clicked == None:
+            return
+
+        # 主机
+        if isinstance(self.item_clicked, HostGraphicItem):
+            self.openHostEditor(self.item_clicked)
+            return
+        # 交换机
+        elif isinstance(self.item_clicked, SwitchGraphicItem):
+            # 将 交换机图形对象 和 其中包含的交换机属性信息对象 传递至属性设置界面
+            if isinstance(self.item_clicked.switchAttr, TsnSwitch):
+                self.editSwitchNetargsWindowTsn.setSwitchGraphicItem(
+                    self.item_clicked
+                )
+                self.editSwitchNetargsWindowTsn.show()
+            elif isinstance(self.item_clicked.switchAttr, RdmaSwitch):
+                self.editSwitchNetargsWindowRdma.setSwitchGraphicItem(
+                    self.item_clicked
+                )
+                self.editSwitchNetargsWindowRdma.show()
+            else:
+                self.editSwitchNetargsWindowUdp.setSwitchGraphicItem(
+                    self.item_clicked
+                )
+                self.editSwitchNetargsWindowUdp.show()
+            return
+        # 连接
+        elif isinstance(self.item_clicked, GraphicEdge):
+            # 将 连接图形对象 和 其中包含的连接属性信息对象 传递至属性设置界面
+            self.editLinkArgsWindow.setLinkGraphicItem(self.item_clicked)
+            self.editLinkArgsWindow.show()
+            return
 
     def init_ui(self):
         self.setScene(self.gr_scene)
@@ -78,7 +121,7 @@ class GraphicView(QGraphicsView):
         Host_class=Host,
     ):
         item = HostGraphicItem(
-            host_name, host_type, img, width, height, Host_class=Host_class
+            host_name, host_type, img, width, height, parent=self, Host_class=Host_class
         )
         # 将onlyCpu记录到属性中
         item.hostAttr.only_cpu = onlyCpu
@@ -98,7 +141,7 @@ class GraphicView(QGraphicsView):
         Switch_class=Switch,
     ):
         item = SwitchGraphicItem(
-            switch_name, switch_type, img, width, height, Switch_class=Switch_class
+            switch_name, switch_type, img, width, height, parent=self, Switch_class=Switch_class
         )
         item.setPos(0, 0)
         self.gr_scene.add_node(item)
@@ -141,42 +184,18 @@ class GraphicView(QGraphicsView):
             self.editHostNetargsWindowRdma.setHostGraphicItem(item)
             self.editHostNetargsWindowRdma.show()
 
-    def mousePressEvent(self, event):
-        # 点击鼠标时更新“位置”和“鼠标所在图元”
-        super().mousePressEvent(event)
-        self.mouse_pos = event.pos()
-        self.mouse_pos_item = self.get_item_at_pos(event)  # self.itemAt(self.mouse_pos)
-        #  如果是右键鼠标，弹出配置页
-        if event.button() == Qt.MouseButton.RightButton:
-            # TODO：可判断更多类型的主机，引导至不同类型主机的配置界面
-            # 主机
-            print(self.mouse_pos_item)
-            if isinstance(self.mouse_pos_item, HostGraphicItem):
-                self.openHostEditor(self.mouse_pos_item)
 
-                return
-            # 交换机
-            elif isinstance(self.mouse_pos_item, SwitchGraphicItem):
-                # 将 交换机图形对象 和 其中包含的交换机属性信息对象 传递至属性设置界面
-                if isinstance(self.mouse_pos_item.switchAttr, TsnSwitch):
-                    self.editSwitchNetargsWindowTsn.setSwitchGraphicItem(
-                        self.mouse_pos_item
-                    )
-                    self.editSwitchNetargsWindowTsn.show()
-                else:
-                    self.editSwitchNetargsWindowUdp.setSwitchGraphicItem(
-                        self.mouse_pos_item
-                    )
-                    self.editSwitchNetargsWindowUdp.show()
-                return
-            # 连接
-            elif isinstance(self.mouse_pos_item, GraphicEdge):
-                # 将 连接图形对象 和 其中包含的连接属性信息对象 传递至属性设置界面
-                self.editLinkArgsWindow.setLinkGraphicItem(self.mouse_pos_item)
-                self.editLinkArgsWindow.show()
-                return
+    
+    def graphicItemClicked(self, item, event: QGraphicsSceneMouseEvent):
+        self.item_clicked = item
+        if event.button() == Qt.MouseButton.RightButton:
+            self.menu.popup(QCursor.pos())
         elif self.lineToolEnabled:
-            self.lineClick(event)
+            self.lineClick()
+    
+    
+    def linkClicked(self, link, event: QGraphicsSceneMouseEvent):
+        return
 
     # 当前鼠标所在图元
     def get_item_at_pos(self, event):
@@ -213,8 +232,8 @@ class GraphicView(QGraphicsView):
             self.lineToolEnabled = False
             self.parent.ui.add_line.setText("连线")
 
-    def lineClick(self, event):
-        item = self.get_item_at_pos(event)
+    def lineClick(self):
+        item = self.item_clicked
         if isinstance(item, GraphicItem):
             # 是起点
             if self.drag_start_item == None:
@@ -244,7 +263,7 @@ class GraphicView(QGraphicsView):
 
     def delete_node(self):
         # 删除键
-        item = self.mouse_pos_item
+        item = self.item_clicked
         if isinstance(item, QGraphicsItemGroup):
             self.gr_scene.remove_node(item)
         if isinstance(item, QGraphicsPathItem):

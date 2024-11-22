@@ -12,10 +12,11 @@ import globaldata
 class GraphicItem(QGraphicsItemGroup):
 
     def __init__(self, name, para, width=100, height=100, parent=None):  # para通常是图像名称
-        super().__init__(parent)
+        super().__init__()
         self.para = para
         self.width = width
         self.height = height
+        self.parent = parent
         # 创建 QGraphicsPixmapItem 
         self.pixmap = QPixmap(para)
         self.pix = self.pixmap.scaled(QSize(self.width, self.height))
@@ -57,6 +58,10 @@ class GraphicItem(QGraphicsItemGroup):
             for gr_edge in self.scene().edges:
                 gr_edge.edge_wrap.update_positions()
 
+    def mousePressEvent(self, event) -> None:
+        super().mousePressEvent(event)
+        self.parent.graphicItemClicked(self, event)
+
     def remove_from_globaldata(self):
         return
 
@@ -88,7 +93,7 @@ class HostGraphicItem(GraphicItem):
         parent=None,
         Host_class=Host,
     ):
-        super().__init__(host_name, para, width, height, parent=None)
+        super().__init__(host_name, para, width, height, parent=parent)
         # 主机属性
         # self.hostAttr = Host_class(host_name, host_type)
         # 使用给定的主机类存储数据
@@ -124,7 +129,7 @@ class SwitchGraphicItem(GraphicItem):
         parent=None,
         Switch_class=Switch,
     ):
-        super().__init__(switch_name, para, width, height, parent=None)
+        super().__init__(switch_name, para, width, height, parent=parent)
         # 交换机属性
         # self.switchAttr = Switch_class(switch_name, switch_type)
         # 使用给定的交换机类存储数据
