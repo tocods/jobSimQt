@@ -58,6 +58,17 @@ class JobSimQt(QMainWindow):
         self.start.shutdown.clicked.connect(sys.exit)
 
 
+    """
+    创建一个新的项目目录并使用默认的 JSON 文件进行初始化。
+
+    该方法打开一个目录选择对话框供用户选择目录。
+    然后在所选目录中创建三个 JSON 文件（'hosts.json'、'jobs.json' 和 'faults.json'），
+    每个文件都初始化为空列表。所选目录路径将添加到历史记录中，并将历史记录保存到 'history.txt'。
+    最后，它调用 startUp 方法并传入所选目录路径。
+
+    异常:
+        IOError: 如果写入 JSON 文件或历史记录文件时发生错误。
+    """
     def newP(self):
         file_name = QFileDialog.getExistingDirectory(None, "Open File", "")
         print(file_name)
@@ -76,11 +87,29 @@ class JobSimQt(QMainWindow):
         self.startUp(file_name)
     
 
+    """
+    打开一个项目目录并使用 JSON 文件进行初始化。
+
+    该方法接受一个项目目录路径作为参数。
+    如果项目目录不存在，则显示一个消息框并返回。
+    如果项目目录中的任何 JSON 文件不存在，则显示一个消息框并返回。
+    否则，将项目目录路径添加到历史记录中，并将历史记录保存到 'history.txt'。
+    最后，它调用 startUp 方法并传入项目目录路径。
+    """
     def openP(self):
         file_name = QFileDialog.getExistingDirectory(None, "Open File", "")
         print(file_name)
         self.openProject(file_name)
 
+    """
+    打开一个项目目录并使用 JSON 文件进行初始化。
+
+    该方法接受一个项目目录路径作为参数。
+    如果项目目录不存在，则显示一个消息框并返回。
+    如果项目目录中的任何 JSON 文件不存在，则显示一个消息框并返回。
+    否则，将项目目录路径添加到历史记录中，并将历史记录保存到 'history.txt'。
+    最后，它调用 startUp 方法并传入项目目录路径。
+    """
     def openProject(self, file_name):
         if not os.path.isdir(file_name):
             QMessageBox.information(self, "", "项目不存在")
@@ -111,6 +140,13 @@ class JobSimQt(QMainWindow):
             f.writelines(self.history)
         self.startUp(file_name)
 
+    """
+    选择项目。
+
+    该方法获取当前项目目录树中的项目名称。
+    如果项目名称是根节点，则返回。
+    否则，调用 openProject 方法并传入项目名称。
+    """
     def choseP(self):
         print("aaa")
         if_root = False
@@ -124,6 +160,38 @@ class JobSimQt(QMainWindow):
             return
         self.openProject(nowClect.text(0))
 
+    """
+    启动应用程序并初始化所有组件和 UI 元素。
+
+    该方法接受一个项目目录路径作为参数。
+    如果项目目录路径不是绝对路径，则将其转换为绝对路径。
+    然后，将项目目录路径设置为 projectPath 属性。
+
+    该方法初始化以下组件和 UI 元素：
+    - duration 属性设置为 100。
+    - wfont 属性设置为 QFont 对象，字体大小设置为 30。
+    - 设置字体为 wfont。
+    - projectPath 属性设置为 path 的副本。
+    - 调用 _initJsonFiles 方法。
+    - nowClect 属性设置为 None。
+    - 创建 UI 对象。
+    - 调用 UI 对象的 setup_ui 方法并传入自身。
+    - 为 action_change_home、action_change_dock、action_software、action_open_folder 和 action_open_color_dialog 信号连接槽。
+    - 为 action_open_font_dialog 信号连接槽。
+    - 为 action_out 信号连接槽。
+    - 为 action_enable 和 action_disable 信号连接槽。
+    - 为 actions_theme 列表中的每个动作连接槽。
+    - 获取屏幕对象。
+    - 获取屏幕可用区域大小。
+    - 设置 homeui 和 resultui 的 infoList 表头隐藏。
+    - 设置窗口大小。
+    - 调用 _initAll 方法。
+    - 调用 initTreeView 方法。
+    - 调用 setClicked 方法。
+    - 调用 center 方法。
+    - 设置 currentProjectInfo 的 fullname 属性为 path。
+    - 调用 network_editor 对象的 load_network_from_xml 方法。
+    """
     def startUp(self, path):
         self.duration = 100
         if not os.path.isabs(path):
@@ -271,6 +339,7 @@ class JobSimQt(QMainWindow):
 
         #self.setClicked()
     
+    
     def _initJsonFiles(self):
         if not os.path.exists(project.projectPath + "/hosts.json"):
             with open(project.projectPath + "/hosts.json", "w") as f:
@@ -282,7 +351,24 @@ class JobSimQt(QMainWindow):
             with open(project.projectPath + "/faults.json", "w") as f:
                 f.write("[]")
     
-    def _initAll(self):
+    """
+    初始化应用程序的所有组件和UI元素。
+    此方法执行以下任务：
+    - 打印初始化消息和当前项目路径。
+    - 在主页UI文本编辑小部件中设置初始文本。
+    - 将当前主机、任务和故障重置为None。
+    - 清空系统仿真字典中的主机、任务和故障。
+    - 清空主页UI选项卡小部件。
+    - 从各自的JSON文件中解析并加载主机、任务和故障。
+    - 初始化并设置主机信息页面UI。
+    - 在主机信息页面添加CPU、RAM和GPU利用率图表的选项卡。
+    - 初始化并设置任务信息页面UI。
+    - 在主页UI选项卡小部件中添加任务信息的选项卡。
+    - 初始化并设置故障信息页面UI。
+    - 在故障信息页面添加故障注入模型和错误报告的选项卡。
+    - 隐藏主页UI选项卡小部件的选项卡栏。
+    """
+    def __initAll(self):
         print("init all")
         print(project.projectPath)
         self._ui.homeui.textEdit.setText("加载成功,当前项目: " + project.projectPath)
