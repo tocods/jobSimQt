@@ -34,8 +34,6 @@ class JobSimQt(QMainWindow):
         self.start = Ui_start()
         self.start.setupUi(self)
         # self.setWindowFlags(Qt.FramelessWindowHint)
-        self.setWindowIcon(QIcon("img/仿真.png"))
-        self.setWindowTitle("系统管理建模和仿真工具")
         self.center()
         self.history = []
         globaldata.readPath()
@@ -249,8 +247,8 @@ class JobSimQt(QMainWindow):
         action_name = self.sender().text()
         #self._ui.stack_widget.setCurrentIndex(0 if action_name == "运行仿真" else 1)
         if action_name == "系统管理评估平台":
-            print(f"{globaldata.targetPath[3]} {project.projectPath}")
-            os.popen(f"{globaldata.targetPath[3]} {project.projectPath}")
+            print(f"{globaldata.targetPath[0]} {project.projectPath}")
+            os.popen(f"{globaldata.targetPath[0]} {project.projectPath}")
         if action_name == "系统管理集成开发平台":
             self._startSoftware()
 
@@ -272,7 +270,7 @@ class JobSimQt(QMainWindow):
         QApplication.instance().setStyleSheet(qdarktheme.load_stylesheet(theme))
 
     def _startSoftware(self):
-        os.popen(f"{globaldata.targetPath[1]} ide")
+        os.popen(f"{globaldata.targetPath[1]} {globaldata.targetPath[2]}")
         return
 
     def setClicked(self):
@@ -831,7 +829,7 @@ class JobSimQt(QMainWindow):
         item4 = QTableWidgetItem("SM最大线程块")
         item4.setBackground(QColor(192, 192, 192))
         self.hostInfoPage.gputable.setItem(i, 3, item4)
-        item5 = QTableWidgetItem("TFLOPS")
+        item5 = QTableWidgetItem("核心FLOPs")
         item5.setBackground(QColor(192, 192, 192))
         self.hostInfoPage.gputable.setItem(i, 4, item5)
         item6 = QTableWidgetItem("显存(GB)")
@@ -880,7 +878,7 @@ class JobSimQt(QMainWindow):
             item4 = QTableWidgetItem("SM最大线程块")
             item4.setBackground(QColor(192, 192, 192))
             self.hostInfoPage.gputable.setItem(0, 3, item4)
-            item5 = QTableWidgetItem("TFLOPS")
+            item5 = QTableWidgetItem("核心FLOPs")
             item5.setBackground(QColor(192, 192, 192))
             self.hostInfoPage.gputable.setItem(0, 4, item5)
             item6 = QTableWidgetItem("显存(GB)")
@@ -963,7 +961,7 @@ class JobSimQt(QMainWindow):
         item3 = QTableWidgetItem("线程数")
         item3.setBackground(QColor(192, 192, 192))
         self.jobInfoPage.gputable.setItem(i, 2, item3)
-        item4 = QTableWidgetItem("TFLOP")
+        item4 = QTableWidgetItem("每线程FLOP")
         item4.setBackground(QColor(192, 192, 192))
         self.jobInfoPage.gputable.setItem(i, 3, item4)
         item5 = QTableWidgetItem("需求显存(MB)")    
@@ -1018,7 +1016,7 @@ class JobSimQt(QMainWindow):
             item3 = QTableWidgetItem("线程数")
             item3.setBackground(QColor(192, 192, 192))
             self.jobInfoPage.gputable.setItem(0, 2, item3)
-            item4 = QTableWidgetItem("TFLOP")
+            item4 = QTableWidgetItem("每线程FLOP")
             item4.setBackground(QColor(192, 192, 192))
             self.jobInfoPage.gputable.setItem(0, 3, item4)
             item5 = QTableWidgetItem("需求显存(MB)")    
@@ -1320,7 +1318,7 @@ class JobSimQt(QMainWindow):
         #将日志信息显示在文本框中
         self._ui.homeui.textEdit.setText(out)
         if "任务群总完成时间" in out:
-            QMessageBox.information(self, "提示", "仿真完成")
+            QMessageBox.information(self, "", "仿真完成")
         self._ui.central_window.centralWidget().setEnabled(True)
         # self._initResult()
         # self._ui.stack_widget.setCurrentIndex(1)
