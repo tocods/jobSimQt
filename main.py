@@ -62,10 +62,13 @@ class JobSimQt(QMainWindow):
         globaldata.currentProjectInfo.setFullPath(path)
         self._initOutputFiles()
         # 保存当前文件路径
-        self.selfPath = os.path.dirname(os.path.abspath(__file__))
+        if getattr(sys, 'frozen', False):
+            self.selfPath = os.path.dirname(sys.executable)
+        else:
+            self.selfPath = os.path.dirname(os.path.abspath(__file__))
         self.pathTxt = self.selfPath + "/path.txt"
         if not os.path.isfile(self.pathTxt):
-            QMessageBox.information(self, "提示", "请先设置仿真工具路径", QMessageBox.Ok)
+            QMessageBox.information(self, "提示", "请先设置仿真工具路径:" + self.pathTxt, QMessageBox.Ok)
             return
         self.netSecruityPath = ""
         self.grafanaPath = ""
@@ -148,7 +151,7 @@ class JobSimQt(QMainWindow):
             if self.netSecurityPath == "":
                 QMessageBox.information(self, "提示", "缺少网络安全评估软件可执行文件路径", QMessageBox.Ok)
                 return
-            os.popen(self.netSecurityPath)
+            subprocess.Popen(self.netSecurityPath)
     
     # def load_cookies(self):
     #     profile = self.webview.page().profile()
@@ -278,7 +281,7 @@ class JobSimQt(QMainWindow):
             self.lastlastChose = None
             
             self._ui.stack_1.netCalUi.shows.setRowCount(row+1)
-            self._ui.stack_1.netCalUi.shows.setItem(row, 0, QTableWidgetItem("Flow_" + row.__str__()))
+            self._ui.stack_1.netCalUi.shows.setItem(row, 0, QTableWidgetItem("Flow_" + (row+1).__str__()))
             show = QPushButton()
             show.setText("展示")
             show.clicked.connect(self.showNetFlow)
@@ -334,7 +337,7 @@ class JobSimQt(QMainWindow):
         if self.javaPath == "":
             QMessageBox.information(self, "提示", "缺少java路径", QMessageBox.Ok)
             return
-        subprocess.run(self.javaPath + " -jar discoDNCxin.jar " + project.projectPath + "/network_data.xml " + project.projectPath + "/flow_data.xml " + project.projectPath + "/OutputFiles")
+        subprocess.run(self.javaPath + " -jar NetCal-DNC.jar " + project.projectPath + "/network_data.xml " + project.projectPath + "/flow_data.xml " + project.projectPath + "/OutputFiles")
         self.readNetResult()
         self.__printNet()
 
@@ -594,7 +597,7 @@ class JobSimQt(QMainWindow):
         
         # Append different texts
         self._ui.resultui.jobshow2.append(numFormat.format(str(self.throughput))) 
-        self._ui.resultui.jobshow2.append(otherFormat.format('FLOPS/s')) 
+        self._ui.resultui.jobshow2.append(otherFormat.format('TFLOPS/s')) 
 
 
         self.efficiency = round(getEfficiency(self.job_results), 2)
@@ -797,7 +800,10 @@ if __name__ == "__main__":
     #     app.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps)
     # QDir.addSearchPath("icons", f"{get_project_root_path().as_posix()}/widget_gallery/ui/svg")
     if len(sys.argv) < 2:
-        win = JobSimQt(os.path.dirname(os.path.abspath(__file__)) + "/project")
+        if getattr(sys, 'frozen', False):
+            win = JobSimQt(os.path.dirname(sys.executable)  + "/project")
+        else:
+            win = JobSimQt(os.path.dirname(os.path.abspath(__file__)) + "/project")
     else:
         win = JobSimQt(sys.argv[1])
     win.menuBar().setNativeMenuBar(False)

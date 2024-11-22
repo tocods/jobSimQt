@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<NetworkAnalysisResults>
+    <NetworkAnalysisResult FlowOfInterest="Flow(f0, 0, AC{(0.0,0.0),0.0;!(0.0,10000.0),100000.0}, {Turn(t3, 3, Server(s2, 2), Server(s4, 4))})">
+        <TotalFlowAnalysis alpha_per_server="{Server(s2, 2)={AC{(0.0,0.0),0.0;!(0.0,10000.0),100000.0}}, Server(s4, 4)={AC{(0.0,0.0),0.0;!(0.0,11000.0),100000.0}}}" backlog_bound="12000.0" backlog_bound_per_server="{Server(s2, 2)={11000.0}, Server(s4, 4)={12000.0}}" delay_bound="0.020012000000000002" delay_bound_per_server="{Server(s2, 2)={0.010001}, Server(s4, 4)={0.010011}}"/>
+        <SeparatedFlowAnalysis backlog_bound="12000.0" delay_bound="0.02001" e2e_SFA_SCs="[SC{(0.0,0.0),0.0;!(0.02,0.0),1.0E9}]" e2e_SFA_SCs_per_server="{Server(s2, 2)={SC{(0.0,0.0),0.0;!(0.01,0.0),1.0E10}}, Server(s4, 4)={SC{(0.0,0.0),0.0;!(0.01,0.0),1.0E9}}}" xtx_per_server="{Server(s2, 2)={AC{(0.0,0.0),0.0}}, Server(s4, 4)={AC{(0.0,0.0),0.0}}}"/>
+        <PMOOAnalysis backlog_bound="12000.0" delay_bound="0.02001" e2e_PMOO_SCs="[SC{(0.0,0.0),0.0;!(0.02,0.0),1.0E9}]" xtx_per_server="{}"/>
+        <TandemMatchingAnalysis backlog_bound="12000.0" delay_bound="0.02001" e2e_TMA_SCs="[SC{(0.0,0.0),0.0;!(0.02,0.0),1.0E9}]" xtx_per_server="{}"/>
+    </NetworkAnalysisResult>
+</NetworkAnalysisResults>
