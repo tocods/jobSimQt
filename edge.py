@@ -54,6 +54,14 @@ class Edge:
         self.end_item = None
         self.start_item = None
 
+    def remove_from_globaldata(self):
+        i = 0
+        while i < len(globaldata.linkList):
+            if globaldata.linkList[i] == self:
+                globaldata.linkList.pop(i)
+            else:
+                i += 1
+
     def remove(self):
         self.remove_from_current_items()
         self.scene.remove_edge(self.gr_edge)
@@ -61,7 +69,6 @@ class Edge:
 
 
 class GraphicEdge(QGraphicsPathItem):
-
     def __init__(self, edge_wrap, parent=None):
         super().__init__(parent)
         self.edge_wrap = edge_wrap
@@ -79,6 +86,9 @@ class GraphicEdge(QGraphicsPathItem):
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable) # 线条可选
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable)
         self.setZValue(-1) # 让线条出现在所有图元的最下层
+
+    def remove_from_globaldata(self):
+        self.edge_wrap.remove_from_globaldata()
 
     def set_src(self, x, y):
         self.pos_src = [x, y]

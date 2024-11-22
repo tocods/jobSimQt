@@ -22,7 +22,7 @@ class SetSimtimeWindow(QDialog):
         self.type_combo = QComboBox()
         self.type_combo.addItems(["通用", "RDMA"])
 
-        layout.addRow("时间:", self.time_input)
+        layout.addRow("时间(s):", self.time_input)
         layout.addRow("网络类型:", self.type_combo)
 
         submit_button = QPushButton("确定")
