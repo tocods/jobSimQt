@@ -1,6 +1,1 @@
-D:/project2
-D:/project3
-D:/project1/����Ŀ¼
-D:/ϵͳ������ģ���������/UDP����
-D:/project6
-D:/jobSimQt/project2
+D:/jobSimQt/project

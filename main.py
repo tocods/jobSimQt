@@ -112,14 +112,18 @@ class JobSimQt(QMainWindow):
         if not os.path.isdir(file_name):
             QMessageBox.information(self, "", "项目不存在")
             l = file_name + '\n'
+            print("is:" + l)
             if l in self.history:
-                self.history.remove(file_name + '\n')
+                self.history.remove(l)
             with open("history.txt", "w") as f:
                 f.writelines(self.history)
+            print("aaab")
             self.start.projects.clear()
             for his in self.history:
                 item = QTreeWidgetItem([his.strip('\n')])
                 self.start.projects.addTopLevelItem(item)
+                print('add' + his)
+            print('nnn')
             return
         if not os.path.exists(file_name + "/hosts.json"):
             QMessageBox.information(self, "", "主机信息文件不存在")
@@ -366,7 +370,7 @@ class JobSimQt(QMainWindow):
     - 在故障信息页面添加故障注入模型和错误报告的选项卡。
     - 隐藏主页UI选项卡小部件的选项卡栏。
     """
-    def __initAll(self):
+    def _initAll(self):
         print("init all")
         print(project.projectPath)
         self._ui.homeui.textEdit.setText("加载成功,当前项目: " + project.projectPath)
