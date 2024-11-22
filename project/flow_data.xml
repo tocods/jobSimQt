@@ -1,7 +1,12 @@
 <?xml version="1.0" ?>
 <Flows>
     <Flow>
-        <node name="udp_cpu3"/>
-        <node name="udp_switch2"/>
+        <node name="tcp_switch"/>
+        <node name="tcp_cpu"/>
+    </Flow>
+    <Flow>
+        <node name="udp_cpu"/>
+        <node name="udp_switch"/>
+        <node name="udp_cpu2"/>
     </Flow>
 </Flows>
