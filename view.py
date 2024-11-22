@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QMouseEvent
+from qdarktheme.qtpy.QtGui import QMouseEvent
 from Window.EditHostNetargsWindow import *
 from Window.EditLinkArgsWindow import EditLinkArgsWindow
 from Window.EditSwitchNetargsWindow import *
