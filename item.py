@@ -105,7 +105,6 @@ class HostGraphicItem(GraphicItem):
         return self.hostAttr
 
     def remove_from_globaldata(self):
-        print("remove_from_globaldata")
         print(globaldata.linkList)
         i = 0
         while i < len(globaldata.linkList):

@@ -53,6 +53,7 @@ class GraphicScene(QGraphicsScene):
     # 删除画布上的某连线图元
     def remove_edge(self, edge):
         try:
+            edge.remove_from_globaldata()
             self.edges.remove(edge)
             self.removeItem(edge)
         except Exception as reason:
