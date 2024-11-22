@@ -12,7 +12,7 @@ class ParserModule:
 
     def reload(self):
         with open(
-            os.path.join(self.path, "Parameters.ini"), "r", encoding="utf-8"
+            os.path.join(self.path, "Parameters.ini"), "r"
         ) as file:
             configText = file.read()
             flowNameList = re.findall(r'\bflowName\s*=\s*"([^"]+)"', configText)
@@ -97,7 +97,8 @@ class ParserModule:
     def loadData(self):
         self.reload()
         resultPath = os.path.join(self.path, "results", "General-#0.vec")
-        with open(resultPath, "r", encoding="utf-8") as fp:
+        with open(resultPath, "r") as fp:
+        # with open(resultPath, "r", encoding="utf-8") as fp:
             for line in fp:
                 if line == "":
                     continue
