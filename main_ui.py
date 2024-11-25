@@ -21,7 +21,8 @@ from ShowNetResultsWindow import ShowNetResultsWindow
 from component.netanalysis import Ui_NetAnalysis
 
 class UI:
-    def setup_ui(self, main_win: QMainWindow, path) -> None:
+    def setup_ui(self, main_win: QMainWindow, path, tab) -> None:
+        print("UI " + tab.__str__())
         # Actions
         self.action_change_home = QAction(QIcon(path + "/img/网络.png"), "网络仿真结果分析")
         self.action_change_dock = QAction(QIcon(path + "/img/应用软件集群.png"), "系统管理仿真结果分析")
@@ -53,17 +54,30 @@ class UI:
         self.action_micro_service.setCheckable(True)
         self.action_net_safe.setCheckable(True)
         self.action_change_home.setChecked(True)
-        action_group_toolbar.addAction(self.action_change_home)
-        action_group_toolbar.addAction(self.action_change_dock)
-        action_group_toolbar.addAction(self.action_micro_service)
-        action_group_toolbar.addAction(self.action_net_safe)
+        if tab == -1:
+            print("tab == -1")
+            action_group_toolbar.addAction(self.action_change_home)
+            action_group_toolbar.addAction(self.action_change_dock)
+            action_group_toolbar.addAction(self.action_micro_service)
+            action_group_toolbar.addAction(self.action_net_safe)
+        if tab == 0:
+            print("tab == 0")
+            action_group_toolbar.addAction(self.action_change_home)
+        if tab == 1:
+            print("tab == 1")
+            action_group_toolbar.addAction(self.action_change_dock)
 
         # Setup Widgets
         spacer.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         spacer.setEnabled(False)
 
         activitybar.setMovable(False)
-        activitybar.addActions((self.action_change_home, self.action_change_dock, self.action_micro_service, self.action_net_safe))
+        if tab == -1:
+            activitybar.addActions((self.action_change_home, self.action_change_dock, self.action_micro_service, self.action_net_safe))
+        if tab == 0:
+            activitybar.addAction(self.action_change_home)
+        if tab == 1:
+            activitybar.addAction(self.action_change_dock)
         activitybar.addWidget(spacer)
         #activitybar.addWidget(tool_btn_settings)
 
@@ -73,8 +87,8 @@ class UI:
         # tool_btn_disable.setDefaultAction(self.action_disable)
         tool_btn_theme.setIcon(QIcon(path + "/img/样式设置.png"))
         tool_btn_theme.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
-
-        toolbar.addAction(self.action_open_folder)
+        if tab == -1:
+            toolbar.addAction(self.action_open_folder)
         toolbar.addSeparator()
         toolbar.addWidget(tool_btn_theme)
 
@@ -101,22 +115,23 @@ class UI:
 
         # setup custom property
         activitybar.setProperty("type", "activitybar")
-
+        #  展示所有界面
         # layout
         self.stack_1 = ShowNetResultsWindow()
 
         #self.homeui = Ui_home()
         #HomeUI().setup_ui(stack_1)
-        self.stack_widget.addWidget(self.stack_1)
-        stack_2 = QWidget()
+        #self.stack_widget.addWidget(self.stack_1)
+        self.stack_2 = QWidget()
         self.resultui = Ui_Result()
         #ResultUI().setup_ui(stack_2)
-        self.resultui.setupUi(stack_2)
+        self.resultui.setupUi(self.stack_2)
         #DockUI().setup_ui(stack_2)
-        self.stack_widget.addWidget(stack_2)
+        #self.stack_widget.addWidget(stack_2)
 
         self.stack_3 = QWidget()
-        self.stack_widget.addWidget(self.stack_3)
+        #self.stack_widget.addWidget(self.stack_3)
+
 
         self.central_window.setCentralWidget(self.stack_widget)
         self.central_window.addToolBar(toolbar)

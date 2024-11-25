@@ -34,6 +34,7 @@ from item import GraphicItem
 from edge import Edge
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
+from ShowNetResultsWindow import ShowNetResultsWindow
 
 
 class NetResultType:
@@ -52,7 +53,7 @@ class NetResult:
     
 
 class JobSimQt(QMainWindow):
-    def __init__(self, path) -> None:
+    def __init__(self, path, tab) -> None:
         super().__init__()
         self.duration = 100
         print(path)
@@ -92,13 +93,27 @@ class JobSimQt(QMainWindow):
         self.setWindowIcon(QIcon(self.selfPath + "/img/数据.png"))
         self.nowClect = None
         self._ui = UI()
-        self._ui.setup_ui(self, self.selfPath)
+        self._ui.setup_ui(self, self.selfPath, tab)
+        self.tab = tab
+        if tab == -1:
+            self._ui.stack_widget.addWidget(self._ui.stack_1)
+            self._ui.stack_widget.addWidget(self._ui.stack_2)
+            self._ui.stack_widget.addWidget(self._ui.stack_3)
+        if tab == 0:
+            self._ui.stack_widget.addWidget(self._ui.stack_1)
+        if tab == 1:
+            self._ui.stack_widget.addWidget(self._ui.stack_2)
         self._ui.stack_widget.setCurrentIndex(0)
         # Signal
-        self._ui.action_change_home.triggered.connect(self._change_page)
-        self._ui.action_change_dock.triggered.connect(self._change_page)
-        self._ui.action_micro_service.triggered.connect(self._change_page)
-        self._ui.action_net_safe.triggered.connect(self._change_page)
+        if tab == -1:
+            self._ui.action_change_home.triggered.connect(self._change_page)
+            self._ui.action_change_dock.triggered.connect(self._change_page)
+            self._ui.action_micro_service.triggered.connect(self._change_page)
+            self._ui.action_net_safe.triggered.connect(self._change_page)
+        if tab == 0:
+            self._ui.action_change_home.triggered.connect(self._change_page)
+        if tab == 1:
+            self._ui.action_change_dock.triggered.connect(self._change_page)
         self._ui.action_refresh.triggered.connect(self._initAll)
         self._ui.action_open_folder.triggered.connect(self.loadFromProject
             #lambda: QFileDialog.getOpenFileName(self, "Open File", options=QFileDialog.Option.DontUseNativeDialog)
@@ -125,7 +140,10 @@ class JobSimQt(QMainWindow):
         if action_name == "网络仿真结果分析":
             self._ui.stack_widget.setCurrentIndex(0)
         if action_name == "系统管理仿真结果分析":
-            self._ui.stack_widget.setCurrentIndex(1)
+            if self.tab != 1:
+                self._ui.stack_widget.setCurrentIndex(1)
+            else:
+                self._ui.stack_widget.setCurrentIndex(0)
         if action_name == "微服务指标采集":
                     # 初始化一个page
             if self.grafanaPath == "":
@@ -799,13 +817,18 @@ if __name__ == "__main__":
     # if hasattr(Qt.ApplicationAttribute, "AA_UseHighDpiPixmaps"):  # Enable High DPI display with Qt5
     #     app.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps)
     # QDir.addSearchPath("icons", f"{get_project_root_path().as_posix()}/widget_gallery/ui/svg")
-    if len(sys.argv) < 2:
+    if len(sys.argv) <2:
         if getattr(sys, 'frozen', False):
-            win = JobSimQt(os.path.dirname(sys.executable)  + "/project")
+            win = JobSimQt(os.path.dirname(sys.executable)  + "/project", -1)
         else:
-            win = JobSimQt(os.path.dirname(os.path.abspath(__file__)) + "/project")
+            win = JobSimQt(os.path.dirname(os.path.abspath(__file__)) + "/project", -1)
+    elif len(sys.argv) == 2:
+        if getattr(sys, 'frozen', False):
+            win = JobSimQt(os.path.dirname(sys.executable)  + "/project", sys.argv[1])
+        else:
+            win = JobSimQt(os.path.dirname(os.path.abspath(__file__)) + "/project", int(sys.argv[1]))
     else:
-        win = JobSimQt(sys.argv[1])
+        win = JobSimQt(sys.argv[1], int(sys.argv[2]))
     win.menuBar().setNativeMenuBar(False)
     app.setStyleSheet(qdarktheme.load_stylesheet())
     win.show()
