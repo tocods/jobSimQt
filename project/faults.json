@@ -8,6 +8,6 @@
         "mttr_shape": 5.0,
         "name": "fault_4101",
         "aim": "host1",
-        "type": "RAM"
+        "type": "gpu"
     }
 ]

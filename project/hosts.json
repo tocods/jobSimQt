@@ -1,7 +1,20 @@
 [
     {
         "name": "host1",
-        "video_card_infos": [],
+        "video_card_infos": [
+            {
+                "gpu_infos": [
+                    {
+                        "cores": 1000,
+                        "core_per_sm": 100,
+                        "max_block_per_sm": 10,
+                        "gddram": 8,
+                        "flops_per_core": 10
+                    }
+                ],
+                "pcie_bw": 5
+            }
+        ],
         "cpu_infos": [
             {
                 "cores": 2,
