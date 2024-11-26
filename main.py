@@ -445,6 +445,13 @@ class JobSimQt(QMainWindow):
         self._ui.homeui.tabWidget.tabBar().hide()
         #self._initResult()
 
+        self._ui.network_editor.ui.hostWuli.clear()
+        self._ui.network_editor.ui.hostXieyi.clear()
+        self._ui.network_editor.ui.hostZhongjian.clear()
+        self._ui.network_editor.ui.lianlu.clear()
+
+        self.
+
 
     def initTreeView(self):
         f = QFont()

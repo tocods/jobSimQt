@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <faultRecord>
-  <faultRecord time="6.59" type="rebuild" object="host1" isFalseAlarm="False" isSuccessRebuild="False" redundancyBefore="10" redundancyAfter="0" faultType="gpu" />
   <faultRecord time="10" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <faultRecord time="15.17" type="rebuild" object="host1" isFalseAlarm="False" isSuccessRebuild="False" redundancyBefore="10" redundancyAfter="0" faultType="gpu" />
   <faultRecord time="20" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <faultRecord time="28.69" type="rebuild" object="host1" isFalseAlarm="False" isSuccessRebuild="False" redundancyBefore="10" redundancyAfter="0" faultType="gpu" />
   <faultRecord time="30" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
   <faultRecord time="40" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <faultRecord time="41.73" type="rebuild" object="host1" isFalseAlarm="False" isSuccessRebuild="False" redundancyBefore="9.25" redundancyAfter="0" faultType="gpu" />
-  <faultRecord time="49.4" type="rebuild" object="host1" isFalseAlarm="True" isSuccessRebuild="True" redundancyBefore="10" redundancyAfter="0" faultType="gpu" />
   <faultRecord time="50" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <faultRecord time="56.96" type="rebuild" object="host1" isFalseAlarm="False" isSuccessRebuild="False" redundancyBefore="10" redundancyAfter="0" faultType="gpu" />
   <faultRecord time="60" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
   <faultRecord time="70" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
   <faultRecord time="80" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <faultRecord time="85.07" type="rebuild" object="host1" isFalseAlarm="False" isSuccessRebuild="False" redundancyBefore="10" redundancyAfter="0" faultType="gpu" />
   <faultRecord time="90" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <reliability value="0" />
+  <reliability value="1" />
 </faultRecord>

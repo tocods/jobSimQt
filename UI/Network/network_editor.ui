@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>916</width>
-    <height>692</height>
+    <width>918</width>
+    <height>948</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_3">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,5">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,5,2">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -46,7 +46,7 @@
           </widget>
          </item>
          <item>
-          <layout class="QGridLayout" name="add" rowstretch="0,0,0,0">
+          <layout class="QGridLayout" name="add" rowstretch="0,0,0">
            <item row="2" column="1">
             <widget class="QPushButton" name="global_setting">
              <property name="text">
@@ -112,6 +112,58 @@
       <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
        <item>
         <widget class="QGraphicsView" name="graphicsView"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>主机配置</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="hostApply">
+           <property name="text">
+            <string>应用</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTabWidget" name="hostWuli"/>
+       </item>
+       <item>
+        <widget class="QTabWidget" name="hostXieyi"/>
+       </item>
+       <item>
+        <widget class="QTabWidget" name="hostZhongjian"/>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>链路配置</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="linkApple">
+           <property name="text">
+            <string>应用</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTabWidget" name="lianlu"/>
        </item>
       </layout>
      </item>
