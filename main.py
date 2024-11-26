@@ -584,7 +584,7 @@ class JobSimQt(QMainWindow):
         self._ui.resultui.jobshow1.append(numFormat.format(str(self.avergaeRunTime))) 
         self._ui.resultui.jobshow1.append(otherFormat.format('s')) 
 
-        self.throughput = (int)(getThroughput(self.job_results))
+        self.throughput = (int)(getThroughput(self.job_results, self.cluster_result))
         # self._ui.resultui.jobshow2.setText(str(self.throughput) + "FLOPS/s")
         # 不可编辑
         self._ui.resultui.jobshow2.setReadOnly(True)
@@ -600,7 +600,7 @@ class JobSimQt(QMainWindow):
         self._ui.resultui.jobshow2.append(otherFormat.format('TFLOPS/s')) 
 
 
-        self.efficiency = round(getEfficiency(self.job_results), 2)
+        self.efficiency = round(getEfficiency(self.job_results, self.cluster_resultq), 2)
         # self._ui.resultui.jobshow3.setText(str(self.efficiency))
         # 不可编辑
         self._ui.resultui.jobShow3.setReadOnly(True)

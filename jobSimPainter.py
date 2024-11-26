@@ -101,6 +101,28 @@ class HostRecord:
         self.maxCpuUtilization = 0
         self.maxRamUtilization = 0
         self.maxGpuUtilization = 0
+
+    def ifInUse(self, i):
+        hostUtilization = self.hostUtilizations[i]
+        if float(hostUtilization.cpuUtilization) > 0 or float(hostUtilization.ramUtilization) > 0:
+            return True
+        for gpuUtilization in hostUtilization.gpuUtilizations:
+            if float(gpuUtilization.utilization) > 0:
+                return True
+        return False
+
+    def getInUseTime(self):
+        inUseTime = 0
+        for hostUtilization in self.hostUtilizations:
+            #如果CPU利用率或者内存利用率大于0，说明主机在使用
+            if float(hostUtilization.cpuUtilization) > 0 or float(hostUtilization.ramUtilization) > 0:
+                inUseTime += 1
+            #如果GPU利用率大于0，说明主机在使用
+
+            for gpuUtilization in hostUtilization.gpuUtilizations:
+                if float(gpuUtilization.utilization) > 0:
+                    inUseTime += 1
+        return inUseTime
     
     def calculateUtilization(self):
         cpuUtilizationList = self.getCpuUilizationList()
@@ -202,6 +224,19 @@ class ClusterRecord:
 
     def addHostRecord(self, hostRecord):
         self.hostRecords.append(hostRecord)
+
+    def getInUseTime(self):
+        inUseTime = 0.0
+        maxLen = len(self.hostRecords[0].hostUtilizations)
+        for i in maxLen:
+            ifAnyHostInUse = False
+            for hostRecord in self.hostRecords:
+                if hostRecord.ifInUse(i):
+                    ifAnyHostInUse = True
+                    break
+            if ifAnyHostInUse:
+                inUseTime += 1
+        return inUseTime
 
     def print(self):
         for hostRecord in self.hostRecords:
