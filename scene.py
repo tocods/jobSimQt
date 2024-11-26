@@ -37,13 +37,17 @@ class GraphicScene(QGraphicsScene):
     # 删除画布上的某图像图元
     def remove_node(self, node):
         try:
-            node.remove_from_globaldata()
             self.nodes.remove(node)
             # 删除图元时，遍历与其连接的线，并移除
-            for edge in self.edges:
+            i = 0
+            while i < len(self.edges):
+                edge = self.edges[i]
                 if edge.edge_wrap.start_item is node or edge.edge_wrap.end_item is node:
                     self.remove_edge(edge)
+                else:
+                    i += 1
             self.removeItem(node)
+            node.remove_from_globaldata()
         except Exception as reason:
             reason #请勿连续按下删除键
     # 在画布上添加连线图元
@@ -53,9 +57,9 @@ class GraphicScene(QGraphicsScene):
     # 删除画布上的某连线图元
     def remove_edge(self, edge):
         try:
-            edge.remove_from_globaldata()
             self.edges.remove(edge)
             self.removeItem(edge)
+            edge.remove_from_globaldata()
         except Exception as reason:
             reason #请勿连续按下删除键
 

@@ -104,27 +104,20 @@ def create_xml():
     rdma_hosts_element = ET.SubElement(hosts_element, "RdmaHosts")
     tsn_hosts_element = ET.SubElement(hosts_element, "TsnHosts")
     dds_hosts_element = ET.SubElement(hosts_element, "DdsHosts")
-    all_hosts_element = ET.SubElement(hosts_element, "AllHosts")
 
     for host_graphic_item in hostList:
         # 判断主机类型
         if isinstance(host_graphic_item.hostAttr, entity.host.NormalHost):
-            all_host_element = ET.SubElement(all_hosts_element, "NormalHost")
             host_element = ET.SubElement(normal_hosts_element, "NormalHost")
         elif isinstance(host_graphic_item.hostAttr, entity.host.UdpHost):
-            all_host_element = ET.SubElement(all_hosts_element, "UdpHost")
             host_element = ET.SubElement(udp_hosts_element, "UdpHost")
         elif isinstance(host_graphic_item.hostAttr, entity.host.TcpHost):
-            all_host_element = ET.SubElement(all_hosts_element, "TcpHost")
             host_element = ET.SubElement(tcp_hosts_element, "TcpHost")
         elif isinstance(host_graphic_item.hostAttr, entity.host.RdmaHost):
-            all_host_element = ET.SubElement(all_hosts_element, "RdmaHost")
             host_element = ET.SubElement(rdma_hosts_element, "RdmaHost")
         elif isinstance(host_graphic_item.hostAttr, entity.host.TsnHost):
-            all_host_element = ET.SubElement(all_hosts_element, "TsnHost")
             host_element = ET.SubElement(tsn_hosts_element, "TsnHost")
         elif isinstance(host_graphic_item.hostAttr, entity.host.DdsHost):
-            all_host_element = ET.SubElement(all_hosts_element, "DdsHost")
             host_element = ET.SubElement(dds_hosts_element, "DdsHost")
         else:
             print("not a valid host!")
