@@ -618,7 +618,7 @@ class JobSimQt(QMainWindow):
         self._ui.resultui.jobshow2.append(otherFormat.format('TFLOPS/s')) 
 
 
-        self.efficiency = round(getEfficiency(self.job_results, self.cluster_resultq), 2)
+        self.efficiency = round(getEfficiency(self.job_results, self.cluster_result), 2)
         # self._ui.resultui.jobshow3.setText(str(self.efficiency))
         # 不可编辑
         self._ui.resultui.jobShow3.setReadOnly(True)
@@ -722,10 +722,14 @@ class JobSimQt(QMainWindow):
             self.faultTable.setItem(i, 0, QTableWidgetItem(faultRecord.time))
             self.faultTable.setItem(i, 1, QTableWidgetItem(faultRecord.object))
             self.faultTable.setItem(i, 2, QTableWidgetItem(faultRecord.type))
-            if faultRecord.hardware == "CPU":
+            if faultRecord.hardware == "CPU" or faultRecord.hardware == "cpu":
                 self.faultTable.setItem(i, 3, QTableWidgetItem("CPU"))
-            elif faultRecord.hardware == "ram":
+            elif faultRecord.hardware == "ram" or faultRecord.hardware == "RAM" or faultRecord.hardware == "内存":
                 self.faultTable.setItem(i, 3, QTableWidgetItem("内存"))
+            elif faultRecord.hardware == "GPU" or faultRecord.hardware == "gpu":
+                self.faultTable.setItem(i, 3, QTableWidgetItem("GPU"))
+            else:
+                self.faultTable.setItem(i, 3, QTableWidgetItem("\\"))
             self.faultTable.setCellWidget(i, 4, seeMore)
             i += 1
         self._ui.resultui.faultTabs.addTab(self.faultTable, "故障记录")
@@ -733,9 +737,9 @@ class JobSimQt(QMainWindow):
         # 设置不可见
         self.faultMoreTable.verticalHeader().setVisible(False)
         self.faultMoreTable.horizontalHeader().setVisible(True)
-        self.faultMoreTable.setColumnCount(4)
+        self.faultMoreTable.setColumnCount(5)
         self.faultMoreTable.setRowCount(0)
-        self.faultMoreTable.setHorizontalHeaderLabels(["是否虚警", "重构成功", "可靠度(前)", "可靠度(后)"])
+        self.faultMoreTable.setHorizontalHeaderLabels(["是否虚警", "重构成功", "可靠度(前)", "可靠度(后)", "资源可用性"])
         self._ui.resultui.faultTabs.addTab(self.faultMoreTable, "故障详细信息")
 
     def _initChartView(self, hostName):
@@ -798,6 +802,7 @@ class JobSimQt(QMainWindow):
             self.faultMoreTable.setItem(0, 1, QTableWidgetItem("\\"))
             self.faultMoreTable.setItem(0, 2, QTableWidgetItem("\\"))
             self.faultMoreTable.setItem(0, 3, QTableWidgetItem("\\"))
+            self.faultMoreTable.setItem(0, 4, QTableWidgetItem("\\"))
             self._ui.resultui.faultTabs.setCurrentIndex(1)
             return
         else:
@@ -805,9 +810,9 @@ class JobSimQt(QMainWindow):
                 self.faultMoreTable.setItem(0, 1, QTableWidgetItem("是"))
             else:
                 self.faultMoreTable.setItem(0, 1, QTableWidgetItem("否"))
-        
-        self.faultMoreTable.setItem(0, 2, QTableWidgetItem(str(faultRecord.redundancyBefore)))
-        self.faultMoreTable.setItem(0, 3, QTableWidgetItem(str(faultRecord.redundancyAfter)))
+            self.faultMoreTable.setItem(0, 2, QTableWidgetItem(str(faultRecord.redundancyBefore)))
+            self.faultMoreTable.setItem(0, 3, QTableWidgetItem(str(faultRecord.redundancyAfter)))
+            self.faultMoreTable.setItem(0, 4, QTableWidgetItem(str(faultRecord.redundancyAfter)))
         self._ui.resultui.faultTabs.setCurrentIndex(1)
 
 if __name__ == "__main__":

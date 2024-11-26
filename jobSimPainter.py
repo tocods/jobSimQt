@@ -228,7 +228,7 @@ class ClusterRecord:
     def getInUseTime(self):
         inUseTime = 0.0
         maxLen = len(self.hostRecords[0].hostUtilizations)
-        for i in maxLen:
+        for i in range(maxLen):
             ifAnyHostInUse = False
             for hostRecord in self.hostRecords:
                 if hostRecord.ifInUse(i):
