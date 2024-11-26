@@ -189,7 +189,7 @@ def create_xml():
 
 
     # Convert to a pretty XML string
-    xml_str = ET.tostring(root, encoding="unicode")
+    xml_str = ET.tostring(root)
 
     parsed_xml_str = minidom.parseString(xml_str)
     formatted_xml_str = parsed_xml_str.toprettyxml(indent="    ")

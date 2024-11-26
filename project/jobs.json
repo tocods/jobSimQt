@@ -7,7 +7,18 @@
             "pes_number": 1,
             "length": "6000"
         },
-        "gpu_task": null,
+        "gpu_task": {
+            "kernels": [
+                {
+                    "block_num": 10,
+                    "thread_num": 10,
+                    "thread_length": 100
+                }
+            ],
+            "requested_gddram_size": 100,
+            "task_input_size": 100,
+            "task_output_size": 100
+        },
         "host": ""
     }
 ]
