@@ -8,7 +8,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QMenu,
     QGraphicsPathItem,
     QGraphicsItemGroup,
-    QGraphicsSceneMouseEvent
+    QGraphicsSceneMouseEvent,
 )
 from qdarktheme.qtpy.QtCore import Qt, QRect
 from qdarktheme.qtpy.QtGui import QPainter, QAction, QCursor
@@ -40,7 +40,7 @@ class GraphicView(QGraphicsView):
         self.deleteAction.triggered.connect(self.deleteItem)
         self.menu.addAction(self.editAction)
         self.menu.addAction(self.deleteAction)
-        
+
         # 子界面
         self.editHostNetargsWindowNormal = EditHostNetargsWindowNormal(self, sysSim)
         self.editHostNetargsWindowUdp = EditHostNetargsWindowUdp(self, sysSim)
@@ -57,6 +57,8 @@ class GraphicView(QGraphicsView):
         self.init_ui()
 
         self.lineToolEnabled = False
+        self.hostAdding = False
+        self.switchAdding = False
 
     def showEditor(self):
         if self.item_clicked == None:
@@ -70,19 +72,13 @@ class GraphicView(QGraphicsView):
         elif isinstance(self.item_clicked, SwitchGraphicItem):
             # 将 交换机图形对象 和 其中包含的交换机属性信息对象 传递至属性设置界面
             if isinstance(self.item_clicked.switchAttr, TsnSwitch):
-                self.editSwitchNetargsWindowTsn.setSwitchGraphicItem(
-                    self.item_clicked
-                )
+                self.editSwitchNetargsWindowTsn.setSwitchGraphicItem(self.item_clicked)
                 self.editSwitchNetargsWindowTsn.show()
             elif isinstance(self.item_clicked.switchAttr, RdmaSwitch):
-                self.editSwitchNetargsWindowRdma.setSwitchGraphicItem(
-                    self.item_clicked
-                )
+                self.editSwitchNetargsWindowRdma.setSwitchGraphicItem(self.item_clicked)
                 self.editSwitchNetargsWindowRdma.show()
             else:
-                self.editSwitchNetargsWindowUdp.setSwitchGraphicItem(
-                    self.item_clicked
-                )
+                self.editSwitchNetargsWindowUdp.setSwitchGraphicItem(self.item_clicked)
                 self.editSwitchNetargsWindowUdp.show()
             return
         # 连接
@@ -111,6 +107,19 @@ class GraphicView(QGraphicsView):
         # 设置拖拽模式
         self.setDragMode(QGraphicsView.DragMode.RubberBandDrag)
 
+    def setHostToAdd(
+        self, host_name, host_type, img, width, height, onlyCpu, Host_class
+    ):
+        self.lineToolDisable()
+        self.hostAdding = True
+        self.hostToAdd_name = host_name
+        self.hostToAdd_type = host_type
+        self.hostToAdd_img = img
+        self.hostToAdd_width = width
+        self.hostToAdd_height = height
+        self.hostToAdd_onlyCpu = onlyCpu
+        self.hostToAdd_class = Host_class
+
     # 在画布上添加主机
     def createGraphicHostItem(
         self,
@@ -121,16 +130,34 @@ class GraphicView(QGraphicsView):
         height,
         onlyCpu=False,
         Host_class=Host,
+        pos_x=0,
+        pos_y=0
     ):
         item = HostGraphicItem(
             host_name, host_type, img, width, height, parent=self, Host_class=Host_class
         )
         # 将onlyCpu记录到属性中
         item.hostAttr.only_cpu = onlyCpu
-        item.setPos(0, 0)
+        item.setPos(pos_x, pos_y)
         self.jobSim.addHostItem(item, onlyCPU=onlyCpu)
         self.gr_scene.add_node(item)
         return item
+
+    def setSwitchToAdd(
+        self, switch_name, switch_type, img, width, height, Switch_class
+    ):
+        self.lineToolDisable()
+        self.switchAdding = True
+        self.switchToAdd_name = switch_name
+        self.switchToAdd_type = switch_type
+        self.switchToAdd_img = img
+        self.switchToAdd_width = width
+        self.switchToAdd_height = height
+        self.switchToAdd_class = Switch_class
+
+    def stopAdding(self):
+        self.hostAdding = False
+        self.switchAdding = False
 
     # 在画布上添加交换机
     def createGraphicSwitchItem(
@@ -141,11 +168,19 @@ class GraphicView(QGraphicsView):
         width,
         height,
         Switch_class=Switch,
+        pos_x=0,
+        pos_y=0
     ):
         item = SwitchGraphicItem(
-            switch_name, switch_type, img, width, height, parent=self, Switch_class=Switch_class
+            switch_name,
+            switch_type,
+            img,
+            width,
+            height,
+            parent=self,
+            Switch_class=Switch_class,
         )
-        item.setPos(0, 0)
+        item.setPos(pos_x, pos_y)
         self.gr_scene.add_node(item)
         return item
 
@@ -185,16 +220,13 @@ class GraphicView(QGraphicsView):
             self.editHostNetargsWindowRdma.setHostGraphicItem(item)
             self.editHostNetargsWindowRdma.show()
 
-
-    
     def graphicItemClicked(self, item, event: QGraphicsSceneMouseEvent):
         self.item_clicked = item
         if event.button() == Qt.MouseButton.RightButton:
             self.menu.popup(QCursor.pos())
         elif self.lineToolEnabled:
             self.lineClick()
-    
-    
+
     def linkClicked(self, link, event: QGraphicsSceneMouseEvent):
         self.item_clicked = link
         if event.button() == Qt.MouseButton.RightButton:
@@ -226,21 +258,54 @@ class GraphicView(QGraphicsView):
 
     def mousePressEvent(self, event: QMouseEvent):
         super().mousePressEvent(event)
-        if event.button() != Qt.MouseButton.RightButton:
-            return
-        link = self.get_link_at_pos(event)
-        if link == None:
-            return
-        
-        self.linkClicked(link, event)
+        if event.button() == Qt.MouseButton.LeftButton:
+            targetPos = self.mapToScene(event.pos())
+            if self.hostAdding:
+                self.createGraphicHostItem(
+                    self.hostToAdd_name,
+                    self.hostToAdd_type,
+                    self.hostToAdd_img,
+                    self.hostToAdd_width,
+                    self.hostToAdd_height,
+                    self.hostToAdd_onlyCpu,
+                    self.hostToAdd_class,
+                    targetPos.x(),
+                    targetPos.y()
+                )
+            elif self.switchAdding:
+                self.createGraphicSwitchItem(
+                    self.switchToAdd_name,
+                    self.switchToAdd_type,
+                    self.switchToAdd_img,
+                    self.switchToAdd_width,
+                    self.switchToAdd_height,
+                    self.switchToAdd_class,
+                    targetPos.x(),
+                    targetPos.y()
+                )
+        else:
+            link = self.get_link_at_pos(event)
+            if link == None:
+                return
+
+            self.linkClicked(link, event)
+        self.parent.update_tree_view()
+
+    def lineToolStateChange(self):
+        if not self.lineToolEnabled:
+            self.lineToolEnable()
+        else:
+            self.lineToolDisable()
 
     def lineToolEnable(self):
-        if not self.lineToolEnabled:
-            self.lineToolEnabled = True
-            self.parent.ui.add_line.setText("停止连线")
-        else:
-            self.lineToolEnabled = False
-            self.parent.ui.add_line.setText("连线")
+        self.lineToolEnabled = True
+        self.parent.ui.add_line.setText("停止连线")
+        self.hostAdding = False
+        self.switchAdding = False
+
+    def lineToolDisable(self):
+        self.lineToolEnabled = False
+        self.parent.ui.add_line.setText("连线")
 
     def lineClick(self):
         item = self.item_clicked
@@ -278,6 +343,7 @@ class GraphicView(QGraphicsView):
             self.gr_scene.remove_node(item)
         if isinstance(item, QGraphicsPathItem):
             self.gr_scene.remove_edge(item)
+        self.parent.update_tree_view()
 
     # def mouseReleaseEvent(self, event):
     #         super().mouseReleaseEvent(event)

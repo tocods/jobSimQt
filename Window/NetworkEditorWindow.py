@@ -26,23 +26,13 @@ class NetworkEditorWindow(QWidget):
         self.networkGlobalConfigWindow = NetworkGlobalConfig()
         self.init_add_node_menu()
         self.ui.add_host.setMenu(self.add_host_menu)
+
         self.ui.add_switch.setMenu(self.add_switch_menu)
-        self.ui.add_line.clicked.connect(self.ui.graphicsView.lineToolEnable)
+        self.ui.add_switch.clicked.connect(self.stop_adding)
+        self.ui.add_line.clicked.connect(self.ui.graphicsView.lineToolStateChange)
         self.ui.global_setting.clicked.connect(self.show_network_global_config)
         self.ui.run.clicked.connect(self.action_set_netsim_time_cb)
         self.update_tree_view()
-
-    def show_add_host_menu(self):
-        button = self.ui.add_host
-        button_pos = button.mapToGlobal(button.rect().bottomLeft())
-        self.add_host_menu.move(button_pos)
-        self.add_host_menu.show()
-
-    def show_add_switch_menu(self):
-        button = self.ui.add_switch
-        button_pos = button.mapToGlobal(button.rect().bottomLeft())
-        self.add_switch_menu.move(button_pos)
-        self.add_switch_menu.show()
 
     def action_set_netsim_time_cb(self):
         self.setSimtimeWindow.show()
@@ -63,6 +53,9 @@ class NetworkEditorWindow(QWidget):
                 lambda _, i=index: self.add_host_menu_item_selected(i)
             )
             self.add_host_menu.addAction(action)
+        action = QAction("停止添加", self)
+        action.triggered.connect(self.stop_adding)
+        self.add_host_menu.addAction(action)
 
     def init_add_switch_menu(self):
         self.add_switch_menu = QMenu(self)
@@ -79,6 +72,9 @@ class NetworkEditorWindow(QWidget):
                 lambda _, i=index: self.add_switch_menu_item_selected(i)
             )
             self.add_switch_menu.addAction(action)
+        action = QAction("停止添加", self)
+        action.triggered.connect(self.stop_adding)
+        self.add_switch_menu.addAction(action)
 
     def init_add_node_menu(self):
         self.init_add_host_menu()
@@ -120,7 +116,7 @@ class NetworkEditorWindow(QWidget):
             DdsHost,
         ]
 
-        self.ui.graphicsView.createGraphicHostItem(
+        self.ui.graphicsView.setHostToAdd(
             name_list[index],
             type_list[index],
             img_list[index],
@@ -129,12 +125,14 @@ class NetworkEditorWindow(QWidget):
             only_cpu_list[index],
             class_list[index],
         )
-        self.update_tree_view()
+
+    def stop_adding(self):
+        self.ui.graphicsView.stopAdding()
 
     def add_switch_menu_item_selected(self, index):
         name_list = [
             "switch",
-            "rdma_switch"
+            "rdma_switch",
             "tsn_switch",
         ]
         type_list = [
@@ -149,10 +147,11 @@ class NetworkEditorWindow(QWidget):
         ]
         class_list = [
             NormalSwitch,
+            RdmaSwitch,
             TsnSwitch,
         ]
 
-        self.ui.graphicsView.createGraphicSwitchItem(
+        self.ui.graphicsView.setSwitchToAdd(
             name_list[index],
             type_list[index],
             img_list[index],
@@ -160,7 +159,6 @@ class NetworkEditorWindow(QWidget):
             100,
             class_list[index],
         )
-        self.update_tree_view()
 
     def update_tree_view(self):
         self.ui.infoList.clear()
