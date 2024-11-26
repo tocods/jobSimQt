@@ -6,7 +6,9 @@ from qdarktheme.qtpy.QtWidgets import (
     QHBoxLayout,
     QMessageBox,
     QDialog,
+    QComboBox
 )
+import globaldata
 
 
 CHINESE_KEYS = {
@@ -89,8 +91,17 @@ class JsonArrayEditor(QDialog):
         for row, obj in enumerate(self.json_data):
             for col, field in enumerate(self.fields):  # 假设字段名称固定
                 value = obj.get(field, "")
-                item = QTableWidgetItem(str(value))
-                self.table_widget.setItem(row, col, item)
+                if field == "destAddress" or field == "connectAddress":
+                    combo = QComboBox(self)
+                    addrList = []
+                    for host in globaldata.hostList:
+                        addrList.append(host.hostAttr.name)
+                    combo.addItems(addrList)
+                    combo.setCurrentText(value)
+                    self.table_widget.setCellWidget(row, col, combo)
+                else:
+                    item = QTableWidgetItem(str(value))
+                    self.table_widget.setItem(row, col, item)
 
     def try_insert_object(self, obj: dict):
         """进行检查 如果key一致就加入"""
@@ -110,7 +121,18 @@ class JsonArrayEditor(QDialog):
         row_position = self.table_widget.rowCount()
         self.table_widget.insertRow(row_position)
         for col, field in enumerate(self.fields):
-            self.table_widget.setItem(row_position, col, QTableWidgetItem(obj[field]))
+                value = obj.get(field, "")
+                if field == "destAddress" or field == "connectAddress":
+                    combo = QComboBox(self)
+                    addrList = []
+                    for host in globaldata.hostList:
+                        addrList.append(host.hostAttr.name)
+                    combo.addItems(addrList)
+                    combo.setCurrentText(value)
+                    self.table_widget.setCellWidget(row_position, col, combo)
+                else:
+                    item = QTableWidgetItem(str(value))
+                    self.table_widget.setItem(row_position, col, item)
 
     def delete_object(self):
         """删除选中的对象"""
