@@ -11,16 +11,20 @@ class ParserModule:
         self.reload()
 
     def reload(self):
-        with open(
-            os.path.join(self.path, "Parameters.ini"), "r"
-        ) as file:
-            configText = file.read()
-            flowNameList = re.findall(r'\bflowName\s*=\s*"([^"]+)"', configText)
-        self.flowNameList = flowNameList
-        self.flowNameLossList = []
-        for name in self.flowNameList:
-            self.flowNameLossList.append(name + "_loss")
-        self.reset()
+        try:
+            with open(
+                os.path.join(self.path, "Parameters.ini"), "r"
+            ) as file:
+                configText = file.read()
+                flowNameList = re.findall(r'\bflowName\s*=\s*"([^"]+)"', configText)
+            self.flowNameList = flowNameList
+            self.flowNameLossList = []
+            for name in self.flowNameList:
+                self.flowNameLossList.append(name + "_loss")
+            self.reset()
+        except Exception as e:
+            print(e)
+
 
     def reset(self):
         self.latencyVectorList = []
