@@ -134,7 +134,7 @@ class SetSimtimeWindow(QDialog):
         f.write(f'**.eth[*].queue.typename = "{data["queueTypename"]}"\n')
         f.write(f'**.eth[*].queue.packetCapacity = {data["queuePacketCapacity"]}\n')
         self.generateTcpINIHeader(f)
-        self.generateDdsINIHeader(f)
+        self.generateINIHeaderIp(f)
         # self.generateRdmaINIHeader(f)
 
     def generateTcpINIHeader(self, f):
@@ -155,10 +155,11 @@ class SetSimtimeWindow(QDialog):
         f.write("**.tcp.timestampSupport = false\n")
         f.write("**.tcp.mss = 1452\n")
 
-    def generateDdsINIHeader(self, f):
-        f.write(
-            "*.configurator.config = xml(\"<config><interface hosts='**' address='192.x.x.x' netmask='255.x.x.x'/></config>\")\n"
-        )
+    def generateINIHeaderIp(self, f):
+        f.write('*.configurator.config = xml("<config>\n" + \\')
+        for host in globaldata.hostList:
+            f.write(f'"<interface hosts=\'{host.hostAttr.name}\' address=\'{host.hostAttr.ip}\' netmask=\'255.255.255.x\'/>\n" + \\')
+        f.write('"</config>")\n')
 
     def generateRdmaINIHeader(self, f):
         f.write('*.*.llc.typename = ""\n')

@@ -95,9 +95,10 @@ class JsonArrayEditor(QDialog):
     def try_insert_object(self, obj: dict):
         """进行检查 如果key一致就加入"""
         if not self.fields == obj.keys():
-            return
+            return False
 
         self.add_object(obj)
+        return True
 
     def add(self):
         """添加新对象到数组"""
