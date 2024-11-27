@@ -19,8 +19,8 @@ from PySide6.QtWidgets import (QApplication, QGraphicsView, QGridLayout, QHBoxLa
     QHeaderView, QLabel, QPushButton, QSizePolicy,
     QTabWidget, QTreeWidget, QTreeWidgetItem, QVBoxLayout,
     QWidget)
-from view import GraphicView
 from scene import GraphicScene
+from view import GraphicView
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -134,20 +134,30 @@ class Ui_Form(object):
 
         self.verticalLayout_5.addLayout(self.horizontalLayout_4)
 
-        self.hostWuli = QTabWidget(Form)
-        self.hostWuli.setObjectName(u"hostWuli")
+        self.hostSet = QTabWidget(Form)
+        self.hostSet.setObjectName(u"hostSet")
 
-        self.verticalLayout_5.addWidget(self.hostWuli)
+        self.verticalLayout_5.addWidget(self.hostSet)
 
-        self.hostXieyi = QTabWidget(Form)
-        self.hostXieyi.setObjectName(u"hostXieyi")
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.label_6 = QLabel(Form)
+        self.label_6.setObjectName(u"label_6")
 
-        self.verticalLayout_5.addWidget(self.hostXieyi)
+        self.horizontalLayout_6.addWidget(self.label_6)
 
-        self.hostZhongjian = QTabWidget(Form)
-        self.hostZhongjian.setObjectName(u"hostZhongjian")
+        self.switchApply = QPushButton(Form)
+        self.switchApply.setObjectName(u"switchApply")
 
-        self.verticalLayout_5.addWidget(self.hostZhongjian)
+        self.horizontalLayout_6.addWidget(self.switchApply)
+
+
+        self.verticalLayout_5.addLayout(self.horizontalLayout_6)
+
+        self.switchSet = QTabWidget(Form)
+        self.switchSet.setObjectName(u"switchSet")
+
+        self.verticalLayout_5.addWidget(self.switchSet)
 
         self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
@@ -156,18 +166,18 @@ class Ui_Form(object):
 
         self.horizontalLayout_5.addWidget(self.label_5)
 
-        self.linkApple = QPushButton(Form)
-        self.linkApple.setObjectName(u"linkApple")
+        self.linkApply = QPushButton(Form)
+        self.linkApply.setObjectName(u"linkApply")
 
-        self.horizontalLayout_5.addWidget(self.linkApple)
+        self.horizontalLayout_5.addWidget(self.linkApply)
 
 
         self.verticalLayout_5.addLayout(self.horizontalLayout_5)
 
-        self.lianlu = QTabWidget(Form)
-        self.lianlu.setObjectName(u"lianlu")
+        self.linkSet = QTabWidget(Form)
+        self.linkSet.setObjectName(u"linkSet")
 
-        self.verticalLayout_5.addWidget(self.lianlu)
+        self.verticalLayout_5.addWidget(self.linkSet)
 
 
         self.horizontalLayout.addLayout(self.verticalLayout_5)
@@ -195,7 +205,9 @@ class Ui_Form(object):
         self.run.setText(QCoreApplication.translate("Form", u"\u8fd0\u884c\u4eff\u771f", None))
         self.label_3.setText(QCoreApplication.translate("Form", u"\u4e3b\u673a\u914d\u7f6e", None))
         self.hostApply.setText(QCoreApplication.translate("Form", u"\u5e94\u7528", None))
+        self.label_6.setText(QCoreApplication.translate("Form", u"\u4ea4\u6362\u673a\u914d\u7f6e", None))
+        self.switchApply.setText(QCoreApplication.translate("Form", u"\u5e94\u7528", None))
         self.label_5.setText(QCoreApplication.translate("Form", u"\u94fe\u8def\u914d\u7f6e", None))
-        self.linkApple.setText(QCoreApplication.translate("Form", u"\u5e94\u7528", None))
+        self.linkApply.setText(QCoreApplication.translate("Form", u"\u5e94\u7528", None))
     # retranslateUi
 

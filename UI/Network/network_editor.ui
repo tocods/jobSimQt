@@ -136,13 +136,28 @@
         </layout>
        </item>
        <item>
-        <widget class="QTabWidget" name="hostWuli"/>
+        <widget class="QTabWidget" name="hostSet"/>
        </item>
        <item>
-        <widget class="QTabWidget" name="hostXieyi"/>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>交换机配置</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="switchApply">
+           <property name="text">
+            <string>应用</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QTabWidget" name="hostZhongjian"/>
+        <widget class="QTabWidget" name="switchSet"/>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -154,7 +169,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="linkApple">
+          <widget class="QPushButton" name="linkApply">
            <property name="text">
             <string>应用</string>
            </property>
@@ -163,7 +178,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QTabWidget" name="lianlu"/>
+        <widget class="QTabWidget" name="linkSet"/>
        </item>
       </layout>
      </item>

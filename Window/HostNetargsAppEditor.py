@@ -69,37 +69,38 @@ DEFAULT_SINK = {
 
 
 class HostNetargsAppEditor(QDialog):
-    def __init__(self, json_data):
+    def __init__(self, json_data, noButton=False):
         QDialog.__init__(self)
 
         self.json_data = json_data
         self.tabs = {}
 
-        self.setup_ui()
+        self.setup_ui(noButton)
         self.update_table()
 
     def get_key_chinese(self):
         key_chinese = {}
         return key_chinese
 
-    def setup_ui(self):
+    def setup_ui(self, noButton=False):
         self.setWindowTitle("编辑器")
         self.setGeometry(100, 100, 800, 600)
         self.tabWidget = QTabWidget()
         self.setupTab()
         for title, tab in self.tabs.items():
             self.tabWidget.addTab(tab, title)
-
-        self.applyButton = QPushButton("保存")
-        self.applyButton.clicked.connect(self.save)
+        if not noButton:
+            self.applyButton = QPushButton("保存")
+            self.applyButton.clicked.connect(self.save)
 
         layout = QVBoxLayout()
         layout.addWidget(self.tabWidget)
 
-        edit_layout = QHBoxLayout()
-        edit_layout.addWidget(self.applyButton)
+        if not noButton:
+            edit_layout = QHBoxLayout()
+            edit_layout.addWidget(self.applyButton)
 
-        layout.addLayout(edit_layout)
+            layout.addLayout(edit_layout)
         self.setLayout(layout)
 
     def save(self):
@@ -124,6 +125,22 @@ class HostNetargsAppEditor(QDialog):
     def get_json_data(self):
         return self.json_data
 
+
+class HostNetargsAppEditorApp(HostNetargsAppEditor):
+    def setupTab(self):
+        self.tabs = {
+            "Udp发送端": JsonArrayEditor([], DEFAULT_SOURCE["udp"], False),
+            "Tcp发送端": JsonArrayEditor([], DEFAULT_SOURCE["tcp"], False),
+            "Rdma发送端": JsonArrayEditor([], DEFAULT_SOURCE["rdma"], False),
+            "Udp接收端": JsonArrayEditor([], DEFAULT_SINK["udp"], False),
+            "Tcp接收端": JsonArrayEditor([], DEFAULT_SINK["tcp"], False),
+            "Rdma接收端": JsonArrayEditor([], DEFAULT_SINK["rdma"], False),
+        }
+class HostNetargsAppEditorMiddleware(HostNetargsAppEditor):
+    def setupTab(self):
+        self.tabs = {
+             "Dds接收端": JsonArrayEditor([], DEFAULT_SINK["dds"], False),
+        }
 
 class HostNetargsAppEditorNormal(HostNetargsAppEditor):
     def setupTab(self):

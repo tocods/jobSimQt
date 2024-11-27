@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jobRun>
   <Job name="job_6742">
-    <RunningRecord status="Canceled" host="host1" start="0" end="10" duration="10">
-      <KernelRecord id="0" h2d="0.032" d2h="0" start="3.06" end="-1" duration="-1" />
+    <RunningRecord status="Success" host="host1" start="0" end="4.19" duration="4.19">
+      <KernelRecord id="0" h2d="0.032" d2h="0.032" start="3.06" end="4.16" duration="1.1" />
     </RunningRecord>
-    <RunningRecord status="Canceled" host="host1" start="10" end="20" duration="10">
-      <KernelRecord id="0" h2d="0.032" d2h="0" start="13.16" end="-1" duration="-1" />
+    <RunningRecord status="Success" host="host1" start="10" end="14.29" duration="4.29">
+      <KernelRecord id="0" h2d="0.032" d2h="0.032" start="13.16" end="14.26" duration="1.1" />
     </RunningRecord>
-    <RunningRecord status="Canceled" host="host1" start="20" end="30" duration="10">
-      <KernelRecord id="0" h2d="0.032" d2h="0" start="23.26" end="-1" duration="-1" />
+    <RunningRecord status="Success" host="host1" start="20" end="24.39" duration="4.39">
+      <KernelRecord id="0" h2d="0.032" d2h="0.032" start="23.26" end="24.36" duration="1.1" />
     </RunningRecord>
-    <RunningRecord status="Canceled" host="host1" start="30" end="40" duration="10">
-      <KernelRecord id="0" h2d="0.032" d2h="0" start="33.36" end="-1" duration="-1" />
+    <RunningRecord status="Success" host="host1" start="30" end="34.49" duration="4.49">
+      <KernelRecord id="0" h2d="0.032" d2h="0.032" start="33.36" end="34.46" duration="1.1" />
     </RunningRecord>
-    <RunningRecord status="Canceled" host="host1" start="40" end="50" duration="10">
-      <KernelRecord id="0" h2d="0.032" d2h="0" start="43.46" end="-1" duration="-1" />
+    <RunningRecord status="Success" host="host1" start="40" end="44.59" duration="4.59">
+      <KernelRecord id="0" h2d="0.032" d2h="0.032" start="43.46" end="44.56" duration="1.1" />
     </RunningRecord>
-    <RunningRecord status="Canceled" host="host1" start="50" end="60" duration="10">
-      <KernelRecord id="0" h2d="0.032" d2h="0" start="53.56" end="-1" duration="-1" />
+    <RunningRecord status="Success" host="host1" start="50" end="54.69" duration="4.69">
+      <KernelRecord id="0" h2d="0.032" d2h="0.032" start="53.56" end="54.66" duration="1.1" />
     </RunningRecord>
-    <RunningRecord status="Canceled" host="host1" start="60" end="70" duration="10">
-      <KernelRecord id="0" h2d="0.032" d2h="0" start="63.66" end="-1" duration="-1" />
+    <RunningRecord status="Success" host="host1" start="60" end="64.79" duration="4.79">
+      <KernelRecord id="0" h2d="0.032" d2h="0.032" start="63.66" end="64.76" duration="1.1" />
     </RunningRecord>
-    <RunningRecord status="Canceled" host="host1" start="70" end="80" duration="10">
-      <KernelRecord id="0" h2d="0.032" d2h="0" start="73.76" end="-1" duration="-1" />
+    <RunningRecord status="Success" host="host1" start="70" end="74.89" duration="4.89">
+      <KernelRecord id="0" h2d="0.032" d2h="0.032" start="73.76" end="74.86" duration="1.1" />
     </RunningRecord>
-    <RunningRecord status="Canceled" host="host1" start="80" end="90" duration="10">
-      <KernelRecord id="0" h2d="0.032" d2h="0" start="83.86" end="-1" duration="-1" />
+    <RunningRecord status="Success" host="host1" start="80" end="84.99" duration="4.99">
+      <KernelRecord id="0" h2d="0.032" d2h="0.032" start="83.86" end="84.96" duration="1.1" />
+    </RunningRecord>
+    <RunningRecord status="Success" host="host1" start="90" end="95.09" duration="5.09">
+      <KernelRecord id="0" h2d="0.032" d2h="0.032" start="93.96" end="95.06" duration="1.1" />
     </RunningRecord>
   </Job>
 </jobRun>

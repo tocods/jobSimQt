@@ -9,7 +9,7 @@
                         "core_per_sm": 100,
                         "max_block_per_sm": 10,
                         "gddram": 8,
-                        "flops_per_core": 10
+                        "flops_per_core": 10000
                     }
                 ],
                 "pcie_bw": 5

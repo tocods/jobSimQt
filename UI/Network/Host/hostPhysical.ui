@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Udp</class>
- <widget class="QDialog" name="Udp">
+ <class>hostWuli</class>
+ <widget class="QWidget" name="hostWuli">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>836</width>
-    <height>489</height>
+    <width>1226</width>
+    <height>663</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -50,16 +50,6 @@
      </row>
      <row>
       <property name="text">
-       <string>app数量</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>app参数</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
        <string>IP</string>
       </property>
      </row>
@@ -73,32 +63,6 @@
        <string>值</string>
       </property>
      </column>
-     <item row="1" column="0">
-      <property name="text">
-       <string/>
-      </property>
-      <property name="textAlignment">
-       <set>AlignCenter</set>
-      </property>
-     </item>
-     <item row="2" column="0">
-      <property name="text">
-       <string/>
-      </property>
-      <property name="textAlignment">
-       <set>AlignCenter</set>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="applyButton">
-     <property name="text">
-      <string>应用</string>
-     </property>
-     <property name="autoDefault">
-      <bool>false</bool>
-     </property>
     </widget>
    </item>
   </layout>

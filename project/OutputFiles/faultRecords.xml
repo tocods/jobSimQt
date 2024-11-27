@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <faultRecord>
-  <faultRecord time="10" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <faultRecord time="20" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <faultRecord time="30" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <faultRecord time="40" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <faultRecord time="50" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <faultRecord time="60" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <faultRecord time="70" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <faultRecord time="80" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
-  <faultRecord time="90" type="timeover" object="job_6742" isFalseAlarm="False" isSuccessRebuild="True" redundancyBefore="-1" redundancyAfter="-1" faultType="" />
   <reliability value="1" />
 </faultRecord>
