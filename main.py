@@ -450,7 +450,6 @@ class JobSimQt(QMainWindow):
         self._ui.network_editor.ui.hostZhongjian.clear()
         self._ui.network_editor.ui.lianlu.clear()
 
-        self.
 
 
     def initTreeView(self):
