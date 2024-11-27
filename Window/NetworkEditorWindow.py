@@ -168,6 +168,8 @@ class NetworkEditorWindow(QWidget):
         itemhost = QTreeWidgetItem(tree_widget, ["主机"])
         for host in globaldata.hostList:
             item = QTreeWidgetItem([host.hostAttr.name])
+            for app in host.hostAttr.appArgs:
+                item.addChild(QTreeWidgetItem([app["typename"]]))
             itemhost.addChild(item)
         itemjob = QTreeWidgetItem(tree_widget, ["交换机"])
         for switch in globaldata.switchList:
