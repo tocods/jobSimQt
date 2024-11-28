@@ -1,0 +1,8 @@
+java.lang.ArrayIndexOutOfBoundsException: Index 0 out of bounds for length 0
+	at org.networkcalculus.dnc.demos.NetworkParser.main(NetworkParser.java:351)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at com.exe4j.runtime.LauncherEngine.launch(LauncherEngine.java:84)
+	at com.exe4j.runtime.WinLauncher.main(WinLauncher.java:94)
