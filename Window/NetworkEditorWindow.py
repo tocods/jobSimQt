@@ -245,6 +245,9 @@ class NetworkEditorWindow(QWidget):
     def selectSwitch(self, switchItem: SwitchGraphicItem):
         self.curSwitchItem = switchItem
         self.switchEditor.setDict(switchItem.switchAttr.getAttr())
+        self.tsnQueue.clean()
+        for obj in self.curSwitchItem.switchAttr.getTsnQueue():
+            self.tsnQueue.add_object(obj)
         return
 
     def selectLink(self, linkItem: GraphicEdge):
@@ -268,6 +271,10 @@ class NetworkEditorWindow(QWidget):
         self.curSwitchItem.setName(data["name"])
         self.curSwitchItem.switchAttr.applyAttr(data)
         self.switchEditor.setDict(self.curSwitchItem.switchAttr.getAttr())
+
+        data = self.tsnQueue.get_json_data()
+        self.curSwitchItem.switchAttr.setTsnQueue(data)
+
         self.update_tree_view()
         return
 
