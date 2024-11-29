@@ -1,8 +1,8 @@
 version 3
-run General-0-20241129-13:34:14-19848
+run General-0-20241129-14:43:09-6440
 attr configname General
-attr datetime 20241129-13:34:14
-attr datetimef 20241129-133414
+attr datetime 20241129-14:43:09
+attr datetimef 20241129-144309
 attr experiment General
 attr inifile D:/jobSimQt/project/Parameters.ini
 attr iterationvars ""
@@ -10,7 +10,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network TargetNetwork
-attr processid 19848
+attr processid 6440
 attr repetition 0
 attr replication #0
 attr resultdir results

@@ -1,9 +1,9 @@
-file 2692325 1732858457                                         
+file 2692323 1732862593                                         
 version 3
-run General-0-20241129-13:34:14-19848
+run General-0-20241129-14:43:09-6440
 attr configname General
-attr datetime 20241129-13:34:14
-attr datetimef 20241129-133414
+attr datetime 20241129-14:43:09
+attr datetimef 20241129-144309
 attr experiment General
 attr inifile D:/jobSimQt/project/Parameters.ini
 attr iterationvars ""
@@ -11,7 +11,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network TargetNetwork
-attr processid 19848
+attr processid 6440
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -60,8 +60,8 @@ vector 0 TargetNetwork.udp_tcp.eth[0].macLayer.queue 615.udp_tcp.eth[0].macLayer
 vector 1 TargetNetwork.switch.eth[1].macLayer.queue 615.switch.eth[1].macLayer.queue ETV
 vector 2 TargetNetwork.udp_tcp2.app[0].sink default ETV
 vector 3 TargetNetwork.udp_tcp2.app[0].sink default_loss ETV
-0	2468 869489 11 314801 0 1.499968338991 29983 0 0.18 859.2199999998 49.065200000007
-1	871957 840452 22 314799 0.00008432 1.499967378991 29980 0 0.01 149.90000000001 1.4989999999999
-2	1712409 582199 31 314792 0.00016864 1.499966418991 14989 0.00016864 0.001696876977 6.0948729074431 0.0033761111981215
-3	2294608 397715 31 314792 0.00016864 1.499966418991 14989 0 0 0 0
+0	2466 869489 11 314801 0 1.499968338991 29983 0 0.18 859.2199999998 49.065200000007
+1	871955 840452 22 314799 0.00008432 1.499967378991 29980 0 0.01 149.90000000001 1.4989999999999
+2	1712407 582199 31 314792 0.00016864 1.499966418991 14989 0.00016864 0.001696876977 6.0948729074431 0.0033761111981215
+3	2294606 397715 31 314792 0.00016864 1.499966418991 14989 0 0 0 0
 
