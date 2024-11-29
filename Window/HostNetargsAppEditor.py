@@ -135,6 +135,14 @@ class HostNetargsAppEditorApp(HostNetargsAppEditor):
             "Udp接收端": JsonArrayEditor([], DEFAULT_SINK["udp"], False),
             "Tcp接收端": JsonArrayEditor([], DEFAULT_SINK["tcp"], False),
             "Rdma接收端": JsonArrayEditor([], DEFAULT_SINK["rdma"], False),
+            "TSN": JsonArrayEditor(
+            [],
+            {
+                "stream": "default",
+                "packetFilter": "expr(udp.destPort == 1000)",
+                "pcp": "0",
+            },
+        )
         }
 class HostNetargsAppEditorMiddleware(HostNetargsAppEditor):
     def setupTab(self):

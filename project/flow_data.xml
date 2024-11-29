@@ -1,12 +1,16 @@
 <?xml version="1.0" ?>
 <Flows>
     <Flow>
-        <node name="tsn_sender1"/>
-        <node name="tsn_switch"/>
+        <node name="udp_tcp"/>
+        <node name="switch2"/>
     </Flow>
     <Flow>
-        <node name="tsn_sender1"/>
-        <node name="tsn_switch"/>
-        <node name="tsn_sender2"/>
+        <node name="udp_tcp"/>
+        <node name="switch2"/>
+    </Flow>
+    <Flow>
+        <node name="udp_tcp"/>
+        <node name="switch2"/>
+        <node name="udp_tcp2"/>
     </Flow>
 </Flows>
