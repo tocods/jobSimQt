@@ -1,8 +1,8 @@
 version 3
-run General-0-20241127-15:51:44-30076
+run General-0-20241129-13:34:14-19848
 attr configname General
-attr datetime 20241127-15:51:44
-attr datetimef 20241127-155144
+attr datetime 20241129-13:34:14
+attr datetimef 20241129-133414
 attr experiment General
 attr inifile D:/jobSimQt/project/Parameters.ini
 attr iterationvars ""
@@ -10,7 +10,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network TargetNetwork
-attr processid 30076
+attr processid 19848
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -39,40 +39,34 @@ config **.tcp.sackSupport false
 config **.tcp.windowScalingSupport false
 config **.tcp.timestampSupport false
 config **.tcp.mss 1452
-config *.configurator.config "xml(\"<config>\\n\" + \"<interface hosts='dds' address='192.168.0.1' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='dds2' address='192.168.0.2' netmask='255.255.255.x'/>\\n\" + \"</config>\")"
-config *.dds.numApps 2
-config *.dds.app[0].typename DDSPublishApp
-config *.dds.app[0].io.receiveBroadcast true
-config *.dds.app[0].io.publish "\"Topic1\""
-config *.dds.app[0].io.destPort 1000
-config *.dds.app[0].io.historyCacheLength 10
-config *.dds.ipv4.ip.limitedBroadcast true
-config *.dds.app[0].source.packetLength 5000B
-config *.dds.app[0].source.productionInterval exponential(20ms)
-config *.dds.app[0].sink.typename ""
-config *.dds.app[1].typename DDSSubscribeApp
-config *.dds.app[1].source.subscribe "\"Topic1@1000\""
-config *.dds.app[1].io.localPort 1000
-config *.dds.app[1].io.receiverBufferLength 1000
-config *.dds.app[1].io.nackCountdown 0.25ms
-config *.dds.app[1].source.packetLength 20B
-config *.dds.ipv4.ip.limitedBroadcast true
-config *.dds.app[1].sink.flowName "\"default\""
-config *.dds2.numApps 0
+config *.configurator.config "xml(\"<config>\\n\" + \"<interface hosts='udp_tcp' address='192.168.0.1' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp2' address='192.168.0.2' netmask='255.255.255.x'/>\\n\" + \"</config>\")"
+config *.udp_tcp.numApps 1
+config *.udp_tcp.app[0].typename UdpApp615
+config *.udp_tcp.app[0].source.packetLength 1000B
+config *.udp_tcp.app[0].source.productionInterval exponential(100us)
+config *.udp_tcp.app[0].io.destAddress "\"udp_tcp2\""
+config *.udp_tcp.app[0].io.destPort 1000
+config *.udp_tcp.app[0].sink.typename ""
+config *.udp_tcp2.numApps 1
+config *.udp_tcp2.app[0].typename UdpApp615
+config *.udp_tcp2.app[0].source.typename ""
+config *.udp_tcp2.app[0].io.destPort -1
+config *.udp_tcp2.app[0].io.localPort 1000
+config *.udp_tcp2.app[0].sink.flowName "\"default\""
 config *.switch.eth[*].bitrate 100Mbps
 
-par TargetNetwork.dds.ethg$o[0].channel typename "\"ned.DatarateChannel\""
-par TargetNetwork.dds.ethg$o[0].channel disabled false
+par TargetNetwork.udp_tcp.ethg$o[0].channel typename "\"ned.DatarateChannel\""
+par TargetNetwork.udp_tcp.ethg$o[0].channel disabled false
 attr mutable ""
-par TargetNetwork.dds.ethg$o[0].channel delay 0s
+par TargetNetwork.udp_tcp.ethg$o[0].channel delay 0s
 attr mutable ""
 attr unit s
-par TargetNetwork.dds.ethg$o[0].channel datarate 1e+08bps
+par TargetNetwork.udp_tcp.ethg$o[0].channel datarate 1e+08bps
 attr mutable ""
 attr unit bps
-par TargetNetwork.dds.ethg$o[0].channel ber 0
+par TargetNetwork.udp_tcp.ethg$o[0].channel ber 0
 attr mutable ""
-par TargetNetwork.dds.ethg$o[0].channel per 0
+par TargetNetwork.udp_tcp.ethg$o[0].channel per 0
 attr mutable ""
 par TargetNetwork.switch.ethg$o[0].channel typename "\"ned.DatarateChannel\""
 par TargetNetwork.switch.ethg$o[0].channel disabled false
@@ -87,6 +81,19 @@ par TargetNetwork.switch.ethg$o[0].channel ber 0
 attr mutable ""
 par TargetNetwork.switch.ethg$o[0].channel per 0
 attr mutable ""
+par TargetNetwork.udp_tcp2.ethg$o[0].channel typename "\"ned.DatarateChannel\""
+par TargetNetwork.udp_tcp2.ethg$o[0].channel disabled false
+attr mutable ""
+par TargetNetwork.udp_tcp2.ethg$o[0].channel delay 0s
+attr mutable ""
+attr unit s
+par TargetNetwork.udp_tcp2.ethg$o[0].channel datarate 1e+08bps
+attr mutable ""
+attr unit bps
+par TargetNetwork.udp_tcp2.ethg$o[0].channel ber 0
+attr mutable ""
+par TargetNetwork.udp_tcp2.ethg$o[0].channel per 0
+attr mutable ""
 par TargetNetwork.switch.ethg$o[1].channel typename "\"ned.DatarateChannel\""
 par TargetNetwork.switch.ethg$o[1].channel disabled false
 attr mutable ""
@@ -99,19 +106,6 @@ attr unit bps
 par TargetNetwork.switch.ethg$o[1].channel ber 0
 attr mutable ""
 par TargetNetwork.switch.ethg$o[1].channel per 0
-attr mutable ""
-par TargetNetwork.dds2.ethg$o[0].channel typename "\"ned.DatarateChannel\""
-par TargetNetwork.dds2.ethg$o[0].channel disabled false
-attr mutable ""
-par TargetNetwork.dds2.ethg$o[0].channel delay 0s
-attr mutable ""
-attr unit s
-par TargetNetwork.dds2.ethg$o[0].channel datarate 1e+08bps
-attr mutable ""
-attr unit bps
-par TargetNetwork.dds2.ethg$o[0].channel ber 0
-attr mutable ""
-par TargetNetwork.dds2.ethg$o[0].channel per 0
 attr mutable ""
 par TargetNetwork.visualizer.sceneVisualizer typename "\"inet.visualizer.canvas.scene.SceneCanvasVisualizer\""
 par TargetNetwork.visualizer.sceneVisualizer visualizationTargetModule "\"^.^\""
@@ -830,670 +824,708 @@ par TargetNetwork.configurator dumpAddresses false
 par TargetNetwork.configurator dumpRoutes false
 par TargetNetwork.configurator dumpConfig "\"\""
 par TargetNetwork.macForwardingTableConfigurator typename "\"inet.linklayer.configurator.MacForwardingTableConfigurator\""
-par TargetNetwork.dds.ethg$i[0].channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.eth[0].phys$o.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.interfaceTable typename "\"inet.networklayer.common.InterfaceTable\""
-par TargetNetwork.dds.interfaceTable displayAddresses false
-par TargetNetwork.dds.cb typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds.cb displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.cb forwardServiceRegistration true
-par TargetNetwork.dds.cb forwardProtocolRegistration true
-par TargetNetwork.dds.bl typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds.bl displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.bl forwardServiceRegistration true
-par TargetNetwork.dds.bl forwardProtocolRegistration true
-par TargetNetwork.dds.ethernet.fcsInserter.out.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.ethernet.lowerLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.ethernet.upperLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.ethernet.macHeaderChecker.out.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.ethernet.macHeaderInserter typename "\"inet.linklayer.ethernet.modular.EthernetMacHeaderInserter\""
-par TargetNetwork.dds.ethernet.macHeaderInserter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.ethernet.macHeaderInserter interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.ethernet.paddingInserter typename "\"inet.protocolelement.common.PaddingInserter\""
-par TargetNetwork.dds.ethernet.paddingInserter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.ethernet.paddingInserter minLength 480b
+par TargetNetwork.udp_tcp.ethg$i[0].channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.eth[0].phys$o.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.interfaceTable typename "\"inet.networklayer.common.InterfaceTable\""
+par TargetNetwork.udp_tcp.interfaceTable displayAddresses false
+par TargetNetwork.udp_tcp.cb typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp.cb displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.cb forwardServiceRegistration true
+par TargetNetwork.udp_tcp.cb forwardProtocolRegistration true
+par TargetNetwork.udp_tcp.bl typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp.bl displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.bl forwardServiceRegistration true
+par TargetNetwork.udp_tcp.bl forwardProtocolRegistration true
+par TargetNetwork.udp_tcp.bl_loop typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp.bl_loop displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.bl_loop forwardServiceRegistration true
+par TargetNetwork.udp_tcp.bl_loop forwardProtocolRegistration true
+par TargetNetwork.udp_tcp.ethernet.fcsInserter.out.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.ethernet.lowerLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.ethernet.upperLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.ethernet.macHeaderChecker.out.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.ethernet.macHeaderInserter typename "\"inet.linklayer.ethernet.modular.EthernetMacHeaderInserter\""
+par TargetNetwork.udp_tcp.ethernet.macHeaderInserter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.ethernet.macHeaderInserter interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
+par TargetNetwork.udp_tcp.ethernet.paddingInserter typename "\"inet.protocolelement.common.PaddingInserter\""
+par TargetNetwork.udp_tcp.ethernet.paddingInserter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.ethernet.paddingInserter minLength 480b
 attr unit b
-par TargetNetwork.dds.ethernet.paddingInserter roundingLength 8b
+par TargetNetwork.udp_tcp.ethernet.paddingInserter roundingLength 8b
 attr unit b
-par TargetNetwork.dds.ethernet.paddingInserter insertionPosition "\"back\""
+par TargetNetwork.udp_tcp.ethernet.paddingInserter insertionPosition "\"back\""
 attr enum front,back
-par TargetNetwork.dds.ethernet.fcsInserter typename "\"inet.linklayer.ethernet.modular.EthernetFcsInserter\""
-par TargetNetwork.dds.ethernet.fcsInserter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.ethernet.fcsInserter fcsMode "\"declared\""
+par TargetNetwork.udp_tcp.ethernet.fcsInserter typename "\"inet.linklayer.ethernet.modular.EthernetFcsInserter\""
+par TargetNetwork.udp_tcp.ethernet.fcsInserter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.ethernet.fcsInserter fcsMode "\"declared\""
 attr enum disabled,declared,computed
-par TargetNetwork.dds.ethernet.macHeaderChecker typename "\"inet.linklayer.ethernet.modular.EthernetMacHeaderChecker\""
-par TargetNetwork.dds.ethernet.macHeaderChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
-par TargetNetwork.dds.ethernet.macHeaderChecker backpressure false
-par TargetNetwork.dds.ethernet.macHeaderChecker interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.ethernet.macHeaderChecker promiscuous false
-par TargetNetwork.dds.ethernet.fcsChecker typename "\"inet.linklayer.ethernet.modular.EthernetFcsChecker\""
-par TargetNetwork.dds.ethernet.fcsChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
-par TargetNetwork.dds.ethernet.fcsChecker backpressure false
-par TargetNetwork.dds.ethernet.fcsChecker popFcs true
-par TargetNetwork.dds.ethernet typename "\"inet.linklayer.ethernet.modular.EthernetLayer\""
-par TargetNetwork.dds.ethernet interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.ethernet hasSocketSupport false
-par TargetNetwork.dds.li typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds.li displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.li forwardServiceRegistration true
-par TargetNetwork.dds.li forwardProtocolRegistration true
-par TargetNetwork.dds.lo[0].upperLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.lo[0].lo.upperLayerOut.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.lo[0].lo typename "\"inet.linklayer.loopback.Loopback\""
-par TargetNetwork.dds.lo[0].lo interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.lo[0].lo mtu 4470B
+par TargetNetwork.udp_tcp.ethernet.macHeaderChecker typename "\"inet.linklayer.ethernet.modular.EthernetMacHeaderChecker\""
+par TargetNetwork.udp_tcp.ethernet.macHeaderChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
+par TargetNetwork.udp_tcp.ethernet.macHeaderChecker backpressure false
+par TargetNetwork.udp_tcp.ethernet.macHeaderChecker interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
+par TargetNetwork.udp_tcp.ethernet.macHeaderChecker promiscuous false
+par TargetNetwork.udp_tcp.ethernet.fcsChecker typename "\"inet.linklayer.ethernet.modular.EthernetFcsChecker\""
+par TargetNetwork.udp_tcp.ethernet.fcsChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
+par TargetNetwork.udp_tcp.ethernet.fcsChecker backpressure false
+par TargetNetwork.udp_tcp.ethernet.fcsChecker popFcs true
+par TargetNetwork.udp_tcp.ethernet typename "\"inet.linklayer.ethernet.modular.EthernetLayer\""
+par TargetNetwork.udp_tcp.ethernet interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
+par TargetNetwork.udp_tcp.ethernet hasSocketSupport false
+par TargetNetwork.udp_tcp.li typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp.li displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.li forwardServiceRegistration true
+par TargetNetwork.udp_tcp.li forwardProtocolRegistration true
+par TargetNetwork.udp_tcp.li_loop typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp.li_loop displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.li_loop forwardServiceRegistration true
+par TargetNetwork.udp_tcp.li_loop forwardProtocolRegistration true
+par TargetNetwork.udp_tcp.lo[0].upperLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.lo[0].lo.upperLayerOut.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.lo[0].lo typename "\"inet.linklayer.loopback.Loopback\""
+par TargetNetwork.udp_tcp.lo[0].lo interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
+par TargetNetwork.udp_tcp.lo[0].lo mtu 4470B
 attr unit B
-par TargetNetwork.dds.lo[0] typename "\"inet.linklayer.loopback.LoopbackInterface\""
-par TargetNetwork.dds.lo[0] displayStringTextFormat "\"%a (%i)\\n%m\""
-par TargetNetwork.dds.lo[0] recordPcap false
-par TargetNetwork.dds.lo[0] numPcapRecorders 0
-par TargetNetwork.dds.lo[0] interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.eth[0].phyLayer.lowerLayerOut.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.eth[0].phys$i.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.eth[0].upperLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.eth[0].macLayer.upperLayerOut.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.eth[0].macLayer.upperLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.eth[0].macLayer.outboundEmitter.out.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.eth[0].macLayer.lowerLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.eth[0].macLayer.fcsChecker.out.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.eth[0].macLayer.queue typename "\"inet.queueing.queue.PacketQueue\""
-par TargetNetwork.dds.eth[0].macLayer.queue displayStringTextFormat "\"contains %p pk (%l) pushed %u\\npulled %o removed %r dropped %d\""
-par TargetNetwork.dds.eth[0].macLayer.queue packetCapacity 100
-par TargetNetwork.dds.eth[0].macLayer.queue dataCapacity -1b
+par TargetNetwork.udp_tcp.lo[0] typename "\"inet.linklayer.loopback.LoopbackInterface\""
+par TargetNetwork.udp_tcp.lo[0] displayStringTextFormat "\"%a (%i)\\n%m\""
+par TargetNetwork.udp_tcp.lo[0] recordPcap false
+par TargetNetwork.udp_tcp.lo[0] numPcapRecorders 0
+par TargetNetwork.udp_tcp.lo[0] interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.lowerLayerOut.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.eth[0].phys$i.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.eth[0].upperLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.upperLayerOut.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.upperLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.outboundEmitter.out.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.lowerLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.fcsChecker.out.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.queue typename "\"inet.queueing.queue.PacketQueue\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.queue displayStringTextFormat "\"contains %p pk (%l) pushed %u\\npulled %o removed %r dropped %d\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.queue packetCapacity 100
+par TargetNetwork.udp_tcp.eth[0].macLayer.queue dataCapacity -1b
 attr unit b
-par TargetNetwork.dds.eth[0].macLayer.queue dropperClass "\"inet::queueing::PacketAtCollectionEndDropper\""
-par TargetNetwork.dds.eth[0].macLayer.queue comparatorClass "\"\""
-par TargetNetwork.dds.eth[0].macLayer.queue bufferModule "\"\""
-par TargetNetwork.dds.eth[0].macLayer.queue portName "\"\""
-par TargetNetwork.dds.eth[0].macLayer.server typename "\"inet.queueing.server.InstantServer\""
-par TargetNetwork.dds.eth[0].macLayer.server displayStringTextFormat "\"served %p pk (%l)\""
-par TargetNetwork.dds.eth[0].macLayer.server serveSchedulingPriority 0
-par TargetNetwork.dds.eth[0].macLayer.outboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
-par TargetNetwork.dds.eth[0].macLayer.outboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.eth[0].macLayer.outboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
-par TargetNetwork.dds.eth[0].macLayer.outboundEmitter direction "\"outbound\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.queue dropperClass "\"inet::queueing::PacketAtCollectionEndDropper\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.queue comparatorClass "\"\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.queue bufferModule "\"\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.queue portName "\"\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.server typename "\"inet.queueing.server.InstantServer\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.server displayStringTextFormat "\"served %p pk (%l)\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.server serveSchedulingPriority 0
+par TargetNetwork.udp_tcp.eth[0].macLayer.outboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.outboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.outboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.outboundEmitter direction "\"outbound\""
 attr enum undefined,inbound,outbound
-par TargetNetwork.dds.eth[0].macLayer.outboundEmitter signalName "\"packetSentToLower\""
-par TargetNetwork.dds.eth[0].macLayer.fcsChecker typename "\"inet.linklayer.ethernet.modular.EthernetFcsChecker\""
-par TargetNetwork.dds.eth[0].macLayer.fcsChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
-par TargetNetwork.dds.eth[0].macLayer.fcsChecker backpressure false
-par TargetNetwork.dds.eth[0].macLayer.fcsChecker popFcs false
-par TargetNetwork.dds.eth[0].macLayer.inboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
-par TargetNetwork.dds.eth[0].macLayer.inboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.eth[0].macLayer.inboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
-par TargetNetwork.dds.eth[0].macLayer.inboundEmitter direction "\"inbound\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.outboundEmitter signalName "\"packetSentToLower\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.fcsChecker typename "\"inet.linklayer.ethernet.modular.EthernetFcsChecker\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.fcsChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.fcsChecker backpressure false
+par TargetNetwork.udp_tcp.eth[0].macLayer.fcsChecker popFcs false
+par TargetNetwork.udp_tcp.eth[0].macLayer.inboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.inboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.inboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
+par TargetNetwork.udp_tcp.eth[0].macLayer.inboundEmitter direction "\"inbound\""
 attr enum undefined,inbound,outbound
-par TargetNetwork.dds.eth[0].macLayer.inboundEmitter signalName "\"packetReceivedFromLower\""
-par TargetNetwork.dds.eth[0].macLayer typename "\"inet.linklayer.ethernet.modular.EthernetMacLayer\""
-par TargetNetwork.dds.eth[0].macLayer bitrate 1e+08bps
+par TargetNetwork.udp_tcp.eth[0].macLayer.inboundEmitter signalName "\"packetReceivedFromLower\""
+par TargetNetwork.udp_tcp.eth[0].macLayer typename "\"inet.linklayer.ethernet.modular.EthernetMacLayer\""
+par TargetNetwork.udp_tcp.eth[0].macLayer bitrate 1e+08bps
 attr unit bps
-par TargetNetwork.dds.eth[0].phyLayer.upperLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.eth[0].phyLayer.transmitter.out.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.eth[0].phyLayer.lowerLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.eth[0].phyLayer.phyHeaderChecker.out.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.eth[0].phyLayer.phyHeaderInserter typename "\"inet.physicallayer.wired.ethernet.EthernetPhyHeaderInserter\""
-par TargetNetwork.dds.eth[0].phyLayer.phyHeaderInserter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.eth[0].phyLayer.interFrameGapInserter typename "\"inet.protocolelement.common.InterpacketGapInserter\""
-par TargetNetwork.dds.eth[0].phyLayer.interFrameGapInserter displayStringTextFormat "\"delayed %p pk (%l)\\nifg: %g\""
-par TargetNetwork.dds.eth[0].phyLayer.interFrameGapInserter clockModule "\"\""
-par TargetNetwork.dds.eth[0].phyLayer.interFrameGapInserter initialChannelBusy false
-par TargetNetwork.dds.eth[0].phyLayer.interFrameGapInserter duration 96s/dropUnit(parent.bitrate)
+par TargetNetwork.udp_tcp.eth[0].phyLayer.upperLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.transmitter.out.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.lowerLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.phyHeaderChecker.out.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.phyHeaderInserter typename "\"inet.physicallayer.wired.ethernet.EthernetPhyHeaderInserter\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.phyHeaderInserter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.interFrameGapInserter typename "\"inet.protocolelement.common.InterpacketGapInserter\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.interFrameGapInserter displayStringTextFormat "\"delayed %p pk (%l)\\nifg: %g\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.interFrameGapInserter clockModule "\"\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.interFrameGapInserter initialChannelBusy false
+par TargetNetwork.udp_tcp.eth[0].phyLayer.interFrameGapInserter duration 96s/dropUnit(parent.bitrate)
 attr unit s
-par TargetNetwork.dds.eth[0].phyLayer.outboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
-par TargetNetwork.dds.eth[0].phyLayer.outboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.eth[0].phyLayer.outboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
-par TargetNetwork.dds.eth[0].phyLayer.outboundEmitter direction "\"outbound\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.outboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.outboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.outboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.outboundEmitter direction "\"outbound\""
 attr enum undefined,inbound,outbound
-par TargetNetwork.dds.eth[0].phyLayer.outboundEmitter signalName "\"packetSentToLower\""
-par TargetNetwork.dds.eth[0].phyLayer.transmitter typename "\"inet.protocolelement.transceiver.PacketTransmitter\""
-par TargetNetwork.dds.eth[0].phyLayer.transmitter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.eth[0].phyLayer.transmitter clockModule "\"\""
-par TargetNetwork.dds.eth[0].phyLayer.transmitter datarate this.bitrate
+par TargetNetwork.udp_tcp.eth[0].phyLayer.outboundEmitter signalName "\"packetSentToLower\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.transmitter typename "\"inet.protocolelement.transceiver.PacketTransmitter\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.transmitter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.transmitter clockModule "\"\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.transmitter datarate this.bitrate
 attr unit bps
-scalar TargetNetwork.dds.eth[0].phyLayer.transmitter propagationTime 0
-par TargetNetwork.dds.eth[0].phyLayer.phyHeaderChecker typename "\"inet.physicallayer.wired.ethernet.EthernetPhyHeaderChecker\""
-par TargetNetwork.dds.eth[0].phyLayer.phyHeaderChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
-par TargetNetwork.dds.eth[0].phyLayer.phyHeaderChecker backpressure false
-par TargetNetwork.dds.eth[0].phyLayer.inboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
-par TargetNetwork.dds.eth[0].phyLayer.inboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.eth[0].phyLayer.inboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
-par TargetNetwork.dds.eth[0].phyLayer.inboundEmitter direction "\"inbound\""
+scalar TargetNetwork.udp_tcp.eth[0].phyLayer.transmitter propagationTime 0
+par TargetNetwork.udp_tcp.eth[0].phyLayer.phyHeaderChecker typename "\"inet.physicallayer.wired.ethernet.EthernetPhyHeaderChecker\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.phyHeaderChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.phyHeaderChecker backpressure false
+par TargetNetwork.udp_tcp.eth[0].phyLayer.inboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.inboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.inboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.inboundEmitter direction "\"inbound\""
 attr enum undefined,inbound,outbound
-par TargetNetwork.dds.eth[0].phyLayer.inboundEmitter signalName "\"packetReceivedFromLower\""
-par TargetNetwork.dds.eth[0].phyLayer.receiver typename "\"inet.protocolelement.transceiver.PacketReceiver\""
-par TargetNetwork.dds.eth[0].phyLayer.receiver displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.eth[0].phyLayer.receiver datarate 1e+08bps
+par TargetNetwork.udp_tcp.eth[0].phyLayer.inboundEmitter signalName "\"packetReceivedFromLower\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.receiver typename "\"inet.protocolelement.transceiver.PacketReceiver\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.receiver displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer.receiver datarate 1e+08bps
 attr unit bps
-par TargetNetwork.dds.eth[0].phyLayer typename "\"inet.physicallayer.wired.ethernet.EthernetPhyLayer\""
-par TargetNetwork.dds.eth[0].phyLayer bitrate this.bitrate
+par TargetNetwork.udp_tcp.eth[0].phyLayer typename "\"inet.physicallayer.wired.ethernet.EthernetPhyLayer\""
+par TargetNetwork.udp_tcp.eth[0].phyLayer bitrate this.bitrate
 attr unit bps
-par TargetNetwork.dds.eth[0] typename "\"inet.linklayer.ethernet.LayeredEthernetInterface\""
-par TargetNetwork.dds.eth[0] displayStringTextFormat "\"%a (%i)\\n%m\""
-par TargetNetwork.dds.eth[0] recordPcap false
-par TargetNetwork.dds.eth[0] numPcapRecorders 0
-par TargetNetwork.dds.eth[0] protocol "\"ethernetmac\""
-par TargetNetwork.dds.eth[0] broadcast true
-par TargetNetwork.dds.eth[0] multicast true
-par TargetNetwork.dds.eth[0] address "\"0A-AA-00-00-00-01\""
+par TargetNetwork.udp_tcp.eth[0] typename "\"inet.linklayer.ethernet.LayeredEthernetInterface\""
+par TargetNetwork.udp_tcp.eth[0] displayStringTextFormat "\"%a (%i)\\n%m\""
+par TargetNetwork.udp_tcp.eth[0] recordPcap false
+par TargetNetwork.udp_tcp.eth[0] numPcapRecorders 0
+par TargetNetwork.udp_tcp.eth[0] protocol "\"ethernetmac\""
+par TargetNetwork.udp_tcp.eth[0] broadcast true
+par TargetNetwork.udp_tcp.eth[0] multicast true
+par TargetNetwork.udp_tcp.eth[0] address "\"0A-AA-00-00-00-01\""
 attr mutable ""
-par TargetNetwork.dds.eth[0] bitrate 1e+08bps
+par TargetNetwork.udp_tcp.eth[0] bitrate 1e+08bps
 attr unit bps
-par TargetNetwork.dds.eth[0] mtu 1500B
+par TargetNetwork.udp_tcp.eth[0] mtu 1500B
 attr unit B
-par TargetNetwork.dds.eth[0] interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.ipv4.transportIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.ipv4.up.out[0].channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.ipv4.lp.out[2].channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.ipv4.ifIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds.ipv4.configurator typename "\"inet.networklayer.configurator.ipv4.Ipv4NodeConfigurator\""
-par TargetNetwork.dds.ipv4.configurator interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.ipv4.configurator routingTableModule "\"TargetNetwork.dds.ipv4.routingTable\""
-par TargetNetwork.dds.ipv4.configurator networkConfiguratorModule "\"configurator\""
-par TargetNetwork.dds.ipv4.configurator configureRoutingTable true
-par TargetNetwork.dds.ipv4.routingTable typename "\"inet.networklayer.ipv4.Ipv4RoutingTable\""
-par TargetNetwork.dds.ipv4.routingTable interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.ipv4.routingTable routerId "\"auto\""
-par TargetNetwork.dds.ipv4.routingTable netmaskRoutes "\"*\""
-par TargetNetwork.dds.ipv4.routingTable forwarding false
-par TargetNetwork.dds.ipv4.routingTable multicastForwarding false
-par TargetNetwork.dds.ipv4.routingTable useAdminDist false
-par TargetNetwork.dds.ipv4.routingTable routingFile "\"\""
-par TargetNetwork.dds.ipv4.natTable typename "\"inet.networklayer.ipv4.Ipv4NatTable\""
-par TargetNetwork.dds.ipv4.natTable networkProtocolModule "\"^.ip\""
-par TargetNetwork.dds.ipv4.natTable config "<config/> at content:1"
-par TargetNetwork.dds.ipv4.up typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds.ipv4.up displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.ipv4.up forwardServiceRegistration true
-par TargetNetwork.dds.ipv4.up forwardProtocolRegistration true
-par TargetNetwork.dds.ipv4.igmp typename "\"inet.networklayer.ipv4.Igmpv2\""
-par TargetNetwork.dds.ipv4.igmp interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.ipv4.igmp routingTableModule "\"TargetNetwork.dds.ipv4.routingTable\""
-par TargetNetwork.dds.ipv4.igmp crcMode "\"declared\""
+par TargetNetwork.udp_tcp.eth[0] interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
+par TargetNetwork.udp_tcp.ipv4.transportIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.ipv4.up.out[0].channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.ipv4.lp.out[2].channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.ipv4.ifIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp.ipv4.configurator typename "\"inet.networklayer.configurator.ipv4.Ipv4NodeConfigurator\""
+par TargetNetwork.udp_tcp.ipv4.configurator interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
+par TargetNetwork.udp_tcp.ipv4.configurator routingTableModule "\"TargetNetwork.udp_tcp.ipv4.routingTable\""
+par TargetNetwork.udp_tcp.ipv4.configurator networkConfiguratorModule "\"configurator\""
+par TargetNetwork.udp_tcp.ipv4.configurator configureRoutingTable true
+par TargetNetwork.udp_tcp.ipv4.routingTable typename "\"inet.networklayer.ipv4.Ipv4RoutingTable\""
+par TargetNetwork.udp_tcp.ipv4.routingTable interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
+par TargetNetwork.udp_tcp.ipv4.routingTable routerId "\"auto\""
+par TargetNetwork.udp_tcp.ipv4.routingTable netmaskRoutes "\"*\""
+par TargetNetwork.udp_tcp.ipv4.routingTable forwarding false
+par TargetNetwork.udp_tcp.ipv4.routingTable multicastForwarding false
+par TargetNetwork.udp_tcp.ipv4.routingTable useAdminDist false
+par TargetNetwork.udp_tcp.ipv4.routingTable routingFile "\"\""
+par TargetNetwork.udp_tcp.ipv4.natTable typename "\"inet.networklayer.ipv4.Ipv4NatTable\""
+par TargetNetwork.udp_tcp.ipv4.natTable networkProtocolModule "\"^.ip\""
+par TargetNetwork.udp_tcp.ipv4.natTable config "<config/> at content:1"
+par TargetNetwork.udp_tcp.ipv4.up typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp.ipv4.up displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.ipv4.up forwardServiceRegistration true
+par TargetNetwork.udp_tcp.ipv4.up forwardProtocolRegistration true
+par TargetNetwork.udp_tcp.ipv4.igmp typename "\"inet.networklayer.ipv4.Igmpv2\""
+par TargetNetwork.udp_tcp.ipv4.igmp interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
+par TargetNetwork.udp_tcp.ipv4.igmp routingTableModule "\"TargetNetwork.udp_tcp.ipv4.routingTable\""
+par TargetNetwork.udp_tcp.ipv4.igmp crcMode "\"declared\""
 attr enum declared,computed
-par TargetNetwork.dds.ipv4.igmp enabled true
-par TargetNetwork.dds.ipv4.igmp robustnessVariable 2
-par TargetNetwork.dds.ipv4.igmp queryInterval 125s
+par TargetNetwork.udp_tcp.ipv4.igmp enabled true
+par TargetNetwork.udp_tcp.ipv4.igmp robustnessVariable 2
+par TargetNetwork.udp_tcp.ipv4.igmp queryInterval 125s
 attr unit s
-par TargetNetwork.dds.ipv4.igmp queryResponseInterval 10s
+par TargetNetwork.udp_tcp.ipv4.igmp queryResponseInterval 10s
 attr unit s
-par TargetNetwork.dds.ipv4.igmp groupMembershipInterval 260s
+par TargetNetwork.udp_tcp.ipv4.igmp groupMembershipInterval 260s
 attr unit s
-par TargetNetwork.dds.ipv4.igmp otherQuerierPresentInterval 255s
+par TargetNetwork.udp_tcp.ipv4.igmp otherQuerierPresentInterval 255s
 attr unit s
-par TargetNetwork.dds.ipv4.igmp startupQueryInterval 31.25s
+par TargetNetwork.udp_tcp.ipv4.igmp startupQueryInterval 31.25s
 attr unit s
-par TargetNetwork.dds.ipv4.igmp startupQueryCount 2
-par TargetNetwork.dds.ipv4.igmp lastMemberQueryInterval 1s
+par TargetNetwork.udp_tcp.ipv4.igmp startupQueryCount 2
+par TargetNetwork.udp_tcp.ipv4.igmp lastMemberQueryInterval 1s
 attr unit s
-par TargetNetwork.dds.ipv4.igmp lastMemberQueryCount 2
-par TargetNetwork.dds.ipv4.igmp unsolicitedReportInterval 10s
+par TargetNetwork.udp_tcp.ipv4.igmp lastMemberQueryCount 2
+par TargetNetwork.udp_tcp.ipv4.igmp unsolicitedReportInterval 10s
 attr unit s
-par TargetNetwork.dds.ipv4.icmp typename "\"inet.networklayer.ipv4.Icmp\""
-par TargetNetwork.dds.ipv4.icmp interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.ipv4.icmp routingTableModule "\"TargetNetwork.dds.ipv4.routingTable\""
-par TargetNetwork.dds.ipv4.icmp crcMode "\"declared\""
+par TargetNetwork.udp_tcp.ipv4.icmp typename "\"inet.networklayer.ipv4.Icmp\""
+par TargetNetwork.udp_tcp.ipv4.icmp interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
+par TargetNetwork.udp_tcp.ipv4.icmp routingTableModule "\"TargetNetwork.udp_tcp.ipv4.routingTable\""
+par TargetNetwork.udp_tcp.ipv4.icmp crcMode "\"declared\""
 attr enum declared,computed
 attr mutable ""
-par TargetNetwork.dds.ipv4.icmp quoteLength 8B
+par TargetNetwork.udp_tcp.ipv4.icmp quoteLength 8B
 attr mutable ""
 attr unit B
-par TargetNetwork.dds.ipv4.mp typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds.ipv4.mp displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.ipv4.mp forwardServiceRegistration true
-par TargetNetwork.dds.ipv4.mp forwardProtocolRegistration true
-par TargetNetwork.dds.ipv4.ip typename "\"inet.networklayer.ipv4.Ipv4\""
-par TargetNetwork.dds.ipv4.ip interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.ipv4.ip routingTableModule "\"TargetNetwork.dds.ipv4.routingTable\""
-par TargetNetwork.dds.ipv4.ip arpModule "\"TargetNetwork.dds.ipv4.arp\""
-par TargetNetwork.dds.ipv4.ip icmpModule "\"TargetNetwork.dds.ipv4.icmp\""
-par TargetNetwork.dds.ipv4.ip crcMode "\"declared\""
+par TargetNetwork.udp_tcp.ipv4.mp typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp.ipv4.mp displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.ipv4.mp forwardServiceRegistration true
+par TargetNetwork.udp_tcp.ipv4.mp forwardProtocolRegistration true
+par TargetNetwork.udp_tcp.ipv4.ip typename "\"inet.networklayer.ipv4.Ipv4\""
+par TargetNetwork.udp_tcp.ipv4.ip interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
+par TargetNetwork.udp_tcp.ipv4.ip routingTableModule "\"TargetNetwork.udp_tcp.ipv4.routingTable\""
+par TargetNetwork.udp_tcp.ipv4.ip arpModule "\"TargetNetwork.udp_tcp.ipv4.arp\""
+par TargetNetwork.udp_tcp.ipv4.ip icmpModule "\"TargetNetwork.udp_tcp.ipv4.icmp\""
+par TargetNetwork.udp_tcp.ipv4.ip crcMode "\"declared\""
 attr enum declared,computed
-par TargetNetwork.dds.ipv4.ip timeToLive 32
-par TargetNetwork.dds.ipv4.ip multicastTimeToLive 32
-par TargetNetwork.dds.ipv4.ip fragmentTimeout 60s
+par TargetNetwork.udp_tcp.ipv4.ip timeToLive 32
+par TargetNetwork.udp_tcp.ipv4.ip multicastTimeToLive 32
+par TargetNetwork.udp_tcp.ipv4.ip fragmentTimeout 60s
 attr unit s
-par TargetNetwork.dds.ipv4.ip limitedBroadcast true
-par TargetNetwork.dds.ipv4.ip directBroadcastInterfaces "\"\""
-par TargetNetwork.dds.ipv4.arp typename "\"inet.networklayer.arp.ipv4.GlobalArp\""
-par TargetNetwork.dds.ipv4.arp interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.ipv4.arp addressType "\"ipv4\""
+par TargetNetwork.udp_tcp.ipv4.ip limitedBroadcast false
+par TargetNetwork.udp_tcp.ipv4.ip directBroadcastInterfaces "\"\""
+par TargetNetwork.udp_tcp.ipv4.arp typename "\"inet.networklayer.arp.ipv4.GlobalArp\""
+par TargetNetwork.udp_tcp.ipv4.arp interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
+par TargetNetwork.udp_tcp.ipv4.arp addressType "\"ipv4\""
 attr enum ipv4,ipv6,mac,moduleid,modulepath
-par TargetNetwork.dds.ipv4.lp typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds.ipv4.lp displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.ipv4.lp forwardServiceRegistration true
-par TargetNetwork.dds.ipv4.lp forwardProtocolRegistration true
-par TargetNetwork.dds.ipv4 typename "\"inet.networklayer.ipv4.Ipv4NetworkLayer\""
-par TargetNetwork.dds.ipv4 forwarding false
-par TargetNetwork.dds.ipv4 multicastForwarding false
-par TargetNetwork.dds.ipv4 interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.ipv4 displayStringTextFormat "\"%i\""
-par TargetNetwork.dds.nl typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds.nl displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.nl forwardServiceRegistration true
-par TargetNetwork.dds.nl forwardProtocolRegistration true
-par TargetNetwork.dds.udp typename "\"inet.transportlayer.udp.Udp\""
-par TargetNetwork.dds.udp interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.udp icmpModule "\"^.ipv4.icmp\""
-par TargetNetwork.dds.udp icmpv6Module "\"^.ipv6.icmpv6\""
-par TargetNetwork.dds.udp crcMode "\"declared\""
+par TargetNetwork.udp_tcp.ipv4.lp typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp.ipv4.lp displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.ipv4.lp forwardServiceRegistration true
+par TargetNetwork.udp_tcp.ipv4.lp forwardProtocolRegistration true
+par TargetNetwork.udp_tcp.ipv4 typename "\"inet.networklayer.ipv4.Ipv4NetworkLayer\""
+par TargetNetwork.udp_tcp.ipv4 forwarding false
+par TargetNetwork.udp_tcp.ipv4 multicastForwarding false
+par TargetNetwork.udp_tcp.ipv4 interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
+par TargetNetwork.udp_tcp.ipv4 displayStringTextFormat "\"%i\""
+par TargetNetwork.udp_tcp.nl typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp.nl displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.nl forwardServiceRegistration true
+par TargetNetwork.udp_tcp.nl forwardProtocolRegistration true
+par TargetNetwork.udp_tcp.udp typename "\"inet.transportlayer.udp.Udp\""
+par TargetNetwork.udp_tcp.udp interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
+par TargetNetwork.udp_tcp.udp icmpModule "\"^.ipv4.icmp\""
+par TargetNetwork.udp_tcp.udp icmpv6Module "\"^.ipv6.icmpv6\""
+par TargetNetwork.udp_tcp.udp crcMode "\"declared\""
 attr enum disabled,declared,computed
-par TargetNetwork.dds.udp defaultMulticastLoop true
-par TargetNetwork.dds.tn typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds.tn displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.tn forwardServiceRegistration true
-par TargetNetwork.dds.tn forwardProtocolRegistration true
-par TargetNetwork.dds.app[0].source typename "\"inet.queueing.source.DDSActivePacketSource\""
-par TargetNetwork.dds.app[0].source displayStringTextFormat "\"created %p pk (%l)\""
-par TargetNetwork.dds.app[0].source packetNameFormat "\"%a-%c\""
-par TargetNetwork.dds.app[0].source packetRepresentation "\"byteCount\""
-attr units bitCount,bits,byteCount,bytes,applicationPacket
-par TargetNetwork.dds.app[0].source packetProtocol "\"unknown\""
-par TargetNetwork.dds.app[0].source packetLength 40000b
-attr unit b
-par TargetNetwork.dds.app[0].source packetData -1
-par TargetNetwork.dds.app[0].source attachCreationTimeTag true
-par TargetNetwork.dds.app[0].source attachIdentityTag true
-par TargetNetwork.dds.app[0].source attachDirectionTag true
-par TargetNetwork.dds.app[0].source clockModule "\"\""
-par TargetNetwork.dds.app[0].source initialProductionOffset -1s
-attr mutable ""
-attr unit s
-par TargetNetwork.dds.app[0].source productionInterval exponential(20ms)
-attr unit s
-par TargetNetwork.dds.app[0].source scheduleForAbsoluteTime true
-par TargetNetwork.dds.app[0].io typename "\"inet.applications.ddsapp.DDSSocketIo2\""
-par TargetNetwork.dds.app[0].io interfaceTableModule "\"TargetNetwork.dds.app[0].interfaceTable\""
-par TargetNetwork.dds.app[0].io localAddress "\"\""
-par TargetNetwork.dds.app[0].io localPort -1
-par TargetNetwork.dds.app[0].io destAddress "\"\""
-par TargetNetwork.dds.app[0].io destPort 1000
-par TargetNetwork.dds.app[0].io publish "\"Topic1\""
-par TargetNetwork.dds.app[0].io subscribe "\"\""
-par TargetNetwork.dds.app[0].io nackCountdown -1s
-attr unit s
-par TargetNetwork.dds.app[0].io receiverBufferLength 100
-par TargetNetwork.dds.app[0].io historyCacheLength 10
-par TargetNetwork.dds.app[0].io timeToLive -1
-par TargetNetwork.dds.app[0].io dontFragment false
-par TargetNetwork.dds.app[0].io dscp -1
-par TargetNetwork.dds.app[0].io tos -1
-par TargetNetwork.dds.app[0].io multicastInterface "\"\""
-par TargetNetwork.dds.app[0].io multicastAddresses []
-par TargetNetwork.dds.app[0].io receiveBroadcast true
-par TargetNetwork.dds.app[0].io joinLocalMulticastGroups false
-par TargetNetwork.dds.app[0].io stopOperationExtraTime -1s
-attr unit s
-par TargetNetwork.dds.app[0].io stopOperationTimeout 2s
-attr unit s
-scalar TargetNetwork.dds.app[0].io "packets sent" 300
-scalar TargetNetwork.dds.app[0].io "packets received" 0
-par TargetNetwork.dds.app[0] typename "\"inet.applications.ddsapp.DDSPublishApp\""
-par TargetNetwork.dds.app[0] interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.app[1].source typename "\"inet.queueing.source.DDSSubActivePacketSource\""
-par TargetNetwork.dds.app[1].source displayStringTextFormat "\"created %p pk (%l)\""
-par TargetNetwork.dds.app[1].source packetNameFormat "\"%a-%c\""
-par TargetNetwork.dds.app[1].source packetRepresentation "\"byteCount\""
-attr units bitCount,bits,byteCount,bytes,applicationPacket
-par TargetNetwork.dds.app[1].source packetProtocol "\"unknown\""
-par TargetNetwork.dds.app[1].source packetLength 160b
-attr unit b
-par TargetNetwork.dds.app[1].source packetData -1
-par TargetNetwork.dds.app[1].source attachCreationTimeTag true
-par TargetNetwork.dds.app[1].source attachIdentityTag true
-par TargetNetwork.dds.app[1].source attachDirectionTag true
-par TargetNetwork.dds.app[1].source clockModule "\"\""
-par TargetNetwork.dds.app[1].source initialProductionOffset -1s
-attr mutable ""
-attr unit s
-par TargetNetwork.dds.app[1].source scheduleForAbsoluteTime true
-par TargetNetwork.dds.app[1].source subscribe "\"Topic1@1000\""
-par TargetNetwork.dds.app[1].sink typename "\"inet.queueing.sink.DDSPassivePacketSink\""
-par TargetNetwork.dds.app[1].sink displayStringTextFormat "\"received %p pk (%l)\""
-par TargetNetwork.dds.app[1].sink clockModule "\"\""
-par TargetNetwork.dds.app[1].sink initialConsumptionOffset 0s
-attr unit s
-par TargetNetwork.dds.app[1].sink consumptionInterval 0s
-attr unit s
-par TargetNetwork.dds.app[1].sink scheduleForAbsoluteTime true
-par TargetNetwork.dds.app[1].sink flowName "\"default\""
-par TargetNetwork.dds.app[1].io typename "\"inet.applications.ddsapp.DDSSocketIo2\""
-par TargetNetwork.dds.app[1].io interfaceTableModule "\"TargetNetwork.dds.app[1].interfaceTable\""
-par TargetNetwork.dds.app[1].io localAddress "\"\""
-par TargetNetwork.dds.app[1].io localPort 1000
-par TargetNetwork.dds.app[1].io destAddress "\"\""
-par TargetNetwork.dds.app[1].io destPort -1
-par TargetNetwork.dds.app[1].io publish "\"\""
-par TargetNetwork.dds.app[1].io subscribe "\"\""
-par TargetNetwork.dds.app[1].io nackCountdown 0.00025s
-attr unit s
-par TargetNetwork.dds.app[1].io receiverBufferLength 1000
-par TargetNetwork.dds.app[1].io historyCacheLength 10
-par TargetNetwork.dds.app[1].io timeToLive -1
-par TargetNetwork.dds.app[1].io dontFragment false
-par TargetNetwork.dds.app[1].io dscp -1
-par TargetNetwork.dds.app[1].io tos -1
-par TargetNetwork.dds.app[1].io multicastInterface "\"\""
-par TargetNetwork.dds.app[1].io multicastAddresses []
-par TargetNetwork.dds.app[1].io receiveBroadcast false
-par TargetNetwork.dds.app[1].io joinLocalMulticastGroups false
-par TargetNetwork.dds.app[1].io stopOperationExtraTime -1s
-attr unit s
-par TargetNetwork.dds.app[1].io stopOperationTimeout 2s
-attr unit s
-scalar TargetNetwork.dds.app[1].io "packets sent" 0
-scalar TargetNetwork.dds.app[1].io "packets received" 296
-par TargetNetwork.dds.app[1] typename "\"inet.applications.ddsapp.DDSSubscribeApp\""
-par TargetNetwork.dds.app[1] interfaceTableModule "\"TargetNetwork.dds.interfaceTable\""
-par TargetNetwork.dds.at typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds.at displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds.at forwardServiceRegistration true
-par TargetNetwork.dds.at forwardProtocolRegistration true
-par TargetNetwork.dds typename "\"inet.node.inet.DDSStandardHost\""
-par TargetNetwork.dds hasStatus false
-par TargetNetwork.dds osgModel "\"\""
-par TargetNetwork.dds osgModelColor "\"\""
-par TargetNetwork.dds canvasImage "\"\""
-par TargetNetwork.dds canvasImageColor "\"\""
-par TargetNetwork.dds recordPcap false
-par TargetNetwork.dds numPcapRecorders 0
-par TargetNetwork.dds numLoInterfaces 1
-par TargetNetwork.dds numWlanInterfaces 0
-par TargetNetwork.dds numEthInterfaces 0
-par TargetNetwork.dds numPppInterfaces 0
-par TargetNetwork.dds numTunInterfaces 0
-par TargetNetwork.dds numVirtInterfaces 0
-par TargetNetwork.dds fcsMode "\"declared\""
+par TargetNetwork.udp_tcp.udp defaultMulticastLoop true
+par TargetNetwork.udp_tcp.tcp typename "\"inet.transportlayer.tcp.Tcp\""
+par TargetNetwork.udp_tcp.tcp crcMode "\"declared\""
 attr enum declared,computed
-par TargetNetwork.dds hasIpv4 true
-par TargetNetwork.dds hasIpv6 false
-par TargetNetwork.dds hasGn false
-par TargetNetwork.dds forwarding false
-par TargetNetwork.dds multicastForwarding false
-par TargetNetwork.dds hasUdp true
-par TargetNetwork.dds hasTcp true
-par TargetNetwork.dds hasSctp false
-par TargetNetwork.dds numApps 2
-par TargetNetwork.dds2.ethg$i[0].channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.eth[0].phys$o.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.interfaceTable typename "\"inet.networklayer.common.InterfaceTable\""
-par TargetNetwork.dds2.interfaceTable displayAddresses false
-par TargetNetwork.dds2.cb typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds2.cb displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.cb forwardServiceRegistration true
-par TargetNetwork.dds2.cb forwardProtocolRegistration true
-par TargetNetwork.dds2.bl typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds2.bl displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.bl forwardServiceRegistration true
-par TargetNetwork.dds2.bl forwardProtocolRegistration true
-par TargetNetwork.dds2.ethernet.fcsInserter.out.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.ethernet.lowerLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.ethernet.upperLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.ethernet.macHeaderChecker.out.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.ethernet.macHeaderInserter typename "\"inet.linklayer.ethernet.modular.EthernetMacHeaderInserter\""
-par TargetNetwork.dds2.ethernet.macHeaderInserter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.ethernet.macHeaderInserter interfaceTableModule "\"TargetNetwork.dds2.interfaceTable\""
-par TargetNetwork.dds2.ethernet.paddingInserter typename "\"inet.protocolelement.common.PaddingInserter\""
-par TargetNetwork.dds2.ethernet.paddingInserter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.ethernet.paddingInserter minLength 480b
+par TargetNetwork.udp_tcp.tcp advertisedWindow 65535
+par TargetNetwork.udp_tcp.tcp delayedAcksEnabled false
+par TargetNetwork.udp_tcp.tcp nagleEnabled true
+par TargetNetwork.udp_tcp.tcp limitedTransmitEnabled false
+par TargetNetwork.udp_tcp.tcp increasedIWEnabled false
+par TargetNetwork.udp_tcp.tcp sackSupport false
+par TargetNetwork.udp_tcp.tcp windowScalingSupport false
+par TargetNetwork.udp_tcp.tcp windowScalingFactor -1
+par TargetNetwork.udp_tcp.tcp timestampSupport false
+par TargetNetwork.udp_tcp.tcp mss 1452
+par TargetNetwork.udp_tcp.tcp msl 120s
+attr unit s
+par TargetNetwork.udp_tcp.tcp tcpAlgorithmClass "\"TcpReno\""
+attr enum TcpVegas,TcpWestwood,TcpNewReno,TcpReno,TcpTahoe,TcpNoCongestionControl
+par TargetNetwork.udp_tcp.tcp useDataNotification false
+par TargetNetwork.udp_tcp.tcp dupthresh 3
+par TargetNetwork.udp_tcp.tcp initialSsthresh 4294967295
+par TargetNetwork.udp_tcp.tcp stopOperationExtraTime 0s
+attr unit s
+par TargetNetwork.udp_tcp.tcp stopOperationTimeout 2s
+attr unit s
+par TargetNetwork.udp_tcp.tcp ecnWillingness false
+par TargetNetwork.udp_tcp.tcp dctcpGamma 0.0625
+par TargetNetwork.udp_tcp.tn typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp.tn displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.tn forwardServiceRegistration true
+par TargetNetwork.udp_tcp.tn forwardProtocolRegistration true
+par TargetNetwork.udp_tcp.app[0].source typename "\"inet.queueing.source.UdpActivePacketSource\""
+par TargetNetwork.udp_tcp.app[0].source displayStringTextFormat "\"created %p pk (%l)\""
+par TargetNetwork.udp_tcp.app[0].source packetNameFormat "\"%a-%c\""
+par TargetNetwork.udp_tcp.app[0].source packetRepresentation "\"byteCount\""
+attr units bitCount,bits,byteCount,bytes,applicationPacket
+par TargetNetwork.udp_tcp.app[0].source packetProtocol "\"unknown\""
+par TargetNetwork.udp_tcp.app[0].source packetLength 8000b
 attr unit b
-par TargetNetwork.dds2.ethernet.paddingInserter roundingLength 8b
+par TargetNetwork.udp_tcp.app[0].source packetData -1
+par TargetNetwork.udp_tcp.app[0].source attachCreationTimeTag true
+par TargetNetwork.udp_tcp.app[0].source attachIdentityTag true
+par TargetNetwork.udp_tcp.app[0].source attachDirectionTag true
+par TargetNetwork.udp_tcp.app[0].source clockModule "\"\""
+par TargetNetwork.udp_tcp.app[0].source initialProductionOffset -1s
+attr mutable ""
+attr unit s
+par TargetNetwork.udp_tcp.app[0].source productionInterval exponential(100us)
+attr unit s
+par TargetNetwork.udp_tcp.app[0].source scheduleForAbsoluteTime true
+par TargetNetwork.udp_tcp.app[0].io typename "\"inet.applications.udpapp.UdpSocketIo\""
+par TargetNetwork.udp_tcp.app[0].io interfaceTableModule "\"TargetNetwork.udp_tcp.app[0].interfaceTable\""
+par TargetNetwork.udp_tcp.app[0].io localAddress "\"\""
+par TargetNetwork.udp_tcp.app[0].io localPort -1
+par TargetNetwork.udp_tcp.app[0].io destAddress "\"udp_tcp2\""
+par TargetNetwork.udp_tcp.app[0].io destPort 1000
+par TargetNetwork.udp_tcp.app[0].io timeToLive -1
+par TargetNetwork.udp_tcp.app[0].io dontFragment false
+par TargetNetwork.udp_tcp.app[0].io dscp -1
+par TargetNetwork.udp_tcp.app[0].io tos -1
+par TargetNetwork.udp_tcp.app[0].io multicastInterface "\"\""
+par TargetNetwork.udp_tcp.app[0].io multicastAddresses []
+par TargetNetwork.udp_tcp.app[0].io receiveBroadcast false
+par TargetNetwork.udp_tcp.app[0].io joinLocalMulticastGroups false
+par TargetNetwork.udp_tcp.app[0].io stopOperationExtraTime -1s
+attr unit s
+par TargetNetwork.udp_tcp.app[0].io stopOperationTimeout 2s
+attr unit s
+scalar TargetNetwork.udp_tcp.app[0].io "packets sent" 14992
+scalar TargetNetwork.udp_tcp.app[0].io "packets received" 0
+par TargetNetwork.udp_tcp.app[0] typename "\"inet.applications.udpapp.UdpApp615\""
+par TargetNetwork.udp_tcp.app[0] interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
+par TargetNetwork.udp_tcp.at typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp.at displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp.at forwardServiceRegistration true
+par TargetNetwork.udp_tcp.at forwardProtocolRegistration true
+par TargetNetwork.udp_tcp typename "\"inet.node.inet.StandardHost\""
+par TargetNetwork.udp_tcp hasStatus false
+par TargetNetwork.udp_tcp osgModel "\"\""
+par TargetNetwork.udp_tcp osgModelColor "\"\""
+par TargetNetwork.udp_tcp canvasImage "\"\""
+par TargetNetwork.udp_tcp canvasImageColor "\"\""
+par TargetNetwork.udp_tcp recordPcap false
+par TargetNetwork.udp_tcp numPcapRecorders 0
+par TargetNetwork.udp_tcp numLoInterfaces 1
+par TargetNetwork.udp_tcp numWlanInterfaces 0
+par TargetNetwork.udp_tcp numEthInterfaces 0
+par TargetNetwork.udp_tcp numPppInterfaces 0
+par TargetNetwork.udp_tcp numTunInterfaces 0
+par TargetNetwork.udp_tcp numVirtInterfaces 0
+par TargetNetwork.udp_tcp fcsMode "\"declared\""
+attr enum declared,computed
+par TargetNetwork.udp_tcp hasIpv4 true
+par TargetNetwork.udp_tcp hasIpv6 false
+par TargetNetwork.udp_tcp hasGn false
+par TargetNetwork.udp_tcp forwarding false
+par TargetNetwork.udp_tcp multicastForwarding false
+par TargetNetwork.udp_tcp hasUdp true
+par TargetNetwork.udp_tcp hasTcp true
+par TargetNetwork.udp_tcp hasSctp false
+par TargetNetwork.udp_tcp numApps 1
+par TargetNetwork.udp_tcp2.ethg$i[0].channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.eth[0].phys$o.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.interfaceTable typename "\"inet.networklayer.common.InterfaceTable\""
+par TargetNetwork.udp_tcp2.interfaceTable displayAddresses false
+par TargetNetwork.udp_tcp2.cb typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp2.cb displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.cb forwardServiceRegistration true
+par TargetNetwork.udp_tcp2.cb forwardProtocolRegistration true
+par TargetNetwork.udp_tcp2.bl typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp2.bl displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.bl forwardServiceRegistration true
+par TargetNetwork.udp_tcp2.bl forwardProtocolRegistration true
+par TargetNetwork.udp_tcp2.bl_loop typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp2.bl_loop displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.bl_loop forwardServiceRegistration true
+par TargetNetwork.udp_tcp2.bl_loop forwardProtocolRegistration true
+par TargetNetwork.udp_tcp2.ethernet.fcsInserter.out.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.ethernet.lowerLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.ethernet.upperLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.ethernet.macHeaderChecker.out.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.ethernet.macHeaderInserter typename "\"inet.linklayer.ethernet.modular.EthernetMacHeaderInserter\""
+par TargetNetwork.udp_tcp2.ethernet.macHeaderInserter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.ethernet.macHeaderInserter interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
+par TargetNetwork.udp_tcp2.ethernet.paddingInserter typename "\"inet.protocolelement.common.PaddingInserter\""
+par TargetNetwork.udp_tcp2.ethernet.paddingInserter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.ethernet.paddingInserter minLength 480b
 attr unit b
-par TargetNetwork.dds2.ethernet.paddingInserter insertionPosition "\"back\""
+par TargetNetwork.udp_tcp2.ethernet.paddingInserter roundingLength 8b
+attr unit b
+par TargetNetwork.udp_tcp2.ethernet.paddingInserter insertionPosition "\"back\""
 attr enum front,back
-par TargetNetwork.dds2.ethernet.fcsInserter typename "\"inet.linklayer.ethernet.modular.EthernetFcsInserter\""
-par TargetNetwork.dds2.ethernet.fcsInserter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.ethernet.fcsInserter fcsMode "\"declared\""
+par TargetNetwork.udp_tcp2.ethernet.fcsInserter typename "\"inet.linklayer.ethernet.modular.EthernetFcsInserter\""
+par TargetNetwork.udp_tcp2.ethernet.fcsInserter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.ethernet.fcsInserter fcsMode "\"declared\""
 attr enum disabled,declared,computed
-par TargetNetwork.dds2.ethernet.macHeaderChecker typename "\"inet.linklayer.ethernet.modular.EthernetMacHeaderChecker\""
-par TargetNetwork.dds2.ethernet.macHeaderChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
-par TargetNetwork.dds2.ethernet.macHeaderChecker backpressure false
-par TargetNetwork.dds2.ethernet.macHeaderChecker interfaceTableModule "\"TargetNetwork.dds2.interfaceTable\""
-par TargetNetwork.dds2.ethernet.macHeaderChecker promiscuous false
-par TargetNetwork.dds2.ethernet.fcsChecker typename "\"inet.linklayer.ethernet.modular.EthernetFcsChecker\""
-par TargetNetwork.dds2.ethernet.fcsChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
-par TargetNetwork.dds2.ethernet.fcsChecker backpressure false
-par TargetNetwork.dds2.ethernet.fcsChecker popFcs true
-par TargetNetwork.dds2.ethernet typename "\"inet.linklayer.ethernet.modular.EthernetLayer\""
-par TargetNetwork.dds2.ethernet interfaceTableModule "\"TargetNetwork.dds2.interfaceTable\""
-par TargetNetwork.dds2.ethernet hasSocketSupport false
-par TargetNetwork.dds2.li typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds2.li displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.li forwardServiceRegistration true
-par TargetNetwork.dds2.li forwardProtocolRegistration true
-par TargetNetwork.dds2.lo[0].upperLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.lo[0].lo.upperLayerOut.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.lo[0].lo typename "\"inet.linklayer.loopback.Loopback\""
-par TargetNetwork.dds2.lo[0].lo interfaceTableModule "\"TargetNetwork.dds2.interfaceTable\""
-par TargetNetwork.dds2.lo[0].lo mtu 4470B
+par TargetNetwork.udp_tcp2.ethernet.macHeaderChecker typename "\"inet.linklayer.ethernet.modular.EthernetMacHeaderChecker\""
+par TargetNetwork.udp_tcp2.ethernet.macHeaderChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
+par TargetNetwork.udp_tcp2.ethernet.macHeaderChecker backpressure false
+par TargetNetwork.udp_tcp2.ethernet.macHeaderChecker interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
+par TargetNetwork.udp_tcp2.ethernet.macHeaderChecker promiscuous false
+par TargetNetwork.udp_tcp2.ethernet.fcsChecker typename "\"inet.linklayer.ethernet.modular.EthernetFcsChecker\""
+par TargetNetwork.udp_tcp2.ethernet.fcsChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
+par TargetNetwork.udp_tcp2.ethernet.fcsChecker backpressure false
+par TargetNetwork.udp_tcp2.ethernet.fcsChecker popFcs true
+par TargetNetwork.udp_tcp2.ethernet typename "\"inet.linklayer.ethernet.modular.EthernetLayer\""
+par TargetNetwork.udp_tcp2.ethernet interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
+par TargetNetwork.udp_tcp2.ethernet hasSocketSupport false
+par TargetNetwork.udp_tcp2.li typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp2.li displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.li forwardServiceRegistration true
+par TargetNetwork.udp_tcp2.li forwardProtocolRegistration true
+par TargetNetwork.udp_tcp2.li_loop typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp2.li_loop displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.li_loop forwardServiceRegistration true
+par TargetNetwork.udp_tcp2.li_loop forwardProtocolRegistration true
+par TargetNetwork.udp_tcp2.lo[0].upperLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.lo[0].lo.upperLayerOut.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.lo[0].lo typename "\"inet.linklayer.loopback.Loopback\""
+par TargetNetwork.udp_tcp2.lo[0].lo interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
+par TargetNetwork.udp_tcp2.lo[0].lo mtu 4470B
 attr unit B
-par TargetNetwork.dds2.lo[0] typename "\"inet.linklayer.loopback.LoopbackInterface\""
-par TargetNetwork.dds2.lo[0] displayStringTextFormat "\"%a (%i)\\n%m\""
-par TargetNetwork.dds2.lo[0] recordPcap false
-par TargetNetwork.dds2.lo[0] numPcapRecorders 0
-par TargetNetwork.dds2.lo[0] interfaceTableModule "\"TargetNetwork.dds2.interfaceTable\""
-par TargetNetwork.dds2.eth[0].phyLayer.lowerLayerOut.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.eth[0].phys$i.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.eth[0].upperLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.eth[0].macLayer.upperLayerOut.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.eth[0].macLayer.upperLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.eth[0].macLayer.outboundEmitter.out.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.eth[0].macLayer.lowerLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.eth[0].macLayer.fcsChecker.out.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.eth[0].macLayer.queue typename "\"inet.queueing.queue.PacketQueue\""
-par TargetNetwork.dds2.eth[0].macLayer.queue displayStringTextFormat "\"contains %p pk (%l) pushed %u\\npulled %o removed %r dropped %d\""
-par TargetNetwork.dds2.eth[0].macLayer.queue packetCapacity 100
-par TargetNetwork.dds2.eth[0].macLayer.queue dataCapacity -1b
+par TargetNetwork.udp_tcp2.lo[0] typename "\"inet.linklayer.loopback.LoopbackInterface\""
+par TargetNetwork.udp_tcp2.lo[0] displayStringTextFormat "\"%a (%i)\\n%m\""
+par TargetNetwork.udp_tcp2.lo[0] recordPcap false
+par TargetNetwork.udp_tcp2.lo[0] numPcapRecorders 0
+par TargetNetwork.udp_tcp2.lo[0] interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.lowerLayerOut.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.eth[0].phys$i.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.eth[0].upperLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.upperLayerOut.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.upperLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.outboundEmitter.out.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.lowerLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.fcsChecker.out.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.queue typename "\"inet.queueing.queue.PacketQueue\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.queue displayStringTextFormat "\"contains %p pk (%l) pushed %u\\npulled %o removed %r dropped %d\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.queue packetCapacity 100
+par TargetNetwork.udp_tcp2.eth[0].macLayer.queue dataCapacity -1b
 attr unit b
-par TargetNetwork.dds2.eth[0].macLayer.queue dropperClass "\"inet::queueing::PacketAtCollectionEndDropper\""
-par TargetNetwork.dds2.eth[0].macLayer.queue comparatorClass "\"\""
-par TargetNetwork.dds2.eth[0].macLayer.queue bufferModule "\"\""
-par TargetNetwork.dds2.eth[0].macLayer.queue portName "\"\""
-par TargetNetwork.dds2.eth[0].macLayer.server typename "\"inet.queueing.server.InstantServer\""
-par TargetNetwork.dds2.eth[0].macLayer.server displayStringTextFormat "\"served %p pk (%l)\""
-par TargetNetwork.dds2.eth[0].macLayer.server serveSchedulingPriority 0
-par TargetNetwork.dds2.eth[0].macLayer.outboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
-par TargetNetwork.dds2.eth[0].macLayer.outboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.eth[0].macLayer.outboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
-par TargetNetwork.dds2.eth[0].macLayer.outboundEmitter direction "\"outbound\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.queue dropperClass "\"inet::queueing::PacketAtCollectionEndDropper\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.queue comparatorClass "\"\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.queue bufferModule "\"\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.queue portName "\"\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.server typename "\"inet.queueing.server.InstantServer\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.server displayStringTextFormat "\"served %p pk (%l)\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.server serveSchedulingPriority 0
+par TargetNetwork.udp_tcp2.eth[0].macLayer.outboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.outboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.outboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.outboundEmitter direction "\"outbound\""
 attr enum undefined,inbound,outbound
-par TargetNetwork.dds2.eth[0].macLayer.outboundEmitter signalName "\"packetSentToLower\""
-par TargetNetwork.dds2.eth[0].macLayer.fcsChecker typename "\"inet.linklayer.ethernet.modular.EthernetFcsChecker\""
-par TargetNetwork.dds2.eth[0].macLayer.fcsChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
-par TargetNetwork.dds2.eth[0].macLayer.fcsChecker backpressure false
-par TargetNetwork.dds2.eth[0].macLayer.fcsChecker popFcs false
-par TargetNetwork.dds2.eth[0].macLayer.inboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
-par TargetNetwork.dds2.eth[0].macLayer.inboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.eth[0].macLayer.inboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
-par TargetNetwork.dds2.eth[0].macLayer.inboundEmitter direction "\"inbound\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.outboundEmitter signalName "\"packetSentToLower\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.fcsChecker typename "\"inet.linklayer.ethernet.modular.EthernetFcsChecker\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.fcsChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.fcsChecker backpressure false
+par TargetNetwork.udp_tcp2.eth[0].macLayer.fcsChecker popFcs false
+par TargetNetwork.udp_tcp2.eth[0].macLayer.inboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.inboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.inboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer.inboundEmitter direction "\"inbound\""
 attr enum undefined,inbound,outbound
-par TargetNetwork.dds2.eth[0].macLayer.inboundEmitter signalName "\"packetReceivedFromLower\""
-par TargetNetwork.dds2.eth[0].macLayer typename "\"inet.linklayer.ethernet.modular.EthernetMacLayer\""
-par TargetNetwork.dds2.eth[0].macLayer bitrate 1e+08bps
+par TargetNetwork.udp_tcp2.eth[0].macLayer.inboundEmitter signalName "\"packetReceivedFromLower\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer typename "\"inet.linklayer.ethernet.modular.EthernetMacLayer\""
+par TargetNetwork.udp_tcp2.eth[0].macLayer bitrate 1e+08bps
 attr unit bps
-par TargetNetwork.dds2.eth[0].phyLayer.upperLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.eth[0].phyLayer.transmitter.out.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.eth[0].phyLayer.lowerLayerIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.eth[0].phyLayer.phyHeaderChecker.out.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.eth[0].phyLayer.phyHeaderInserter typename "\"inet.physicallayer.wired.ethernet.EthernetPhyHeaderInserter\""
-par TargetNetwork.dds2.eth[0].phyLayer.phyHeaderInserter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.eth[0].phyLayer.interFrameGapInserter typename "\"inet.protocolelement.common.InterpacketGapInserter\""
-par TargetNetwork.dds2.eth[0].phyLayer.interFrameGapInserter displayStringTextFormat "\"delayed %p pk (%l)\\nifg: %g\""
-par TargetNetwork.dds2.eth[0].phyLayer.interFrameGapInserter clockModule "\"\""
-par TargetNetwork.dds2.eth[0].phyLayer.interFrameGapInserter initialChannelBusy false
-par TargetNetwork.dds2.eth[0].phyLayer.interFrameGapInserter duration 96s/dropUnit(parent.bitrate)
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.upperLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.transmitter.out.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.lowerLayerIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.phyHeaderChecker.out.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.phyHeaderInserter typename "\"inet.physicallayer.wired.ethernet.EthernetPhyHeaderInserter\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.phyHeaderInserter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.interFrameGapInserter typename "\"inet.protocolelement.common.InterpacketGapInserter\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.interFrameGapInserter displayStringTextFormat "\"delayed %p pk (%l)\\nifg: %g\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.interFrameGapInserter clockModule "\"\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.interFrameGapInserter initialChannelBusy false
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.interFrameGapInserter duration 96s/dropUnit(parent.bitrate)
 attr unit s
-par TargetNetwork.dds2.eth[0].phyLayer.outboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
-par TargetNetwork.dds2.eth[0].phyLayer.outboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.eth[0].phyLayer.outboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
-par TargetNetwork.dds2.eth[0].phyLayer.outboundEmitter direction "\"outbound\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.outboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.outboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.outboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.outboundEmitter direction "\"outbound\""
 attr enum undefined,inbound,outbound
-par TargetNetwork.dds2.eth[0].phyLayer.outboundEmitter signalName "\"packetSentToLower\""
-par TargetNetwork.dds2.eth[0].phyLayer.transmitter typename "\"inet.protocolelement.transceiver.PacketTransmitter\""
-par TargetNetwork.dds2.eth[0].phyLayer.transmitter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.eth[0].phyLayer.transmitter clockModule "\"\""
-par TargetNetwork.dds2.eth[0].phyLayer.transmitter datarate this.bitrate
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.outboundEmitter signalName "\"packetSentToLower\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.transmitter typename "\"inet.protocolelement.transceiver.PacketTransmitter\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.transmitter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.transmitter clockModule "\"\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.transmitter datarate this.bitrate
 attr unit bps
-scalar TargetNetwork.dds2.eth[0].phyLayer.transmitter propagationTime 0
-par TargetNetwork.dds2.eth[0].phyLayer.phyHeaderChecker typename "\"inet.physicallayer.wired.ethernet.EthernetPhyHeaderChecker\""
-par TargetNetwork.dds2.eth[0].phyLayer.phyHeaderChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
-par TargetNetwork.dds2.eth[0].phyLayer.phyHeaderChecker backpressure false
-par TargetNetwork.dds2.eth[0].phyLayer.inboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
-par TargetNetwork.dds2.eth[0].phyLayer.inboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.eth[0].phyLayer.inboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
-par TargetNetwork.dds2.eth[0].phyLayer.inboundEmitter direction "\"inbound\""
+scalar TargetNetwork.udp_tcp2.eth[0].phyLayer.transmitter propagationTime 0
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.phyHeaderChecker typename "\"inet.physicallayer.wired.ethernet.EthernetPhyHeaderChecker\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.phyHeaderChecker displayStringTextFormat "\"dropped %d/%p pk (%k/%l)\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.phyHeaderChecker backpressure false
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.inboundEmitter typename "\"inet.protocolelement.common.PacketEmitter\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.inboundEmitter displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.inboundEmitter packetFilter "(omnetpp::cValueHolder)holder: \"*\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.inboundEmitter direction "\"inbound\""
 attr enum undefined,inbound,outbound
-par TargetNetwork.dds2.eth[0].phyLayer.inboundEmitter signalName "\"packetReceivedFromLower\""
-par TargetNetwork.dds2.eth[0].phyLayer.receiver typename "\"inet.protocolelement.transceiver.PacketReceiver\""
-par TargetNetwork.dds2.eth[0].phyLayer.receiver displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.eth[0].phyLayer.receiver datarate 1e+08bps
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.inboundEmitter signalName "\"packetReceivedFromLower\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.receiver typename "\"inet.protocolelement.transceiver.PacketReceiver\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.receiver displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer.receiver datarate 1e+08bps
 attr unit bps
-par TargetNetwork.dds2.eth[0].phyLayer typename "\"inet.physicallayer.wired.ethernet.EthernetPhyLayer\""
-par TargetNetwork.dds2.eth[0].phyLayer bitrate this.bitrate
+par TargetNetwork.udp_tcp2.eth[0].phyLayer typename "\"inet.physicallayer.wired.ethernet.EthernetPhyLayer\""
+par TargetNetwork.udp_tcp2.eth[0].phyLayer bitrate this.bitrate
 attr unit bps
-par TargetNetwork.dds2.eth[0] typename "\"inet.linklayer.ethernet.LayeredEthernetInterface\""
-par TargetNetwork.dds2.eth[0] displayStringTextFormat "\"%a (%i)\\n%m\""
-par TargetNetwork.dds2.eth[0] recordPcap false
-par TargetNetwork.dds2.eth[0] numPcapRecorders 0
-par TargetNetwork.dds2.eth[0] protocol "\"ethernetmac\""
-par TargetNetwork.dds2.eth[0] broadcast true
-par TargetNetwork.dds2.eth[0] multicast true
-par TargetNetwork.dds2.eth[0] address "\"0A-AA-00-00-00-02\""
+par TargetNetwork.udp_tcp2.eth[0] typename "\"inet.linklayer.ethernet.LayeredEthernetInterface\""
+par TargetNetwork.udp_tcp2.eth[0] displayStringTextFormat "\"%a (%i)\\n%m\""
+par TargetNetwork.udp_tcp2.eth[0] recordPcap false
+par TargetNetwork.udp_tcp2.eth[0] numPcapRecorders 0
+par TargetNetwork.udp_tcp2.eth[0] protocol "\"ethernetmac\""
+par TargetNetwork.udp_tcp2.eth[0] broadcast true
+par TargetNetwork.udp_tcp2.eth[0] multicast true
+par TargetNetwork.udp_tcp2.eth[0] address "\"0A-AA-00-00-00-02\""
 attr mutable ""
-par TargetNetwork.dds2.eth[0] bitrate 1e+08bps
+par TargetNetwork.udp_tcp2.eth[0] bitrate 1e+08bps
 attr unit bps
-par TargetNetwork.dds2.eth[0] mtu 1500B
+par TargetNetwork.udp_tcp2.eth[0] mtu 1500B
 attr unit B
-par TargetNetwork.dds2.eth[0] interfaceTableModule "\"TargetNetwork.dds2.interfaceTable\""
-par TargetNetwork.dds2.ipv4.transportIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.ipv4.up.out[0].channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.ipv4.lp.out[2].channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.ipv4.ifIn.channel typename "\"ned.IdealChannel\""
-par TargetNetwork.dds2.ipv4.configurator typename "\"inet.networklayer.configurator.ipv4.Ipv4NodeConfigurator\""
-par TargetNetwork.dds2.ipv4.configurator interfaceTableModule "\"TargetNetwork.dds2.interfaceTable\""
-par TargetNetwork.dds2.ipv4.configurator routingTableModule "\"TargetNetwork.dds2.ipv4.routingTable\""
-par TargetNetwork.dds2.ipv4.configurator networkConfiguratorModule "\"configurator\""
-par TargetNetwork.dds2.ipv4.configurator configureRoutingTable true
-par TargetNetwork.dds2.ipv4.routingTable typename "\"inet.networklayer.ipv4.Ipv4RoutingTable\""
-par TargetNetwork.dds2.ipv4.routingTable interfaceTableModule "\"TargetNetwork.dds2.interfaceTable\""
-par TargetNetwork.dds2.ipv4.routingTable routerId "\"auto\""
-par TargetNetwork.dds2.ipv4.routingTable netmaskRoutes "\"*\""
-par TargetNetwork.dds2.ipv4.routingTable forwarding false
-par TargetNetwork.dds2.ipv4.routingTable multicastForwarding false
-par TargetNetwork.dds2.ipv4.routingTable useAdminDist false
-par TargetNetwork.dds2.ipv4.routingTable routingFile "\"\""
-par TargetNetwork.dds2.ipv4.natTable typename "\"inet.networklayer.ipv4.Ipv4NatTable\""
-par TargetNetwork.dds2.ipv4.natTable networkProtocolModule "\"^.ip\""
-par TargetNetwork.dds2.ipv4.natTable config "<config/> at content:1"
-par TargetNetwork.dds2.ipv4.up typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds2.ipv4.up displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.ipv4.up forwardServiceRegistration true
-par TargetNetwork.dds2.ipv4.up forwardProtocolRegistration true
-par TargetNetwork.dds2.ipv4.igmp typename "\"inet.networklayer.ipv4.Igmpv2\""
-par TargetNetwork.dds2.ipv4.igmp interfaceTableModule "\"TargetNetwork.dds2.interfaceTable\""
-par TargetNetwork.dds2.ipv4.igmp routingTableModule "\"TargetNetwork.dds2.ipv4.routingTable\""
-par TargetNetwork.dds2.ipv4.igmp crcMode "\"declared\""
+par TargetNetwork.udp_tcp2.eth[0] interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
+par TargetNetwork.udp_tcp2.ipv4.transportIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.ipv4.up.out[0].channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.ipv4.lp.out[2].channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.ipv4.ifIn.channel typename "\"ned.IdealChannel\""
+par TargetNetwork.udp_tcp2.ipv4.configurator typename "\"inet.networklayer.configurator.ipv4.Ipv4NodeConfigurator\""
+par TargetNetwork.udp_tcp2.ipv4.configurator interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
+par TargetNetwork.udp_tcp2.ipv4.configurator routingTableModule "\"TargetNetwork.udp_tcp2.ipv4.routingTable\""
+par TargetNetwork.udp_tcp2.ipv4.configurator networkConfiguratorModule "\"configurator\""
+par TargetNetwork.udp_tcp2.ipv4.configurator configureRoutingTable true
+par TargetNetwork.udp_tcp2.ipv4.routingTable typename "\"inet.networklayer.ipv4.Ipv4RoutingTable\""
+par TargetNetwork.udp_tcp2.ipv4.routingTable interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
+par TargetNetwork.udp_tcp2.ipv4.routingTable routerId "\"auto\""
+par TargetNetwork.udp_tcp2.ipv4.routingTable netmaskRoutes "\"*\""
+par TargetNetwork.udp_tcp2.ipv4.routingTable forwarding false
+par TargetNetwork.udp_tcp2.ipv4.routingTable multicastForwarding false
+par TargetNetwork.udp_tcp2.ipv4.routingTable useAdminDist false
+par TargetNetwork.udp_tcp2.ipv4.routingTable routingFile "\"\""
+par TargetNetwork.udp_tcp2.ipv4.natTable typename "\"inet.networklayer.ipv4.Ipv4NatTable\""
+par TargetNetwork.udp_tcp2.ipv4.natTable networkProtocolModule "\"^.ip\""
+par TargetNetwork.udp_tcp2.ipv4.natTable config "<config/> at content:1"
+par TargetNetwork.udp_tcp2.ipv4.up typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp2.ipv4.up displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.ipv4.up forwardServiceRegistration true
+par TargetNetwork.udp_tcp2.ipv4.up forwardProtocolRegistration true
+par TargetNetwork.udp_tcp2.ipv4.igmp typename "\"inet.networklayer.ipv4.Igmpv2\""
+par TargetNetwork.udp_tcp2.ipv4.igmp interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
+par TargetNetwork.udp_tcp2.ipv4.igmp routingTableModule "\"TargetNetwork.udp_tcp2.ipv4.routingTable\""
+par TargetNetwork.udp_tcp2.ipv4.igmp crcMode "\"declared\""
 attr enum declared,computed
-par TargetNetwork.dds2.ipv4.igmp enabled true
-par TargetNetwork.dds2.ipv4.igmp robustnessVariable 2
-par TargetNetwork.dds2.ipv4.igmp queryInterval 125s
+par TargetNetwork.udp_tcp2.ipv4.igmp enabled true
+par TargetNetwork.udp_tcp2.ipv4.igmp robustnessVariable 2
+par TargetNetwork.udp_tcp2.ipv4.igmp queryInterval 125s
 attr unit s
-par TargetNetwork.dds2.ipv4.igmp queryResponseInterval 10s
+par TargetNetwork.udp_tcp2.ipv4.igmp queryResponseInterval 10s
 attr unit s
-par TargetNetwork.dds2.ipv4.igmp groupMembershipInterval 260s
+par TargetNetwork.udp_tcp2.ipv4.igmp groupMembershipInterval 260s
 attr unit s
-par TargetNetwork.dds2.ipv4.igmp otherQuerierPresentInterval 255s
+par TargetNetwork.udp_tcp2.ipv4.igmp otherQuerierPresentInterval 255s
 attr unit s
-par TargetNetwork.dds2.ipv4.igmp startupQueryInterval 31.25s
+par TargetNetwork.udp_tcp2.ipv4.igmp startupQueryInterval 31.25s
 attr unit s
-par TargetNetwork.dds2.ipv4.igmp startupQueryCount 2
-par TargetNetwork.dds2.ipv4.igmp lastMemberQueryInterval 1s
+par TargetNetwork.udp_tcp2.ipv4.igmp startupQueryCount 2
+par TargetNetwork.udp_tcp2.ipv4.igmp lastMemberQueryInterval 1s
 attr unit s
-par TargetNetwork.dds2.ipv4.igmp lastMemberQueryCount 2
-par TargetNetwork.dds2.ipv4.igmp unsolicitedReportInterval 10s
+par TargetNetwork.udp_tcp2.ipv4.igmp lastMemberQueryCount 2
+par TargetNetwork.udp_tcp2.ipv4.igmp unsolicitedReportInterval 10s
 attr unit s
-par TargetNetwork.dds2.ipv4.icmp typename "\"inet.networklayer.ipv4.Icmp\""
-par TargetNetwork.dds2.ipv4.icmp interfaceTableModule "\"TargetNetwork.dds2.interfaceTable\""
-par TargetNetwork.dds2.ipv4.icmp routingTableModule "\"TargetNetwork.dds2.ipv4.routingTable\""
-par TargetNetwork.dds2.ipv4.icmp crcMode "\"declared\""
+par TargetNetwork.udp_tcp2.ipv4.icmp typename "\"inet.networklayer.ipv4.Icmp\""
+par TargetNetwork.udp_tcp2.ipv4.icmp interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
+par TargetNetwork.udp_tcp2.ipv4.icmp routingTableModule "\"TargetNetwork.udp_tcp2.ipv4.routingTable\""
+par TargetNetwork.udp_tcp2.ipv4.icmp crcMode "\"declared\""
 attr enum declared,computed
 attr mutable ""
-par TargetNetwork.dds2.ipv4.icmp quoteLength 8B
+par TargetNetwork.udp_tcp2.ipv4.icmp quoteLength 8B
 attr mutable ""
 attr unit B
-par TargetNetwork.dds2.ipv4.mp typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds2.ipv4.mp displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.ipv4.mp forwardServiceRegistration true
-par TargetNetwork.dds2.ipv4.mp forwardProtocolRegistration true
-par TargetNetwork.dds2.ipv4.ip typename "\"inet.networklayer.ipv4.Ipv4\""
-par TargetNetwork.dds2.ipv4.ip interfaceTableModule "\"TargetNetwork.dds2.interfaceTable\""
-par TargetNetwork.dds2.ipv4.ip routingTableModule "\"TargetNetwork.dds2.ipv4.routingTable\""
-par TargetNetwork.dds2.ipv4.ip arpModule "\"TargetNetwork.dds2.ipv4.arp\""
-par TargetNetwork.dds2.ipv4.ip icmpModule "\"TargetNetwork.dds2.ipv4.icmp\""
-par TargetNetwork.dds2.ipv4.ip crcMode "\"declared\""
+par TargetNetwork.udp_tcp2.ipv4.mp typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp2.ipv4.mp displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.ipv4.mp forwardServiceRegistration true
+par TargetNetwork.udp_tcp2.ipv4.mp forwardProtocolRegistration true
+par TargetNetwork.udp_tcp2.ipv4.ip typename "\"inet.networklayer.ipv4.Ipv4\""
+par TargetNetwork.udp_tcp2.ipv4.ip interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
+par TargetNetwork.udp_tcp2.ipv4.ip routingTableModule "\"TargetNetwork.udp_tcp2.ipv4.routingTable\""
+par TargetNetwork.udp_tcp2.ipv4.ip arpModule "\"TargetNetwork.udp_tcp2.ipv4.arp\""
+par TargetNetwork.udp_tcp2.ipv4.ip icmpModule "\"TargetNetwork.udp_tcp2.ipv4.icmp\""
+par TargetNetwork.udp_tcp2.ipv4.ip crcMode "\"declared\""
 attr enum declared,computed
-par TargetNetwork.dds2.ipv4.ip timeToLive 32
-par TargetNetwork.dds2.ipv4.ip multicastTimeToLive 32
-par TargetNetwork.dds2.ipv4.ip fragmentTimeout 60s
+par TargetNetwork.udp_tcp2.ipv4.ip timeToLive 32
+par TargetNetwork.udp_tcp2.ipv4.ip multicastTimeToLive 32
+par TargetNetwork.udp_tcp2.ipv4.ip fragmentTimeout 60s
 attr unit s
-par TargetNetwork.dds2.ipv4.ip limitedBroadcast false
-par TargetNetwork.dds2.ipv4.ip directBroadcastInterfaces "\"\""
-par TargetNetwork.dds2.ipv4.arp typename "\"inet.networklayer.arp.ipv4.GlobalArp\""
-par TargetNetwork.dds2.ipv4.arp interfaceTableModule "\"TargetNetwork.dds2.interfaceTable\""
-par TargetNetwork.dds2.ipv4.arp addressType "\"ipv4\""
+par TargetNetwork.udp_tcp2.ipv4.ip limitedBroadcast false
+par TargetNetwork.udp_tcp2.ipv4.ip directBroadcastInterfaces "\"\""
+par TargetNetwork.udp_tcp2.ipv4.arp typename "\"inet.networklayer.arp.ipv4.GlobalArp\""
+par TargetNetwork.udp_tcp2.ipv4.arp interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
+par TargetNetwork.udp_tcp2.ipv4.arp addressType "\"ipv4\""
 attr enum ipv4,ipv6,mac,moduleid,modulepath
-par TargetNetwork.dds2.ipv4.lp typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds2.ipv4.lp displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.ipv4.lp forwardServiceRegistration true
-par TargetNetwork.dds2.ipv4.lp forwardProtocolRegistration true
-par TargetNetwork.dds2.ipv4 typename "\"inet.networklayer.ipv4.Ipv4NetworkLayer\""
-par TargetNetwork.dds2.ipv4 forwarding false
-par TargetNetwork.dds2.ipv4 multicastForwarding false
-par TargetNetwork.dds2.ipv4 interfaceTableModule "\"TargetNetwork.dds2.interfaceTable\""
-par TargetNetwork.dds2.ipv4 displayStringTextFormat "\"%i\""
-par TargetNetwork.dds2.nl typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds2.nl displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.nl forwardServiceRegistration true
-par TargetNetwork.dds2.nl forwardProtocolRegistration true
-par TargetNetwork.dds2.udp typename "\"inet.transportlayer.udp.Udp\""
-par TargetNetwork.dds2.udp interfaceTableModule "\"TargetNetwork.dds2.interfaceTable\""
-par TargetNetwork.dds2.udp icmpModule "\"^.ipv4.icmp\""
-par TargetNetwork.dds2.udp icmpv6Module "\"^.ipv6.icmpv6\""
-par TargetNetwork.dds2.udp crcMode "\"declared\""
+par TargetNetwork.udp_tcp2.ipv4.lp typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp2.ipv4.lp displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.ipv4.lp forwardServiceRegistration true
+par TargetNetwork.udp_tcp2.ipv4.lp forwardProtocolRegistration true
+par TargetNetwork.udp_tcp2.ipv4 typename "\"inet.networklayer.ipv4.Ipv4NetworkLayer\""
+par TargetNetwork.udp_tcp2.ipv4 forwarding false
+par TargetNetwork.udp_tcp2.ipv4 multicastForwarding false
+par TargetNetwork.udp_tcp2.ipv4 interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
+par TargetNetwork.udp_tcp2.ipv4 displayStringTextFormat "\"%i\""
+par TargetNetwork.udp_tcp2.nl typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp2.nl displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.nl forwardServiceRegistration true
+par TargetNetwork.udp_tcp2.nl forwardProtocolRegistration true
+par TargetNetwork.udp_tcp2.udp typename "\"inet.transportlayer.udp.Udp\""
+par TargetNetwork.udp_tcp2.udp interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
+par TargetNetwork.udp_tcp2.udp icmpModule "\"^.ipv4.icmp\""
+par TargetNetwork.udp_tcp2.udp icmpv6Module "\"^.ipv6.icmpv6\""
+par TargetNetwork.udp_tcp2.udp crcMode "\"declared\""
 attr enum disabled,declared,computed
-par TargetNetwork.dds2.udp defaultMulticastLoop true
-par TargetNetwork.dds2.tn typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds2.tn displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.tn forwardServiceRegistration true
-par TargetNetwork.dds2.tn forwardProtocolRegistration true
-par TargetNetwork.dds2.at typename "\"inet.common.MessageDispatcher\""
-par TargetNetwork.dds2.at displayStringTextFormat "\"processed %p pk (%l)\""
-par TargetNetwork.dds2.at forwardServiceRegistration true
-par TargetNetwork.dds2.at forwardProtocolRegistration true
-par TargetNetwork.dds2 typename "\"inet.node.inet.DDSStandardHost\""
-par TargetNetwork.dds2 hasStatus false
-par TargetNetwork.dds2 osgModel "\"\""
-par TargetNetwork.dds2 osgModelColor "\"\""
-par TargetNetwork.dds2 canvasImage "\"\""
-par TargetNetwork.dds2 canvasImageColor "\"\""
-par TargetNetwork.dds2 recordPcap false
-par TargetNetwork.dds2 numPcapRecorders 0
-par TargetNetwork.dds2 numLoInterfaces 1
-par TargetNetwork.dds2 numWlanInterfaces 0
-par TargetNetwork.dds2 numEthInterfaces 0
-par TargetNetwork.dds2 numPppInterfaces 0
-par TargetNetwork.dds2 numTunInterfaces 0
-par TargetNetwork.dds2 numVirtInterfaces 0
-par TargetNetwork.dds2 fcsMode "\"declared\""
+par TargetNetwork.udp_tcp2.udp defaultMulticastLoop true
+par TargetNetwork.udp_tcp2.tcp typename "\"inet.transportlayer.tcp.Tcp\""
+par TargetNetwork.udp_tcp2.tcp crcMode "\"declared\""
 attr enum declared,computed
-par TargetNetwork.dds2 hasIpv4 true
-par TargetNetwork.dds2 hasIpv6 false
-par TargetNetwork.dds2 hasGn false
-par TargetNetwork.dds2 forwarding false
-par TargetNetwork.dds2 multicastForwarding false
-par TargetNetwork.dds2 hasUdp true
-par TargetNetwork.dds2 hasTcp true
-par TargetNetwork.dds2 hasSctp false
-par TargetNetwork.dds2 numApps 0
+par TargetNetwork.udp_tcp2.tcp advertisedWindow 65535
+par TargetNetwork.udp_tcp2.tcp delayedAcksEnabled false
+par TargetNetwork.udp_tcp2.tcp nagleEnabled true
+par TargetNetwork.udp_tcp2.tcp limitedTransmitEnabled false
+par TargetNetwork.udp_tcp2.tcp increasedIWEnabled false
+par TargetNetwork.udp_tcp2.tcp sackSupport false
+par TargetNetwork.udp_tcp2.tcp windowScalingSupport false
+par TargetNetwork.udp_tcp2.tcp windowScalingFactor -1
+par TargetNetwork.udp_tcp2.tcp timestampSupport false
+par TargetNetwork.udp_tcp2.tcp mss 1452
+par TargetNetwork.udp_tcp2.tcp msl 120s
+attr unit s
+par TargetNetwork.udp_tcp2.tcp tcpAlgorithmClass "\"TcpReno\""
+attr enum TcpVegas,TcpWestwood,TcpNewReno,TcpReno,TcpTahoe,TcpNoCongestionControl
+par TargetNetwork.udp_tcp2.tcp useDataNotification false
+par TargetNetwork.udp_tcp2.tcp dupthresh 3
+par TargetNetwork.udp_tcp2.tcp initialSsthresh 4294967295
+par TargetNetwork.udp_tcp2.tcp stopOperationExtraTime 0s
+attr unit s
+par TargetNetwork.udp_tcp2.tcp stopOperationTimeout 2s
+attr unit s
+par TargetNetwork.udp_tcp2.tcp ecnWillingness false
+par TargetNetwork.udp_tcp2.tcp dctcpGamma 0.0625
+par TargetNetwork.udp_tcp2.tn typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp2.tn displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.tn forwardServiceRegistration true
+par TargetNetwork.udp_tcp2.tn forwardProtocolRegistration true
+par TargetNetwork.udp_tcp2.app[0].sink typename "\"inet.queueing.sink.UdpPassivePacketSink\""
+par TargetNetwork.udp_tcp2.app[0].sink displayStringTextFormat "\"received %p pk (%l)\""
+par TargetNetwork.udp_tcp2.app[0].sink clockModule "\"\""
+par TargetNetwork.udp_tcp2.app[0].sink initialConsumptionOffset 0s
+attr unit s
+par TargetNetwork.udp_tcp2.app[0].sink consumptionInterval 0s
+attr unit s
+par TargetNetwork.udp_tcp2.app[0].sink scheduleForAbsoluteTime true
+par TargetNetwork.udp_tcp2.app[0].sink flowName "\"default\""
+par TargetNetwork.udp_tcp2.app[0].io typename "\"inet.applications.udpapp.UdpSocketIo\""
+par TargetNetwork.udp_tcp2.app[0].io interfaceTableModule "\"TargetNetwork.udp_tcp2.app[0].interfaceTable\""
+par TargetNetwork.udp_tcp2.app[0].io localAddress "\"\""
+par TargetNetwork.udp_tcp2.app[0].io localPort 1000
+par TargetNetwork.udp_tcp2.app[0].io destAddress "\"\""
+par TargetNetwork.udp_tcp2.app[0].io destPort -1
+par TargetNetwork.udp_tcp2.app[0].io timeToLive -1
+par TargetNetwork.udp_tcp2.app[0].io dontFragment false
+par TargetNetwork.udp_tcp2.app[0].io dscp -1
+par TargetNetwork.udp_tcp2.app[0].io tos -1
+par TargetNetwork.udp_tcp2.app[0].io multicastInterface "\"\""
+par TargetNetwork.udp_tcp2.app[0].io multicastAddresses []
+par TargetNetwork.udp_tcp2.app[0].io receiveBroadcast false
+par TargetNetwork.udp_tcp2.app[0].io joinLocalMulticastGroups false
+par TargetNetwork.udp_tcp2.app[0].io stopOperationExtraTime -1s
+attr unit s
+par TargetNetwork.udp_tcp2.app[0].io stopOperationTimeout 2s
+attr unit s
+scalar TargetNetwork.udp_tcp2.app[0].io "packets sent" 0
+scalar TargetNetwork.udp_tcp2.app[0].io "packets received" 14989
+par TargetNetwork.udp_tcp2.app[0] typename "\"inet.applications.udpapp.UdpApp615\""
+par TargetNetwork.udp_tcp2.app[0] interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
+par TargetNetwork.udp_tcp2.at typename "\"inet.common.MessageDispatcher\""
+par TargetNetwork.udp_tcp2.at displayStringTextFormat "\"processed %p pk (%l)\""
+par TargetNetwork.udp_tcp2.at forwardServiceRegistration true
+par TargetNetwork.udp_tcp2.at forwardProtocolRegistration true
+par TargetNetwork.udp_tcp2 typename "\"inet.node.inet.StandardHost\""
+par TargetNetwork.udp_tcp2 hasStatus false
+par TargetNetwork.udp_tcp2 osgModel "\"\""
+par TargetNetwork.udp_tcp2 osgModelColor "\"\""
+par TargetNetwork.udp_tcp2 canvasImage "\"\""
+par TargetNetwork.udp_tcp2 canvasImageColor "\"\""
+par TargetNetwork.udp_tcp2 recordPcap false
+par TargetNetwork.udp_tcp2 numPcapRecorders 0
+par TargetNetwork.udp_tcp2 numLoInterfaces 1
+par TargetNetwork.udp_tcp2 numWlanInterfaces 0
+par TargetNetwork.udp_tcp2 numEthInterfaces 0
+par TargetNetwork.udp_tcp2 numPppInterfaces 0
+par TargetNetwork.udp_tcp2 numTunInterfaces 0
+par TargetNetwork.udp_tcp2 numVirtInterfaces 0
+par TargetNetwork.udp_tcp2 fcsMode "\"declared\""
+attr enum declared,computed
+par TargetNetwork.udp_tcp2 hasIpv4 true
+par TargetNetwork.udp_tcp2 hasIpv6 false
+par TargetNetwork.udp_tcp2 hasGn false
+par TargetNetwork.udp_tcp2 forwarding false
+par TargetNetwork.udp_tcp2 multicastForwarding false
+par TargetNetwork.udp_tcp2 hasUdp true
+par TargetNetwork.udp_tcp2 hasTcp true
+par TargetNetwork.udp_tcp2 hasSctp false
+par TargetNetwork.udp_tcp2 numApps 1
 par TargetNetwork.switch.eth[0].phys$o.channel typename "\"ned.IdealChannel\""
 par TargetNetwork.switch.ethg$i[0].channel typename "\"ned.IdealChannel\""
 par TargetNetwork.switch.eth[1].phys$o.channel typename "\"ned.IdealChannel\""
@@ -1525,7 +1557,7 @@ par TargetNetwork.switch.bridging displayStringTextFormat "\"proc: %p\\ndisc: %d
 scalar TargetNetwork.switch.bridging "processed frames" 0
 scalar TargetNetwork.switch.bridging "discarded frames" 0
 scalar TargetNetwork.switch.bridging "number of received BPDUs from STP module" 0
-scalar TargetNetwork.switch.bridging "number of received frames from network (including BPDUs)" 1
+scalar TargetNetwork.switch.bridging "number of received frames from network (including BPDUs)" 14990
 scalar TargetNetwork.switch.bridging "number of dropped frames (including BPDUs)" 0
 scalar TargetNetwork.switch.bridging "number of delivered BPDUs to the STP module" 0
 scalar TargetNetwork.switch.bridging "number of dispatched BPDU frames to the network" 0
