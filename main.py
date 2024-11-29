@@ -123,6 +123,8 @@ class JobSimQt(QMainWindow):
         # self._ui.action_disable.triggered.connect(self._toggle_state)
         for action in self._ui.actions_theme:
             action.triggered.connect(self._change_theme)
+        self._ui.stack_1.netCalUi.chose.clicked.connect(self.__choseFlow)
+        self._ui.stack_1.netCalUi.run.clicked.connect(self.__runNetAnalysis)
         screen = QGuiApplication.screens()[0]
         screen_size = screen.availableGeometry()
         self.setGeometry(0, 0, screen_size.width() * 0.9, screen_size.height() * 0.9)
@@ -229,6 +231,7 @@ class JobSimQt(QMainWindow):
         self._ui.resultui.jobshow2.clear()
         self._ui.resultui.jobShow3.clear()
         self._initAll()
+        self._ui.stack_widget.setCurrentIndex(0)
         #self.setClicked()
     
     def _initOutputFiles(self):
@@ -257,6 +260,7 @@ class JobSimQt(QMainWindow):
         sysSim.hosts = {}
         sysSim.jobs = {}
         sysSim.faults = {}
+        self.chosing = False
         path = project.projectPath + "/hosts.json"
         parser = ParseUtil()
         self.hosts = parser.parseHosts(path)
@@ -272,13 +276,12 @@ class JobSimQt(QMainWindow):
         for fault in self.faults:
             sysSim.faults[fault.name] = fault
         self.__initNetAnalysis()
-        self._ui.stack_1.netCalUi.chose.clicked.connect(self.__choseFlow)
-        self._ui.stack_1.netCalUi.run.clicked.connect(self.__runNetAnalysis)
         self._initJobResult()
 
         
 
     def __choseFlow(self):
+        print("chose " + self.chosing.__str__())
         if self.chosing == False:
             self.__printNet()
             self._ui.stack_1.netCalUi.nets.setEnabled(True)
@@ -355,7 +358,7 @@ class JobSimQt(QMainWindow):
         if self.javaPath == "":
             QMessageBox.information(self, "提示", "缺少java路径", QMessageBox.Ok)
             return
-        subprocess.run(self.javaPath + " -jar NetCal-DNC.jar " + project.projectPath + "/network_data.xml " + project.projectPath + "/flow_data.xml " + project.projectPath + "/OutputFiles")
+        subprocess.run("netcal.exe " + project.projectPath + "/network_data.xml " + project.projectPath + "/flow_data.xml " + project.projectPath + "/OutputFiles")
         self.readNetResult()
         self.__printNet()
 

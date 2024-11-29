@@ -5,13 +5,4 @@
         <node name="udp_switch"/>
         <node name="udp_cpu2"/>
     </Flow>
-    <Flow>
-        <node name="udp_cpu3"/>
-        <node name="udp_switch2"/>
-    </Flow>
-    <Flow>
-        <node name="tsn_cpu"/>
-        <node name="tsn_switch"/>
-        <node name="tsn_cpu2"/>
-    </Flow>
 </Flows>
