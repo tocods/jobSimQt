@@ -121,14 +121,16 @@ class HostNetargsAppEditor(QDialog):
     def update_table(self):
         for obj in self.json_data:
             for _, tab in self.tabs.items():
-                print(tab.defaultObj["typename"])
-                print(obj["typename"])
                 if tab.defaultObj["typename"] == obj["typename"]:
                     if tab.try_insert_object(obj):
                         break
         return
     
     def get_json_data(self):
+        self.json_data = []
+        for _, tab in self.tabs.items():
+            self.json_data += tab.get_json_data()
+
         return self.json_data
 
 

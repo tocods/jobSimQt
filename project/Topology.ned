@@ -16,13 +16,13 @@ import inet.transportLayer.contract.IRoce;
 network TargetNetwork extends WiredNetworkBase
 {
     submodules:
-        dds: DDSStandardHost {
+        udp_tcp: StandardHost {
         }
-        dds2: DDSStandardHost {
+        udp_tcp2: StandardHost {
         }
         switch: EthernetSwitch {
         }
     connections:
-        dds.ethg++ <--> { datarate=100Mbps;} <--> switch.ethg++;
-        switch.ethg++ <--> { datarate=100Mbps;} <--> dds2.ethg++;
+        udp_tcp.ethg++ <--> { datarate=100Mbps;} <--> switch.ethg++;
+        udp_tcp2.ethg++ <--> { datarate=100Mbps;} <--> switch.ethg++;
 }

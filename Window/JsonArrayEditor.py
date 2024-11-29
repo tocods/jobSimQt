@@ -126,8 +126,12 @@ class JsonArrayEditor(QDialog):
         for row in range(self.table_widget.rowCount()):
             obj = {}
             for col, field in enumerate(self.fields):
-                item = self.table_widget.item(row, col)
-                obj[field] = item.text() if item else ""
+                if field == "destAddress" or field == "connectAddress":
+                    item = self.table_widget.cellWidget(row, col)
+                    obj[field] = item.currentText() if item else ""
+                else:
+                    item = self.table_widget.item(row, col)
+                    obj[field] = item.text() if item else ""
             new_data.append(obj)
         self.json_data = new_data
         return self.json_data
