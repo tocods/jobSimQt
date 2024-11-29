@@ -156,9 +156,9 @@ class SetSimtimeWindow(QDialog):
         f.write("**.tcp.mss = 1452\n")
 
     def generateINIHeaderIp(self, f):
-        f.write('*.configurator.config = xml("<config>\n" + \\')
+        f.write('*.configurator.config = xml("<config>\\n" + \\\n')
         for host in globaldata.hostList:
-            f.write(f'"<interface hosts=\'{host.hostAttr.name}\' address=\'{host.hostAttr.ip}\' netmask=\'255.255.255.x\'/>\n" + \\')
+            f.write(f'"<interface hosts=\'{host.hostAttr.name}\' address=\'{host.hostAttr.ip}\' netmask=\'255.255.255.x\'/>\\n" + \\\n')
         f.write('"</config>")\n')
 
     def generateRdmaINIHeader(self, f):

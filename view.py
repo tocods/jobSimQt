@@ -16,7 +16,6 @@ from qdarktheme.qtpy.QtGui import QPainter, QAction, QCursor
 from item import GraphicItem, HostGraphicItem, SwitchGraphicItem
 from edge import Edge, GraphicEdge
 from HostInfoForm import HostInfoForm
-from jobSim import jobSim
 from HostInfoForm import HostInfoForm
 from jobSim import sysSim
 from entity.host import *
@@ -34,59 +33,16 @@ class GraphicView(QGraphicsView):
         # item menu
         self.item_clicked = None
         self.menu = QMenu(self)
-        self.editAction = QAction(text="编辑")
-        self.editAction.triggered.connect(self.showEditor)
         self.deleteAction = QAction(text="删除")
         self.deleteAction.triggered.connect(self.deleteItem)
-        self.menu.addAction(self.editAction)
         self.menu.addAction(self.deleteAction)
 
-        # 子界面
-        self.editHostNetargsWindowNormal = EditHostNetargsWindowNormal(self, sysSim)
-        self.editHostNetargsWindowUdp = EditHostNetargsWindowUdp(self, sysSim)
-        self.editHostNetargsWindowTcp = EditHostNetargsWindowTcp(self, sysSim)
-        self.editHostNetargsWindowRdma = EditHostNetargsWindowRdma(self, sysSim)
-        self.editHostNetargsWindowTsn = EditHostNetargsWindowTsn(self, sysSim)
-        self.editHostNetargsWindowDds = EditHostNetargsWindowDds(self, sysSim)
-
-        self.editSwitchNetargsWindowUdp = EditSwitchNetargsWindowUdp(self)
-        self.editSwitchNetargsWindowTsn = EditSwitchNetargsWindowTsn(self)
-        self.editSwitchNetargsWindowRdma = EditSwitchNetargsWindowRdma(self)
-        self.editLinkArgsWindow = EditLinkArgsWindow(self)
         self.hostInform = HostInfoForm(self.jobSim)
         self.init_ui()
 
         self.lineToolEnabled = False
         self.hostAdding = False
         self.switchAdding = False
-
-    def showEditor(self):
-        if self.item_clicked == None:
-            return
-
-        # 主机
-        if isinstance(self.item_clicked, HostGraphicItem):
-            self.openHostEditor(self.item_clicked)
-            return
-        # 交换机
-        elif isinstance(self.item_clicked, SwitchGraphicItem):
-            # 将 交换机图形对象 和 其中包含的交换机属性信息对象 传递至属性设置界面
-            if isinstance(self.item_clicked.switchAttr, TsnSwitch):
-                self.editSwitchNetargsWindowTsn.setSwitchGraphicItem(self.item_clicked)
-                self.editSwitchNetargsWindowTsn.show()
-            elif isinstance(self.item_clicked.switchAttr, RdmaSwitch):
-                self.editSwitchNetargsWindowRdma.setSwitchGraphicItem(self.item_clicked)
-                self.editSwitchNetargsWindowRdma.show()
-            else:
-                self.editSwitchNetargsWindowUdp.setSwitchGraphicItem(self.item_clicked)
-                self.editSwitchNetargsWindowUdp.show()
-            return
-        # 连接
-        elif isinstance(self.item_clicked, GraphicEdge):
-            # 将 连接图形对象 和 其中包含的连接属性信息对象 传递至属性设置界面
-            self.editLinkArgsWindow.setLinkGraphicItem(self.item_clicked)
-            self.editLinkArgsWindow.show()
-            return
 
     def init_ui(self):
         self.setScene(self.gr_scene)
@@ -131,7 +87,7 @@ class GraphicView(QGraphicsView):
         onlyCpu=False,
         Host_class=Host,
         pos_x=0,
-        pos_y=0
+        pos_y=0,
     ):
         item = HostGraphicItem(
             host_name, host_type, img, width, height, parent=self, Host_class=Host_class
@@ -169,7 +125,7 @@ class GraphicView(QGraphicsView):
         height,
         Switch_class=Switch,
         pos_x=0,
-        pos_y=0
+        pos_y=0,
     ):
         item = SwitchGraphicItem(
             switch_name,
@@ -222,6 +178,10 @@ class GraphicView(QGraphicsView):
 
     def graphicItemClicked(self, item, event: QGraphicsSceneMouseEvent):
         self.item_clicked = item
+        if isinstance(self.item_clicked, HostGraphicItem):
+            self.parent.selectHost(item)
+        if isinstance(self.item_clicked, SwitchGraphicItem):
+            self.parent.selectSwitch(item)
         if event.button() == Qt.MouseButton.RightButton:
             self.menu.popup(QCursor.pos())
         elif self.lineToolEnabled:
@@ -229,6 +189,7 @@ class GraphicView(QGraphicsView):
 
     def linkClicked(self, link, event: QGraphicsSceneMouseEvent):
         self.item_clicked = link
+        self.parent.selectLink(link)
         if event.button() == Qt.MouseButton.RightButton:
             self.menu.popup(QCursor.pos())
         return
@@ -270,7 +231,7 @@ class GraphicView(QGraphicsView):
                     self.hostToAdd_onlyCpu,
                     self.hostToAdd_class,
                     targetPos.x(),
-                    targetPos.y()
+                    targetPos.y(),
                 )
             elif self.switchAdding:
                 self.createGraphicSwitchItem(
@@ -281,13 +242,10 @@ class GraphicView(QGraphicsView):
                     self.switchToAdd_height,
                     self.switchToAdd_class,
                     targetPos.x(),
-                    targetPos.y()
+                    targetPos.y(),
                 )
-        else:
-            link = self.get_link_at_pos(event)
-            if link == None:
-                return
-
+        link = self.get_link_at_pos(event)
+        if link != None:
             self.linkClicked(link, event)
         self.parent.update_tree_view()
 
@@ -343,6 +301,7 @@ class GraphicView(QGraphicsView):
             self.gr_scene.remove_node(item)
         if isinstance(item, QGraphicsPathItem):
             self.gr_scene.remove_edge(item)
+        self.parent.cancelSelect()
         self.parent.update_tree_view()
 
     # def mouseReleaseEvent(self, event):

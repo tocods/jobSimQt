@@ -14,6 +14,15 @@ from UI.Network.network_editor_ui import Ui_Form
 import os
 import globaldata
 import xml.etree.ElementTree as ET
+from edge import GraphicEdge
+from item import HostGraphicItem, SwitchGraphicItem
+from Window.HostNetargsAppEditor import (
+    HostNetargsAppEditorApp,
+    HostNetargsAppEditorMiddleware,
+)
+from Window.JsonArrayEditor import JsonArrayEditor
+from Window.DictEditor import DictEditor
+from jobSim import sysSim
 
 
 class NetworkEditorWindow(QWidget):
@@ -22,6 +31,7 @@ class NetworkEditorWindow(QWidget):
 
         self.ui = Ui_Form()
         self.ui.setupUi(self)
+        self.setupSide()
         self.setSimtimeWindow = SetSimtimeWindow(self)
         self.networkGlobalConfigWindow = NetworkGlobalConfig()
         self.init_add_node_menu()
@@ -32,7 +42,45 @@ class NetworkEditorWindow(QWidget):
         self.ui.add_line.clicked.connect(self.ui.graphicsView.lineToolStateChange)
         self.ui.global_setting.clicked.connect(self.show_network_global_config)
         self.ui.run.clicked.connect(self.action_set_netsim_time_cb)
+        self.ui.hostApply.clicked.connect(self.applyHost)
+        self.ui.switchApply.clicked.connect(self.applySwitch)
+        self.ui.linkApply.clicked.connect(self.applyLink)
+
         self.update_tree_view()
+
+        self.curHostItem = None
+        self.curSwitchItem = None
+        self.curLinkItem = None
+
+    def setupSide(self):
+        self.ui.hostSet.clear()
+        self.ui.switchSet.clear()
+        self.ui.linkSet.clear()
+
+        self.hostPhysics = DictEditor(["name", "ip", "mac"], {}, False)
+        self.ui.hostSet.addTab(self.hostPhysics, "物理层")
+        self.hostApp = HostNetargsAppEditorApp("", True)
+        self.ui.hostSet.addTab(self.hostApp, "协议层")
+        self.hostMiddleware = HostNetargsAppEditorMiddleware("", True)
+        self.ui.hostSet.addTab(self.hostMiddleware, "中间件层")
+
+        self.linkEditor = DictEditor(["link_bandwidth"], {}, False)
+        self.ui.linkSet.addTab(self.linkEditor, "链路速率")
+
+        self.switchEditor = DictEditor(["name", "transmission_rate"], {}, False)
+        self.ui.switchSet.addTab(self.switchEditor, "交换机")
+        self.tsnQueue = JsonArrayEditor(
+            "",
+            {
+                "display-name": "default",
+                "offset": "0ms",
+                "durations": "[1ms, 10ms]",
+                "initiallyOpen": "true",
+                "packetCapacity": "100",
+            },
+            False,
+        )
+        self.ui.switchSet.addTab(self.tsnQueue, "tsn队列配置")
 
     def action_set_netsim_time_cb(self):
         self.setSimtimeWindow.show()
@@ -182,6 +230,55 @@ class NetworkEditorWindow(QWidget):
         if event.key() == Qt.Key.Key_Delete:
             self.ui.graphicsView.delete_node()
             self.update_tree_view()
+
+    def cancelSelect(self):
+        self.curHostItem = None
+        self.hostPhysics.setDict({})
+        self.hostApp.clean()
+        self.curSwitchItem = None
+        self.switchEditor.setDict({})
+        self.curLinkItem = None
+        self.linkEditor.setDict({})
+
+    def selectHost(self, hostItem: HostGraphicItem):
+        self.curHostItem = hostItem
+        self.hostPhysics.setDict(hostItem.hostAttr.getPhysicsAttr())
+        self.hostApp.setData(hostItem.hostAttr.appArgs.copy())
+        return
+
+    def selectSwitch(self, switchItem: SwitchGraphicItem):
+        self.curSwitchItem = switchItem
+        self.switchEditor.setDict(switchItem.switchAttr.getAttr())
+        return
+
+    def selectLink(self, linkItem: GraphicEdge):
+        self.curLinkItem = linkItem
+        self.linkEditor.setDict(linkItem.getLinkAttr())
+        return
+
+    def applyHost(self):
+        data = self.hostPhysics.getDict()
+        self.curHostItem.hostAttr.applyPhysicsAttr(data)
+        sysSim.hosts[self.curHostItem].name = data["name"]
+        data = self.hostApp.get_json_data()
+        self.curHostItem.hostAttr.appArgs = data
+        self.update_tree_view()
+
+        return
+
+    def applySwitch(self):
+        data = self.switchEditor.getDict()
+        self.curSwitchItem.switchAttr.applyAttr(data)
+        self.switchEditor.setDict(self.curSwitchItem.switchAttr.getAttr())
+        self.update_tree_view()
+        return
+
+    def applyLink(self):
+        data = self.linkEditor.getDict()
+        self.curLinkItem.edge_wrap.linkAttr.applyAttr(data)
+        self.linkEditor.setDict(self.curLinkItem.getLinkAttr())
+        self.update_tree_view()
+        return
 
     def load_network_from_xml(self):
         # Helper function to find a host or switch by name
