@@ -1,19 +1,19 @@
 <?xml version="1.0" ?>
 <Network>
     <Hosts>
-        <NormalHosts>
-            <NormalHost name="udp_tcp" type="StandardHost" ip="0.0.0.0" mac="00:1A:2B:3C:4D:5E" packet_size="100" packet_interval="100" total_traffic="1000" numApps="0" appArgs="[]" only_cpu="True" graphic_pos_x="-114.0" graphic_pos_y="12.0" graphic_image="img/Normal_CPU_Host.png" graphic_width="100" graphic_height="100"/>
-            <NormalHost name="udp_tcp2" type="StandardHost" ip="0.0.0.0" mac="00:1A:2B:3C:4D:5E" packet_size="100" packet_interval="100" total_traffic="1000" numApps="0" appArgs="[]" only_cpu="True" graphic_pos_x="424.0" graphic_pos_y="272.0" graphic_image="img/Normal_CPU_Host.png" graphic_width="100" graphic_height="100"/>
-        </NormalHosts>
+        <NormalHosts/>
         <UdpHosts/>
         <TcpHosts/>
         <RdmaHosts/>
         <TsnHosts/>
-        <DdsHosts/>
+        <DdsHosts>
+            <DdsHost name="dds" type="DDSStandardHost" ip="192.168.0.1" mac="00:1A:2B:3C:4D:5E" packet_size="100" packet_interval="100" total_traffic="1000" numApps="2" appArgs="[{&quot;typename&quot;: &quot;DDSPublishApp&quot;, &quot;publish&quot;: &quot;Topic1&quot;, &quot;destPort&quot;: &quot;1000&quot;, &quot;packetLength&quot;: &quot;5000B&quot;, &quot;productionInterval&quot;: &quot;20ms&quot;, &quot;historyCacheLength&quot;: &quot;10&quot;}, {&quot;typename&quot;: &quot;DDSSubscribeApp&quot;, &quot;subscribeTopic&quot;: &quot;Topic1&quot;, &quot;subscribePort&quot;: &quot;1000&quot;, &quot;localPort&quot;: &quot;1000&quot;, &quot;nackCountdown&quot;: &quot;0.25ms&quot;, &quot;flowName&quot;: &quot;default&quot;, &quot;receiverBufferLength&quot;: &quot;1000&quot;}]" only_cpu="True" graphic_pos_x="-61.0" graphic_pos_y="-25.0" graphic_image="img/DDS_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+            <DdsHost name="dds2" type="DDSStandardHost" ip="192.168.0.2" mac="00:1A:2B:3C:4D:5E" packet_size="100" packet_interval="100" total_traffic="1000" numApps="0" appArgs="[]" only_cpu="True" graphic_pos_x="522.0" graphic_pos_y="376.0" graphic_image="img/DDS_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+        </DdsHosts>
     </Hosts>
     <Switches>
         <NormalSwitches>
-            <NormalSwitch name="switch2" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="119.0" graphic_pos_y="115.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
+            <NormalSwitch name="switch" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="245.0" graphic_pos_y="296.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
         </NormalSwitches>
         <UdpSwitches/>
         <TcpSwitches/>
@@ -22,8 +22,8 @@
         <DdsSwitches/>
     </Switches>
     <Links>
-        <Link name="Link" type="Eth100M" endpoint1="udp_tcp" endpoint2="switch2" link_bandwidth="100"/>
-        <Link name="Link2" type="Eth100M" endpoint1="switch2" endpoint2="udp_tcp2" link_bandwidth="100"/>
+        <Link name="Link" type="Eth100M" endpoint1="dds" endpoint2="switch" link_bandwidth="100"/>
+        <Link name="Link2" type="Eth100M" endpoint1="switch" endpoint2="dds2" link_bandwidth="100"/>
     </Links>
     <GlobalSetting content="{&quot;Tcp&quot;: {&quot;forwarding&quot;: &quot;false&quot;, &quot;retryTimeout&quot;: &quot;1s&quot;, &quot;retryCount&quot;: &quot;3&quot;, &quot;cacheTimeout&quot;: &quot;100s&quot;, &quot;tcpAlgorithmClass&quot;: &quot;TcpReno&quot;}, &quot;Rdma&quot;: {&quot;connectionType&quot;: &quot;RELIABLE_CONNECTION&quot;, &quot;maxSendQueueSize&quot;: &quot;256&quot;, &quot;maxRecvQueueSize&quot;: &quot;256&quot;}, &quot;common&quot;: {&quot;queueTypename&quot;: &quot;DropTailQueue&quot;, &quot;queuePacketCapacity&quot;: &quot;20&quot;, &quot;TsnQueue&quot;: [{&quot;stream&quot;: &quot;best-effort&quot;, &quot;pcp&quot;: &quot;0&quot;}, {&quot;stream&quot;: &quot;time-triggered&quot;, &quot;pcp&quot;: &quot;4&quot;}, {&quot;stream&quot;: &quot;ack&quot;, &quot;pcp&quot;: &quot;5&quot;}]}}"/>
 </Network>

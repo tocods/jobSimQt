@@ -8,32 +8,8 @@ from qdarktheme.qtpy.QtWidgets import (
     QDialog,
     QComboBox
 )
+from UI.localisation import CHINESE_KEYS
 import globaldata
-
-
-CHINESE_KEYS = {
-    "typename": "类型名",
-    "packetLength": "发包长度",
-    "productionInterval": "发包间隔",
-    "destAddress": "目标地址（名称）",
-    "destPort": "目标端口",
-    "sendBytes": "发送长度",
-    "localPort": "本机端口",
-    "connectAddress": "目标地址（名称）",
-    "connectPort": "目标端口",
-    "localPort": "本地端口",
-    "destinationQueuePairNumber": "目标QueuePair序号",
-    "localQueuePairNumber": "本地QueuePair序号",
-    "pcp": "优先级",
-    "messageType": "消息类型",
-    "publish": "发布主题",
-    "subscribeTopic": "订阅主题",
-    "subscribePort": "订阅端口",
-    "nackCountdown": "nackCountdown",
-    "flowName": "flow名称",
-    "historyCacheLength": "历史缓存",
-    "receiverBufferLength": "接收缓存"
-}
 
 
 class JsonArrayEditor(QDialog):
@@ -89,7 +65,7 @@ class JsonArrayEditor(QDialog):
         """显示 JSON 对象数组在表格中"""
         self.table_widget.setRowCount(len(self.json_data))
         for row, obj in enumerate(self.json_data):
-            for col, field in enumerate(self.fields):  # 假设字段名称固定
+            for col, field in enumerate(self.fields):
                 value = obj.get(field, "")
                 if field == "destAddress" or field == "connectAddress":
                     combo = QComboBox(self)
@@ -155,3 +131,7 @@ class JsonArrayEditor(QDialog):
             new_data.append(obj)
         self.json_data = new_data
         return self.json_data
+    
+    def clean(self):
+        self.json_data = []
+        self.show_json_objects()

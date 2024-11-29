@@ -27,11 +27,6 @@ from PySide6.QtCharts import QChart,QChartView,QLineSeries,QDateTimeAxis,QValueA
 from jobSimPainter import Painter, XmlParser
 from util.table import NumericDelegate
 import globaldata
-from UI.Network.Host.hostPhysical import Ui_hostWuli
-from Window.HostNetargsAppEditor import HostNetargsAppEditorApp, HostNetargsAppEditorMiddleware
-from UI.Network.link_editor_ui import Ui_linkEdit
-from UI.Network.switch_editor_ui import Ui_switchEdit
-from Window.JsonArrayEditor import JsonArrayEditor
 
 class JobSimQt(QMainWindow):
     def __init__(self) -> None:
@@ -450,41 +445,6 @@ class JobSimQt(QMainWindow):
 
         self._ui.homeui.tabWidget.tabBar().hide()
         #self._initResult()
-
-        self._ui.network_editor.ui.hostSet.clear()
-        self._ui.network_editor.ui.switchSet.clear()
-        self._ui.network_editor.ui.linkSet.clear()
-
-        self.hostWuli = QWidget()
-        hw = Ui_hostWuli()
-        hw.setupUi(self.hostWuli)
-        self._ui.network_editor.ui.hostSet.addTab(self.hostWuli, "物理层")
-        self.hostApp = HostNetargsAppEditorApp("", True)
-        self._ui.network_editor.ui.hostSet.addTab(self.hostApp, "协议层")
-        self.hostMiddleware = HostNetargsAppEditorMiddleware("", True)
-        self._ui.network_editor.ui.hostSet.addTab(self.hostMiddleware, "中间件层")
-
-        self.linkEdit = QWidget()
-        le = Ui_linkEdit()
-        le.setupUi(self.linkEdit)
-        self._ui.network_editor.ui.linkSet.addTab(self.linkEdit, "链路速率")
-
-        self.switchEdit = QWidget()
-        self.se = Ui_switchEdit()
-        self.se.setupUi(self.switchEdit)
-        self._ui.network_editor.ui.switchSet.addTab(self.switchEdit, "交换机")
-        self.tsnQueue = JsonArrayEditor(
-            "",
-            {
-                "display-name": "default",
-                "offset": "0ms",
-                "durations": "[1ms, 10ms]",
-                "initiallyOpen": "true",
-                "packetCapacity": "100",
-            },
-            False
-        )
-        self._ui.network_editor.ui.switchSet.addTab(self.tsnQueue, "tsn队列配置")
 
 
 

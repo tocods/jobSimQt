@@ -74,6 +74,11 @@ class EditHostNetargsWindowNormal(EditHostNetargsWindow):
         )
         self.hostGraphicItem.hostAttr.numApps = self.tmp_numApps
         self.hostGraphicItem.hostAttr.appArgs = self.tmp_appArgs
+
+        item = self.ui.tableWidget_netargs.item(3, 0)
+        self.hostGraphicItem.hostAttr.ip = item.text()
+        item = self.ui.tableWidget_netargs.item(4, 0)
+        self.hostGraphicItem.hostAttr.mac = item.text()
         self.lineEdit_name_cb()
         self.hide()
 
@@ -146,6 +151,10 @@ class EditHostNetargsWindowUdp(EditHostNetargsWindow):
         )
         self.hostGraphicItem.hostAttr.numApps = self.tmp_numApps
         self.hostGraphicItem.hostAttr.appArgs = self.tmp_appArgs
+        item = self.ui.tableWidget_netargs.item(3, 0)
+        self.hostGraphicItem.hostAttr.ip = item.text()
+        item = self.ui.tableWidget_netargs.item(4, 0)
+        self.hostGraphicItem.hostAttr.mac = item.text()
         self.lineEdit_name_cb()
         self.hide()
 
@@ -215,6 +224,10 @@ class EditHostNetargsWindowTcp(EditHostNetargsWindow):
         )
         self.hostGraphicItem.hostAttr.numApps = self.tmp_numApps
         self.hostGraphicItem.hostAttr.appArgs = self.tmp_appArgs
+        item = self.ui.tableWidget_netargs.item(3, 0)
+        self.hostGraphicItem.hostAttr.ip = item.text()
+        item = self.ui.tableWidget_netargs.item(4, 0)
+        self.hostGraphicItem.hostAttr.mac = item.text()
         self.lineEdit_name_cb()
         self.hide()
 
@@ -285,6 +298,10 @@ class EditHostNetargsWindowRdma(EditHostNetargsWindow):
         self.hostGraphicItem.hostAttr.numApps = self.tmp_numApps
         self.hostGraphicItem.hostAttr.appArgs = self.tmp_appArgs
         self.hostGraphicItem.hostAttr.rdmaArgs = self.tmp_rdmaArgs
+        item = self.ui.tableWidget_netargs.item(4, 0)
+        self.hostGraphicItem.hostAttr.ip = item.text()
+        item = self.ui.tableWidget_netargs.item(5, 0)
+        self.hostGraphicItem.hostAttr.mac = item.text()
         self.lineEdit_name_cb()
 
         self.hide()
@@ -357,6 +374,10 @@ class EditHostNetargsWindowTsn(EditHostNetargsWindow):
         self.hostGraphicItem.hostAttr.numApps = self.tmp_numApps
         self.hostGraphicItem.hostAttr.appArgs = self.tmp_appArgs
         self.hostGraphicItem.hostAttr.tsnArgs = self.tmp_tsnArgs
+        item = self.ui.tableWidget_netargs.item(4, 0)
+        self.hostGraphicItem.hostAttr.ip = item.text()
+        item = self.ui.tableWidget_netargs.item(5, 0)
+        self.hostGraphicItem.hostAttr.mac = item.text()
         self.lineEdit_name_cb()
 
         self.hide()
@@ -448,6 +469,10 @@ class EditHostNetargsWindowDds(EditHostNetargsWindow):
         )
         self.hostGraphicItem.hostAttr.numApps = self.tmp_numApps
         self.hostGraphicItem.hostAttr.appArgs = self.tmp_appArgs
+        item = self.ui.tableWidget_netargs.item(3, 0)
+        self.hostGraphicItem.hostAttr.ip = item.text()
+        item = self.ui.tableWidget_netargs.item(4, 0)
+        self.hostGraphicItem.hostAttr.mac = item.text()
         self.lineEdit_name_cb()
         self.hide()
 

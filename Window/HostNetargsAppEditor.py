@@ -109,19 +109,25 @@ class HostNetargsAppEditor(QDialog):
             self.json_data += tab.get_json_data()
         self.accept()
 
-    def setupTab(self):
-        return
+    def clean(self):
+        for _, tab in self.tabs.items():
+            tab.clean()
+    
+    def setData(self, data: list):
+        self.clean()
+        self.json_data = data
+        self.update_table()
 
     def update_table(self):
         for obj in self.json_data:
             for _, tab in self.tabs.items():
+                print(tab.defaultObj["typename"])
+                print(obj["typename"])
                 if tab.defaultObj["typename"] == obj["typename"]:
                     if tab.try_insert_object(obj):
                         break
         return
     
-    
-
     def get_json_data(self):
         return self.json_data
 
@@ -139,6 +145,7 @@ class HostNetargsAppEditorApp(HostNetargsAppEditor):
 class HostNetargsAppEditorMiddleware(HostNetargsAppEditor):
     def setupTab(self):
         self.tabs = {
+             "Dds发送端": JsonArrayEditor([], DEFAULT_SOURCE["dds"], False),
              "Dds接收端": JsonArrayEditor([], DEFAULT_SINK["dds"], False),
         }
 

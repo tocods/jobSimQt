@@ -11,6 +11,9 @@ class Link:
         self.endpoint2 = endpoint2  # 连接另一端
         self.type = type
 
+    def applyAttr(self, data):
+        self.link_bandwidth = data["link_bandwidth"]
+
     def set_name(self, name):
         # TODO: 检查名字是否符合omnet规范
         # 检查是否重名

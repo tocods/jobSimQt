@@ -13,6 +13,17 @@ class Switch(NetworkDevice):
 
         print(f"Switch name:{name} host_type:{switch_type} created")
 
+    def getAttr(self):
+        result = {
+            "name": self.name,
+            "transmission_rate": self.transmission_rate
+        }
+        return result
+    
+    def applyAttr(self, data):
+        self.set_name(data["name"])
+        self.transmission_rate = data["transmission_rate"]
+
     def setXMLElement(self, element):
         element.set("name", self.name)
         element.set("type", self.type)

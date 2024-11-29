@@ -6,16 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1026</width>
-    <height>664</height>
+    <width>750</width>
+    <height>476</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTableWidget" name="tableWidget_netargs">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="layoutDirection">
       <enum>Qt::LeftToRight</enum>
      </property>
@@ -51,6 +57,31 @@
      <row>
       <property name="text">
        <string>转发速率(Mbps)</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>丢包率</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>端点一</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>端点一端口</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>端点二</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>端点二端口</string>
       </property>
      </row>
      <column>

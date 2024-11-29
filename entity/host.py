@@ -16,6 +16,20 @@ class Host(NetworkDevice):
 
         print(f"Host name:{name} host_type:{host_type} created")
 
+    def getPhysicsAttr(self):
+        result = {
+            "name": self.name,
+            "ip": self.ip,
+            "mac": self.mac
+        }
+
+        return result
+    
+    def applyPhysicsAttr(self, data):
+        self.set_name(data["name"])
+        self.ip = data["ip"]
+        self.mac = data["mac"]
+
     def generateINI(self, f):
         f.write(f"*.{self.name}.numApps = {len(self.appArgs)}\n")
         for index in range(0, len(self.appArgs)):
