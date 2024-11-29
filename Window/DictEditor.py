@@ -1,4 +1,3 @@
-from PyQt5.QtCore import Qt
 from qdarktheme.qtpy.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
