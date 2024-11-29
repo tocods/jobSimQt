@@ -12,9 +12,7 @@ class ParserModule:
 
     def reload(self):
         try:
-            with open(
-                os.path.join(self.path, "Parameters.ini"), "r"
-            ) as file:
+            with open(os.path.join(self.path, "Parameters.ini"), "r") as file:
                 configText = file.read()
                 flowNameList = re.findall(r'\bflowName\s*=\s*"([^"]+)"', configText)
             self.flowNameList = flowNameList
@@ -25,19 +23,23 @@ class ParserModule:
         except Exception as e:
             print(e)
 
-
     def reset(self):
         self.latencyVectorList = []
         self.bufferVectorList = []
         self.lossVectorList = []
+        self.tcpReceiveQueueVectorList = []
+
         self.flowNameVector = {}
         self.hostNameVector = {}
         self.flowNameLossVector = {}
+        self.tcpReceiveQueueVector = {}
+
         self.latencyResultX = {}
         self.latencyResultY = {}
         self.latencyResultMaxX = {}
         self.latencyResultMaxY = {}
         self.maxLatency = 0.0
+
         self.bufferResultX = {}
         self.bufferResultY = {}
         self.bufferResultMaxX = {}
@@ -57,10 +59,16 @@ class ParserModule:
                 self.latencyResultY[id] = []
                 self.latencyResultMaxX[id] = 0.0
                 self.latencyResultMaxY[id] = 0.0
-            if strlist[3][:4] == "615.":
+            if strlist[3][:4] == "615." or (
+                len(strlist[3]) > 16 and strlist[3][-16:] == ".TcpReceiveQueue"
+            ) or (
+                len(strlist[3]) > 16 and strlist[3][-16:] == ".DdsReceiveQueue"
+            ):
+                queue = strlist[3]
+                if strlist[3][:4] == "615.":
+                    queue = queue[4:]
                 self.bufferVectorList.append(id)
-                host_name = strlist[3].split(".")[1]
-                self.hostNameVector[host_name] = id
+                self.hostNameVector[queue] = id
                 self.bufferResultX[id] = []
                 self.bufferResultY[id] = []
                 self.bufferResultMaxX[id] = 0.0
@@ -69,7 +77,6 @@ class ParserModule:
                 self.lossVectorList.append(id)
                 self.flowNameLossVector[strlist[3]] = id
                 self.lossResult[id] = 0.0
-                
 
     def loadDataLine(self, line):
         line_list = line.strip("\n").split("\t")
@@ -86,23 +93,22 @@ class ParserModule:
                 self.latencyResultMaxY[id], float(line_list[3]) * 1000
             )
         elif id in self.bufferVectorList:
-            self.bufferResultX[id].append(float(line_list[2]))
-            self.bufferResultY[id].append(float(line_list[3]))
+            self.bufferResultX[id].append(float(line_list[2]) * 100)
+            self.bufferResultY[id].append(float(line_list[3]) * 100)
             self.bufferResultMaxX[id] = max(
-                self.bufferResultMaxX[id], float(line_list[2])
+                self.bufferResultMaxX[id], float(line_list[2]) * 100
             )
             self.bufferResultMaxY[id] = max(
-                self.bufferResultMaxY[id], float(line_list[3])
+                self.bufferResultMaxY[id], float(line_list[3]) * 100
             )
         elif id in self.lossVectorList:
             self.lossResult[id] = max(self.lossResult[id], float(line_list[3]))
-
 
     def loadData(self):
         self.reload()
         resultPath = os.path.join(self.path, "results", "General-#0.vec")
         with open(resultPath, "r") as fp:
-        # with open(resultPath, "r", encoding="utf-8") as fp:
+            # with open(resultPath, "r", encoding="utf-8") as fp:
             for line in fp:
                 if line == "":
                     continue

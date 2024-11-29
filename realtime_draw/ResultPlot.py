@@ -135,7 +135,7 @@ class BufferResultPlot(ResultPlot):
         self.figure.clear()
         ax = self.figure.add_subplot(111)
         ax.set_xlabel("时间(ms)")
-        ax.set_ylabel("缓冲区")
+        ax.set_ylabel("缓冲区(%)")
         ax.grid(True)
 
         maxX = 0.0
