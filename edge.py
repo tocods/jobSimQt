@@ -90,6 +90,7 @@ class GraphicEdge(QGraphicsPathItem):
     def getLinkAttr(self):
         result = {
             "link_bandwidth": self.edge_wrap.linkAttr.link_bandwidth,
+            "error_rate": self.edge_wrap.linkAttr.error_rate
         }
 
         return result

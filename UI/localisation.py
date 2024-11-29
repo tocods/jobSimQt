@@ -22,8 +22,9 @@ CHINESE_KEYS = {
     "flowName": "flow名称",
     "historyCacheLength": "历史缓存",
     "receiverBufferLength": "接收缓存",
-    "link_bandwidth": "链路带宽",
+    "link_bandwidth": "链路带宽(Mbps)",
     "endpoint1": "端点1",
     "endpoint2": "端点2",
     "transmission_rate": "传输速率(Mbps)",
+    "error_rate": "错误率"
 }

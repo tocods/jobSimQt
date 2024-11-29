@@ -64,7 +64,7 @@ class NetworkEditorWindow(QWidget):
         self.hostMiddleware = HostNetargsAppEditorMiddleware("", True)
         self.ui.hostSet.addTab(self.hostMiddleware, "中间件层")
 
-        self.linkEditor = DictEditor(["link_bandwidth"], {}, False)
+        self.linkEditor = DictEditor(["link_bandwidth", "error_rate"], {}, False)
         self.ui.linkSet.addTab(self.linkEditor, "链路速率")
 
         self.switchEditor = DictEditor(["name", "transmission_rate"], {}, False)
@@ -443,6 +443,7 @@ class NetworkEditorWindow(QWidget):
             edge = graphicView.createGraphicLink(endpoint1, endpoint2)
             edge.linkAttr.type = element.get("type")
             edge.linkAttr.link_bandwidth = element.get("link_bandwidth")
+            edge.linkAttr.error_rate = element.get("error_rate")
 
         # Load all links
         for link_element in links_element.findall("Link"):
