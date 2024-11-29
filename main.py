@@ -1322,7 +1322,7 @@ class JobSimQt(QMainWindow):
             QMessageBox.information(self, "", "未设置任务信息")
             self._ui.central_window.centralWidget().setEnabled(True)
             return
-        execute = globaldata.targetPath[2] + " -jar ./jobSim/gpuworkflowsim.jar " + project.projectPath + "/OutputFiles " + project.projectPath + "/hosts.json " + project.projectPath + "/jobs.json " + project.projectPath + "/faults.json " + str(0) + " " + str(self.duration)
+        execute = globaldata.targetPath[2] + " " + project.projectPath + "/OutputFiles " + project.projectPath + "/hosts.json " + project.projectPath + "/jobs.json " + project.projectPath + "/faults.json " + str(0) + " " + str(self.duration)
         print(execute)
         popen = subprocess.Popen(execute, shell=True, stdout=subprocess.PIPE,  universal_newlines=True, stderr=subprocess.STDOUT)
         out,err = popen.communicate()
@@ -1330,7 +1330,7 @@ class JobSimQt(QMainWindow):
         #将日志信息显示在文本框中
         self._ui.homeui.textEdit.setText(out)
         if "任务群总完成时间" in out:
-            QMessageBox.information(self, "", "仿真完成")
+            QMessageBox.information(self, "提示", "仿真完成")
         self._ui.central_window.centralWidget().setEnabled(True)
         os.popen(f"{globaldata.targetPath[3]} {project.projectPath} 1")
 
