@@ -1,8 +1,8 @@
 version 3
-run General-0-20241129-19:03:33-18068
+run General-0-20241129-19:48:13-15636
 attr configname General
-attr datetime 20241129-19:03:33
-attr datetimef 20241129-190333
+attr datetime 20241129-19:48:13
+attr datetimef 20241129-194813
 attr experiment General
 attr inifile D:/jobSimQt/project/Parameters.ini
 attr iterationvars ""
@@ -10,7 +10,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network TargetNetwork
-attr processid 18068
+attr processid 15636
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -45,16 +45,16 @@ config *.udp_tcp.app[0].typename DDSPublishApp
 config *.udp_tcp.app[0].io.receiveBroadcast true
 config *.udp_tcp.app[0].io.publish "\"Topic1\""
 config *.udp_tcp.app[0].io.destPort 1000
-config *.udp_tcp.app[0].io.historyCacheLength 1
+config *.udp_tcp.app[0].io.historyCacheLength 10
 config *.udp_tcp.ipv4.ip.limitedBroadcast true
-config *.udp_tcp.app[0].source.packetLength 100B
-config *.udp_tcp.app[0].source.productionInterval exponential(2ms)
+config *.udp_tcp.app[0].source.packetLength 5000B
+config *.udp_tcp.app[0].source.productionInterval exponential(200ms)
 config *.udp_tcp.app[0].sink.typename ""
 config *.udp_tcp2.numApps 1
 config *.udp_tcp2.app[0].typename DDSSubscribeApp
 config *.udp_tcp2.app[0].source.subscribe "\"Topic1@1000\""
 config *.udp_tcp2.app[0].io.localPort 1000
-config *.udp_tcp2.app[0].io.receiverBufferLength 10
+config *.udp_tcp2.app[0].io.receiverBufferLength 1000
 config *.udp_tcp2.app[0].io.nackCountdown 0.25ms
 config *.udp_tcp2.app[0].source.packetLength 20B
 config *.udp_tcp2.ipv4.ip.limitedBroadcast true
@@ -63,7 +63,7 @@ config *.udp_tcp3.numApps 1
 config *.udp_tcp3.app[0].typename DDSSubscribeApp
 config *.udp_tcp3.app[0].source.subscribe "\"Topic1@1000\""
 config *.udp_tcp3.app[0].io.localPort 1000
-config *.udp_tcp3.app[0].io.receiverBufferLength 10
+config *.udp_tcp3.app[0].io.receiverBufferLength 1000
 config *.udp_tcp3.app[0].io.nackCountdown 0.25ms
 config *.udp_tcp3.app[0].source.packetLength 20B
 config *.udp_tcp3.ipv4.ip.limitedBroadcast true
@@ -81,7 +81,7 @@ attr mutable ""
 attr unit bps
 par TargetNetwork.udp_tcp.ethg$o[0].channel ber 0
 attr mutable ""
-par TargetNetwork.udp_tcp.ethg$o[0].channel per 0.001
+par TargetNetwork.udp_tcp.ethg$o[0].channel per 0
 attr mutable ""
 par TargetNetwork.switch.ethg$o[0].channel typename "\"ned.DatarateChannel\""
 par TargetNetwork.switch.ethg$o[0].channel disabled false
@@ -94,7 +94,7 @@ attr mutable ""
 attr unit bps
 par TargetNetwork.switch.ethg$o[0].channel ber 0
 attr mutable ""
-par TargetNetwork.switch.ethg$o[0].channel per 0.001
+par TargetNetwork.switch.ethg$o[0].channel per 0
 attr mutable ""
 par TargetNetwork.udp_tcp2.ethg$o[0].channel typename "\"ned.DatarateChannel\""
 par TargetNetwork.udp_tcp2.ethg$o[0].channel disabled false
@@ -107,7 +107,7 @@ attr mutable ""
 attr unit bps
 par TargetNetwork.udp_tcp2.ethg$o[0].channel ber 0
 attr mutable ""
-par TargetNetwork.udp_tcp2.ethg$o[0].channel per 0.001
+par TargetNetwork.udp_tcp2.ethg$o[0].channel per 0
 attr mutable ""
 par TargetNetwork.switch.ethg$o[1].channel typename "\"ned.DatarateChannel\""
 par TargetNetwork.switch.ethg$o[1].channel disabled false
@@ -120,7 +120,7 @@ attr mutable ""
 attr unit bps
 par TargetNetwork.switch.ethg$o[1].channel ber 0
 attr mutable ""
-par TargetNetwork.switch.ethg$o[1].channel per 0.001
+par TargetNetwork.switch.ethg$o[1].channel per 0
 attr mutable ""
 par TargetNetwork.udp_tcp3.ethg$o[0].channel typename "\"ned.DatarateChannel\""
 par TargetNetwork.udp_tcp3.ethg$o[0].channel disabled false
@@ -133,7 +133,7 @@ attr mutable ""
 attr unit bps
 par TargetNetwork.udp_tcp3.ethg$o[0].channel ber 0
 attr mutable ""
-par TargetNetwork.udp_tcp3.ethg$o[0].channel per 0.001
+par TargetNetwork.udp_tcp3.ethg$o[0].channel per 0
 attr mutable ""
 par TargetNetwork.switch.ethg$o[2].channel typename "\"ned.DatarateChannel\""
 par TargetNetwork.switch.ethg$o[2].channel disabled false
@@ -146,7 +146,7 @@ attr mutable ""
 attr unit bps
 par TargetNetwork.switch.ethg$o[2].channel ber 0
 attr mutable ""
-par TargetNetwork.switch.ethg$o[2].channel per 0.001
+par TargetNetwork.switch.ethg$o[2].channel per 0
 attr mutable ""
 par TargetNetwork.visualizer.sceneVisualizer typename "\"inet.visualizer.canvas.scene.SceneCanvasVisualizer\""
 par TargetNetwork.visualizer.sceneVisualizer visualizationTargetModule "\"^.^\""
@@ -1157,7 +1157,7 @@ par TargetNetwork.udp_tcp.app[0].source packetNameFormat "\"%a-%c\""
 par TargetNetwork.udp_tcp.app[0].source packetRepresentation "\"byteCount\""
 attr units bitCount,bits,byteCount,bytes,applicationPacket
 par TargetNetwork.udp_tcp.app[0].source packetProtocol "\"unknown\""
-par TargetNetwork.udp_tcp.app[0].source packetLength 800b
+par TargetNetwork.udp_tcp.app[0].source packetLength 40000b
 attr unit b
 par TargetNetwork.udp_tcp.app[0].source packetData -1
 par TargetNetwork.udp_tcp.app[0].source attachCreationTimeTag true
@@ -1167,7 +1167,7 @@ par TargetNetwork.udp_tcp.app[0].source clockModule "\"\""
 par TargetNetwork.udp_tcp.app[0].source initialProductionOffset -1s
 attr mutable ""
 attr unit s
-par TargetNetwork.udp_tcp.app[0].source productionInterval exponential(2ms)
+par TargetNetwork.udp_tcp.app[0].source productionInterval exponential(200ms)
 attr unit s
 par TargetNetwork.udp_tcp.app[0].source scheduleForAbsoluteTime true
 par TargetNetwork.udp_tcp.app[0].io typename "\"inet.applications.ddsapp.DDSSocketIo2\""
@@ -1181,7 +1181,7 @@ par TargetNetwork.udp_tcp.app[0].io subscribe "\"\""
 par TargetNetwork.udp_tcp.app[0].io nackCountdown -1s
 attr unit s
 par TargetNetwork.udp_tcp.app[0].io receiverBufferLength 100
-par TargetNetwork.udp_tcp.app[0].io historyCacheLength 1
+par TargetNetwork.udp_tcp.app[0].io historyCacheLength 10
 par TargetNetwork.udp_tcp.app[0].io timeToLive -1
 par TargetNetwork.udp_tcp.app[0].io dontFragment false
 par TargetNetwork.udp_tcp.app[0].io dscp -1
@@ -1194,7 +1194,7 @@ par TargetNetwork.udp_tcp.app[0].io stopOperationExtraTime -1s
 attr unit s
 par TargetNetwork.udp_tcp.app[0].io stopOperationTimeout 2s
 attr unit s
-scalar TargetNetwork.udp_tcp.app[0].io "packets sent" 714
+scalar TargetNetwork.udp_tcp.app[0].io "packets sent" 24
 scalar TargetNetwork.udp_tcp.app[0].io "packets received" 0
 par TargetNetwork.udp_tcp.app[0] typename "\"inet.applications.ddsapp.DDSPublishApp\""
 par TargetNetwork.udp_tcp.app[0] interfaceTableModule "\"TargetNetwork.udp_tcp.interfaceTable\""
@@ -1550,7 +1550,7 @@ par TargetNetwork.udp_tcp2.app[0].io publish "\"\""
 par TargetNetwork.udp_tcp2.app[0].io subscribe "\"\""
 par TargetNetwork.udp_tcp2.app[0].io nackCountdown 0.00025s
 attr unit s
-par TargetNetwork.udp_tcp2.app[0].io receiverBufferLength 10
+par TargetNetwork.udp_tcp2.app[0].io receiverBufferLength 1000
 par TargetNetwork.udp_tcp2.app[0].io historyCacheLength 10
 par TargetNetwork.udp_tcp2.app[0].io timeToLive -1
 par TargetNetwork.udp_tcp2.app[0].io dontFragment false
@@ -1565,7 +1565,7 @@ attr unit s
 par TargetNetwork.udp_tcp2.app[0].io stopOperationTimeout 2s
 attr unit s
 scalar TargetNetwork.udp_tcp2.app[0].io "packets sent" 0
-scalar TargetNetwork.udp_tcp2.app[0].io "packets received" 711
+scalar TargetNetwork.udp_tcp2.app[0].io "packets received" 20
 par TargetNetwork.udp_tcp2.app[0] typename "\"inet.applications.ddsapp.DDSSubscribeApp\""
 par TargetNetwork.udp_tcp2.app[0] interfaceTableModule "\"TargetNetwork.udp_tcp2.interfaceTable\""
 par TargetNetwork.udp_tcp2.at typename "\"inet.common.MessageDispatcher\""
@@ -1920,7 +1920,7 @@ par TargetNetwork.udp_tcp3.app[0].io publish "\"\""
 par TargetNetwork.udp_tcp3.app[0].io subscribe "\"\""
 par TargetNetwork.udp_tcp3.app[0].io nackCountdown 0.00025s
 attr unit s
-par TargetNetwork.udp_tcp3.app[0].io receiverBufferLength 10
+par TargetNetwork.udp_tcp3.app[0].io receiverBufferLength 1000
 par TargetNetwork.udp_tcp3.app[0].io historyCacheLength 10
 par TargetNetwork.udp_tcp3.app[0].io timeToLive -1
 par TargetNetwork.udp_tcp3.app[0].io dontFragment false
@@ -1935,7 +1935,7 @@ attr unit s
 par TargetNetwork.udp_tcp3.app[0].io stopOperationTimeout 2s
 attr unit s
 scalar TargetNetwork.udp_tcp3.app[0].io "packets sent" 0
-scalar TargetNetwork.udp_tcp3.app[0].io "packets received" 710
+scalar TargetNetwork.udp_tcp3.app[0].io "packets received" 20
 par TargetNetwork.udp_tcp3.app[0] typename "\"inet.applications.ddsapp.DDSSubscribeApp\""
 par TargetNetwork.udp_tcp3.app[0] interfaceTableModule "\"TargetNetwork.udp_tcp3.interfaceTable\""
 par TargetNetwork.udp_tcp3.at typename "\"inet.common.MessageDispatcher\""
@@ -2000,7 +2000,7 @@ par TargetNetwork.switch.bridging displayStringTextFormat "\"proc: %p\\ndisc: %d
 scalar TargetNetwork.switch.bridging "processed frames" 0
 scalar TargetNetwork.switch.bridging "discarded frames" 0
 scalar TargetNetwork.switch.bridging "number of received BPDUs from STP module" 0
-scalar TargetNetwork.switch.bridging "number of received frames from network (including BPDUs)" 1426
+scalar TargetNetwork.switch.bridging "number of received frames from network (including BPDUs)" 44
 scalar TargetNetwork.switch.bridging "number of dropped frames (including BPDUs)" 0
 scalar TargetNetwork.switch.bridging "number of delivered BPDUs to the STP module" 0
 scalar TargetNetwork.switch.bridging "number of dispatched BPDU frames to the network" 0

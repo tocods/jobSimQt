@@ -1,9 +1,9 @@
-file 340603 1732878213                                          
+file 10881 1732880893                                           
 version 3
-run General-0-20241129-19:03:33-18068
+run General-0-20241129-19:48:13-15636
 attr configname General
-attr datetime 20241129-19:03:33
-attr datetimef 20241129-190333
+attr datetime 20241129-19:48:13
+attr datetimef 20241129-194813
 attr experiment General
 attr inifile D:/jobSimQt/project/Parameters.ini
 attr iterationvars ""
@@ -11,7 +11,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network TargetNetwork
-attr processid 18068
+attr processid 15636
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -46,16 +46,16 @@ config *.udp_tcp.app[0].typename DDSPublishApp
 config *.udp_tcp.app[0].io.receiveBroadcast true
 config *.udp_tcp.app[0].io.publish "\"Topic1\""
 config *.udp_tcp.app[0].io.destPort 1000
-config *.udp_tcp.app[0].io.historyCacheLength 1
+config *.udp_tcp.app[0].io.historyCacheLength 10
 config *.udp_tcp.ipv4.ip.limitedBroadcast true
-config *.udp_tcp.app[0].source.packetLength 100B
-config *.udp_tcp.app[0].source.productionInterval exponential(2ms)
+config *.udp_tcp.app[0].source.packetLength 5000B
+config *.udp_tcp.app[0].source.productionInterval exponential(200ms)
 config *.udp_tcp.app[0].sink.typename ""
 config *.udp_tcp2.numApps 1
 config *.udp_tcp2.app[0].typename DDSSubscribeApp
 config *.udp_tcp2.app[0].source.subscribe "\"Topic1@1000\""
 config *.udp_tcp2.app[0].io.localPort 1000
-config *.udp_tcp2.app[0].io.receiverBufferLength 10
+config *.udp_tcp2.app[0].io.receiverBufferLength 1000
 config *.udp_tcp2.app[0].io.nackCountdown 0.25ms
 config *.udp_tcp2.app[0].source.packetLength 20B
 config *.udp_tcp2.ipv4.ip.limitedBroadcast true
@@ -64,7 +64,7 @@ config *.udp_tcp3.numApps 1
 config *.udp_tcp3.app[0].typename DDSSubscribeApp
 config *.udp_tcp3.app[0].source.subscribe "\"Topic1@1000\""
 config *.udp_tcp3.app[0].io.localPort 1000
-config *.udp_tcp3.app[0].io.receiverBufferLength 10
+config *.udp_tcp3.app[0].io.receiverBufferLength 1000
 config *.udp_tcp3.app[0].io.nackCountdown 0.25ms
 config *.udp_tcp3.app[0].source.packetLength 20B
 config *.udp_tcp3.ipv4.ip.limitedBroadcast true
@@ -83,16 +83,16 @@ vector 8 TargetNetwork.udp_tcp2.app[0].sink default ETV
 vector 9 TargetNetwork.udp_tcp2.app[0].sink default_loss ETV
 vector 10 TargetNetwork.udp_tcp3.app[0].sink default2 ETV
 vector 11 TargetNetwork.udp_tcp3.app[0].sink default2_loss ETV
-0	3954 74 25 107 0 0.001616389009 4 0 0.01 0.02 0.0002
-1	4028 74 27 139 0 0.001629669009 4 0 0.01 0.02 0.0002
-2	4102 186 40 146 0.00000592 0.001635589009 8 0 0.02 0.06 0.0008
-3	4288 38399 41 29106 0.00000592 1.499041280074 1422 0 0.01 7.1099999999999 0.071100000000001
-4	42687 38501 43 29091 0.00000592 1.499028000074 1426 0 0.01 7.1299999999999 0.071300000000001
-5	81188 79183 89 29093 0.001591749009 1.499028960074 2852 0 0.03 28.760000000001 0.435
-6	160371 39094 103 29098 0.001616389009 1.499040320074 1421 0.1 0.2 213.1 35.51
-7	199465 39042 135 29113 0.001629669009 1.499053600074 1419 0.1 0.2 212.8 35.46
-8	238507 27161 179 29099 0.005374317117 1.499040320074 710 5.12e-05 0.01768617261 1.515103503711 0.0064992767393535
-9	265668 24565 179 29099 0.005374317117 1.499040320074 710 0 0.0041928721174004 1.1775027979446 0.003730890395135
-10	290233 27847 195 29114 0.005387597117 1.499053600074 709 6.448e-05 0.01769945261 1.524494383711 0.0066266408352676
-11	318080 22521 195 29114 0.005387597117 1.499053600074 709 0 0.0045941807044411 0.74252441882967 0.002640702885154
+0	3962 74 28 131 0 0.159419060913 4 0 0.01 0.02 0.0002
+1	4036 74 30 163 0 0.159542100913 4 0 0.01 0.02 0.0002
+2	4110 186 43 177 0.00000592 0.159548020913 8 0 0.02 0.06 0.0008
+3	4296 1053 44 868 0.00000592 1.147498918928 42 0 0.01 0.21 0.0021
+4	5349 1053 46 845 0.00000592 1.147427878928 42 0 0.01 0.21 0.0021
+5	6402 2129 107 847 0.159174900913 1.147428838928 80 0 0.08 3.2 0.172
+6	8531 928 127 852 0.159419060913 1.147478918928 36 0.1 0.5 10.6 3.66
+7	9459 928 159 873 0.159542100913 1.147549958928 36 0.1 0.5 10.6 3.66
+8	10387 147 311 769 0.33913113861 1.146882758928 4 0.179956237697 0.372165002415 0.988440338015 0.26829210140168
+9	10534 95 311 769 0.33913113861 1.146882758928 4 0 0 0 0
+10	10629 151 330 787 0.33925417861 1.147005798928 4 0.180079277697 0.372288042415 0.988932498015 0.26853539735543
+11	10780 99 330 787 0.33925417861 1.147005798928 4 0 0 0 0
 

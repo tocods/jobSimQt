@@ -254,6 +254,7 @@ class NetworkEditorWindow(QWidget):
 
     def applyHost(self):
         data = self.hostPhysics.getDict()
+        self.curHostItem.setName(data["name"])
         self.curHostItem.hostAttr.applyPhysicsAttr(data)
         sysSim.hosts[self.curHostItem].name = data["name"]
         data = self.hostApp.get_json_data() + self.hostMiddleware.get_json_data()
@@ -264,6 +265,7 @@ class NetworkEditorWindow(QWidget):
 
     def applySwitch(self):
         data = self.switchEditor.getDict()
+        self.curSwitchItem.setName(data["name"])
         self.curSwitchItem.switchAttr.applyAttr(data)
         self.switchEditor.setDict(self.curSwitchItem.switchAttr.getAttr())
         self.update_tree_view()
