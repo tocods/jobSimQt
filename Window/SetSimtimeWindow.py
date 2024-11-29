@@ -80,7 +80,7 @@ class SetSimtimeWindow(QDialog):
                 else:
                     end2Attr = (linkAttr.endpoint2).switchAttr
                 f.write(
-                    f"        {end1Attr.name}.ethg++ <--> {{ datarate={linkAttr.link_bandwidth}Mbps;}} <--> {end2Attr.name}.ethg++;\n"
+                    f"        {end1Attr.name}.ethg++ <--> {{ datarate={linkAttr.link_bandwidth}Mbps; per={linkAttr.error_rate};}} <--> {end2Attr.name}.ethg++;\n"
                 )
             f.write("}\n")
         return

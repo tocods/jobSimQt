@@ -76,6 +76,9 @@ networkGlobalConfig = {
         "connectionType": "RELIABLE_CONNECTION",
         "maxSendQueueSize": "256",
         "maxRecvQueueSize": "256",
+        "windowSize": "100",
+        "retransmitTimeout": "20ms",
+        "rateLimit": "1e9"
     },
     "common": {
         "queueTypename": "DropTailQueue",
@@ -184,6 +187,7 @@ def create_xml():
             link_element.set("endpoint2", link_item.linkAttr.endpoint2.switchAttr.name)
 
         link_element.set("link_bandwidth", str(link_item.linkAttr.link_bandwidth))
+        link_element.set("error_rate", str(link_item.linkAttr.error_rate))
     globalSettingElement = ET.SubElement(root, "GlobalSetting")
     globalSettingElement.set("content", json.dumps(networkGlobalConfig))
 

@@ -64,7 +64,7 @@ class NetworkEditorWindow(QWidget):
         self.hostMiddleware = HostNetargsAppEditorMiddleware("", True)
         self.ui.hostSet.addTab(self.hostMiddleware, "中间件层")
 
-        self.linkEditor = DictEditor(["link_bandwidth"], {}, False)
+        self.linkEditor = DictEditor(["link_bandwidth", "error_rate"], {}, False)
         self.ui.linkSet.addTab(self.linkEditor, "链路速率")
 
         self.switchEditor = DictEditor(["name", "transmission_rate"], {}, False)
@@ -72,6 +72,7 @@ class NetworkEditorWindow(QWidget):
         self.tsnQueue = JsonArrayEditor(
             "",
             {
+                
                 "display-name": "default",
                 "offset": "0ms",
                 "durations": "[1ms, 10ms]",
@@ -91,7 +92,6 @@ class NetworkEditorWindow(QWidget):
             "UDP-TCP通用型主机",
             "RDMA型主机",
             "TSN型主机",
-            "DDS型主机",
         ]
 
         for index in range(0, len(menu_item_names)):
@@ -137,22 +137,18 @@ class NetworkEditorWindow(QWidget):
             "udp_tcp",
             "rdma",
             "tsn",
-            "dds",
         ]
         type_list = [
             "StandardHost",
             "StandardHost",
             "TsnDevice",
-            "StandardHost",
         ]
         img_list = [
             "img/Normal_CPU_Host.png",
             "img/RDMA_CPU_Host.png",
             "img/TSN_CPU_Host.png",
-            "img/DDS_CPU_Host.png",
         ]
         only_cpu_list = [
-            True,
             True,
             True,
             True,
@@ -161,7 +157,6 @@ class NetworkEditorWindow(QWidget):
             NormalHost,
             RdmaHost,
             TsnHost,
-            DdsHost,
         ]
 
         self.ui.graphicsView.setHostToAdd(
@@ -253,6 +248,7 @@ class NetworkEditorWindow(QWidget):
         self.curHostItem = hostItem
         self.hostPhysics.setDict(hostItem.hostAttr.getPhysicsAttr())
         self.hostApp.setData(hostItem.hostAttr.appArgs.copy())
+        self.hostMiddleware.setData(hostItem.hostAttr.appArgs.copy())
         return
     
     def selectHostApp(self, hostItem: HostGraphicItem):
@@ -261,6 +257,9 @@ class NetworkEditorWindow(QWidget):
     def selectSwitch(self, switchItem: SwitchGraphicItem):
         self.curSwitchItem = switchItem
         self.switchEditor.setDict(switchItem.switchAttr.getAttr())
+        self.tsnQueue.clean()
+        for obj in self.curSwitchItem.switchAttr.getTsnQueue():
+            self.tsnQueue.add_object(obj)
         return
 
     def selectLink(self, linkItem: GraphicEdge):
@@ -270,9 +269,10 @@ class NetworkEditorWindow(QWidget):
 
     def applyHost(self):
         data = self.hostPhysics.getDict()
+        self.curHostItem.setName(data["name"])
         self.curHostItem.hostAttr.applyPhysicsAttr(data)
         sysSim.hosts[self.curHostItem].name = data["name"]
-        data = self.hostApp.get_json_data()
+        data = self.hostApp.get_json_data() + self.hostMiddleware.get_json_data()
         self.curHostItem.hostAttr.appArgs = data
         self.update_tree_view()
 
@@ -282,8 +282,13 @@ class NetworkEditorWindow(QWidget):
 
     def applySwitch(self):
         data = self.switchEditor.getDict()
+        self.curSwitchItem.setName(data["name"])
         self.curSwitchItem.switchAttr.applyAttr(data)
         self.switchEditor.setDict(self.curSwitchItem.switchAttr.getAttr())
+
+        data = self.tsnQueue.get_json_data()
+        self.curSwitchItem.switchAttr.setTsnQueue(data)
+
         self.update_tree_view()
         return
 
@@ -461,6 +466,7 @@ class NetworkEditorWindow(QWidget):
             edge = graphicView.createGraphicLink(endpoint1, endpoint2)
             edge.linkAttr.type = element.get("type")
             edge.linkAttr.link_bandwidth = element.get("link_bandwidth")
+            edge.linkAttr.error_rate = element.get("error_rate")
 
         # Load all links
         for link_element in links_element.findall("Link"):

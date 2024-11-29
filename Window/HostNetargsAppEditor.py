@@ -117,6 +117,7 @@ class HostNetargsAppEditor(QDialog):
         self.clean()
         self.json_data = data
         self.update_table()
+        self.get_json_data()
 
     def update_table(self):
         for obj in self.json_data:
@@ -146,6 +147,7 @@ class HostNetargsAppEditorApp(HostNetargsAppEditor):
             "TSN": JsonArrayEditor(
             [],
             {
+                "typename": "TSN",
                 "stream": "default",
                 "packetFilter": "expr(udp.destPort == 1000)",
                 "pcp": "0",

@@ -112,6 +112,7 @@ class HostGraphicItem(GraphicItem):
                 globaldata.linkList.pop(i)
             else:
                 i += 1
+        print(self)
         globaldata.hostList.remove(self)
         print(globaldata.hostList)
 

@@ -10,6 +10,7 @@ class Switch(NetworkDevice):
         self.num_ports = 1
         self.transmission_rate = 100
         self.port_buffer_size = 100
+        self.tsn_queue = []
 
         print(f"Switch name:{name} host_type:{switch_type} created")
 
@@ -23,6 +24,12 @@ class Switch(NetworkDevice):
     def applyAttr(self, data):
         self.set_name(data["name"])
         self.transmission_rate = data["transmission_rate"]
+
+    def getTsnQueue(self):
+        return self.tsn_queue
+    
+    def setTsnQueue(self, tsn_queue):
+        self.tsn_queue = tsn_queue
 
     def setXMLElement(self, element):
         element.set("name", self.name)
@@ -91,7 +98,6 @@ class RdmaSwitch(Switch):
 class TsnSwitch(Switch):
     def __init__(self, name):
         super().__init__(name, "EthernetSwitch")
-        self.tsn_queue = []
 
     def setXMLElement(self, element):
         element.set("name", self.name)

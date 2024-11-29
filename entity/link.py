@@ -6,6 +6,7 @@ class Link:
 
         # 连接属性，初始化为默认值
         self.link_bandwidth = 100
+        self.error_rate = 0
 
         self.endpoint1 = endpoint1  # 连接一端
         self.endpoint2 = endpoint2  # 连接另一端
@@ -13,6 +14,7 @@ class Link:
 
     def applyAttr(self, data):
         self.link_bandwidth = data["link_bandwidth"]
+        self.error_rate = data["error_rate"]
 
     def set_name(self, name):
         # TODO: 检查名字是否符合omnet规范

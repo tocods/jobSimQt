@@ -20,9 +20,12 @@ network TargetNetwork extends WiredNetworkBase
         }
         udp_tcp2: StandardHost {
         }
+        udp_tcp3: StandardHost {
+        }
         switch: EthernetSwitch {
         }
     connections:
-        udp_tcp.ethg++ <--> { datarate=100Mbps;} <--> switch.ethg++;
-        udp_tcp2.ethg++ <--> { datarate=100Mbps;} <--> switch.ethg++;
+        udp_tcp.ethg++ <--> { datarate=100Mbps; per=0;} <--> switch.ethg++;
+        udp_tcp2.ethg++ <--> { datarate=100Mbps; per=0;} <--> switch.ethg++;
+        udp_tcp3.ethg++ <--> { datarate=100Mbps; per=0;} <--> switch.ethg++;
 }
