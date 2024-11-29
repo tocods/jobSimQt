@@ -9,6 +9,7 @@ from qdarktheme.qtpy.QtWidgets import (
 )
 import globaldata
 from item import HostGraphicItem
+import project
 
 
 class SetSimtimeWindow(QDialog):
@@ -35,22 +36,23 @@ class SetSimtimeWindow(QDialog):
 
     def apply_time(self):
         time = float(self.time_input.text())
-        project = globaldata.currentProjectInfo.path
+        project_path = globaldata.currentProjectInfo.path
         print(f"开始仿真\n 仿真时间:{time}")
 
         self.generateNED()
         self.generateINI(time)
         os_type = platform.system()
-        print(project)
+        print(project_path)
         if os_type == "Windows":
             omnetpp_src = "D:/omnetpp-6.0/samples/inet4.5/src"
-            command = f"omnet_tools\\opp_run.exe -r 0 -m -u Cmdenv -c General -n {project};{omnetpp_src}; -l {omnetpp_src}/INET {project}/Parameters.ini"
+            command = f"omnet_tools\\opp_run.exe -r 0 -m -u Cmdenv -c General -n {project_path};{omnetpp_src}; -l {omnetpp_src}/INET {project_path}/Parameters.ini"
             print(command)
             exit_code = os.system(command)
             print(f"仿真完毕 exit_code:{exit_code}")
+            os.popen(f"{globaldata.targetPath[3]} {project.projectPath} -1")
         else:
             omnetpp_src = "/Users/shi/omnetpp_new/samples/inet4.5/src"
-            command = f"opp_run -r 0 -m -u Cmdenv -c General -n {project}:{omnetpp_src} -l {omnetpp_src}/INET {project}/Parameters.ini"
+            command = f"opp_run -r 0 -m -u Cmdenv -c General -n {project_path}:{omnetpp_src} -l {omnetpp_src}/INET {project_path}/Parameters.ini"
             exit_code = os.system(command)
             print(f"仿真完毕 exit_code:{exit_code}")
         self.hide()
@@ -105,9 +107,9 @@ class SetSimtimeWindow(QDialog):
         f.write("import inet.node.rocev2.RoceSwitch;\n")
         f.write("import inet.transportLayer.contract.IRoce;\n")
 
-        f.write(f'network TargetNetwork extends WiredNetworkBase\n')
+        f.write(f"network TargetNetwork extends WiredNetworkBase\n")
         f.write(f'{"{"}\n')
-        f.write('    submodules:\n')
+        f.write("    submodules:\n")
 
     def generateINI(self, time):
         with open(
@@ -129,7 +131,7 @@ class SetSimtimeWindow(QDialog):
         f.write("\n")
         f.write(f'*.*.ethernet.typename = "EthernetLayer"\n')
         f.write(f'*.*.eth[*].typename = "LayeredEthernetInterface"\n')
-        f.write(f'*.*.eth[*].bitrate = 100Mbps\n')
+        f.write(f"*.*.eth[*].bitrate = 100Mbps\n")
         data = globaldata.networkGlobalConfig["common"]
         f.write(f'**.eth[*].queue.typename = "{data["queueTypename"]}"\n')
         f.write(f'**.eth[*].queue.packetCapacity = {data["queuePacketCapacity"]}\n')
@@ -158,7 +160,9 @@ class SetSimtimeWindow(QDialog):
     def generateINIHeaderIp(self, f):
         f.write('*.configurator.config = xml("<config>\\n" + \\\n')
         for host in globaldata.hostList:
-            f.write(f'"<interface hosts=\'{host.hostAttr.name}\' address=\'{host.hostAttr.ip}\' netmask=\'255.255.255.x\'/>\\n" + \\\n')
+            f.write(
+                f"\"<interface hosts='{host.hostAttr.name}' address='{host.hostAttr.ip}' netmask='255.255.255.x'/>\\n\" + \\\n"
+            )
         f.write('"</config>")\n')
 
     def generateRdmaINIHeader(self, f):
