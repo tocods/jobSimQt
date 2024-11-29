@@ -76,6 +76,9 @@ networkGlobalConfig = {
         "connectionType": "RELIABLE_CONNECTION",
         "maxSendQueueSize": "256",
         "maxRecvQueueSize": "256",
+        "windowSize": "100",
+        "retransmitTimeout": "20ms",
+        "rateLimit": "1e9"
     },
     "common": {
         "queueTypename": "DropTailQueue",

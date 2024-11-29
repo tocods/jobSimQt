@@ -72,6 +72,7 @@ class NetworkEditorWindow(QWidget):
         self.tsnQueue = JsonArrayEditor(
             "",
             {
+                
                 "display-name": "default",
                 "offset": "0ms",
                 "durations": "[1ms, 10ms]",
@@ -91,7 +92,6 @@ class NetworkEditorWindow(QWidget):
             "UDP-TCP通用型主机",
             "RDMA型主机",
             "TSN型主机",
-            "DDS型主机",
         ]
 
         for index in range(0, len(menu_item_names)):
@@ -137,22 +137,18 @@ class NetworkEditorWindow(QWidget):
             "udp_tcp",
             "rdma",
             "tsn",
-            "dds",
         ]
         type_list = [
             "StandardHost",
             "StandardHost",
             "TsnDevice",
-            "StandardHost",
         ]
         img_list = [
             "img/Normal_CPU_Host.png",
             "img/RDMA_CPU_Host.png",
             "img/TSN_CPU_Host.png",
-            "img/DDS_CPU_Host.png",
         ]
         only_cpu_list = [
-            True,
             True,
             True,
             True,
@@ -161,7 +157,6 @@ class NetworkEditorWindow(QWidget):
             NormalHost,
             RdmaHost,
             TsnHost,
-            DdsHost,
         ]
 
         self.ui.graphicsView.setHostToAdd(
@@ -244,6 +239,7 @@ class NetworkEditorWindow(QWidget):
         self.curHostItem = hostItem
         self.hostPhysics.setDict(hostItem.hostAttr.getPhysicsAttr())
         self.hostApp.setData(hostItem.hostAttr.appArgs.copy())
+        self.hostMiddleware.setData(hostItem.hostAttr.appArgs.copy())
         return
 
     def selectSwitch(self, switchItem: SwitchGraphicItem):
@@ -260,7 +256,7 @@ class NetworkEditorWindow(QWidget):
         data = self.hostPhysics.getDict()
         self.curHostItem.hostAttr.applyPhysicsAttr(data)
         sysSim.hosts[self.curHostItem].name = data["name"]
-        data = self.hostApp.get_json_data()
+        data = self.hostApp.get_json_data() + self.hostMiddleware.get_json_data()
         self.curHostItem.hostAttr.appArgs = data
         self.update_tree_view()
 

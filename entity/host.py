@@ -17,14 +17,10 @@ class Host(NetworkDevice):
         print(f"Host name:{name} host_type:{host_type} created")
 
     def getPhysicsAttr(self):
-        result = {
-            "name": self.name,
-            "ip": self.ip,
-            "mac": self.mac
-        }
+        result = {"name": self.name, "ip": self.ip, "mac": self.mac}
 
         return result
-    
+
     def applyPhysicsAttr(self, data):
         self.set_name(data["name"])
         self.ip = data["ip"]
@@ -37,36 +33,13 @@ class Host(NetworkDevice):
             if appArg["typename"] == "UdpApp615":
                 self.generateINIUdp(f, index)
             if appArg["typename"] == "TcpSessionApp":
-                f.write(
-                    f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].sendBytes = {appArg["sendBytes"]}\n'
-                )
-                f.write(f"*.{self.name}.app[{index}].active = true\n")
-                f.write(
-                    f'*.{self.name}.app[{index}].localPort = {appArg["localPort"]}\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].connectAddress = "{appArg["connectAddress"]}"\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].connectPort = {appArg["connectPort"]}\n'
-                )
-                f.write(f"*.{self.name}.app[{index}].tOpen = 0s\n")
-                f.write(f"*.{self.name}.app[{index}].tSend = 0s\n")
-                f.write(f"*.{self.name}.app[{index}].tClose = 0s\n")
-                f.write(f'*.{self.name}.app[{index}].sendScript = ""\n')
+                self.generateINITcpSource(f, index)
             if appArg["typename"] == "TcpSinkApp":
-                f.write(
-                    f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].localPort = {appArg["localPort"]}\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].flowName = "{appArg["flowName"]}"\n'
-                )
+                self.generateINITcpSink(f, index)
+            if appArg["typename"] == "DDSPublishApp":
+                self.generateINIDdsSource(f, index)
+            if appArg["typename"] == "DDSSubscribeApp":
+                self.generateINIDdsSink(f, index)
             f.write("\n")
 
     def getNumber(self, s: str):
@@ -105,6 +78,63 @@ class Host(NetworkDevice):
                 f'*.{self.name}.app[{index}].sink.flowName = "{appArg["flowName"]}"\n'
             )
 
+    def generateINITcpSource(self, f, index):
+        appArg = self.appArgs[index]
+        f.write(f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n')
+        f.write(f'*.{self.name}.app[{index}].sendBytes = {appArg["sendBytes"]}\n')
+        f.write(f"*.{self.name}.app[{index}].active = true\n")
+        f.write(f'*.{self.name}.app[{index}].localPort = {appArg["localPort"]}\n')
+        f.write(
+            f'*.{self.name}.app[{index}].connectAddress = "{appArg["connectAddress"]}"\n'
+        )
+        f.write(f'*.{self.name}.app[{index}].connectPort = {appArg["connectPort"]}\n')
+        f.write(f"*.{self.name}.app[{index}].tOpen = 0s\n")
+        f.write(f"*.{self.name}.app[{index}].tSend = 0s\n")
+        f.write(f"*.{self.name}.app[{index}].tClose = 0s\n")
+        f.write(f'*.{self.name}.app[{index}].sendScript = ""\n')
+
+    def generateINITcpSink(self, f, index):
+        appArg = self.appArgs[index]
+        f.write(f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n')
+        f.write(f'*.{self.name}.app[{index}].localPort = {appArg["localPort"]}\n')
+        f.write(f'*.{self.name}.app[{index}].flowName = "{appArg["flowName"]}"\n')
+
+    def generateINIDdsSource(self, f, index):
+        appArg = self.appArgs[index]
+        f.write(f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n')
+        f.write(f"*.{self.name}.app[{index}].io.receiveBroadcast = true\n")
+        f.write(f'*.{self.name}.app[{index}].io.publish = "{appArg["publish"]}"\n')
+        f.write(f'*.{self.name}.app[{index}].io.destPort = {appArg["destPort"]}\n')
+        f.write(
+            f'*.{self.name}.app[{index}].io.historyCacheLength = {appArg["historyCacheLength"]}\n'
+        )
+        f.write(f"*.{self.name}.ipv4.ip.limitedBroadcast = true\n")
+
+        f.write(
+            f'*.{self.name}.app[{index}].source.packetLength = {appArg["packetLength"]}\n'
+        )
+        f.write(
+            f'*.{self.name}.app[{index}].source.productionInterval = exponential({appArg["productionInterval"]})\n'
+        )
+        f.write(f'*.{self.name}.app[{index}].sink.typename = ""\n')
+
+    def generateINIDdsSink(self, f, index):
+        appArg = self.appArgs[index]
+        f.write(f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n')
+        f.write(
+            f'*.{self.name}.app[{index}].source.subscribe = "{appArg["subscribeTopic"] + "@" + appArg["subscribePort"]}"\n'
+        )
+        f.write(f'*.{self.name}.app[{index}].io.localPort = {appArg["localPort"]}\n')
+        f.write(
+            f'*.{self.name}.app[{index}].io.receiverBufferLength = {appArg["receiverBufferLength"]}\n'
+        )
+        f.write(
+            f'*.{self.name}.app[{index}].io.nackCountdown = {appArg["nackCountdown"]}\n'
+        )
+        f.write(f"*.{self.name}.app[{index}].source.packetLength = 20B\n")
+        f.write(f"*.{self.name}.ipv4.ip.limitedBroadcast = true \n")
+        f.write(f'*.{self.name}.app[{index}].sink.flowName = "{appArg["flowName"]}"\n')
+
     def generateNED(self, f):
         f.write(f"        {self.name}: {self.type} {{\n")
         f.write("        }\n")
@@ -140,50 +170,30 @@ class NormalHost(Host):
         super().__init__(name, "StandardHost")
 
     def generateINI(self, f):
-        return super().generateINI(f)
-
-    def generateNED(self, f):
-        return super().generateNED(f)
-
-    def setXMLElement(self, element):
-        return super().setXMLElement(element)
-
-    def readXMLElement(self, element):
-        return super().readXMLElement(element)
+        f.write(f"*.{self.name}.numApps = {len(self.appArgs)}\n")
+        for index in range(0, len(self.appArgs)):
+            appArg = self.appArgs[index]
+            if appArg["typename"] == "UdpApp615":
+                self.generateINIUdp(f, index)
+            if appArg["typename"] == "TcpSessionApp":
+                self.generateINITcpSource(f, index)
+            if appArg["typename"] == "TcpSinkApp":
+                self.generateINITcpSink(f, index)
+            if appArg["typename"] == "DDSPublishApp":
+                self.generateINIDdsSource(f, index)
+            if appArg["typename"] == "DDSSubscribeApp":
+                self.generateINIDdsSink(f, index)
+            f.write("\n")
 
 
 class UdpHost(Host):
     def __init__(self, name):
         super().__init__(name, "StandardHost")
 
-    def generateINI(self, f):
-        return super().generateINI(f)
-
-    def generateNED(self, f):
-        return super().generateNED(f)
-
-    def setXMLElement(self, element):
-        return super().setXMLElement(element)
-
-    def readXMLElement(self, element):
-        return super().readXMLElement(element)
-
 
 class TcpHost(Host):
     def __init__(self, name):
         super().__init__(name, "StandardHost")
-
-    def generateINI(self, f):
-        return super().generateINI(f)
-
-    def generateNED(self, f):
-        return super().generateNED(f)
-
-    def setXMLElement(self, element):
-        return super().setXMLElement(element)
-
-    def readXMLElement(self, element):
-        return super().readXMLElement(element)
 
 
 # 不同类型的Host类
@@ -212,6 +222,11 @@ class RdmaHost(Host):
             f.write(
                 f'*.{self.name}.rocev2.maxRecvQueueSize = {RdmaArg["maxRecvQueueSize"]}\n'
             )
+            f.write(f'*.{self.name}.rocev2.windowSize = "{RdmaArg["windowSize"]}"\n')
+            f.write(
+                f'*.{self.name}.rocev2.retransmitTimeout = {RdmaArg["retransmitTimeout"]}\n'
+            )
+            f.write(f'*.{self.name}.rocev2.rateLimit = {RdmaArg["rateLimit"]}\n')
             f.write(f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n')
             f.write(
                 f'*.{self.name}.app[{index}].io.localQueuePairNumber = {appArg["localQueuePairNumber"]}\n'
@@ -243,8 +258,7 @@ class RdmaHost(Host):
     def generateNED(self, f):
         f.write(
             # f'        {self.name}: <default("RoceHostNew")> like IRoce {{\n'
-            
-            f'        {self.name}: RoceHostNew {{\n'
+            f"        {self.name}: RoceHostNew {{\n"
         )
         f.write("        }\n")
 
@@ -265,25 +279,26 @@ class TsnHost(Host):
     def __init__(self, name):
         super().__init__(name, "StandardHost")
 
-        # tsn
-        self.tsnArgs = []
-
     def generateINI(self, f):
         super().generateINI(f)
-        f.write(f"*.{self.name}.hasOutgoingStreams = true\n")
-        if len(self.tsnArgs) != 0:
+        tsnArgs = []
+        for arg in self.appArgs:
+            if arg["typename"] == "TSN":
+                tsnArgs.append(arg)
+        if len(tsnArgs) != 0:
+            f.write(f"*.{self.name}.hasOutgoingStreams = true\n")
             f.write(f"*.{self.name}.bridging.streamIdentifier.identifier.mapping = [")
-            for index in range(0, len(self.tsnArgs)):
-                tmp = self.tsnArgs[index]
+            for index in range(0, len(tsnArgs)):
+                tmp = tsnArgs[index]
                 f.write("{")
                 f.write(f'stream: "{tmp["stream"]}", ')
                 f.write(f'packetfilter: {tmp["packetFilter"]}')
                 f.write("}")
-                if index < len(self.tsnArgs) - 1:
+                if index < len(tsnArgs) - 1:
                     f.write(",")
             f.write("]\n")
         f.write(f"*.{self.name}.bridging.streamCoder.encoder.mapping = [")
-        tsnQueue = globaldata.networkGlobalConfig['common']['TsnQueue']
+        tsnQueue = globaldata.networkGlobalConfig["common"]["TsnQueue"]
         for index in range(0, len(tsnQueue)):
             tmp = tsnQueue[index]
             f.write("{")
@@ -303,7 +318,6 @@ class TsnHost(Host):
 
     def setXMLElement(self, element):
         super().setXMLElement(element)
-        element.set("tsnArgs", json.dumps(self.tsnArgs))
 
     def readXMLElement(self, element):
         self.ip = element.get("ip")
@@ -311,7 +325,7 @@ class TsnHost(Host):
         print(element.get("appArgs"))
         self.appArgs = json.loads(element.get("appArgs"))
         print(element.get("tsnArgs"))
-        self.tsnArgs = json.loads(element.get("tsnArgs"))
+        tsnArgs = json.loads(element.get("tsnArgs"))
 
 
 class DdsHost(Host):
@@ -320,54 +334,9 @@ class DdsHost(Host):
 
     def generateINI(self, f):
         f.write(f"*.{self.name}.numApps = {len(self.appArgs)}\n")
-        for index in range(0, len(self.appArgs)):
-            appArg = self.appArgs[index]
-            if appArg["typename"] == "DDSPublishApp":
-                f.write(
-                    f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n'
-                )
-                f.write(f"*.{self.name}.app[{index}].io.receiveBroadcast = true\n")
-                f.write(
-                    f'*.{self.name}.app[{index}].io.publish = "{appArg["publish"]}"\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].io.destPort = {appArg["destPort"]}\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].io.historyCacheLength = {appArg["historyCacheLength"]}\n'
-                )
-                f.write(f"*.{self.name}.ipv4.ip.limitedBroadcast = true\n")
+        # for index in range(0, len(self.appArgs)):
 
-                f.write(
-                    f'*.{self.name}.app[{index}].source.packetLength = {appArg["packetLength"]}\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].source.productionInterval = exponential({appArg["productionInterval"]})\n'
-                )
-                f.write(f'*.{self.name}.app[{index}].sink.typename = ""\n')
-
-            if appArg["typename"] == "DDSSubscribeApp":
-                f.write(
-                    f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].source.subscribe = "{appArg["subscribeTopic"] + "@" + appArg["subscribePort"]}"\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].io.localPort = {appArg["localPort"]}\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].io.receiverBufferLength = {appArg["receiverBufferLength"]}\n'
-                )
-                f.write(
-                    f'*.{self.name}.app[{index}].io.nackCountdown = {appArg["nackCountdown"]}\n'
-                )
-                f.write(f"*.{self.name}.app[{index}].source.packetLength = 20B\n")
-                f.write(f"*.{self.name}.ipv4.ip.limitedBroadcast = true \n")
-                f.write(
-                    f'*.{self.name}.app[{index}].sink.flowName = "{appArg["flowName"]}"\n'
-                )
-            f.write("\n")
+        f.write("\n")
 
     def generateNED(self, f):
         f.write(f"        {self.name}: {self.type} {{\n")

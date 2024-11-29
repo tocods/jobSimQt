@@ -1,9 +1,9 @@
-file 2692323 1732862873                                         
+file 2696996 1732865991                                         
 version 3
-run General-0-20241129-14:47:49-7524
+run General-0-20241129-15:39:47-10424
 attr configname General
-attr datetime 20241129-14:47:49
-attr datetimef 20241129-144749
+attr datetime 20241129-15:39:47
+attr datetimef 20241129-153947
 attr experiment General
 attr inifile D:/jobSimQt/project/Parameters.ini
 attr iterationvars ""
@@ -11,7 +11,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network TargetNetwork
-attr processid 7524
+attr processid 10424
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -41,27 +41,52 @@ config **.tcp.windowScalingSupport false
 config **.tcp.timestampSupport false
 config **.tcp.mss 1452
 config *.configurator.config "xml(\"<config>\\n\" + \"<interface hosts='udp_tcp' address='192.168.0.1' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp2' address='192.168.0.2' netmask='255.255.255.x'/>\\n\" + \"</config>\")"
-config *.udp_tcp.numApps 1
+config *.udp_tcp.numApps 2
 config *.udp_tcp.app[0].typename UdpApp615
 config *.udp_tcp.app[0].source.packetLength 1000B
 config *.udp_tcp.app[0].source.productionInterval exponential(100us)
 config *.udp_tcp.app[0].io.destAddress "\"udp_tcp2\""
-config *.udp_tcp.app[0].io.destPort 1000
+config *.udp_tcp.app[0].io.destPort 1001
 config *.udp_tcp.app[0].sink.typename ""
-config *.udp_tcp2.numApps 1
+config *.udp_tcp.app[1].typename DDSPublishApp
+config *.udp_tcp.app[1].io.receiveBroadcast true
+config *.udp_tcp.app[1].io.publish "\"Topic1\""
+config *.udp_tcp.app[1].io.destPort 1000
+config *.udp_tcp.app[1].io.historyCacheLength 10
+config *.udp_tcp.ipv4.ip.limitedBroadcast true
+config *.udp_tcp.app[1].source.packetLength 5000B
+config *.udp_tcp.app[1].source.productionInterval exponential(200ms)
+config *.udp_tcp.app[1].sink.typename ""
+config *.udp_tcp2.numApps 2
 config *.udp_tcp2.app[0].typename UdpApp615
 config *.udp_tcp2.app[0].source.typename ""
 config *.udp_tcp2.app[0].io.destPort -1
-config *.udp_tcp2.app[0].io.localPort 1000
+config *.udp_tcp2.app[0].io.localPort 1001
 config *.udp_tcp2.app[0].sink.flowName "\"default\""
+config *.udp_tcp2.app[1].typename DDSSubscribeApp
+config *.udp_tcp2.app[1].source.subscribe "\"Topic1@1000\""
+config *.udp_tcp2.app[1].io.localPort 1000
+config *.udp_tcp2.app[1].io.receiverBufferLength 1000
+config *.udp_tcp2.app[1].io.nackCountdown 0.25ms
+config *.udp_tcp2.app[1].source.packetLength 20B
+config *.udp_tcp2.ipv4.ip.limitedBroadcast true
+config *.udp_tcp2.app[1].sink.flowName "\"default1\""
 config *.switch.eth[*].bitrate 100Mbps
 
 vector 0 TargetNetwork.udp_tcp.eth[0].macLayer.queue 615.udp_tcp.eth[0].macLayer.queue ETV
-vector 1 TargetNetwork.switch.eth[1].macLayer.queue 615.switch.eth[1].macLayer.queue ETV
-vector 2 TargetNetwork.udp_tcp2.app[0].sink default ETV
-vector 3 TargetNetwork.udp_tcp2.app[0].sink default_loss ETV
-0	2466 869489 11 314801 0 1.499968338991 29983 0 0.18 859.2199999998 49.065200000007
-1	871955 840452 22 314799 0.00008432 1.499967378991 29980 0 0.01 149.90000000001 1.4989999999999
-2	1712407 582199 31 314792 0.00016864 1.499966418991 14989 0.00016864 0.001696876977 6.0948729074431 0.0033761111981215
-3	2294606 397715 31 314792 0.00016864 1.499966418991 14989 0 0 0 0
+vector 1 TargetNetwork.udp_tcp2.eth[0].macLayer.queue 615.udp_tcp2.eth[0].macLayer.queue ETV
+vector 2 TargetNetwork.switch.eth[0].macLayer.queue 615.switch.eth[0].macLayer.queue ETV
+vector 3 TargetNetwork.switch.eth[1].macLayer.queue 615.switch.eth[1].macLayer.queue ETV
+vector 4 TargetNetwork.udp_tcp2.app[0].sink default ETV
+vector 5 TargetNetwork.udp_tcp2.app[0].sink default_loss ETV
+vector 6 TargetNetwork.udp_tcp2.app[1].sink default1 ETV
+vector 7 TargetNetwork.udp_tcp2.app[1].sink default1_loss ETV
+0	3638 871354 25 315484 0 1.499955326274 30046 0 0.18 890.16999999979 52.408300000008
+1	874992 78 27 37760 0 0.180310864025 4 0 0.01 0.02 0.0002
+2	875070 96 35 37774 0.00000592 0.180316784025 4 0 0.01 0.02 0.0002
+3	875166 841756 58 315470 0.00008432 1.49987095674 30044 0 0.01 150.22000000001 1.5021999999999
+4	1716922 582107 67 315478 0.00016864 1.49995527674 14990 0.00016864 0.001696876977 6.2330453889441 0.0035581264808738
+5	2299029 397502 67 315478 0.00016864 1.49995527674 14990 0 0 0 0
+6	2696531 277 77507 268692 0.37758596833 1.283080670358 7 0.054537479468 0.331934471971 1.105790279363 0.23613025346844
+7	2696808 186 77507 268692 0.37758596833 1.283080670358 7 0 0 0 0
 
