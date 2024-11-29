@@ -3,6 +3,7 @@ from terminaltables import AsciiTable
 import xml.etree.ElementTree as ET
 import json
 
+
 class CPUInfo:
     def __init__(self, cores: Optional[int] = None, mips: Optional[float] = None):
         self.cores = cores
@@ -508,6 +509,16 @@ class jobSim:
         self.faults = {}
         self.duration = -1
         self.scheduler = 0
+
+    def setPath(self, path: str):
+        self.path = path
+
+    def addHostItem(self, item, onlyCPU: bool):
+        print("addHostItem")
+        print(item.hostAttr.name)
+        # 创建一个所有属性都为0的HostInfo对象
+        self.hosts[item.name] = HostInfo(item.hostAttr.name, [], [CPUInfo(2, 1000)], 4)
+        self.onlyCPU[item] = onlyCPU
  
     # def addJob(self, job_info: JobInfo):
     #     self.jobs.append(job_info)

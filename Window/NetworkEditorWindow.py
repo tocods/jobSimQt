@@ -22,7 +22,7 @@ from Window.HostNetargsAppEditor import (
 )
 from Window.JsonArrayEditor import JsonArrayEditor
 from Window.DictEditor import DictEditor
-from jobSim import sysSim
+from util.jobSim import sysSim
 
 
 class NetworkEditorWindow(QWidget):
@@ -209,6 +209,7 @@ class NetworkEditorWindow(QWidget):
         )
 
     def update_tree_view(self):
+        print("update_tree_view")
         self.ui.infoList.clear()
         tree_widget = self.ui.infoList
         tree_widget.setHeaderLabel("节点")
@@ -218,11 +219,19 @@ class NetworkEditorWindow(QWidget):
             item = QTreeWidgetItem([host.hostAttr.name])
             for app in host.hostAttr.appArgs:
                 item.addChild(QTreeWidgetItem([app["typename"]]))
+            for name in sysSim.jobs:
+                job = sysSim.jobs[name]
+                if job.host == host.hostAttr.name:
+                    item.addChild(QTreeWidgetItem([job.name]))
             itemhost.addChild(item)
         itemjob = QTreeWidgetItem(tree_widget, ["交换机"])
         for switch in globaldata.switchList:
             item = QTreeWidgetItem([switch.switchAttr.name])
             itemjob.addChild(item)
+        itemFault = QTreeWidgetItem(tree_widget, ["故障"])
+        for fault in sysSim.faults:
+            item = QTreeWidgetItem([fault])
+            itemFault.addChild(item)
 
         tree_widget.expandAll()
 
@@ -245,6 +254,9 @@ class NetworkEditorWindow(QWidget):
         self.hostPhysics.setDict(hostItem.hostAttr.getPhysicsAttr())
         self.hostApp.setData(hostItem.hostAttr.appArgs.copy())
         return
+    
+    def selectHostApp(self, hostItem: HostGraphicItem):
+        return
 
     def selectSwitch(self, switchItem: SwitchGraphicItem):
         self.curSwitchItem = switchItem
@@ -265,6 +277,8 @@ class NetworkEditorWindow(QWidget):
         self.update_tree_view()
 
         return
+    
+
 
     def applySwitch(self):
         data = self.switchEditor.getDict()
