@@ -368,6 +368,7 @@ class GraphicView(QGraphicsView):
             r = random.randint(0, 10000)
             name = "软件" + f"_{r}"
         new_job = JobInfo(name, 10, CPUTaskInfo(100, 1, 1000))
+        new_job.setHost(self.item_clicked.hostAttr.name)
         sysSim.jobs[name] = new_job
         self.nowJob = new_job
         self.jobInfoPage.pushButton.setIcon(QIcon("img/加.png"))
@@ -686,10 +687,8 @@ class GraphicView(QGraphicsView):
             self.kernel_num = 0
             self._initKernelTable(0, None)
         self.jobInfoPage.host.clear()
-        for(host_name, host) in sysSim.hosts.items():
-            self.jobInfoPage.host.addItem(host_name)
-        if job.host != "":
-            self.jobInfoPage.host.setCurrentText(job.host)
+        self.jobInfoPage.host.addItem(job.host)
+        self.jobInfoPage.host.setCurrentText(job.host)
         print(job.host)
         print("===")
         if job.host != "":
