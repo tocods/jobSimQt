@@ -12,7 +12,12 @@
                 {
                     "block_num": 10,
                     "thread_num": 10,
-                    "thread_length": 100
+                    "thread_length": 100,
+                    "hardware": "GPU",
+                    "requested_gddram_size": null,
+                    "task_input_size": null,
+                    "task_output_size": null,
+                    "type": "\u6d6e\u70b9"
                 }
             ],
             "requested_gddram_size": 100,
@@ -20,5 +25,63 @@
             "task_output_size": 100
         },
         "host": "host1"
+    },
+    {
+        "name": "\u8f6f\u4ef6_3930",
+        "period": "10",
+        "cpu_task": {
+            "ram": "100",
+            "pes_number": 1,
+            "length": 1000
+        },
+        "gpu_task": {
+            "kernels": [
+                {
+                    "block_num": 0,
+                    "thread_num": 1,
+                    "thread_length": 10,
+                    "hardware": "CPU",
+                    "requested_gddram_size": 0,
+                    "task_input_size": 0,
+                    "task_output_size": 0,
+                    "type": "\u6d6e\u70b9"
+                },
+                {
+                    "block_num": 0,
+                    "thread_num": 1,
+                    "thread_length": 10,
+                    "hardware": "CPU",
+                    "requested_gddram_size": 0,
+                    "task_input_size": 0,
+                    "task_output_size": 0,
+                    "type": "\u6d6e\u70b9"
+                },
+                {
+                    "block_num": 10,
+                    "thread_num": 10,
+                    "thread_length": 100,
+                    "hardware": "GPU",
+                    "requested_gddram_size": 100,
+                    "task_input_size": 100,
+                    "task_output_size": 100,
+                    "type": "\u6d6e\u70b9"
+                },
+                {
+                    "block_num": 0,
+                    "thread_num": 1,
+                    "thread_length": 10,
+                    "hardware": "CPU",
+                    "requested_gddram_size": 0,
+                    "task_input_size": 0,
+                    "task_output_size": 0,
+                    "type": "\u6d6e\u70b9"
+                }
+            ],
+            "requested_gddram_size": 0,
+            "task_input_size": 0,
+            "task_output_size": 0
+        },
+        "host": "udp_tcp",
+        "deadline": 5
     }
 ]

@@ -223,12 +223,54 @@ border-radius: 15px; </string>
                        <string notr="true">border: none</string>
                       </property>
                       <property name="text">
-                       <string>核FLOPS:</string>
+                       <string>浮点计算能力:</string>
                       </property>
                      </widget>
                     </item>
                     <item>
                      <widget class="QLineEdit" name="cpuflops">
+                      <property name="styleSheet">
+                       <string notr="true">border: none</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_15">
+                    <item>
+                     <widget class="QLabel" name="label_14">
+                      <property name="styleSheet">
+                       <string notr="true">border: none</string>
+                      </property>
+                      <property name="text">
+                       <string>整数计算能力:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="lineEdit">
+                      <property name="styleSheet">
+                       <string notr="true">border: none</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_16">
+                    <item>
+                     <widget class="QLabel" name="label_15">
+                      <property name="styleSheet">
+                       <string notr="true">border: none</string>
+                      </property>
+                      <property name="text">
+                       <string>矩阵运算能力:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="lineEdit_2">
                       <property name="styleSheet">
                        <string notr="true">border: none</string>
                       </property>

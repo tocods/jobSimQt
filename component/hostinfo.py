@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'hostinfo.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.2
+## Created by: Qt User Interface Compiler version 6.8.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -210,6 +210,40 @@ class Ui_HostInfo(object):
 
         self.verticalLayout_3.addLayout(self.horizontalLayout_4)
 
+        self.horizontalLayout_15 = QHBoxLayout()
+        self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
+        self.label_14 = QLabel(self.widget_2)
+        self.label_14.setObjectName(u"label_14")
+        self.label_14.setStyleSheet(u"border: none")
+
+        self.horizontalLayout_15.addWidget(self.label_14)
+
+        self.lineEdit = QLineEdit(self.widget_2)
+        self.lineEdit.setObjectName(u"lineEdit")
+        self.lineEdit.setStyleSheet(u"border: none")
+
+        self.horizontalLayout_15.addWidget(self.lineEdit)
+
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout_15)
+
+        self.horizontalLayout_16 = QHBoxLayout()
+        self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
+        self.label_15 = QLabel(self.widget_2)
+        self.label_15.setObjectName(u"label_15")
+        self.label_15.setStyleSheet(u"border: none")
+
+        self.horizontalLayout_16.addWidget(self.label_15)
+
+        self.lineEdit_2 = QLineEdit(self.widget_2)
+        self.lineEdit_2.setObjectName(u"lineEdit_2")
+        self.lineEdit_2.setStyleSheet(u"border: none")
+
+        self.horizontalLayout_16.addWidget(self.lineEdit_2)
+
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout_16)
+
 
         self.horizontalLayout_13.addLayout(self.verticalLayout_3)
 
@@ -302,7 +336,9 @@ class Ui_HostInfo(object):
         self.label_7.setText(QCoreApplication.translate("HostInfo", u"CPU\u4fe1\u606f", None))
         self.label_8.setText(QCoreApplication.translate("HostInfo", u"CPU\u6570:", None))
         self.label_9.setText(QCoreApplication.translate("HostInfo", u"CPU\u6838\u6570:", None))
-        self.label_10.setText(QCoreApplication.translate("HostInfo", u"\u6838GFLOPS:", None))
+        self.label_10.setText(QCoreApplication.translate("HostInfo", u"\u6d6e\u70b9\u8ba1\u7b97\u80fd\u529b:", None))
+        self.label_14.setText(QCoreApplication.translate("HostInfo", u"\u6574\u6570\u8ba1\u7b97\u80fd\u529b:", None))
+        self.label_15.setText(QCoreApplication.translate("HostInfo", u"\u77e9\u9635\u8fd0\u7b97\u80fd\u529b:", None))
         self.label_11.setText(QCoreApplication.translate("HostInfo", u"GPU\u4fe1\u606f", None))
         self.label_12.setText("")
         self.pushButton.setText("")
