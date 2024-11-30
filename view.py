@@ -331,13 +331,13 @@ class GraphicView(QGraphicsView):
         # 删除键
         item = self.item_clicked
         if isinstance(item, QGraphicsItemGroup):
+            self.gr_scene.remove_node(item)
             sysSim.hosts.pop(item.hostAttr.name)
             # 遍历任务
             for name in sysSim.jobs:
                 job = sysSim.jobs[name]
                 if job.host == item.hostAttr.name:
                     sysSim.jobs.pop(name)
-            self.gr_scene.remove_node(item)
         if isinstance(item, QGraphicsPathItem):
             self.gr_scene.remove_edge(item)
         self.parent.cancelSelect()
