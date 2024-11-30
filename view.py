@@ -14,7 +14,8 @@ from qdarktheme.qtpy.QtWidgets import (
     QGraphicsItemGroup,
     QGraphicsSceneMouseEvent,
     QHBoxLayout,
-    QTableWidget
+    QTableWidget,
+    QComboBox,
 )
 import numpy as np
 from scipy import stats
@@ -347,7 +348,10 @@ class GraphicView(QGraphicsView):
 
     def addJob(self):
         self.sJMain = QWidget()
-        self.sJMain.setWindowTitle("配置软件")
+        screen_size = sysSim.screenSize
+        self.sJMain.setGeometry(screen_size.width() * 0.3, screen_size.height() * 0.3, screen_size.width() * 0.5, screen_size.height() * 0.5)
+        # self.sJMain.center()
+        self.sJMain.setWindowTitle("设置软件属性")
         self.sJMain.setWindowIcon(QIcon("img/仿真.png"))
         hL = QHBoxLayout()
         self.sJMain.setLayout(hL)
@@ -356,6 +360,7 @@ class GraphicView(QGraphicsView):
         self.sJ = QWidget()
         self.jobInfoPage = Ui_JobInfo()
         self.jobInfoPage.setupUi(self.sJ)
+        #self.sJ.setGeometry(screen_size.width() * 0.3, screen_size.width() * 0.3, screen_size.width() * 0.5, screen_size.height() * 0.5)
         self.sJTab.addTab(self.sJ, "计算信息")
         self.hostApp = HostNetargsAppEditorApp("", True)
         self.sJTab.addTab(self.hostApp, "网络流")
@@ -367,19 +372,35 @@ class GraphicView(QGraphicsView):
         while name in sysSim.jobs:
             r = random.randint(0, 10000)
             name = "软件" + f"_{r}"
-        new_job = JobInfo(name, 10, CPUTaskInfo(100, 1, 1000))
+        k = GPUTaskInfo.Kernel(0, 1, 10, 0, 0, 0, 'CPU')
+        new_job = JobInfo(name, 10, CPUTaskInfo(100, 1, 1000), GPUTaskInfo([k]))
+        new_job.setDeadline(5)
+        new_job.setHost(self.item_clicked.hostAttr.name)
         sysSim.jobs[name] = new_job
         self.nowJob = new_job
         self.jobInfoPage.pushButton.setIcon(QIcon("img/加.png"))
         self.jobInfoPage.apply.clicked.connect(self._applyJob)
-        self.jobInfoPage.pushButton.clicked.connect(self._addKernel)
+        self.jobInfoPage.delete_2.clicked.connect(self._delJob)
+        self.addJobMenu = QMenu(self)
+        self.cpuAc = QAction("CPU运行")
+        self.gpuAc = QAction("GPU运行")
+        #self.cpuAc.triggered.connect(self._cpuRun)
+        self.gpuAc.triggered.connect(self._addKernel)
+        self.cpuAc.triggered.connect(self._addCpuKernel)
+        self.addJobMenu.addAction(self.cpuAc)
+        self.addJobMenu.addAction(self.gpuAc)
+        self.jobInfoPage.pushButton.setMenu(self.addJobMenu)
         self.__initJobInfo(new_job)
         self.sJMain.show()
     
     def setCalculation(self):
         self.sH = QWidget()
+        screen_size = sysSim.screenSize
+        self.sH.setWindowIcon(QIcon("img/仿真.png"))
         self.hostInfoPage = Ui_HostInfo()
         self.hostInfoPage.setupUi(self.sH)
+        self.sH.setWindowTitle("设置计算属性")
+        self.sH.setGeometry(screen_size.width() * 0.3, screen_size.height() * 0.3, screen_size.width() * 0.5, screen_size.height() * 0.5)
         host = self.item_clicked.hostAttr.name
         host = sysSim.hosts[host]
         self.nowHost = host
@@ -419,6 +440,11 @@ class GraphicView(QGraphicsView):
         self.faultRecordTable = QTableWidget()
         self.faultInfoPage.shows.addTab(self.faultRecordTable, "错误上报")
         self._initFaultInfo(new_fault)
+        screen_size = sysSim.screenSize
+        self.sF.setGeometry(0, 0, screen_size.width() * 0.4, screen_size.height() * 0.4)
+        self.sF.setWindowIcon(QIcon("img/仿真.png"))
+        self.sF.setWindowTitle("设置故障属性")
+        self.sF.setGeometry(screen_size.width() * 0.3, screen_size.height() * 0.3, screen_size.width() * 0.5, screen_size.height() * 0.5)
         self.sF.show()
 
     def setMaster(self):
@@ -460,6 +486,8 @@ class GraphicView(QGraphicsView):
         self.hostInfoPage.corenum.setValue(cpucore)
         self.hostInfoPage.cpunum.setValue(cpunum)
         self.hostInfoPage.cpuflops.setText(str(host.cpu_infos[0].mips))
+        self.hostInfoPage.lineEdit.setText(str(host.cpu_infos[0].int_mips))
+        self.hostInfoPage.lineEdit_2.setText(str(host.cpu_infos[0].matrix_mips))
         # 设置正则表达式为运行2位小鼠数
         reg_ex =  QRegularExpression("^([0-9]{1,}[.]{0,1}[0-9]{0,2})$")
         validator = QRegularExpressionValidator(reg_ex, self.hostInfoPage.cpuflops)
@@ -484,7 +512,7 @@ class GraphicView(QGraphicsView):
         self.hostInfoPage.gputable.setFont(f)
         delegate = NumericDelegate(self.hostInfoPage.gputable)
         self.hostInfoPage.gputable.setItemDelegate(delegate)
-        self.hostInfoPage.gputable.setColumnCount(7)
+        self.hostInfoPage.gputable.setColumnCount(9)
         self.hostInfoPage.gputable.setRowCount(gpu_num + 1)
         # 设置不可见
         self.hostInfoPage.gputable.verticalHeader().setVisible(False)
@@ -509,12 +537,18 @@ class GraphicView(QGraphicsView):
         item4 = QTableWidgetItem("SM最大线程块")
         item4.setBackground(QColor(192, 192, 192))
         self.hostInfoPage.gputable.setItem(i, 3, item4)
-        item5 = QTableWidgetItem("TFLOPS")
+        item5 = QTableWidgetItem("浮点计算能力")
         item5.setBackground(QColor(192, 192, 192))
         self.hostInfoPage.gputable.setItem(i, 4, item5)
-        item6 = QTableWidgetItem("显存(GB)")
+        item6 = QTableWidgetItem("整数计算能力")
         item6.setBackground(QColor(192, 192, 192))
         self.hostInfoPage.gputable.setItem(i, 5, item6)
+        item7 = QTableWidgetItem("矩阵运算能力")
+        item7.setBackground(QColor(192, 192, 192))
+        self.hostInfoPage.gputable.setItem(i, 6, item7)
+        item8 = QTableWidgetItem("显存(GB)")
+        item8.setBackground(QColor(192, 192, 192))
+        self.hostInfoPage.gputable.setItem(i, 7, item8)
 
         for gpu_info in gpu_infos:
             i += 1
@@ -524,11 +558,13 @@ class GraphicView(QGraphicsView):
             self.hostInfoPage.gputable.setItem(i, 3, QTableWidgetItem(str(gpu_info.max_block_per_sm))
             )
             self.hostInfoPage.gputable.setItem(i, 4, QTableWidgetItem(str(gpu_info.flops_per_core)))
-            self.hostInfoPage.gputable.setItem(i, 5, QTableWidgetItem(str(gpu_info.gddram)))
+            self.hostInfoPage.gputable.setItem(i, 5, QTableWidgetItem(str(gpu_info.int_flops_per_core)))
+            self.hostInfoPage.gputable.setItem(i, 6, QTableWidgetItem(str(gpu_info.matrix_flops_per_core)))
+            self.hostInfoPage.gputable.setItem(i, 7, QTableWidgetItem(str(gpu_info.gddram)))
             del_gpu = QPushButton()
             del_gpu.setText("删除")
             del_gpu.clicked.connect(self._delGpu)
-            self.hostInfoPage.gputable.setCellWidget(i, 6, del_gpu)
+            self.hostInfoPage.gputable.setCellWidget(i, 8, del_gpu)
 
     def _delGpu(self):
         print("del gpu")
@@ -545,7 +581,7 @@ class GraphicView(QGraphicsView):
         self.hostInfoPage.gputable.setRowCount(self.gpu_num + 1)
         i = self.gpu_num
         if self.gpu_num == 1:
-            self.hostInfoPage.gputable.setColumnCount(7)
+            self.hostInfoPage.gputable.setColumnCount(9)
             item1 = QTableWidgetItem("GPU ID")
             item1.setBackground(QColor(192, 192, 192))
             self.hostInfoPage.gputable.setItem(0, 0, item1)
@@ -558,23 +594,31 @@ class GraphicView(QGraphicsView):
             item4 = QTableWidgetItem("SM最大线程块")
             item4.setBackground(QColor(192, 192, 192))
             self.hostInfoPage.gputable.setItem(0, 3, item4)
-            item5 = QTableWidgetItem("TFLOPS")
+            item5 = QTableWidgetItem("浮点计算能力")
             item5.setBackground(QColor(192, 192, 192))
             self.hostInfoPage.gputable.setItem(0, 4, item5)
-            item6 = QTableWidgetItem("显存(GB)")
+            item6 = QTableWidgetItem("整数计算能力")
             item6.setBackground(QColor(192, 192, 192))
             self.hostInfoPage.gputable.setItem(0, 5, item6)
+            item7 = QTableWidgetItem("矩阵运算能力")
+            item7.setBackground(QColor(192, 192, 192))
+            self.hostInfoPage.gputable.setItem(0, 6, item7)
+            item8 = QTableWidgetItem("显存(GB)")
+            item8.setBackground(QColor(192, 192, 192))
+            self.hostInfoPage.gputable.setItem(0, 7, item8)
 
         self.hostInfoPage.gputable.setItem(i, 0, QTableWidgetItem(str(i)))
-        self.hostInfoPage.gputable.setItem(i, 1, QTableWidgetItem("0"))
-        self.hostInfoPage.gputable.setItem(i, 2, QTableWidgetItem("0"))
-        self.hostInfoPage.gputable.setItem(i, 3, QTableWidgetItem("0"))
-        self.hostInfoPage.gputable.setItem(i, 4, QTableWidgetItem("0"))
-        self.hostInfoPage.gputable.setItem(i, 5, QTableWidgetItem("0"))
+        self.hostInfoPage.gputable.setItem(i, 1, QTableWidgetItem("1000"))
+        self.hostInfoPage.gputable.setItem(i, 2, QTableWidgetItem("100"))
+        self.hostInfoPage.gputable.setItem(i, 3, QTableWidgetItem("10"))
+        self.hostInfoPage.gputable.setItem(i, 4, QTableWidgetItem("10"))
+        self.hostInfoPage.gputable.setItem(i, 5, QTableWidgetItem("10"))
+        self.hostInfoPage.gputable.setItem(i, 6, QTableWidgetItem("10"))
+        self.hostInfoPage.gputable.setItem(i, 7, QTableWidgetItem("10"))
         del_gpu = QPushButton()
         del_gpu.setText("删除")
         del_gpu.clicked.connect(self._delGpu)
-        self.hostInfoPage.gputable.setCellWidget(i, 6, del_gpu)
+        self.hostInfoPage.gputable.setCellWidget(i, 8, del_gpu)
 
     def _applyHost(self):
         print("apply host")
@@ -609,9 +653,11 @@ class GraphicView(QGraphicsView):
         cpunum = self.hostInfoPage.cpunum.value()
         cpucore = self.hostInfoPage.corenum.value()
         cpuflops = self.hostInfoPage.cpuflops.text()
+        cpuintflops = self.hostInfoPage.lineEdit.text()
+        cpumatrixflops = self.hostInfoPage.lineEdit_2.text()
         self.nowHost.cpu_infos = []
         for i in range(cpunum):
-            self.nowHost.cpu_infos.append(CPUInfo(cpucore, cpuflops))
+            self.nowHost.cpu_infos.append(CPUInfo(cpucore, cpuflops, cpuintflops, cpumatrixflops))
         self.nowHost.video_card_infos = []
         # 更新GPU
         if self.gpu_num > 0:
@@ -630,12 +676,18 @@ class GraphicView(QGraphicsView):
                     QMessageBox.information(self, "错误", "第" + n + "个GPU的SM最大线程块数不能为0")
                     continue
                 if int(self.hostInfoPage.gputable.item(i + 1, 4).text()) == 0:
-                    QMessageBox.information(self, "错误", "第" + n + "个GPU的核心FLOPs不能为0")
+                    QMessageBox.information(self, "错误", "第" + n + "个GPU的核心浮点计算能力不能为0")
                     continue
                 if int(self.hostInfoPage.gputable.item(i + 1, 5).text()) == 0:
+                    QMessageBox.information(self, "错误", "第" + n + "个GPU的核心整数计算能力不能为0")
+                    continue
+                if int(self.hostInfoPage.gputable.item(i + 1, 6).text()) == 0:
+                    QMessageBox.information(self, "错误", "第" + n + "个GPU的核心矩阵计算能力不能为0")
+                    continue
+                if int(self.hostInfoPage.gputable.item(i + 1, 7).text()) == 0:
                     QMessageBox.information(self, "错误", "第" + n + "个GPU的显存不能为0")
                     continue
-                gpu = GPUInfo(int(self.hostInfoPage.gputable.item(i + 1, 1).text()), (int)(self.hostInfoPage.gputable.item(i + 1, 2).text()), (int)(self.hostInfoPage.gputable.item(i+ 1, 3).text()), (int)(self.hostInfoPage.gputable.item(i+1, 5).text()), (int)(self.hostInfoPage.gputable.item(i+1, 4).text()))
+                gpu = GPUInfo(int(self.hostInfoPage.gputable.item(i + 1, 1).text()), (int)(self.hostInfoPage.gputable.item(i + 1, 2).text()), (int)(self.hostInfoPage.gputable.item(i+ 1, 3).text()), (int)(self.hostInfoPage.gputable.item(i+1, 7).text()), (int)(self.hostInfoPage.gputable.item(i+1, 4).text()), (int)(self.hostInfoPage.gputable.item(i+1, 5).text()), (int)(self.hostInfoPage.gputable.item(i+1, 6).text()))
                 gpus.append(gpu)
             if len(gpus) > 0:
                 videoCardInfo = VideoCardInfo(gpus)
@@ -672,24 +724,22 @@ class GraphicView(QGraphicsView):
         reg_ex =  QRegularExpression("[0-9]+")
         validator = QRegularExpressionValidator(reg_ex, self.jobInfoPage.period)
         self.jobInfoPage.period.setValidator(validator)
-        self.jobInfoPage.corenum.setValue(job.cpu_task.pes_number)
-        self.jobInfoPage.cpuflops.setText(str(job.cpu_task.length))
-        reg_ex =  QRegularExpression("[0-9]+")
-        validator = QRegularExpressionValidator(reg_ex, self.jobInfoPage.cpuflops)
-        self.jobInfoPage.cpuflops.setValidator(validator)
+        # self.jobInfoPage.corenum.setValue(job.cpu_task.pes_number)
+        # self.jobInfoPage.cpuflops.setText(str(job.cpu_task.length))
+        # reg_ex =  QRegularExpression("[0-9]+")
+        # validator = QRegularExpressionValidator(reg_ex, self.jobInfoPage.cpuflops)
+        # self.jobInfoPage.cpuflops.setValidator(validator)
         if job.gpu_task is not None:
             print("gpu task")
-            self.kernel_num = len(job.gpu_task.kernels)
-            self._initKernelTable(len(job.gpu_task.kernels), job.gpu_task)
+            self.kernel_num = len(job.gpu_task.kernels) - 1
+            self._initKernelTable(self.kernel_num, job.gpu_task)
         else:
             print("no gpu task")
             self.kernel_num = 0
             self._initKernelTable(0, None)
         self.jobInfoPage.host.clear()
-        for(host_name, host) in sysSim.hosts.items():
-            self.jobInfoPage.host.addItem(host_name)
-        if job.host != "":
-            self.jobInfoPage.host.setCurrentText(job.host)
+        self.jobInfoPage.host.addItem(job.host)
+        self.jobInfoPage.host.setCurrentText(job.host)
         print(job.host)
         print("===")
         if job.host != "":
@@ -699,103 +749,236 @@ class GraphicView(QGraphicsView):
        
 
     def _initKernelTable(self, kernel_num, gpu_task):
+        print("init kernel table, " + kernel_num.__str__())
         delegate = NumericDelegate(self.jobInfoPage.gputable)
         self.jobInfoPage.gputable.setItemDelegate(delegate)
-        self.jobInfoPage.gputable.setColumnCount(8)
-        self.jobInfoPage.gputable.setRowCount(kernel_num + 1)
+        self.jobInfoPage.gputable.setColumnCount(10)
+        self.jobInfoPage.gputable.setRowCount(2*(kernel_num + 1))
         # 设置不可见
         self.jobInfoPage.gputable.verticalHeader().setVisible(False)
         self.jobInfoPage.gputable.horizontalHeader().setVisible(False)
         i = 0
-        item1 = QTableWidgetItem("内核 ID")
+        item1 = QTableWidgetItem("顺序")
         item1.setBackground(QColor(192, 192, 192))
         self.jobInfoPage.gputable.setItem(i, 0, item1)
-        item2 = QTableWidgetItem("线程块数")
+        item2 = QTableWidgetItem("硬件")
         item2.setBackground(QColor(192, 192, 192))
         self.jobInfoPage.gputable.setItem(i, 1, item2)
         item3 = QTableWidgetItem("线程数")
         item3.setBackground(QColor(192, 192, 192))
         self.jobInfoPage.gputable.setItem(i, 2, item3)
-        item4 = QTableWidgetItem("TFLOP")
+        item4 = QTableWidgetItem("GFLOPs")
         item4.setBackground(QColor(192, 192, 192))
         self.jobInfoPage.gputable.setItem(i, 3, item4)
-        item5 = QTableWidgetItem("需求显存(MB)")    
+        item5 = QTableWidgetItem("类型")
         item5.setBackground(QColor(192, 192, 192))
         self.jobInfoPage.gputable.setItem(i, 4, item5)
-        item6 = QTableWidgetItem("输入(MB)")
-        item6.setBackground(QColor(192, 192, 192))
-        self.jobInfoPage.gputable.setItem(i, 5, item6)
-        item7 = QTableWidgetItem("输出(MB)")
-        item7.setBackground(QColor(192, 192, 192))
-        self.jobInfoPage.gputable.setItem(i, 6, item7)
-        i = 0
+        i += 1
+        cpuTask = gpu_task.kernels[0]
+        self.jobInfoPage.gputable.setItem(i, 0, QTableWidgetItem(str(i)))
+        self.jobInfoPage.gputable.setItem(i, 1, QTableWidgetItem(str(cpuTask.hardware)))
+        self.jobInfoPage.gputable.setItem(i, 2, QTableWidgetItem(str(cpuTask.thread_num)))
+        self.jobInfoPage.gputable.setItem(i, 3, QTableWidgetItem(str(cpuTask.thread_length)))
+        combox = QComboBox()
+        combox.addItem("整数")
+        combox.addItem("浮点")
+        combox.addItem("矩阵")
+        combox.setCurrentText(cpuTask.type)
+        self.jobInfoPage.gputable.setCellWidget(i, 4, combox)   
         if gpu_task is not None:
+            first = True
             for kernel_info in gpu_task.kernels:
-                i += 1
-                self.jobInfoPage.gputable.setItem(i, 0, QTableWidgetItem(str(i)))
-                self.jobInfoPage.gputable.setItem(i, 1, QTableWidgetItem(str(kernel_info.block_num)))
-                self.jobInfoPage.gputable.setItem(i, 2, QTableWidgetItem(str(kernel_info.thread_num)))
-                self.jobInfoPage.gputable.setItem(i, 3, QTableWidgetItem(str(kernel_info.thread_length)))
-                self.jobInfoPage.gputable.setItem(i, 4, QTableWidgetItem(str(gpu_task.requested_gddram_size)))
-                self.jobInfoPage.gputable.setItem(i, 5, QTableWidgetItem(str(gpu_task.task_input_size)))
-                self.jobInfoPage.gputable.setItem(i, 6, QTableWidgetItem(str(gpu_task.task_output_size)))
-                del_kernel = QPushButton()
-                del_kernel.setText("删除")
-                del_kernel.clicked.connect(self._delKernel)
-                self.jobInfoPage.gputable.setCellWidget(i, 7, del_kernel)
+                if first:
+                    first = False
+                    continue
+                if kernel_info.hardware == "CPU":
+                    i += 1
+                    item1 = QTableWidgetItem("顺序")
+                    item1.setBackground(QColor(192, 192, 192))
+                    self.jobInfoPage.gputable.setItem(i, 0, item1)
+                    itemx = QTableWidgetItem("硬件")
+                    itemx.setBackground(QColor(192, 192, 192))
+                    self.jobInfoPage.gputable.setItem(i, 1, itemx)
+                    item2 = QTableWidgetItem("线程数")
+                    item2.setBackground(QColor(192, 192, 192))
+                    self.jobInfoPage.gputable.setItem(i, 2, item2)
+                    item4 = QTableWidgetItem("GFLOPs")
+                    item4.setBackground(QColor(192, 192, 192))
+                    self.jobInfoPage.gputable.setItem(i, 3, item4)
+                    item8 = QTableWidgetItem("类型")
+                    item8.setBackground(QColor(192, 192, 192))
+                    self.jobInfoPage.gputable.setItem(i, 4, item8)
+                    i += 1
+                    self.jobInfoPage.gputable.setItem(i, 0, QTableWidgetItem(str(int((i+1)/2))))
+                    self.jobInfoPage.gputable.setItem(i, 1, QTableWidgetItem(str(kernel_info.hardware)))
+                    self.jobInfoPage.gputable.setItem(i, 2, QTableWidgetItem(str(kernel_info.thread_num)))
+                    self.jobInfoPage.gputable.setItem(i, 3, QTableWidgetItem(str(kernel_info.thread_length)))
+                    typeChose = QComboBox()
+                    typeChose.addItem("整数")
+                    typeChose.addItem("浮点")
+                    typeChose.addItem("矩阵")
+                    typeChose.setCurrentText(kernel_info.type)
+                    self.jobInfoPage.gputable.setCellWidget(i, 4, typeChose)
+                    del_kernel = QPushButton()
+                    del_kernel.setText("删除")
+                    del_kernel.clicked.connect(self._delKernel)
+                    self.jobInfoPage.gputable.setCellWidget(i, 5, del_kernel)
+                else:
+                    i += 1
+                    item1 = QTableWidgetItem("顺序")
+                    item1.setBackground(QColor(192, 192, 192))
+                    self.jobInfoPage.gputable.setItem(i, 0, item1)
+                    itemx = QTableWidgetItem("硬件")
+                    itemx.setBackground(QColor(192, 192, 192))
+                    self.jobInfoPage.gputable.setItem(i, 1, itemx)
+                    item2 = QTableWidgetItem("线程块数")
+                    item2.setBackground(QColor(192, 192, 192))
+                    self.jobInfoPage.gputable.setItem(i, 2, item2)
+                    item3 = QTableWidgetItem("线程数")
+                    item3.setBackground(QColor(192, 192, 192))
+                    self.jobInfoPage.gputable.setItem(i, 3, item3)
+                    item4 = QTableWidgetItem("TFLOPs")
+                    item4.setBackground(QColor(192, 192, 192))
+                    self.jobInfoPage.gputable.setItem(i, 4, item4)
+                    item5 = QTableWidgetItem("需求显存(MB)")    
+                    item5.setBackground(QColor(192, 192, 192))
+                    self.jobInfoPage.gputable.setItem(i, 5, item5)
+                    item6 = QTableWidgetItem("输入(MB)")
+                    item6.setBackground(QColor(192, 192, 192))
+                    self.jobInfoPage.gputable.setItem(i, 6, item6)
+                    item7 = QTableWidgetItem("输出(MB)")
+                    item7.setBackground(QColor(192, 192, 192))
+                    self.jobInfoPage.gputable.setItem(i, 7, item7)
+                    item8 = QTableWidgetItem("类型")
+                    item8.setBackground(QColor(192, 192, 192))
+                    self.jobInfoPage.gputable.setItem(i, 8, item8)
+                    i += 1
+                    self.jobInfoPage.gputable.setItem(i, 0, QTableWidgetItem(str(int((i+1)/2))))
+                    self.jobInfoPage.gputable.setItem(i, 1, QTableWidgetItem(str(kernel_info.hardware)))
+                    self.jobInfoPage.gputable.setItem(i, 2, QTableWidgetItem(str(kernel_info.block_num)))
+                    self.jobInfoPage.gputable.setItem(i, 3, QTableWidgetItem(str(kernel_info.thread_num)))
+                    self.jobInfoPage.gputable.setItem(i, 4, QTableWidgetItem(str(kernel_info.thread_length)))
+                    self.jobInfoPage.gputable.setItem(i, 5, QTableWidgetItem(str(kernel_info.requested_gddram_size)))
+                    self.jobInfoPage.gputable.setItem(i, 6, QTableWidgetItem(str(kernel_info.task_input_size)))
+                    self.jobInfoPage.gputable.setItem(i, 7, QTableWidgetItem(str(kernel_info.task_output_size)))
+                    typeChose = QComboBox()
+                    typeChose.addItem("整数")
+                    typeChose.addItem("浮点")
+                    typeChose.addItem("矩阵")
+                    typeChose.setCurrentText(kernel_info.type)
+                    self.jobInfoPage.gputable.setCellWidget(i, 8, typeChose)
+                    del_kernel = QPushButton()
+                    del_kernel.setText("删除")
+                    del_kernel.clicked.connect(self._delKernel)
+                    self.jobInfoPage.gputable.setCellWidget(i, 9, del_kernel)
+
         
 
     def _delKernel(self):
         print("del kernel")
         row = self.jobInfoPage.gputable.currentRow()
         self.jobInfoPage.gputable.removeRow(row)
+        row -= 1
+        self.jobInfoPage.gputable.removeRow(row)
         self.kernel_num -= 1
-        for i in range(row, self.kernel_num + 1):
-            self.jobInfoPage.gputable.setItem(i, 0, QTableWidgetItem(str(i)))
+        for i in range(row, 2*(self.kernel_num + 1)):
+            if i % 2 == 1:
+                self.jobInfoPage.gputable.setItem(i, 0, QTableWidgetItem(str(int((i+1)/2))))
 
     def _addKernel(self):
         if self.nowJob is None:
             return
         self.kernel_num += 1
         print("add kernel: " + str(self.kernel_num))
-        self.jobInfoPage.gputable.setRowCount(self.kernel_num + 1)
-        i = self.kernel_num
-        if self.kernel_num == 1:
-            self.jobInfoPage.gputable.setColumnCount(8)
-            item1 = QTableWidgetItem("内核 ID")
-            item1.setBackground(QColor(192, 192, 192))
-            self.jobInfoPage.gputable.setItem(0, 0, item1)
-            item2 = QTableWidgetItem("线程块数")
-            item2.setBackground(QColor(192, 192, 192))
-            self.jobInfoPage.gputable.setItem(0, 1, item2)
-            item3 = QTableWidgetItem("线程数")
-            item3.setBackground(QColor(192, 192, 192))
-            self.jobInfoPage.gputable.setItem(0, 2, item3)
-            item4 = QTableWidgetItem("TFLOP")
-            item4.setBackground(QColor(192, 192, 192))
-            self.jobInfoPage.gputable.setItem(0, 3, item4)
-            item5 = QTableWidgetItem("需求显存(MB)")    
-            item5.setBackground(QColor(192, 192, 192))
-            self.jobInfoPage.gputable.setItem(0, 4, item5)
-            item6 = QTableWidgetItem("输入(MB)")
-            item6.setBackground(QColor(192, 192, 192))
-            self.jobInfoPage.gputable.setItem(0, 5, item6)
-            item7 = QTableWidgetItem("输出(MB)")
-            item7.setBackground(QColor(192, 192, 192))
-            self.jobInfoPage.gputable.setItem(0, 6, item7)
+        self.jobInfoPage.gputable.setRowCount(2*(1+self.kernel_num))
+        i = 2+ 2*(self.kernel_num-1)
+        self.jobInfoPage.gputable.setColumnCount(10)
+        item1 = QTableWidgetItem("顺序")
+        item1.setBackground(QColor(192, 192, 192))
+        self.jobInfoPage.gputable.setItem(i, 0, item1)
+        item1 = QTableWidgetItem("硬件")
+        item1.setBackground(QColor(192, 192, 192))
+        self.jobInfoPage.gputable.setItem(i, 1, item1)
+        item2 = QTableWidgetItem("线程块数")
+        item2.setBackground(QColor(192, 192, 192))
+        self.jobInfoPage.gputable.setItem(i, 2, item2)
+        item3 = QTableWidgetItem("线程数")
+        item3.setBackground(QColor(192, 192, 192))
+        self.jobInfoPage.gputable.setItem(i, 3, item3)
+        item4 = QTableWidgetItem("TFLOPs")
+        item4.setBackground(QColor(192, 192, 192))
+        self.jobInfoPage.gputable.setItem(i, 4, item4)
+        item5 = QTableWidgetItem("需求显存(MB)")    
+        item5.setBackground(QColor(192, 192, 192))
+        self.jobInfoPage.gputable.setItem(i, 5, item5)
+        item6 = QTableWidgetItem("输入(MB)")
+        item6.setBackground(QColor(192, 192, 192))
+        self.jobInfoPage.gputable.setItem(i, 6, item6)
+        item7 = QTableWidgetItem("输出(MB)")
+        item7.setBackground(QColor(192, 192, 192))
+        self.jobInfoPage.gputable.setItem(i, 7, item7)
+        item8 = QTableWidgetItem("类型")
+        item8.setBackground(QColor(192, 192, 192))
+        self.jobInfoPage.gputable.setItem(i, 8, item8)
             
-
-        self.jobInfoPage.gputable.setItem(i, 0, QTableWidgetItem(str(i)))
-        self.jobInfoPage.gputable.setItem(i, 1, QTableWidgetItem("0"))
-        self.jobInfoPage.gputable.setItem(i, 2, QTableWidgetItem("0"))
-        self.jobInfoPage.gputable.setItem(i, 3, QTableWidgetItem("0"))
-        self.jobInfoPage.gputable.setItem(i, 4, QTableWidgetItem("0"))
-        self.jobInfoPage.gputable.setItem(i, 5, QTableWidgetItem("0"))
-        self.jobInfoPage.gputable.setItem(i, 6, QTableWidgetItem("0"))
+        i += 1
+        self.jobInfoPage.gputable.setItem(i, 0, QTableWidgetItem(str(int((i+1)/2))))
+        self.jobInfoPage.gputable.setItem(i, 1, QTableWidgetItem("GPU"))
+        self.jobInfoPage.gputable.setItem(i, 2, QTableWidgetItem("10"))
+        self.jobInfoPage.gputable.setItem(i, 3, QTableWidgetItem("10"))
+        self.jobInfoPage.gputable.setItem(i, 4, QTableWidgetItem("100"))
+        self.jobInfoPage.gputable.setItem(i, 5, QTableWidgetItem("100"))
+        self.jobInfoPage.gputable.setItem(i, 6, QTableWidgetItem("100"))
+        self.jobInfoPage.gputable.setItem(i, 7, QTableWidgetItem("100"))
+        typeChose = QComboBox()
+        typeChose.addItem("整数")
+        typeChose.addItem("浮点")
+        typeChose.addItem("矩阵")
+        typeChose.setCurrentText("浮点")
+        self.jobInfoPage.gputable.setCellWidget(i, 8, typeChose)
         del_kernel = QPushButton()
         del_kernel.setText("删除")
         del_kernel.clicked.connect(self._delKernel)
-        self.jobInfoPage.gputable.setCellWidget(i, 7, del_kernel)
+        self.jobInfoPage.gputable.setCellWidget(i, 9, del_kernel)
+
+    def _addCpuKernel(self):
+        if self.nowJob is None:
+            return
+        self.kernel_num += 1
+        print("add kernel: " + str(self.kernel_num))
+        self.jobInfoPage.gputable.setRowCount(2*(1+self.kernel_num))
+        i = 2+ 2*(self.kernel_num-1)
+        self.jobInfoPage.gputable.setColumnCount(9)
+        item1 = QTableWidgetItem("顺序")
+        item1.setBackground(QColor(192, 192, 192))
+        self.jobInfoPage.gputable.setItem(i, 0, item1)
+        item1 = QTableWidgetItem("硬件")
+        item1.setBackground(QColor(192, 192, 192))
+        self.jobInfoPage.gputable.setItem(i, 1, item1)
+        item3 = QTableWidgetItem("线程数")
+        item3.setBackground(QColor(192, 192, 192))
+        self.jobInfoPage.gputable.setItem(i, 2, item3)
+        item4 = QTableWidgetItem("GFLOPs")
+        item4.setBackground(QColor(192, 192, 192))
+        self.jobInfoPage.gputable.setItem(i, 3, item4)
+        item5 = QTableWidgetItem("类型")
+        item5.setBackground(QColor(192, 192, 192))
+        self.jobInfoPage.gputable.setItem(i, 4, item5)
+        i += 1
+        self.jobInfoPage.gputable.setItem(i, 0, QTableWidgetItem(str(int((i+1)/2))))
+        self.jobInfoPage.gputable.setItem(i, 1, QTableWidgetItem("CPU"))
+        self.jobInfoPage.gputable.setItem(i, 2, QTableWidgetItem("1"))
+        self.jobInfoPage.gputable.setItem(i, 3, QTableWidgetItem("10"))
+        combox = QComboBox()
+        combox.addItem("整数")
+        combox.addItem("浮点")
+        combox.addItem("矩阵")
+        combox.setCurrentText("浮点")
+        self.jobInfoPage.gputable.setCellWidget(i, 4, combox)
+        del_kernel = QPushButton()
+        del_kernel.setText("删除")
+        del_kernel.clicked.connect(self._delKernel)
+        self.jobInfoPage.gputable.setCellWidget(i, 5, del_kernel)
 
     def _applyJob(self):
         print("apply job")
@@ -813,14 +996,6 @@ class GraphicView(QGraphicsView):
             QMessageBox.information(self, "错误", "任务请求内存不能为0")
             self.__initJobInfo(self.nowJob)
             return
-        if self.jobInfoPage.corenum.text() == "" or int(self.jobInfoPage.corenum.text()) == 0:
-            QMessageBox.information(self, "错误", "任务请求CPU核数不能为0")
-            self.__initJobInfo(self.nowJob)
-            return
-        if self.jobInfoPage.ram.text() == "" or int(self.jobInfoPage.ram.text()) == 0:
-            QMessageBox.information(self, "错误", "任务CPU部分计算量不能为0")
-            self.__initJobInfo(self.nowJob)
-            return
         if self.jobInfoPage.period.text() == "":
             QMessageBox.information(self, "错误", "任务周期不能为空")
             self.__initJobInfo(self.nowJob)
@@ -829,37 +1004,51 @@ class GraphicView(QGraphicsView):
         self.nowJob.name = self.jobInfoPage.jobName.text()
         self.nowJob.cpu_task.ram = self.jobInfoPage.ram.text()
         self.nowJob.period = self.jobInfoPage.period.text()
-        self.nowJob.cpu_task.pes_number = self.jobInfoPage.corenum.value()
-        self.nowJob.cpu_task.length = self.jobInfoPage.cpuflops.text()
-        self.nowJob.gpu_task = None
-        print(self.jobInfoPage.host.currentText())
+        # self.nowJob.cpu_task.pes_number = self.jobInfoPage.corenum.value()
+        # self.nowJob.cpu_task.length = self.jobInfoPage.cpuflops.text()
+        # self.nowJob.gpu_task = None
+        # print(self.jobInfoPage.host.currentText())
         if self.jobInfoPage.host.currentText() != "不指定":
             self.nowJob.host = self.jobInfoPage.host.currentText()
         else:
             self.nowJob.host = ""
-        if self.kernel_num > 0:
-            request_gddram_total = 0
-            task_input_size_total = 0
-            task_output_size_total = 0
-            kernels = []
-            for i in range(self.jobInfoPage.gputable.rowCount() - 1):
-                n = i + 1
-                n = n.__str__()
-                if int(self.jobInfoPage.gputable.item(i + 1, 1).text()) == 0:
+        request_gddram_total = 0
+        task_input_size_total = 0
+        task_output_size_total = 0
+        kernels = []
+        for i in range(self.jobInfoPage.gputable.rowCount()):
+            if i%2 == 0:
+                continue
+            n = (i + 1) / 2
+            n = n.__str__()
+            if self.jobInfoPage.gputable.item(i, 1).text() == "CPU":
+                if int(self.jobInfoPage.gputable.item(i, 2).text()) == 0:
+                    QMessageBox.information(self, "错误", "第" + n + "个内核的线程数不能为0")
+                    continue
+                if int(self.jobInfoPage.gputable.item(i, 3).text()) == 0:
+                    QMessageBox.information(self, "错误", "第" + n + "个内核的计算量不能为0")
+                    continue
+                combox = self.jobInfoPage.gputable.cellWidget(i, 4)
+                cpuTask = GPUTaskInfo.Kernel(0, int(self.jobInfoPage.gputable.item(i, 2).text()), int(self.jobInfoPage.gputable.item(i, 3).text()), 0, 0, 0, 'CPU', combox.currentText())
+                kernels.append(cpuTask)
+                continue
+            else:
+                if int(self.jobInfoPage.gputable.item(i, 2).text()) == 0:
                     QMessageBox.information(self, "错误", "第" + n + "个内核的线程块数不能为0")
                     continue
-                if int(self.jobInfoPage.gputable.item(i + 1, 2).text()) == 0:
+                if int(self.jobInfoPage.gputable.item(i, 3).text()) == 0:
                     QMessageBox.information(self, "错误", "第" + n + "个内核的每线程块线程数不能为0")
                     continue
-                if int(self.jobInfoPage.gputable.item(i + 1, 3).text()) == 0:
+                if int(self.jobInfoPage.gputable.item(i, 4).text()) == 0:
                     QMessageBox.information(self, "错误", "第" + n + "个内核的每线程FLOPS不能为0")
                     continue
-                request_gddram_total += int(self.jobInfoPage.gputable.item(i + 1, 4).text())
-                task_input_size_total += int(self.jobInfoPage.gputable.item(i + 1, 5).text())
-                task_output_size_total += int(self.jobInfoPage.gputable.item(i + 1, 6).text())
-                kernel = GPUTaskInfo.Kernel(int(self.jobInfoPage.gputable.item(i + 1, 1).text()), int(self.jobInfoPage.gputable.item(i + 1, 2).text()), int(self.jobInfoPage.gputable.item(i + 1, 3).text()))
+                combox = self.jobInfoPage.gputable.cellWidget(i, 8)
+                # request_gddram_total += int(self.jobInfoPage.gputable.item(i + 1, 4).text())
+                # task_input_size_total += int(self.jobInfoPage.gputable.item(i + 1, 5).text())
+                # task_output_size_total += int(self.jobInfoPage.gputable.item(i + 1, 6).text())
+                kernel = GPUTaskInfo.Kernel(int(self.jobInfoPage.gputable.item(i, 2).text()), int(self.jobInfoPage.gputable.item(i, 3).text()), int(self.jobInfoPage.gputable.item(i, 4).text()), int(self.jobInfoPage.gputable.item(i, 5).text()), int(self.jobInfoPage.gputable.item(i, 6).text()), int(self.jobInfoPage.gputable.item(i, 7).text()), 'GPU', combox.currentText())
                 kernels.append(kernel)
-            self.nowJob.gpu_task = GPUTaskInfo(kernels, request_gddram_total, task_input_size_total, task_output_size_total)
+        self.nowJob.gpu_task = GPUTaskInfo(kernels, request_gddram_total, task_input_size_total, task_output_size_total)
         self.__initJobInfo(self.nowJob)
         sysSim.jobs.pop(name_before)
         sysSim.jobs[self.nowJob.name] = self.nowJob
@@ -1130,6 +1319,14 @@ class GraphicView(QGraphicsView):
         self.series.attachAxis(self.axis_y)
 
         return chart
+    
+    def _delJob(self):
+        print("del job")
+        if self.nowJob is None:
+            return
+        sysSim.jobs.pop(self.nowJob.name)
+        self.sJMain.close()
+        self.parent.update_tree_view()
 
     def _showInfo(self):
         print("show info")
@@ -1161,6 +1358,9 @@ class GraphicView(QGraphicsView):
                     self.faultRecordTable = QTableWidget()
                     self.faultInfoPage.shows.addTab(self.faultRecordTable, "错误上报")
                     self._initFaultInfo(new_fault)
+                    self.sF.setWindowTitle("设置故障属性")
+                    self.sF.setWindowIcon(QIcon("img/仿真.png"))
+                    self.sF.setGeometry(sysSim.screenSize.width() *0.3, sysSim.screenSize.height() *0.3, sysSim.screenSize.width() *0.5, sysSim.screenSize.height() *0.5)
                     self.sF.show()
                 else:
                     return
@@ -1170,7 +1370,7 @@ class GraphicView(QGraphicsView):
                 if self.nowClect == "主机":
                     # 选中的是任务
                     self.sJMain = QWidget()
-                    self.sJMain.setWindowTitle("配置软件")
+                    self.sJMain.setWindowTitle("设置软件属性")
                     self.sJMain.setWindowIcon(QIcon("img/仿真.png"))
                     hL = QHBoxLayout()
                     self.sJMain.setLayout(hL)
@@ -1188,7 +1388,17 @@ class GraphicView(QGraphicsView):
                     self.nowJob = new_job
                     self.jobInfoPage.pushButton.setIcon(QIcon("img/加.png"))
                     self.jobInfoPage.apply.clicked.connect(self._applyJob)
-                    self.jobInfoPage.pushButton.clicked.connect(self._addKernel)
+                    self.jobInfoPage.delete_2.clicked.connect(self._delJob)
+                    self.addJobMenu = QMenu(self)
+                    self.cpuAc = QAction("CPU运行")
+                    self.gpuAc = QAction("GPU运行")
+                    #self.cpuAc.triggered.connect(self._cpuRun)
+                    self.gpuAc.triggered.connect(self._addKernel)
+                    self.cpuAc.triggered.connect(self._addCpuKernel)
+                    self.addJobMenu.addAction(self.cpuAc)
+                    self.addJobMenu.addAction(self.gpuAc)
+                    self.jobInfoPage.pushButton.setMenu(self.addJobMenu)
                     self.__initJobInfo(new_job)
+                    self.sJMain.setGeometry(sysSim.screenSize.width() *0.3, sysSim.screenSize.height() *0.3, sysSim.screenSize.width() *0.5, sysSim.screenSize.height() *0.5)
                     self.sJMain.show()
         

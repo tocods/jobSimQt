@@ -5,17 +5,21 @@ import json
 
 
 class CPUInfo:
-    def __init__(self, cores: Optional[int] = None, mips: Optional[float] = None):
+    def __init__(self, cores: Optional[int] = None, mips: Optional[float] = None, int_mips: Optional[float] = None, matrix_mips: Optional[float] = None):
         self.cores = cores
         self.mips = mips
+        self.int_mips = int_mips
+        self.matrix_mips = matrix_mips
 
 class GPUInfo:
-    def __init__(self, cores: Optional[int] = None, core_per_sm: Optional[int] = None, max_block_per_sm: Optional[int] = None, gddram: Optional[int] = None, flops_per_core: Optional[float] = None):
+    def __init__(self, cores: Optional[int] = None, core_per_sm: Optional[int] = None, max_block_per_sm: Optional[int] = None, gddram: Optional[int] = None, flops_per_core: Optional[float] = None, int_flops_per_core: Optional[float] = None, matrix_flops_per_core: Optional[float] = None):
         self.cores = cores
         self.core_per_sm = core_per_sm
         self.max_block_per_sm = max_block_per_sm
         self.gddram = gddram
         self.flops_per_core = flops_per_core
+        self.int_flops_per_core = int_flops_per_core
+        self.matrix_flops_per_core = matrix_flops_per_core
 
 class VideoCardInfo:
     def __init__(self, gpu_infos: Optional[List[GPUInfo]] = None):
@@ -40,15 +44,15 @@ class HostInfo:
 
         table_data.append([self.name,"", "", "", "", ""])
 
-        table_data.append(["CPU", "cores", "mips", "", "", ""])
+        table_data.append(["CPU", "cores", "mips", "int_mips", "matrix_mips", ""])
         for i, cpu_info in enumerate(self.cpu_infos):
-            table_data.append([i, cpu_info.cores, cpu_info.mips, "", "", ""])
+            table_data.append([i, cpu_info.cores, cpu_info.mips, cpu_info.int_mips, cpu_info.matrix_mips, ""])
 
         if self.video_card_infos:
-            table_data.append(["GPU", "cores", "coresPerSM", "maxBlockPerSM", "Gddram", "FLOPS"])
+            table_data.append(["GPU", "cores", "coresPerSM", "maxBlockPerSM", "Gddram", "FLOPS", "intFLOPS", "matrixFLOPS"])
             for i, video_card_info in enumerate(self.video_card_infos):
                 for gpu_info in video_card_info.get_gpu_infos():
-                    table_data.append([i, gpu_info.cores, gpu_info.core_per_sm, gpu_info.max_block_per_sm, gpu_info.gddram, gpu_info.flops_per_core])
+                    table_data.append([i, gpu_info.cores, gpu_info.core_per_sm, gpu_info.max_block_per_sm, gpu_info.gddram, gpu_info.flops_per_core, gpu_info.int_flops_per_core, gpu_info.matrix_flops_per_core])
 
         table = AsciiTable(table_data)
         table.inner_row_border = True
@@ -66,10 +70,22 @@ class CPUTaskInfo:
 
 class GPUTaskInfo:
     class Kernel:
-        def __init__(self, block_num: Optional[int] = None, thread_num: Optional[int] = None, flops: Optional[float] = None):
+        def __init__(self, block_num: Optional[int] = None, thread_num: Optional[int] = None, flops: Optional[float] = None, requested_gddram_size: Optional[int] = None, task_input_size: Optional[int] = None, task_output_size: Optional[int] = None, hardware: Optional[str] = 'GPU', type: Optional[str] = '浮点'):
             self.block_num = block_num
             self.thread_num = thread_num
             self.thread_length = flops
+            self.hardware = hardware
+            self.requested_gddram_size = requested_gddram_size
+            self.task_input_size = task_input_size
+            self.task_output_size = task_output_size
+            self.type = type
+            if self.type == '浮点':
+                self.calcuType = 0
+            elif self.type == '整数':
+                self.calcuType = 1
+            elif self.type == '矩阵':
+                self.calcuType = 2
+
 
     def __init__(self, kernels: Optional[List['GPUTaskInfo.Kernel']] = None, requested_gddram_size: Optional[int] = None, task_input_size: Optional[int] = None, task_output_size: Optional[int] = None):
         self.kernels = kernels
@@ -80,6 +96,7 @@ class GPUTaskInfo:
     def getFLOPS(self) -> float:
         return sum([(float)(kernel.thread_length) * (int)(kernel.thread_num) * (int)(kernel.block_num) for kernel in self.kernels])
 
+# 没用
 class TaskInfo:
     def __init__(self, cpu_task_info: Optional[CPUTaskInfo] = None, gpu_task_info: Optional[GPUTaskInfo] = None):
         self.cpu_task_info = cpu_task_info
@@ -112,6 +129,9 @@ class JobInfo:
     def setHost(self, host):
         self.host = host
 
+    def setDeadline(self, deadline):
+        self.deadline = deadline
+
     def print(self) -> str:
         table_data = [
             ["name", "period", "memory", ""],
@@ -125,9 +145,9 @@ class JobInfo:
         if self.gpu_task is not None and self.gpu_task is not None:
             print("2 is not NONE")
         if self.gpu_task is not None and self.gpu_task is not None and self.gpu_task.kernels:
-            table_data.append(["Kernel", "blockNum", "threadPerBlock", "FLOP"])
+            table_data.append(["Hardware", "BlockNum", "ThreadNum", "FLOPS", "gddram", "inputSize", "outputSize", 'type'])
             for i, kernel in enumerate(self.gpu_task.kernels):
-                table_data.append([i, kernel.block_num, kernel.block_num, kernel.thread_length])
+                table_data.append([kernel.hardware, kernel.block_num, kernel.thread_num, kernel.thread_length, kernel.requested_gddram_size, kernel.task_input_size, kernel.task_output_size, kernel.type])
 
         table = AsciiTable(table_data)
         table.inner_row_border = True
@@ -517,8 +537,11 @@ class jobSim:
         print("addHostItem")
         print(item.hostAttr.name)
         # 创建一个所有属性都为0的HostInfo对象
-        self.hosts[item.name] = HostInfo(item.hostAttr.name, [], [CPUInfo(2, 1000)], 4)
+        self.hosts[item.name] = HostInfo(item.hostAttr.name, [], [CPUInfo(2, 10, 10, 10)], 4)
         self.onlyCPU[item] = onlyCPU
+
+    def setScreenSize(self, sizes):
+        self.screenSize = sizes
  
     # def addJob(self, job_info: JobInfo):
     #     self.jobs.append(job_info)

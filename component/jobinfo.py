@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'jobinfo.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.2
+## Created by: Qt User Interface Compiler version 6.8.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -43,6 +43,11 @@ class Ui_JobInfo(object):
         self.apply.setObjectName(u"apply")
 
         self.horizontalLayout_9.addWidget(self.apply)
+
+        self.delete_2 = QPushButton(JobInfo)
+        self.delete_2.setObjectName(u"delete_2")
+
+        self.horizontalLayout_9.addWidget(self.delete_2)
 
         self.horizontalLayout_9.setStretch(0, 10)
         self.horizontalLayout_9.setStretch(1, 1)
@@ -131,6 +136,28 @@ class Ui_JobInfo(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout_3)
 
+        self.horizontalLayout_14 = QHBoxLayout()
+        self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
+        self.label_15 = QLabel(self.widget)
+        self.label_15.setObjectName(u"label_15")
+        self.label_15.setStyleSheet(u"border: none")
+
+        self.horizontalLayout_14.addWidget(self.label_15)
+
+        self.lineEdit = QLineEdit(self.widget)
+        self.lineEdit.setObjectName(u"lineEdit")
+
+        self.horizontalLayout_14.addWidget(self.lineEdit)
+
+        self.label_16 = QLabel(self.widget)
+        self.label_16.setObjectName(u"label_16")
+        self.label_16.setStyleSheet(u"border: none")
+
+        self.horizontalLayout_14.addWidget(self.label_16)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout_14)
+
         self.horizontalLayout_13 = QHBoxLayout()
         self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
         self.label_14 = QLabel(self.widget)
@@ -158,68 +185,7 @@ class Ui_JobInfo(object):
 
         self.horizontalLayout_7.addLayout(self.verticalLayout_2)
 
-        self.verticalLayout_4 = QVBoxLayout()
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.label_7 = QLabel(JobInfo)
-        self.label_7.setObjectName(u"label_7")
-
-        self.verticalLayout_4.addWidget(self.label_7)
-
-        self.widget_2 = QWidget(JobInfo)
-        self.widget_2.setObjectName(u"widget_2")
-        self.widget_2.setStyleSheet(u"border: 1px solid grey;\n"
-"border-radius: 15px; ")
-        self.horizontalLayout_12 = QHBoxLayout(self.widget_2)
-        self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.label_9 = QLabel(self.widget_2)
-        self.label_9.setObjectName(u"label_9")
-        self.label_9.setStyleSheet(u"border:  none")
-
-        self.horizontalLayout_5.addWidget(self.label_9)
-
-        self.corenum = QSpinBox(self.widget_2)
-        self.corenum.setObjectName(u"corenum")
-        self.corenum.setStyleSheet(u"border:none")
-
-        self.horizontalLayout_5.addWidget(self.corenum)
-
-
-        self.verticalLayout_3.addLayout(self.horizontalLayout_5)
-
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.label_10 = QLabel(self.widget_2)
-        self.label_10.setObjectName(u"label_10")
-        self.label_10.setStyleSheet(u"border: none")
-
-        self.horizontalLayout_4.addWidget(self.label_10)
-
-        self.cpuflops = QLineEdit(self.widget_2)
-        self.cpuflops.setObjectName(u"cpuflops")
-        self.cpuflops.setStyleSheet(u"border: none")
-
-        self.horizontalLayout_4.addWidget(self.cpuflops)
-
-
-        self.verticalLayout_3.addLayout(self.horizontalLayout_4)
-
-
-        self.horizontalLayout_12.addLayout(self.verticalLayout_3)
-
-
-        self.verticalLayout_4.addWidget(self.widget_2)
-
-        self.verticalLayout_4.setStretch(0, 1)
-        self.verticalLayout_4.setStretch(1, 30)
-
-        self.horizontalLayout_7.addLayout(self.verticalLayout_4)
-
         self.horizontalLayout_7.setStretch(0, 1)
-        self.horizontalLayout_7.setStretch(1, 1)
 
         self.verticalLayout_6.addLayout(self.horizontalLayout_7)
 
@@ -288,7 +254,7 @@ class Ui_JobInfo(object):
         self.horizontalLayout_6.addLayout(self.verticalLayout_8)
 
         self.horizontalLayout_6.setStretch(0, 1)
-        self.horizontalLayout_6.setStretch(1, 1)
+        self.horizontalLayout_6.setStretch(1, 2)
 
         self.horizontalLayout_10.addLayout(self.horizontalLayout_6)
 
@@ -302,17 +268,17 @@ class Ui_JobInfo(object):
         JobInfo.setWindowTitle(QCoreApplication.translate("JobInfo", u"Form", None))
         self.label_13.setText("")
         self.apply.setText(QCoreApplication.translate("JobInfo", u"\u5e94\u7528", None))
+        self.delete_2.setText(QCoreApplication.translate("JobInfo", u"\u5220\u9664", None))
         self.label_6.setText(QCoreApplication.translate("JobInfo", u"\u57fa\u672c\u4fe1\u606f", None))
         self.label.setText(QCoreApplication.translate("JobInfo", u"\u4efb\u52a1\u540d:", None))
         self.label_2.setText(QCoreApplication.translate("JobInfo", u"\u9700\u6c42\u5185\u5b58:", None))
-        self.label_3.setText(QCoreApplication.translate("JobInfo", u"MB", None))
+        self.label_3.setText(QCoreApplication.translate("JobInfo", u"GB", None))
         self.label_4.setText(QCoreApplication.translate("JobInfo", u"\u5468\u671f:", None))
         self.label_5.setText(QCoreApplication.translate("JobInfo", u"s", None))
+        self.label_15.setText(QCoreApplication.translate("JobInfo", u"\u622a\u6b62:", None))
+        self.label_16.setText(QCoreApplication.translate("JobInfo", u"s", None))
         self.label_14.setText(QCoreApplication.translate("JobInfo", u"\u4e3b\u673a:", None))
-        self.label_7.setText(QCoreApplication.translate("JobInfo", u"CPU\u9700\u6c42", None))
-        self.label_9.setText(QCoreApplication.translate("JobInfo", u"\u9700\u6c42\u6838\u6570:", None))
-        self.label_10.setText(QCoreApplication.translate("JobInfo", u"GFLOP:", None))
-        self.label_11.setText(QCoreApplication.translate("JobInfo", u"GPU\u9700\u6c42", None))
+        self.label_11.setText(QCoreApplication.translate("JobInfo", u"\u8ba1\u7b97\u9700\u6c42", None))
         self.label_12.setText("")
         self.pushButton.setText("")
         self.label_8.setText(QCoreApplication.translate("JobInfo", u"\u4efb\u52a1\u8fd0\u884c", None))
