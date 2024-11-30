@@ -16,16 +16,7 @@ import inet.transportLayer.contract.IRoce;
 network TargetNetwork extends WiredNetworkBase
 {
     submodules:
-        udp_tcp: StandardHost {
-        }
-        udp_tcp2: StandardHost {
-        }
-        udp_tcp3: StandardHost {
-        }
-        switch: EthernetSwitch {
+        rdma_switch: RoceSwitch {
         }
     connections:
-        udp_tcp.ethg++ <--> { datarate=100Mbps; per=0;} <--> switch.ethg++;
-        udp_tcp2.ethg++ <--> { datarate=100Mbps; per=0;} <--> switch.ethg++;
-        udp_tcp3.ethg++ <--> { datarate=100Mbps; per=0;} <--> switch.ethg++;
 }

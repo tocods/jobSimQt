@@ -1,5 +1,6 @@
 from entity.network_device import NetworkDevice
 import json
+import globaldata
 
 
 # Switch类继承自NetworkDevice
@@ -93,6 +94,16 @@ class TcpSwitch(Switch):
 class RdmaSwitch(Switch):
     def __init__(self, name):
         super().__init__(name, "RoceSwitch")
+
+    def generateINI(self, f):
+        conf = globaldata.networkGlobalConfig["Rdma"]
+        f.write(f'*.{self.name}.eth[*].bitrate = {self.transmission_rate}Mbps\n')
+        f.write(f'*.{self.name}.eth[*].macLayer.queue.queue[*].red.wq = {conf["wq"]}\n')
+        f.write(f'*.{self.name}.eth[*].macLayer.queue.queue[*].red.minth = {conf["minth"]}\n')
+        f.write(f'*.{self.name}.eth[*].macLayer.queue.queue[*].red.maxth = {conf["maxth"]}\n')
+        f.write(f'*.{self.name}.eth[*].macLayer.queue.queue[*].red.maxp = {conf["maxp"]}\n')
+        f.write(f'*.{self.name}.eth[*].macLayer.queue.queue[*].red.pkrate = {conf["pkrate"]}\n')
+        
 
 
 class TsnSwitch(Switch):
