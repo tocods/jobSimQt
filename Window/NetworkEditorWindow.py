@@ -57,7 +57,7 @@ class NetworkEditorWindow(QWidget):
         self.ui.switchSet.clear()
         self.ui.linkSet.clear()
 
-        self.hostPhysics = DictEditor(["name", "ip", "mac"], {}, False)
+        self.hostPhysics = DictEditor(["name", "ip", "mac", "packet_size", "packet_interval"], {}, False)
         self.ui.hostSet.addTab(self.hostPhysics, "物理层")
         self.hostApp = HostNetargsAppEditorApp("", True)
         self.ui.hostSet.addTab(self.hostApp, "协议层")
