@@ -11,13 +11,22 @@ class Host(NetworkDevice):
         self.appArgs = []
         self.ip = "0.0.0.0"
         self.mac = "00:1A:2B:3C:4D:5E"
+        self.packet_size = 100
+        self.packet_interval = 100
+        self.total_traffic = 1000
         self.type = host_type
         self.only_cpu = True
 
         print(f"Host name:{name} host_type:{host_type} created")
 
     def getPhysicsAttr(self):
-        result = {"name": self.name, "ip": self.ip, "mac": self.mac}
+        result = {
+            "name": self.name,
+            "ip": self.ip,
+            "mac": self.mac,
+            "packet_size": self.packet_size,
+            "packet_interval": self.packet_interval,
+        }
 
         return result
 
@@ -25,6 +34,8 @@ class Host(NetworkDevice):
         self.set_name(data["name"])
         self.ip = data["ip"]
         self.mac = data["mac"]
+        self.packet_size = data["packet_size"]
+        self.packet_interval = data["packet_interval"]
 
     def generateINI(self, f):
         f.write(f"*.{self.name}.numApps = {len(self.appArgs)}\n")
@@ -140,30 +151,30 @@ class Host(NetworkDevice):
         f.write("        }\n")
 
     def setXMLElement(self, element):
-        packet_size = "100"
-        packet_interval = "100"
-        total_traffic = "1000"
-        for appArg in self.appArgs:
-            if appArg["typename"] == "UdpApp615" and len(appArg) > 3:
-                packet_interval = self.getNumber(appArg["productionInterval"])
-                packet_size = self.getNumber(appArg["packetLength"])
+        # for appArg in self.appArgs:
+        #     if appArg["typename"] == "UdpApp615" and len(appArg) > 3:
+        #         packet_interval = self.getNumber(appArg["productionInterval"])
+        #         packet_size = self.getNumber(appArg["packetLength"])
         element.set("name", self.name)
         element.set("type", self.type)
         element.set("ip", self.ip)
         element.set("mac", self.mac)
-        element.set("packet_size", packet_size)
-        element.set("packet_interval", packet_interval)
-        element.set("total_traffic", total_traffic)
+        element.set("packet_size", self.packet_size)
+        element.set("packet_interval", self.packet_interval)
+        element.set("total_traffic", self.total_traffic)
         element.set("numApps", str(self.numApps))
         element.set("appArgs", json.dumps(self.appArgs))
         element.set("only_cpu", str(self.only_cpu))
 
     def readXMLElement(self, element):
+        self.name = element.get("name")
         self.ip = element.get("ip")
         self.mac = element.get("mac")
         self.numApps = int(element.get("numApps"))
         self.appArgs = json.loads(element.get("appArgs"))
-
+        self.packet_size = element.get("packet_size")
+        self.packet_interval = element.get("packet_interval")
+        self.total_traffic = element.get("total_traffic")
 
 class NormalHost(Host):
     def __init__(self, name):
