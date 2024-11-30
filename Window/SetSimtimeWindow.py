@@ -49,7 +49,7 @@ class SetSimtimeWindow(QDialog):
             print(command)
             exit_code = os.system(command)
             print(f"仿真完毕 exit_code:{exit_code}")
-            os.popen(f"{globaldata.targetPath[3]} {project.projectPath} -1")
+            os.popen(f"{globaldata.targetPath[3]} {project.projectPath} 0")
         else:
             omnetpp_src = "/Users/shi/omnetpp_new/samples/inet4.5/src"
             command = f"opp_run -r 0 -m -u Cmdenv -c General -n {project_path}:{omnetpp_src} -l {omnetpp_src}/INET {project_path}/Parameters.ini"

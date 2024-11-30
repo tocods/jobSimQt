@@ -398,6 +398,9 @@ class jobSim:
     def addFault(self, fault_info: FaultGenerator):
         self.faults.append(fault_info)
 
+    def setPath(self, path: str):
+        self.path = path
+
 
 global sysSim
 sysSim = jobSim()

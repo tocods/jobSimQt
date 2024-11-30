@@ -23,7 +23,7 @@ class GraphicItem(QGraphicsItemGroup):
         self.pixmap_item = QGraphicsPixmapItem()
         self.pixmap_item.setPixmap(self.pix)
         self.addToGroup(self.pixmap_item)
-
+        self.name = name
         self.text_item = QGraphicsSimpleTextItem(name)
         font = QFont("Arial", 12)
         self.text_item.setFont(font)

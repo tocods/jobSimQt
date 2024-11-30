@@ -204,6 +204,7 @@ class JobSimQt(QMainWindow):
         self.wfont.setPointSize(30)
         self.setFont(self.wfont)
         project.projectPath = path[:]
+        sysSim.setPath(path)
         self._initJsonFiles()
         # 取消标题栏
         # self.setWindowFlags(Qt.FramelessWindowHint)
@@ -326,6 +327,7 @@ class JobSimQt(QMainWindow):
         file_name = QFileDialog.getExistingDirectory(None, "Open File", "")
         print(file_name)
         project.projectPath = file_name
+        sysSim.setPath(file_name)
         globaldata.currentProjectInfo.setFullPath(file_name)
         self._ui.network_editor.load_network_from_xml()
         self._initJsonFiles()
