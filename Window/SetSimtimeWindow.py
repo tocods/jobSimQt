@@ -6,7 +6,9 @@ from qdarktheme.qtpy.QtWidgets import (
     QLineEdit,
     QComboBox,
     QPushButton,
+    QMessageBox,
 )
+from qdarktheme.qtpy.QtGui import QIcon
 import globaldata
 from item import HostGraphicItem
 import project
@@ -14,10 +16,10 @@ import project
 
 class SetSimtimeWindow(QDialog):
 
-    def __init__(self, parent=None):
+    def __init__(self, sysSim, parent=None):
         QDialog.__init__(self)
         layout = QFormLayout()
-
+        self.sysSim = sysSim
         self.time_input = QLineEdit()
         self.time_input.setText("1.5")
         self.type_combo = QComboBox()
@@ -32,6 +34,7 @@ class SetSimtimeWindow(QDialog):
 
         self.setLayout(layout)
         self.setWindowTitle("设置仿真时间")
+        self.setWindowIcon(QIcon("img/仿真.png"))
         self.hide()
 
     def apply_time(self):
@@ -44,6 +47,15 @@ class SetSimtimeWindow(QDialog):
         os_type = platform.system()
         print(project_path)
         if os_type == "Windows":
+            ifHasMaster = False
+            for host in self.sysSim.hosts:
+                h = self.sysSim.hosts[host]
+                if h.ifMaster == True:
+                    ifHasMaster = True
+                    break
+            if not ifHasMaster:
+                q = QMessageBox.information(self, "提示", "请至少设置一个主机为主节点", QMessageBox.Yes)
+                return
             omnetpp_src = "D:/omnetpp-6.0/samples/inet4.5/src"
             command = f"omnet_tools\\opp_run.exe -r 0 -m -u Cmdenv -c General -n {project_path};{omnetpp_src}; -l {omnetpp_src}/INET {project_path}/Parameters.ini"
             print(command)

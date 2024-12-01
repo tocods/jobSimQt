@@ -6,6 +6,7 @@ from component.jobinfo import Ui_JobInfo
 from component.hostinfo import Ui_HostInfo
 from component.faultinfo import Ui_FaultInfo
 import globaldata
+import os
 from qdarktheme.qtpy.QtWidgets import (
     QWidget,
     QGraphicsView,
@@ -204,6 +205,12 @@ class GraphicView(QGraphicsView):
         self.item_clicked = item
         self.menu = QMenu(self)
         if isinstance(self.item_clicked, HostGraphicItem):
+            name = item.hostAttr.name
+            host = sysSim.hosts[name]
+            if host.ifMaster:
+                self.sMaster.setText("设为从节点")
+            else:
+                self.sMaster.setText("设为主节点")
             self.menu.addAction(self.sMaster)
             self.menu.addAction(self.sCalculation)
             self.menu.addAction(self.setJob)
@@ -338,6 +345,12 @@ class GraphicView(QGraphicsView):
                 job = sysSim.jobs[name]
                 if job.host == item.hostAttr.name:
                     sysSim.jobs.pop(name)
+            for name in sysSim.faults:
+                fault = sysSim.faults[name]
+                if fault.aim == item.hostAttr.name:
+                    sysSim.faults.pop(name)
+            sysSim.manager.pop(item.hostAttr.name)
+            self.gr_scene.remove_node(item)
         if isinstance(item, QGraphicsPathItem):
             self.gr_scene.remove_edge(item)
         self.parent.cancelSelect()
@@ -391,6 +404,7 @@ class GraphicView(QGraphicsView):
         self.addJobMenu.addAction(self.gpuAc)
         self.jobInfoPage.pushButton.setMenu(self.addJobMenu)
         self.__initJobInfo(new_job)
+        self.parent.update_tree_view()
         self.sJMain.show()
     
     def setCalculation(self):
@@ -445,15 +459,26 @@ class GraphicView(QGraphicsView):
         self.sF.setWindowIcon(QIcon("img/仿真.png"))
         self.sF.setWindowTitle("设置故障属性")
         self.sF.setGeometry(screen_size.width() * 0.3, screen_size.height() * 0.3, screen_size.width() * 0.5, screen_size.height() * 0.5)
+        self.parent.update_tree_view()
         self.sF.show()
 
     def setMaster(self):
-        if not self.master:
-            self.master = True
-            self.sMaster.setText("设为从节点")
+        host = self.item_clicked.hostAttr.name
+        hostChose = sysSim.hosts[host]
+        if not hostChose.ifMaster:
+            hostChose.ifMaster = True
+            #self.sMaster.setText("设为从节点")
+            manager = sysSim.manager[host]
+            manager.name = "系统管理软件(主)"
+            sysSim.manager[host] = manager
+            self.parent.update_tree_view()
         else:
-            self.master = False
-            self.sMaster.setText("设为主节点")
+            hostChose.ifMaster = False
+            #self.sMaster.setText("设为主节点")
+            manager = sysSim.manager[host]
+            manager.name = "系统管理软件"
+            sysSim.manager[host] = manager
+            self.parent.update_tree_view()
 
     def _initHostInfo(self, host: HostInfo, ifTrueHost=True):
         self.gpu_num = 0
@@ -479,6 +504,10 @@ class GraphicView(QGraphicsView):
                 self.ramshow.setChart(chartRam)
                 chartGPU = painter.plotGpuUtilization(host.name, -1, -1, float("inf"))
                 self.gpushow.setChart(chartGPU)
+        self.hostInfoPage.shows.clear()
+        self.hostInfoPage.shows.addTab(self.cpushow, "CPU利用率")
+        self.hostInfoPage.shows.addTab(self.ramshow, "内存利用率")
+        self.hostInfoPage.shows.addTab(self.gpushow, "GPU利用率")
         self.hostInfoPage.hostName.setText(host.name)
         self.hostInfoPage.ram.setValue(host.ram)
         cpunum = len(host.cpu_infos)
@@ -700,6 +729,16 @@ class GraphicView(QGraphicsView):
         self.nowHost.print()
         sysSim.hosts.pop(name_before)
         sysSim.hosts[self.nowHost.name] = self.nowHost
+        sysSim.manager[self.nowHost.name] = sysSim.manager[name_before]
+        if name_before != self.nowHost.name:
+            sysSim.manager.pop(name_before)
+        for job in sysSim.jobs:
+            if sysSim.jobs[job].host == name_before:
+                sysSim.jobs[job].host = self.nowHost.name
+        for fault in sysSim.faults:
+            if sysSim.faults[fault].aim == name_before:
+                sysSim.faults[fault].aim = self.nowHost.name
+        self.parent.changeHostName(self.nowHost.name)
         self._initHostInfo(self.nowHost)
     
     def __initJobInfo(self, job: JobInfo, ifTrueJob=True):
@@ -775,6 +814,7 @@ class GraphicView(QGraphicsView):
         self.jobInfoPage.gputable.setItem(i, 4, item5)
         i += 1
         cpuTask = gpu_task.kernels[0]
+        print(cpuTask.hardware + "haha")
         self.jobInfoPage.gputable.setItem(i, 0, QTableWidgetItem(str(i)))
         self.jobInfoPage.gputable.setItem(i, 1, QTableWidgetItem(str(cpuTask.hardware)))
         self.jobInfoPage.gputable.setItem(i, 2, QTableWidgetItem(str(cpuTask.thread_num)))
@@ -792,6 +832,7 @@ class GraphicView(QGraphicsView):
                     first = False
                     continue
                 if kernel_info.hardware == "CPU":
+                    print("is cpu")
                     i += 1
                     item1 = QTableWidgetItem("顺序")
                     item1.setBackground(QColor(192, 192, 192))
@@ -824,6 +865,7 @@ class GraphicView(QGraphicsView):
                     del_kernel.clicked.connect(self._delKernel)
                     self.jobInfoPage.gputable.setCellWidget(i, 5, del_kernel)
                 else:
+                    print("is gpu")
                     i += 1
                     item1 = QTableWidgetItem("顺序")
                     item1.setBackground(QColor(192, 192, 192))
@@ -983,6 +1025,10 @@ class GraphicView(QGraphicsView):
     def _applyJob(self):
         print("apply job")
         if self.nowJob is None:
+            return
+        if self.jobInfoPage.jobName.text().startswith("系统管理软件"):
+            QMessageBox.information(self, "错误", "任务名不合法")
+            self.__initJobInfo(self.nowJob)
             return
         if self.jobInfoPage.jobName.text() == "":
             QMessageBox.information(self, "错误", "任务名不能为空")
@@ -1369,6 +1415,12 @@ class GraphicView(QGraphicsView):
                 print(self.nowClect)
                 if self.nowClect == "主机":
                     # 选中的是任务
+                    softwareName = self.parent.ui.infoList.currentItem().text(0)
+                    if softwareName == "系统管理软件":
+                        return
+                    if softwareName == "系统管理软件(主)":
+                        os.popen(f"{globaldata.targetPath[3]} {sysSim.path} 1")
+                        return
                     self.sJMain = QWidget()
                     self.sJMain.setWindowTitle("设置软件属性")
                     self.sJMain.setWindowIcon(QIcon("img/仿真.png"))
