@@ -1,9 +1,9 @@
-file 3201 1733034406                                            
+file 3200 1733037195                                            
 version 3
-run General-0-20241201-14:26:46-17188
+run General-0-20241201-15:13:15-11456
 attr configname General
-attr datetime 20241201-14:26:46
-attr datetimef 20241201-142646
+attr datetime 20241201-15:13:15
+attr datetimef 20241201-151315
 attr experiment General
 attr inifile D:/jobSimQt/project/Parameters.ini
 attr iterationvars ""
@@ -11,7 +11,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network TargetNetwork
-attr processid 17188
+attr processid 11456
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -64,7 +64,7 @@ config *.udp_tcp3.app[0].typename UdpApp615
 config *.udp_tcp3.app[0].source.typename ""
 config *.udp_tcp3.app[0].io.destPort -1
 config *.udp_tcp3.app[0].io.localPort 1001
-config *.udp_tcp3.app[0].sink.flowName "\"default1\""
+config *.udp_tcp3.app[0].sink.flowName "\"default\""
 config *.udp_tcp3.app[1].typename TcpSinkApp
 config *.udp_tcp3.app[1].localPort 1002
 config *.udp_tcp3.app[1].flowName "\"default2\""
@@ -73,7 +73,7 @@ config *.switch.eth[*].bitrate 100Mbps
 vector 0 TargetNetwork.udp_tcp.eth[0].macLayer.queue 615.udp_tcp.eth[0].macLayer.queue ETV
 vector 1 TargetNetwork.udp_tcp2.eth[0].macLayer.queue 615.udp_tcp2.eth[0].macLayer.queue ETV
 vector 2 TargetNetwork.switch.eth[2].macLayer.queue 615.switch.eth[2].macLayer.queue ETV
-0	3112 23 17 19 0 0 2 0 0.01 0.01 0.0001
-1	3135 23 18 20 0 0 2 0 0.01 0.01 0.0001
-2	3158 41 24 25 0.00000576 0.00000576 2 0 0.01 0.01 0.0001
+0	3111 23 17 19 0 0 2 0 0.01 0.01 0.0001
+1	3134 23 18 20 0 0 2 0 0.01 0.01 0.0001
+2	3157 41 24 25 0.00000576 0.00000576 2 0 0.01 0.01 0.0001
 

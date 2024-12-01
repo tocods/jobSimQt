@@ -1,8 +1,8 @@
 version 3
-run General-0-20241201-14:26:46-17188
+run General-0-20241201-15:13:15-11456
 attr configname General
-attr datetime 20241201-14:26:46
-attr datetimef 20241201-142646
+attr datetime 20241201-15:13:15
+attr datetimef 20241201-151315
 attr experiment General
 attr inifile D:/jobSimQt/project/Parameters.ini
 attr iterationvars ""
@@ -10,7 +10,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network TargetNetwork
-attr processid 17188
+attr processid 11456
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -63,7 +63,7 @@ config *.udp_tcp3.app[0].typename UdpApp615
 config *.udp_tcp3.app[0].source.typename ""
 config *.udp_tcp3.app[0].io.destPort -1
 config *.udp_tcp3.app[0].io.localPort 1001
-config *.udp_tcp3.app[0].sink.flowName "\"default1\""
+config *.udp_tcp3.app[0].sink.flowName "\"default\""
 config *.udp_tcp3.app[1].typename TcpSinkApp
 config *.udp_tcp3.app[1].localPort 1002
 config *.udp_tcp3.app[1].flowName "\"default2\""

@@ -25,7 +25,9 @@
             "task_input_size": 100,
             "task_output_size": 100
         },
-        "host": "host1"
+        "host": "host1",
+        "ifManager": false,
+        "ifInMaster": false
     },
     {
         "name": "\u8f6f\u4ef6_3930",
@@ -86,6 +88,8 @@
             "task_input_size": 0,
             "task_output_size": 0
         },
-        "host": "udp_tcp"
+        "host": "udp_tcp",
+        "ifManager": false,
+        "ifInMaster": false
     }
 ]
