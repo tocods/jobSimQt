@@ -310,7 +310,8 @@ class Painter():
         return chart
 
     def plotHostCPUUtilization(self, hostName, startTime, endTime, ifY = True):
-        hostRecord = self.clusterRecord.hostRecords[0]
+        print('plotHostCPUUtilization: ' + hostName)
+        hostRecord = None
         chart = QChart()
         series = QLineSeries()
         series.setName('CPU利用率')
@@ -318,6 +319,10 @@ class Painter():
             if h.hostName == hostName:
                 hostRecord = h
                 break
+        if hostRecord == None:
+            print('No host record found')
+            # QMessageBox.information(self, '', '主机不存在')
+            return chart
         hostUtilizations = hostRecord.getHostUtilizationByTimeRange(startTime, endTime)
         timeList = []
         cpuUtilizationList = []
@@ -343,15 +348,18 @@ class Painter():
     
 
     def plotHostRamUtilization(self, hostName, startTime, endTime, ifY= True):
-        hostRecord = self.clusterRecord.hostRecords[0]
+        hostRecord = None
         chart = QChart()
         series = QLineSeries()
         series.setName('内存利用率')
-
         for h in self.clusterRecord.hostRecords:
             if h.hostName == hostName:
                 hostRecord = h
                 break
+        if hostRecord == None:
+            print('No host record found')
+            # QMessageBox.information(self, '', '主机不存在')
+            return chart
         hostUtilizations = hostRecord.getHostUtilizationByTimeRange(startTime, endTime)
         timeList = []
         ramUtilizationList = []
@@ -385,12 +393,16 @@ class Painter():
     endTime: end time of the plot
     '''
     def plotGpuUtilization(self, hostName, gpu, startTime, endTime, ifY = True):
-        hostRecord = self.clusterRecord.hostRecords[0]
+        hostRecord = None
         chart = QChart()
         for h in self.clusterRecord.hostRecords:
             if h.hostName == hostName:
                 hostRecord = h
                 break
+        if hostRecord == None:
+            print('No host record found')
+            # QMessageBox.information(self, '', '主机不存在')
+            return chart
         if gpu != -1:
             seriesGPU = QLineSeries()
             seriesGPU.setName('GPU' + str(gpu) + '利用率')

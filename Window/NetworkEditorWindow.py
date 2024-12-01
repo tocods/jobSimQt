@@ -32,7 +32,7 @@ class NetworkEditorWindow(QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.setupSide()
-        self.setSimtimeWindow = SetSimtimeWindow(self)
+        self.setSimtimeWindow = SetSimtimeWindow(sysSim, self)
         self.networkGlobalConfigWindow = NetworkGlobalConfig()
         self.init_add_node_menu()
         self.ui.add_host.setMenu(self.add_host_menu)
@@ -212,8 +212,9 @@ class NetworkEditorWindow(QWidget):
         itemhost = QTreeWidgetItem(tree_widget, ["主机"])
         for host in globaldata.hostList:
             item = QTreeWidgetItem([host.hostAttr.name])
-            for app in host.hostAttr.appArgs:
-                item.addChild(QTreeWidgetItem([app["typename"]]))
+            item.addChild(QTreeWidgetItem([sysSim.manager[host.hostAttr.name].name]))
+            # for app in host.hostAttr.appArgs:
+            #     item.addChild(QTreeWidgetItem([app["typename"]]))
             for name in sysSim.jobs:
                 job = sysSim.jobs[name]
                 if job.host == host.hostAttr.name:
@@ -266,12 +267,36 @@ class NetworkEditorWindow(QWidget):
         self.curLinkItem = linkItem
         self.linkEditor.setDict(linkItem.getLinkAttr())
         return
+    
+    def changeHostName(self, name):
+        data = self.hostPhysics.getDict()
+        data["name"] = name
+        self.hostPhysics.setDict(data)
+        self.curHostItem.setName(data["name"])
+        self.curHostItem.hostAttr.applyPhysicsAttr(data)
+        data = self.hostApp.get_json_data() + self.hostMiddleware.get_json_data()
+        self.curHostItem.hostAttr.appArgs = data
+        self.update_tree_view()
 
     def applyHost(self):
         data = self.hostPhysics.getDict()
+        sysSim.hosts[data["name"]] =  sysSim.hosts[self.curHostItem.hostAttr.name]
+        sysSim.hosts.pop(self.curHostItem.hostAttr.name)
+        sysSim.hosts[data["name"]].name = data["name"]
+        for name in sysSim.jobs:
+            job = sysSim.jobs[name]
+            if job.host == self.curHostItem.hostAttr.name:
+                job.host = data["name"]
+        sysSim.manager[data["name"]] = sysSim.manager[self.curHostItem.hostAttr.name]
+        if data["name"] != self.curHostItem.hostAttr.name:
+            print("bbb")
+            sysSim.manager.pop(self.curHostItem.hostAttr.name)
+        for name in sysSim.faults:
+            fault = sysSim.faults[name]
+            if fault.aim == self.curHostItem.hostAttr.name:
+                fault.aim = data["name"]
         self.curHostItem.setName(data["name"])
         self.curHostItem.hostAttr.applyPhysicsAttr(data)
-        sysSim.hosts[self.curHostItem].name = data["name"]
         data = self.hostApp.get_json_data() + self.hostMiddleware.get_json_data()
         self.curHostItem.hostAttr.appArgs = data
         self.update_tree_view()

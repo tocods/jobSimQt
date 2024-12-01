@@ -1,0 +1,30 @@
+[
+    {
+        "name": "\u4e3b\u673a\uff1a\u4e3b\u8282\u70b9",
+        "video_card_infos": [],
+        "cpu_infos": [
+            {
+                "cores": 2,
+                "mips": 10,
+                "int_mips": 10,
+                "matrix_mips": 10
+            }
+        ],
+        "ram": 4,
+        "ifMaster": false
+    },
+    {
+        "name": "\u4e3b\u673a\uff1a\u4ece\u8282\u70b9",
+        "video_card_infos": [],
+        "cpu_infos": [
+            {
+                "cores": 2,
+                "mips": 10,
+                "int_mips": 10,
+                "matrix_mips": 10
+            }
+        ],
+        "ram": 4,
+        "ifMaster": false
+    }
+]

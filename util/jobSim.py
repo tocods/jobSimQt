@@ -35,6 +35,7 @@ class HostInfo:
         self.video_card_infos = video_card_infos
         self.cpu_infos = cpu_infos
         self.ram = ram
+        self.ifMaster = False
 
 
     def print(self) -> str:
@@ -117,6 +118,8 @@ class JobInfo:
         self.cpu_task = cpu_task
         self.gpu_task = gpu_task
         self.host = ""
+        self.ifManager = False
+        self.ifInMaster = False
         
     def getFLOPS(self) -> float:
         FLOPS = 0
@@ -497,6 +500,12 @@ class ParseUtil:
                 kernel_info.block_num = kernel["block_num"]
                 kernel_info.thread_num = kernel["thread_num"]
                 kernel_info.thread_length = kernel["thread_length"]
+                kernel_info.requested_gddram_size = kernel["requested_gddram_size"]
+                kernel_info.task_input_size = kernel["task_input_size"]
+                kernel_info.task_output_size = kernel["task_output_size"]
+                kernel_info.hardware = kernel["hardware"]
+                kernel_info.type = kernel["type"]
+                kernel_info.calcuType = kernel["calcuType"]
                 gpu_task.kernels.append(kernel_info)
             job_info.gpu_task = gpu_task
             jobs.append(job_info)
@@ -529,6 +538,7 @@ class jobSim:
         self.faults = {}
         self.duration = -1
         self.scheduler = 0
+        self.manager = {}
 
     def setPath(self, path: str):
         self.path = path
@@ -537,7 +547,11 @@ class jobSim:
         print("addHostItem")
         print(item.hostAttr.name)
         # 创建一个所有属性都为0的HostInfo对象
-        self.hosts[item.name] = HostInfo(item.hostAttr.name, [], [CPUInfo(2, 10, 10, 10)], 4)
+        self.hosts[item.hostAttr.name] = HostInfo(item.hostAttr.name, [], [CPUInfo(2, 10, 10, 10)], 4)
+        jobManager = JobInfo("系统管理软件", -1, CPUTaskInfo(4, 100), None)
+        jobManager.setHost(item.hostAttr.name)
+        jobManager.ifManager = True
+        self.manager[item.hostAttr.name] = jobManager
         self.onlyCPU[item] = onlyCPU
 
     def setScreenSize(self, sizes):

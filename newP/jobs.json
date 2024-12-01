@@ -1,0 +1,32 @@
+[
+    {
+        "name": "\u6570\u636e\u91c7\u96c6\u8f6f\u4ef6",
+        "period": "10",
+        "cpu_task": {
+            "ram": "100",
+            "pes_number": 1,
+            "length": 1000
+        },
+        "gpu_task": {
+            "kernels": [
+                {
+                    "block_num": 0,
+                    "thread_num": 1,
+                    "thread_length": 10,
+                    "hardware": "CPU",
+                    "requested_gddram_size": 0,
+                    "task_input_size": 0,
+                    "task_output_size": 0,
+                    "type": "\u6d6e\u70b9",
+                    "calcuType": 0
+                }
+            ],
+            "requested_gddram_size": 0,
+            "task_input_size": 0,
+            "task_output_size": 0
+        },
+        "host": "\u4e3b\u673a\uff1a\u4ece\u8282\u70b9",
+        "ifManager": false,
+        "ifInMaster": false
+    }
+]
