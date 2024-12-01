@@ -226,6 +226,8 @@ class ClusterRecord:
         self.hostRecords.append(hostRecord)
 
     def getInUseTime(self):
+        if len(self.hostRecords) == 0:
+            return 0
         inUseTime = 0.0
         maxLen = len(self.hostRecords[0].hostUtilizations)
         for i in range(maxLen):

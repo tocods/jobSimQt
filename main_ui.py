@@ -95,8 +95,10 @@ class UI:
         # statusbar.addPermanentWidget(tool_btn_enable)
         # statusbar.addPermanentWidget(tool_btn_disable)
         # statusbar.showMessage("Enable")
-
-        menu_toggle = menubar.addMenu("系统管理评估平台")
+        if tab != 1:
+            menu_toggle = menubar.addMenu("系统管理评估平台")
+        else:
+            menu_toggle = menubar.addMenu("系统管理软件")
         # menu_toggle.addActions((self.action_enable, self.action_disable))
         menu_toggle.addActions((self.action_out, self.action_refresh))
         menu_theme = menubar.addMenu("")

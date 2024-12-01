@@ -4,6 +4,7 @@
 # --------------------------------------------------------------------------------------------*/
 
 import sys
+from qdarktheme.qtpy.QtWidgets import QGraphicsItem, QGraphicsPixmapItem, QGraphicsItemGroup, QGraphicsSimpleTextItem
 import json
 import webbrowser
 import subprocess
@@ -14,11 +15,12 @@ import random
 from functools import partial
 import project
 import qdarktheme
-from qdarktheme.qtpy.QtCore import QDir, Qt, Slot, QRegularExpression, QUrl, QRectF
+from qdarktheme.qtpy.QtCore import QDir, Qt, Slot, QRegularExpression, QUrl, QRectF, QSize
 from qdarktheme.qtpy.QtGui import *
 from qdarktheme.qtpy.QtWidgets import *
 from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtNetwork import QNetworkCookie
+from jobSimPainter import FaultRecord
 from main_ui import UI
 from util.jobSim import sysSim, ParseUtil, HostInfo, CPUInfo, GPUInfo, VideoCardInfo, JobInfo, CPUTaskInfo, GPUTaskInfo, FaultGenerator, tranFromC2E, tranFromE2C, LinkNet, HostNet, SwtichNet, FlowNet
 from jobSimPage import JobSimPage
@@ -89,8 +91,12 @@ class JobSimQt(QMainWindow):
                     self.javaPath = line.split("=")[1]
         # 取消标题栏
         #self.setWindowFlags(Qt.FramelessWindowHint)
-        self.setWindowTitle("系统管理评估平台")
-        self.setWindowIcon(QIcon(self.selfPath + "/img/数据.png"))
+        if tab != 1:
+            self.setWindowTitle("系统管理评估平台")
+            self.setWindowIcon(QIcon(self.selfPath + "/img/数据.png"))
+        else:
+            self.setWindowTitle("系统管理软件")
+            self.setWindowIcon(QIcon(self.selfPath + "/img/系统管理软件.png"))
         self.nowClect = None
         self._ui = UI()
         self._ui.setup_ui(self, self.selfPath, tab)
@@ -253,6 +259,19 @@ class JobSimQt(QMainWindow):
                 f.write("<faultRecord>")
                 f.write("  <reliability value=\"1\" />")
                 f.write("</faultRecord>")
+        if not os.path.exists(project.projectPath + "/hosts.json"):
+            with open(project.projectPath + "/hosts.json", "w") as f:
+                f.write("[")
+                f.write("]")
+        if not os.path.exists(project.projectPath + "/jobs.json"):
+            with open(project.projectPath + "/jobs.json", "w") as f:
+                f.write("[")
+                f.write("]")
+        if not os.path.exists(project.projectPath + "/faults.json"):
+            with open(project.projectPath + "/faults.json", "w") as f:
+                f.write("[")
+                f.write("]")
+            
     
     def _initAll(self):
         print("init all")
@@ -358,18 +377,19 @@ class JobSimQt(QMainWindow):
         if self.javaPath == "":
             QMessageBox.information(self, "提示", "缺少java路径", QMessageBox.Ok)
             return
-        subprocess.run("netcal.exe " + project.projectPath + "/network_data.xml " + project.projectPath + "/flow_data.xml " + project.projectPath + "/OutputFiles")
+        subprocess.run(self.selfPath + "/netcal.exe " + project.projectPath + "/network_data.xml " + project.projectPath + "/flow_data.xml " + project.projectPath + "/OutputFiles")
+        #QMessageBox.information(self, "提示", self.selfPath + "/netcal.exe " + project.projectPath + "/network_data.xml " + project.projectPath + "/flow_data.xml " + project.projectPath + "/OutputFiles", QMessageBox.Ok)
         self.readNetResult()
         self.__printNet()
 
     
     def readNetResult(self):
-        print("read")
+        #QMessageBox.information(self, "提示", "读取结果", QMessageBox.Ok)
         if not os.path.isdir(project.projectPath + "/OutputFiles"):
             return
         if not os.path.isfile(project.projectPath + "/OutputFiles/NetworkAnalysisResults.xml"):
             return
-        print("lala")
+        #QMessageBox.information(self, "提示", "读取结果2", QMessageBox.Ok)
         root = ET.parse(project.projectPath + "/OutputFiles/NetworkAnalysisResults.xml").getroot()
         self.netResults = []
         for element in root.findall("NetworkAnalysisResult"):
@@ -448,7 +468,7 @@ class JobSimQt(QMainWindow):
         chart.addSeries(ser)
         # chart.setTitle('CPU利用率')
         chart.createDefaultAxes()
-        chart.axisY().setTitleText("端到端总延迟")
+        chart.axisY().setTitleText("端到端总延迟(秒)")
         self.delayChart.setChart(chart)
         self._ui.stack_1.netCalUi.results.setCurrentIndex(1)
 
@@ -472,7 +492,7 @@ class JobSimQt(QMainWindow):
         chart.addSeries(ser)
         # chart.setTitle('CPU利用率')
         chart.createDefaultAxes()
-        chart.axisY().setTitleText("最大缓冲区上界")
+        chart.axisY().setTitleText("最大缓冲区上界(MB)")
         self.backChart.setChart(chart)
         self._ui.stack_1.netCalUi.results.setCurrentIndex(2)
 
@@ -714,14 +734,17 @@ class JobSimQt(QMainWindow):
         # 设置不可见
         self.faultTable.verticalHeader().setVisible(False)
         self.faultTable.horizontalHeader().setVisible(True)
-        self.faultTable.setColumnCount(5)
+        self.faultTable.setColumnCount(6)
         self.faultTable.setRowCount(fault_num)
-        self.faultTable.setHorizontalHeaderLabels(["时间", "故障对象", "类型", "故障硬件",""])
+        self.faultTable.setHorizontalHeaderLabels(["时间", "故障对象", "类型", "故障硬件","详细信息", "准确性"])
         i = 0
         for faultRecord in self.fault_results:
             seeMore = QPushButton()
             seeMore.setText("查看")
             seeMore.clicked.connect(partial(self._initFaultResult, faultRecord))
+            analysis = QPushButton()
+            analysis.setText("诊断")
+            analysis.clicked.connect(partial(self._analysisAccuracy, faultRecord))
             self.faultTable.setItem(i, 0, QTableWidgetItem(faultRecord.time))
             self.faultTable.setItem(i, 1, QTableWidgetItem(faultRecord.object))
             self.faultTable.setItem(i, 2, QTableWidgetItem(faultRecord.type))
@@ -734,15 +757,16 @@ class JobSimQt(QMainWindow):
             else:
                 self.faultTable.setItem(i, 3, QTableWidgetItem("\\"))
             self.faultTable.setCellWidget(i, 4, seeMore)
+            self.faultTable.setCellWidget(i, 5, analysis)
             i += 1
         self._ui.resultui.faultTabs.addTab(self.faultTable, "故障记录")
         self.faultMoreTable = QTableWidget()
         # 设置不可见
         self.faultMoreTable.verticalHeader().setVisible(False)
         self.faultMoreTable.horizontalHeader().setVisible(True)
-        self.faultMoreTable.setColumnCount(5)
+        self.faultMoreTable.setColumnCount(6)
         self.faultMoreTable.setRowCount(0)
-        self.faultMoreTable.setHorizontalHeaderLabels(["是否虚警", "重构成功", "可靠度(前)", "可靠度(后)", "资源可用性"])
+        self.faultMoreTable.setHorizontalHeaderLabels(["是否虚警", "重构成功", "可靠度(前)", "可靠度(后)", "资源余量", ""])
         self._ui.resultui.faultTabs.addTab(self.faultMoreTable, "故障详细信息")
 
     def _initChartView(self, hostName):
@@ -765,8 +789,8 @@ class JobSimQt(QMainWindow):
         for i in range(len(hostR.hostUtilizations)):
             self.hostMore.setItem(i, 0, QTableWidgetItem(hostR.hostUtilizations[i].time))
 
-            self.hostMore.setItem(i, 1, QTableWidgetItem(str(100 * float(hostR.hostUtilizations[i].cpuUtilization))))
-            self.hostMore.setItem(i, 2, QTableWidgetItem(str(100 *float(hostR.hostUtilizations[i].ramUtilization))))
+            self.hostMore.setItem(i, 1, QTableWidgetItem(str(round(100 * float(hostR.hostUtilizations[i].cpuUtilization), 2))))
+            self.hostMore.setItem(i, 2, QTableWidgetItem(str(round(100 *float(hostR.hostUtilizations[i].ramUtilization), 2))))
             gpuStr = ""
             for gpu in hostR.hostUtilizations[i].gpuUtilizations:
                 gpuStr += str(100 * float(gpu.utilization)) + "/"
@@ -802,6 +826,7 @@ class JobSimQt(QMainWindow):
         else:
             self.faultMoreTable.setItem(0, 0, QTableWidgetItem("否"))
         if faultRecord.type == "任务超时":
+            self.faultMoreTable.setColumnCount(5)
             self.faultMoreTable.setItem(0, 1, QTableWidgetItem("\\"))
             self.faultMoreTable.setItem(0, 2, QTableWidgetItem("\\"))
             self.faultMoreTable.setItem(0, 3, QTableWidgetItem("\\"))
@@ -809,6 +834,7 @@ class JobSimQt(QMainWindow):
             self._ui.resultui.faultTabs.setCurrentIndex(1)
             return
         else:
+            self.faultMoreTable.setColumnCount(6)
             if faultRecord.isSuccessRebuild == "True":
                 self.faultMoreTable.setItem(0, 1, QTableWidgetItem("是"))
             else:
@@ -816,7 +842,75 @@ class JobSimQt(QMainWindow):
             self.faultMoreTable.setItem(0, 2, QTableWidgetItem(str(faultRecord.redundancyBefore)))
             self.faultMoreTable.setItem(0, 3, QTableWidgetItem(str(faultRecord.redundancyAfter)))
             self.faultMoreTable.setItem(0, 4, QTableWidgetItem(str(faultRecord.redundancyAfter)))
+            p = QPushButton()
+            p.setText("资源可用性")
+            p.clicked.connect(partial(self._showResource, faultRecord))
+            self.faultMoreTable.setCellWidget(0, 5, p)
         self._ui.resultui.faultTabs.setCurrentIndex(1)
+
+    def _analysisAccuracy(self, faultRecord: FaultRecord):
+        self.a_wid = QWidget()
+        self.a_wid.resize(400, 300)
+        self.a_layout = QVBoxLayout()
+        self.a_wid.setLayout(self.a_layout)
+        self.a_text = QTextEdit()
+        self.a_text.setReadOnly(True)
+        self.a_layout.addWidget(self.a_text)
+        if faultRecord.type == "任务超时":
+            self.a_text.append("            任务运行故障 √         ")
+            self.a_text.append("               |            ")
+            self.a_text.append("    -------------------------------------       ")
+            self.a_text.append("   |                  或                 |     ")
+            self.a_text.append("    -------------------------------------       ")
+            self.a_text.append("   /                                     \     ")
+            self.a_text.append("主机故障，发生迁移 √           截止时间到达未完成")
+            self.a_text.append("                                              |            ")
+            self.a_text.append("                                 ------------------------       ")
+            self.a_text.append("                                |           或           |     ")
+            self.a_text.append("                                 ------------------------       ")
+            self.a_text.append("                                /                        \     ")
+            self.a_text.append("                         主机内存不足                    主机计算能力不足")
+        else:
+            # 绘制故障树如下：
+            #          主机宕机
+            #         img/或门.png
+            #       /        |       \
+            #  CPU故障    内存故障  GPU故障
+            self.a_text.append("            主机宕机 √         ")
+            self.a_text.append("               |            ")
+            self.a_text.append("    ------------------------       ")
+            self.a_text.append("   |           或           |     ")
+            self.a_text.append("    ------------------------       ")
+            self.a_text.append("   /            |            \     ")
+            if faultRecord.hardware == "CPU" or faultRecord.hardware == "cpu":
+                self.a_text.append("CPU故障 √  内存故障     GPU故障")
+            elif faultRecord.hardware == "ram" or faultRecord.hardware == "RAM" or faultRecord.hardware == "内存":
+                self.a_text.append("CPU故障    内存故障 √    GPU故障")
+            elif faultRecord.hardware == "GPU" or faultRecord.hardware == "gpu":
+                self.a_text.append("CPU故障    内存故障     GPU故障 √")
+            
+        if self.tab != 1:
+            self.a_wid.setWindowTitle("准确性诊断")
+            self.a_wid.setWindowIcon(QIcon(self.selfPath + "/img/数据.png"))
+        else:
+            self.a_wid.setWindowTitle("准确性诊断")
+            self.a_wid.setWindowIcon(QIcon(self.selfPath + "/img/系统管理软件.png"))
+        self.a_wid.show()
+
+    def _showResource(self, faultRecord: FaultRecord):
+        self.r_wid = QWidget()
+        self.r_layout = QVBoxLayout()
+        self.r_wid.setLayout(self.r_layout)
+        self.r_text = QTextEdit()
+        self.r_text.setReadOnly(True)
+        self.r_layout.addWidget(self.r_text)
+        if self.tab != 1:
+            self.r_wid.setWindowTitle("资源可用性计算")
+            self.r_wid.setWindowIcon(QIcon(self.selfPath + "/img/数据.png"))
+        else:
+            self.r_wid.setWindowTitle("资源可用性计算")
+            self.r_wid.setWindowIcon(QIcon(self.selfPath + "/img/系统管理软件.png"))
+        self.r_wid.show()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv+["--no-sandbox"])
@@ -838,6 +932,6 @@ if __name__ == "__main__":
     else:
         win = JobSimQt(sys.argv[1], int(sys.argv[2]))
     win.menuBar().setNativeMenuBar(False)
-    app.setStyleSheet(qdarktheme.load_stylesheet())
+    app.setStyleSheet(qdarktheme.load_stylesheet("light"))
     win.show()
     app.exec()
