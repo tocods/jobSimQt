@@ -271,7 +271,7 @@ class NetworkEditorWindow(QWidget):
         data = self.hostPhysics.getDict()
         self.curHostItem.setName(data["name"])
         self.curHostItem.hostAttr.applyPhysicsAttr(data)
-        sysSim.hosts[self.curHostItem].name = data["name"]
+        # sysSim.hosts[self.curHostItem].name = data["name"]
         data = self.hostApp.get_json_data() + self.hostMiddleware.get_json_data()
         self.curHostItem.hostAttr.appArgs = data
         self.update_tree_view()

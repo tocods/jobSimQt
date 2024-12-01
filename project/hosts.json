@@ -9,7 +9,9 @@
                         "core_per_sm": 100,
                         "max_block_per_sm": 10,
                         "gddram": 8,
-                        "flops_per_core": 10000
+                        "flops_per_core": 10000,
+                        "int_flops_per_core": null,
+                        "matrix_flops_per_core": null
                     }
                 ],
                 "pcie_bw": 5
@@ -18,11 +20,15 @@
         "cpu_infos": [
             {
                 "cores": 2,
-                "mips": "2000"
+                "mips": "2000",
+                "int_mips": null,
+                "matrix_mips": null
             },
             {
                 "cores": 2,
-                "mips": "2000"
+                "mips": "2000",
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4
@@ -33,29 +39,9 @@
         "cpu_infos": [
             {
                 "cores": 2,
-                "mips": 1000
-            }
-        ],
-        "ram": 4
-    },
-    {
-        "name": "udp_tcp",
-        "video_card_infos": [],
-        "cpu_infos": [
-            {
-                "cores": 2,
-                "mips": 1000
-            }
-        ],
-        "ram": 4
-    },
-    {
-        "name": "udp_tcp2",
-        "video_card_infos": [],
-        "cpu_infos": [
-            {
-                "cores": 2,
-                "mips": 1000
+                "mips": 1000,
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4
@@ -66,7 +52,35 @@
         "cpu_infos": [
             {
                 "cores": 2,
-                "mips": 1000
+                "mips": 10,
+                "int_mips": 10,
+                "matrix_mips": 10
+            }
+        ],
+        "ram": 4
+    },
+    {
+        "name": "udp_tcp2",
+        "video_card_infos": [],
+        "cpu_infos": [
+            {
+                "cores": 2,
+                "mips": 10,
+                "int_mips": 10,
+                "matrix_mips": 10
+            }
+        ],
+        "ram": 4
+    },
+    {
+        "name": "udp_tcp",
+        "video_card_infos": [],
+        "cpu_infos": [
+            {
+                "cores": 2,
+                "mips": 10,
+                "int_mips": 10,
+                "matrix_mips": 10
             }
         ],
         "ram": 4
