@@ -78,7 +78,12 @@ networkGlobalConfig = {
         "maxRecvQueueSize": "256",
         "windowSize": "100",
         "retransmitTimeout": "20ms",
-        "rateLimit": "1e9"
+        "rateLimit": "1e9",
+        "wq": "0.002",
+        "minth": "5",
+        "maxth": "50",
+        "maxp": "0.02",
+        "pkrate": "150"
     },
     "common": {
         "queueTypename": "DropTailQueue",
