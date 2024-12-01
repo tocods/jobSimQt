@@ -11,9 +11,9 @@ class Host(NetworkDevice):
         self.appArgs = []
         self.ip = "0.0.0.0"
         self.mac = "00:1A:2B:3C:4D:5E"
-        self.packet_size = 100
-        self.packet_interval = 100
-        self.total_traffic = 1000
+        self.packet_size = "100"
+        self.packet_interval = "100"
+        self.total_traffic = "1000"
         self.type = host_type
         self.only_cpu = True
 

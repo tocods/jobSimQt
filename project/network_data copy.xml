@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<Network>
+    <Hosts>
+        <NormalHosts>
+            <NormalHost name="udp_tcp" type="StandardHost" ip="192.168.0.1" mac="00:1A:2B:3C:4D:5E" packet_size="100" packet_interval="100" total_traffic="1000" numApps="0" appArgs="[{&quot;typename&quot;: &quot;UdpApp615&quot;, &quot;packetLength&quot;: &quot;1000B&quot;, &quot;productionInterval&quot;: &quot;10ms&quot;, &quot;destAddress&quot;: &quot;udp_tcp3&quot;, &quot;destPort&quot;: &quot;1001&quot;}]" only_cpu="True" graphic_pos_x="16.0" graphic_pos_y="-59.0" graphic_image="img/Normal_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+            <NormalHost name="udp_tcp2" type="StandardHost" ip="192.168.0.2" mac="00:1A:2B:3C:4D:5E" packet_size="100" packet_interval="100" total_traffic="1000" numApps="0" appArgs="[{&quot;typename&quot;: &quot;TcpSessionApp&quot;, &quot;sendBytes&quot;: &quot;1MiB&quot;, &quot;localPort&quot;: &quot;1000&quot;, &quot;connectAddress&quot;: &quot;udp_tcp3&quot;, &quot;connectPort&quot;: &quot;1002&quot;}]" only_cpu="True" graphic_pos_x="-52.0" graphic_pos_y="311.0" graphic_image="img/Normal_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+            <NormalHost name="udp_tcp3" type="StandardHost" ip="192.168.0.3" mac="00:1A:2B:3C:4D:5E" packet_size="100" packet_interval="100" total_traffic="1000" numApps="0" appArgs="[{&quot;typename&quot;: &quot;UdpApp615&quot;, &quot;localPort&quot;: &quot;1001&quot;, &quot;flowName&quot;: &quot;default1&quot;}, {&quot;typename&quot;: &quot;TcpSinkApp&quot;, &quot;localPort&quot;: &quot;1002&quot;, &quot;flowName&quot;: &quot;default2&quot;}]" only_cpu="True" graphic_pos_x="438.0" graphic_pos_y="239.0" graphic_image="img/Normal_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+        </NormalHosts>
+        <UdpHosts/>
+        <TcpHosts/>
+        <RdmaHosts/>
+        <TsnHosts/>
+        <DdsHosts/>
+    </Hosts>
+    <Switches>
+        <NormalSwitches>
+            <NormalSwitch name="switch" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="167.0" graphic_pos_y="186.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
+        </NormalSwitches>
+        <UdpSwitches/>
+        <TcpSwitches/>
+        <RdmaSwitches/>
+        <TsnSwitches/>
+        <DdsSwitches/>
+    </Switches>
+    <Links>
+        <Link name="Link" type="Eth100M" endpoint1="switch" endpoint2="udp_tcp" link_bandwidth="100" error_rate="0"/>
+        <Link name="Link2" type="Eth100M" endpoint1="switch" endpoint2="udp_tcp2" link_bandwidth="100" error_rate="0"/>
+        <Link name="Link3" type="Eth100M" endpoint1="switch" endpoint2="udp_tcp3" link_bandwidth="100" error_rate="0"/>
+    </Links>
+    <GlobalSetting content="{&quot;Tcp&quot;: {&quot;forwarding&quot;: &quot;false&quot;, &quot;retryTimeout&quot;: &quot;1s&quot;, &quot;retryCount&quot;: &quot;3&quot;, &quot;cacheTimeout&quot;: &quot;100s&quot;, &quot;tcpAlgorithmClass&quot;: &quot;TcpReno&quot;}, &quot;Rdma&quot;: {&quot;connectionType&quot;: &quot;RELIABLE_CONNECTION&quot;, &quot;maxSendQueueSize&quot;: &quot;256&quot;, &quot;maxRecvQueueSize&quot;: &quot;256&quot;, &quot;windowSize&quot;: &quot;100&quot;, &quot;retransmitTimeout&quot;: &quot;20ms&quot;, &quot;rateLimit&quot;: &quot;1e9&quot;, &quot;wq&quot;: &quot;0.002&quot;, &quot;minth&quot;: &quot;5&quot;, &quot;maxth&quot;: &quot;50&quot;, &quot;maxp&quot;: &quot;0.02&quot;, &quot;pkrate&quot;: &quot;150&quot;}, &quot;common&quot;: {&quot;queueTypename&quot;: &quot;DropTailQueue&quot;, &quot;queuePacketCapacity&quot;: &quot;20&quot;, &quot;TsnQueue&quot;: []}}"/>
+</Network>

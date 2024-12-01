@@ -280,8 +280,9 @@ class NetworkEditorWindow(QWidget):
 
     def applyHost(self):
         data = self.hostPhysics.getDict()
-        sysSim.hosts[data["name"]] =  sysSim.hosts[self.curHostItem.hostAttr.name]
+        tmp = sysSim.hosts[self.curHostItem.hostAttr.name]
         sysSim.hosts.pop(self.curHostItem.hostAttr.name)
+        sysSim.hosts[data["name"]] =  tmp
         sysSim.hosts[data["name"]].name = data["name"]
         for name in sysSim.jobs:
             job = sysSim.jobs[name]

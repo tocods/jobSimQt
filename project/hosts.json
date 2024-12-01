@@ -1,64 +1,17 @@
 [
     {
-        "name": "host1",
-        "video_card_infos": [
-            {
-                "gpu_infos": [
-                    {
-                        "cores": 1000,
-                        "core_per_sm": 100,
-                        "max_block_per_sm": 10,
-                        "gddram": 8,
-                        "flops_per_core": 10000
-                    }
-                ],
-                "pcie_bw": 5
-            }
-        ],
-        "cpu_infos": [
-            {
-                "cores": 2,
-                "mips": "2000"
-            },
-            {
-                "cores": 2,
-                "mips": "2000"
-            }
-        ],
-        "ram": 4
-    },
-    {
-        "name": "host_9116",
-        "video_card_infos": [],
-        "cpu_infos": [
-            {
-                "cores": 2,
-                "mips": 1000
-            }
-        ],
-        "ram": 4
-    },
-    {
-        "name": "udp_tcp",
-        "video_card_infos": [],
-        "cpu_infos": [
-            {
-                "cores": 2,
-                "mips": 1000
-            }
-        ],
-        "ram": 4
-    },
-    {
         "name": "udp_tcp2",
         "video_card_infos": [],
         "cpu_infos": [
             {
                 "cores": 2,
-                "mips": 1000
+                "mips": 10,
+                "int_mips": 10,
+                "matrix_mips": 10
             }
         ],
-        "ram": 4
+        "ram": 4,
+        "ifMaster": false
     },
     {
         "name": "udp_tcp3",
@@ -66,9 +19,26 @@
         "cpu_infos": [
             {
                 "cores": 2,
-                "mips": 1000
+                "mips": 10,
+                "int_mips": 10,
+                "matrix_mips": 10
             }
         ],
-        "ram": 4
+        "ram": 4,
+        "ifMaster": false
+    },
+    {
+        "name": "udp_tcp",
+        "video_card_infos": [],
+        "cpu_infos": [
+            {
+                "cores": 2,
+                "mips": 10,
+                "int_mips": 10,
+                "matrix_mips": 10
+            }
+        ],
+        "ram": 4,
+        "ifMaster": true
     }
 ]
