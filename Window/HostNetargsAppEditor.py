@@ -150,7 +150,6 @@ class HostNetargsAppEditorApp(HostNetargsAppEditor):
                 "typename": "TSN",
                 "stream": "default",
                 "packetFilter": "expr(udp.destPort == 1000)",
-                "pcp": "0",
             },
         )
         }

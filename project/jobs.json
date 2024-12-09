@@ -88,7 +88,7 @@
             "task_input_size": 0,
             "task_output_size": 0
         },
-        "host": "udp_tcp",
+        "host": "UDP1",
         "ifManager": false,
         "ifInMaster": false
     }

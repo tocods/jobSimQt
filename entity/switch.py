@@ -10,6 +10,7 @@ class Switch(NetworkDevice):
         # 交换机属性，初始化为默认值
         self.num_ports = 1
         self.transmission_rate = 100
+        self.transmission_rate_list = "100,100,100,100,100,100,100,100"
         self.port_buffer_size = 100
         self.tsn_queue = []
 
@@ -18,13 +19,13 @@ class Switch(NetworkDevice):
     def getAttr(self):
         result = {
             "name": self.name,
-            "transmission_rate": self.transmission_rate
+            "transmission_rate_list": self.transmission_rate_list
         }
         return result
     
     def applyAttr(self, data):
         self.set_name(data["name"])
-        self.transmission_rate = data["transmission_rate"]
+        self.transmission_rate_list = data["transmission_rate_list"]
 
     def getTsnQueue(self):
         return self.tsn_queue
@@ -38,6 +39,7 @@ class Switch(NetworkDevice):
         element.set("num_ports", str(self.num_ports))
         element.set("transmission_rate", str(self.transmission_rate))
         element.set("port_buffer_size", str(self.port_buffer_size))
+        element.set("transmission_rate_list", str(self.transmission_rate_list))
 
     def generateINI(self, f):
         f.write(f'*.{self.name}.eth[*].bitrate = {self.transmission_rate}Mbps\n')

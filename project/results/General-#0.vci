@@ -1,9 +1,9 @@
-file 3200 1733037195                                            
+file 137885 1733626613                                          
 version 3
-run General-0-20241201-15:13:15-11456
+run General-0-20241208-10:56:52-13196
 attr configname General
-attr datetime 20241201-15:13:15
-attr datetimef 20241201-151315
+attr datetime 20241208-10:56:52
+attr datetimef 20241208-105652
 attr experiment General
 attr inifile D:/jobSimQt/project/Parameters.ini
 attr iterationvars ""
@@ -11,7 +11,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network TargetNetwork
-attr processid 11456
+attr processid 13196
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -24,7 +24,7 @@ config *.*.ethernet.typename EthernetLayer
 config *.*.eth[*].typename LayeredEthernetInterface
 config *.*.eth[*].bitrate 100Mbps
 config **.eth[*].queue.typename DropTailQueue
-config **.eth[*].queue.packetCapacity 20
+config **.eth[*].queue.packetCapacity 100
 config **.forwarding false
 config **.arp.retryTimeout 1s
 config **.arp.retryCount 3
@@ -40,40 +40,146 @@ config **.tcp.sackSupport false
 config **.tcp.windowScalingSupport false
 config **.tcp.timestampSupport false
 config **.tcp.mss 1452
-config *.configurator.config "xml(\"<config>\\n\" + \"<interface hosts='udp_tcp' address='192.168.0.1' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp2' address='192.168.0.2' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp3' address='192.168.0.3' netmask='255.255.255.x'/>\\n\" + \"</config>\")"
+config *.configurator.config "xml(\"<config>\\n\" + \"<interface hosts='udp_tcp' address='192.168.0.1' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp2' address='192.168.0.2' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp3' address='192.168.0.3' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp4' address='192.168.0.4' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp5' address='192.168.0.5' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp6' address='192.168.0.6' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp7' address='192.168.0.7' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp8' address='192.168.0.8' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp9' address='192.168.0.9' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp10' address='192.168.0.10' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp11' address='192.168.0.11' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp12' address='192.168.0.12' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp13' address='192.168.0.13' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp14' address='192.168.0.14' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp15' address='192.168.0.15' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp16' address='192.168.0.16' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp17' address='192.168.0.17' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp18' address='192.168.0.18' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp19' address='192.168.0.19' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp20' address='192.168.0.20' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp21' address='192.168.0.21' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp22' address='192.168.0.22' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp23' address='192.168.0.23' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp24' address='192.168.0.24' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp25' address='192.168.0.25' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp26' address='192.168.0.26' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp27' address='192.168.0.27' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp28' address='192.168.0.28' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp29' address='192.168.0.29' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp30' address='192.168.0.30' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp31' address='192.168.0.31' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp32' address='192.168.0.32' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp33' address='192.168.0.33' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp34' address='192.168.0.34' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp35' address='192.168.0.35' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp36' address='192.168.0.36' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp37' address='192.168.0.37' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp38' address='192.168.0.38' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp39' address='192.168.0.39' netmask='255.255.255.x'/>\\n\" + \"<interface hosts='udp_tcp40' address='192.168.0.40' netmask='255.255.255.x'/>\\n\" + \"</config>\")"
 config *.udp_tcp.numApps 1
 config *.udp_tcp.app[0].typename UdpApp615
 config *.udp_tcp.app[0].source.packetLength 1000B
 config *.udp_tcp.app[0].source.productionInterval exponential(10ms)
-config *.udp_tcp.app[0].io.destAddress "\"udp_tcp3\""
-config *.udp_tcp.app[0].io.destPort 1001
+config *.udp_tcp.app[0].io.destAddress "\"udp_tcp2\""
+config *.udp_tcp.app[0].io.destPort 1000
 config *.udp_tcp.app[0].sink.typename ""
 config *.udp_tcp2.numApps 1
-config *.udp_tcp2.app[0].typename TcpSessionApp
-config *.udp_tcp2.app[0].sendBytes 1MiB
-config *.udp_tcp2.app[0].active true
-config *.udp_tcp2.app[0].localPort 1000
-config *.udp_tcp2.app[0].connectAddress "\"udp_tcp3\""
-config *.udp_tcp2.app[0].connectPort 1002
-config *.udp_tcp2.app[0].tOpen 0s
-config *.udp_tcp2.app[0].tSend 0s
-config *.udp_tcp2.app[0].tClose 0s
-config *.udp_tcp2.app[0].sendScript "\"\""
-config *.udp_tcp3.numApps 2
-config *.udp_tcp3.app[0].typename UdpApp615
-config *.udp_tcp3.app[0].source.typename ""
-config *.udp_tcp3.app[0].io.destPort -1
-config *.udp_tcp3.app[0].io.localPort 1001
-config *.udp_tcp3.app[0].sink.flowName "\"default\""
-config *.udp_tcp3.app[1].typename TcpSinkApp
-config *.udp_tcp3.app[1].localPort 1002
-config *.udp_tcp3.app[1].flowName "\"default2\""
+config *.udp_tcp2.app[0].typename UdpApp615
+config *.udp_tcp2.app[0].source.typename ""
+config *.udp_tcp2.app[0].io.destPort -1
+config *.udp_tcp2.app[0].io.localPort 1000
+config *.udp_tcp2.app[0].sink.flowName "\"default2\""
+config *.udp_tcp3.numApps 0
+config *.udp_tcp4.numApps 0
+config *.udp_tcp5.numApps 0
+config *.udp_tcp6.numApps 0
+config *.udp_tcp7.numApps 0
+config *.udp_tcp8.numApps 0
+config *.udp_tcp9.numApps 1
+config *.udp_tcp9.app[0].typename UdpApp615
+config *.udp_tcp9.app[0].source.packetLength 1000B
+config *.udp_tcp9.app[0].source.productionInterval exponential(10ms)
+config *.udp_tcp9.app[0].io.destAddress "\"udp_tcp10\""
+config *.udp_tcp9.app[0].io.destPort 1000
+config *.udp_tcp9.app[0].sink.typename ""
+config *.udp_tcp10.numApps 1
+config *.udp_tcp10.app[0].typename UdpApp615
+config *.udp_tcp10.app[0].source.typename ""
+config *.udp_tcp10.app[0].io.destPort -1
+config *.udp_tcp10.app[0].io.localPort 1000
+config *.udp_tcp10.app[0].sink.flowName "\"default10\""
+config *.udp_tcp11.numApps 0
+config *.udp_tcp12.numApps 0
+config *.udp_tcp13.numApps 0
+config *.udp_tcp14.numApps 0
+config *.udp_tcp15.numApps 0
+config *.udp_tcp16.numApps 0
+config *.udp_tcp17.numApps 1
+config *.udp_tcp17.app[0].typename UdpApp615
+config *.udp_tcp17.app[0].source.packetLength 1000B
+config *.udp_tcp17.app[0].source.productionInterval exponential(10ms)
+config *.udp_tcp17.app[0].io.destAddress "\"udp_tcp18\""
+config *.udp_tcp17.app[0].io.destPort 1000
+config *.udp_tcp17.app[0].sink.typename ""
+config *.udp_tcp18.numApps 1
+config *.udp_tcp18.app[0].typename UdpApp615
+config *.udp_tcp18.app[0].source.typename ""
+config *.udp_tcp18.app[0].io.destPort -1
+config *.udp_tcp18.app[0].io.localPort 1000
+config *.udp_tcp18.app[0].sink.flowName "\"default18\""
+config *.udp_tcp19.numApps 0
+config *.udp_tcp20.numApps 0
+config *.udp_tcp21.numApps 0
+config *.udp_tcp22.numApps 0
+config *.udp_tcp23.numApps 0
+config *.udp_tcp24.numApps 0
+config *.udp_tcp25.numApps 0
+config *.udp_tcp26.numApps 0
+config *.udp_tcp27.numApps 0
+config *.udp_tcp28.numApps 0
+config *.udp_tcp29.numApps 1
+config *.udp_tcp29.app[0].typename UdpApp615
+config *.udp_tcp29.app[0].source.packetLength 1000B
+config *.udp_tcp29.app[0].source.productionInterval exponential(10ms)
+config *.udp_tcp29.app[0].io.destAddress "\"udp_tcp30\""
+config *.udp_tcp29.app[0].io.destPort 1000
+config *.udp_tcp29.app[0].sink.typename ""
+config *.udp_tcp30.numApps 1
+config *.udp_tcp30.app[0].typename UdpApp615
+config *.udp_tcp30.app[0].source.typename ""
+config *.udp_tcp30.app[0].io.destPort -1
+config *.udp_tcp30.app[0].io.localPort 1000
+config *.udp_tcp30.app[0].sink.flowName "\"default30\""
+config *.udp_tcp31.numApps 0
+config *.udp_tcp32.numApps 0
+config *.udp_tcp33.numApps 1
+config *.udp_tcp33.app[0].typename UdpApp615
+config *.udp_tcp33.app[0].source.packetLength 1000B
+config *.udp_tcp33.app[0].source.productionInterval exponential(10ms)
+config *.udp_tcp33.app[0].io.destAddress "\"udp_tcp34\""
+config *.udp_tcp33.app[0].io.destPort 1000
+config *.udp_tcp33.app[0].sink.typename ""
+config *.udp_tcp34.numApps 1
+config *.udp_tcp34.app[0].typename UdpApp615
+config *.udp_tcp34.app[0].source.typename ""
+config *.udp_tcp34.app[0].io.destPort -1
+config *.udp_tcp34.app[0].io.localPort 1000
+config *.udp_tcp34.app[0].sink.flowName "\"default34\""
+config *.udp_tcp35.numApps 0
+config *.udp_tcp36.numApps 0
+config *.udp_tcp37.numApps 0
+config *.udp_tcp38.numApps 0
+config *.udp_tcp39.numApps 0
+config *.udp_tcp40.numApps 0
 config *.switch.eth[*].bitrate 100Mbps
+config *.switch2.eth[*].bitrate 100Mbps
+config *.switch3.eth[*].bitrate 100Mbps
+config *.switch4.eth[*].bitrate 100Mbps
+config *.switch5.eth[*].bitrate 100Mbps
 
 vector 0 TargetNetwork.udp_tcp.eth[0].macLayer.queue 615.udp_tcp.eth[0].macLayer.queue ETV
-vector 1 TargetNetwork.udp_tcp2.eth[0].macLayer.queue 615.udp_tcp2.eth[0].macLayer.queue ETV
-vector 2 TargetNetwork.switch.eth[2].macLayer.queue 615.switch.eth[2].macLayer.queue ETV
-0	3111 23 17 19 0 0 2 0 0.01 0.01 0.0001
-1	3134 23 18 20 0 0 2 0 0.01 0.01 0.0001
-2	3157 41 24 25 0.00000576 0.00000576 2 0 0.01 0.01 0.0001
+vector 1 TargetNetwork.udp_tcp9.eth[0].macLayer.queue 615.udp_tcp9.eth[0].macLayer.queue ETV
+vector 2 TargetNetwork.udp_tcp17.eth[0].macLayer.queue 615.udp_tcp17.eth[0].macLayer.queue ETV
+vector 3 TargetNetwork.udp_tcp29.eth[0].macLayer.queue 615.udp_tcp29.eth[0].macLayer.queue ETV
+vector 4 TargetNetwork.udp_tcp33.eth[0].macLayer.queue 615.udp_tcp33.eth[0].macLayer.queue ETV
+vector 5 TargetNetwork.switch.eth[1].macLayer.queue 615.switch.eth[1].macLayer.queue ETV
+vector 6 TargetNetwork.switch2.eth[1].macLayer.queue 615.switch2.eth[1].macLayer.queue ETV
+vector 7 TargetNetwork.switch3.eth[1].macLayer.queue 615.switch3.eth[1].macLayer.queue ETV
+vector 8 TargetNetwork.switch4.eth[5].macLayer.queue 615.switch4.eth[5].macLayer.queue ETV
+vector 9 TargetNetwork.switch5.eth[1].macLayer.queue 615.switch5.eth[1].macLayer.queue ETV
+vector 10 TargetNetwork.udp_tcp2.app[0].sink default2 ETV
+vector 11 TargetNetwork.udp_tcp2.app[0].sink default2_loss ETV
+vector 12 TargetNetwork.udp_tcp10.app[0].sink default10 ETV
+vector 13 TargetNetwork.udp_tcp10.app[0].sink default10_loss ETV
+vector 14 TargetNetwork.udp_tcp18.app[0].sink default18 ETV
+vector 15 TargetNetwork.udp_tcp18.app[0].sink default18_loss ETV
+vector 16 TargetNetwork.udp_tcp30.app[0].sink default30 ETV
+vector 17 TargetNetwork.udp_tcp30.app[0].sink default30_loss ETV
+vector 18 TargetNetwork.udp_tcp34.app[0].sink default34 ETV
+vector 19 TargetNetwork.udp_tcp34.app[0].sink default34_loss ETV
+0	10522 7884 119 15985 0 1.494006179891 296 0 0.01 1.48 0.0148
+1	18406 8359 120 15838 0 1.485992665857 314 0 0.01 1.57 0.0157
+2	26765 7837 121 16006 0 1.494582440647 294 0 0.01 1.47 0.0147
+3	34602 8352 122 15893 0 1.489890783523 314 0 0.01 1.57 0.0157
+4	42954 7935 123 15943 0 1.491794854431 298 0 0.01 1.49 0.0149
+5	50889 7902 144 15990 0.00008432 1.494090499891 296 0 0.01 1.48 0.0148
+6	58791 8377 145 15843 0.00008432 1.486076985857 314 0 0.01 1.57 0.0157
+7	67168 7855 146 16011 0.00008432 1.494666760647 294 0 0.01 1.47 0.0147
+8	75023 8371 147 15906 0.00008432 1.489975103523 314 0 0.01 1.57 0.0157
+9	83394 7953 148 15948 0.00008432 1.491879174431 298 0 0.01 1.49 0.0149
+10	91347 5213 189 15998 0.00016864 1.494174819891 148 0.00016864 0.000206854595 0.024996934595 4.2233879146726e-06
+11	96560 3877 189 15998 0.00016864 1.494174819891 148 0 0 0 0
+12	100437 5523 190 15851 0.00016864 1.486161305857 157 0.00016864 0.00016864 0.02647648 4.4649935872e-06
+13	105960 4110 190 15851 0.00016864 1.486161305857 157 0 0 0 0
+14	110070 5181 191 16019 0.00016864 1.494751080647 147 0.00016864 0.000253366481 0.024874806481 4.2163542152943e-06
+15	115251 3854 191 16019 0.00016864 1.494751080647 147 0 0 0 0
+16	119105 5524 192 15914 0.00016864 1.490059423523 157 0.00016864 0.000213356787 0.026521196787 4.482075256159e-06
+17	124629 4107 192 15914 0.00016864 1.490059423523 157 0 0 0 0
+18	128736 5244 193 15962 0.00016864 1.491963494431 149 0.00016864 0.00016864 0.02512736 4.2374779904e-06
+19	133980 3903 193 15962 0.00016864 1.491963494431 149 0 0 0 0
 

@@ -38,7 +38,14 @@ class Host(NetworkDevice):
         self.packet_interval = data["packet_interval"]
 
     def generateINI(self, f):
-        f.write(f"*.{self.name}.numApps = {len(self.appArgs)}\n")
+        tmp = self.appArgs.copy()
+        nonTsnAppList = []
+        for index, app in enumerate(self.appArgs):
+            if app["typename"] != "TSN":
+                nonTsnAppList.append(app)
+        self.numApps = len(nonTsnAppList)
+        self.appArgs = nonTsnAppList
+        f.write(f"*.{self.name}.numApps = {self.numApps}\n")
         for index in range(0, len(self.appArgs)):
             appArg = self.appArgs[index]
             if appArg["typename"] == "UdpApp615":
@@ -52,6 +59,8 @@ class Host(NetworkDevice):
             if appArg["typename"] == "DDSSubscribeApp":
                 self.generateINIDdsSink(f, index)
             f.write("\n")
+        
+        self.appArgs = tmp
 
     def getNumber(self, s: str):
         i = 0
@@ -335,8 +344,6 @@ class TsnHost(Host):
         self.numApps = int(element.get("numApps"))
         print(element.get("appArgs"))
         self.appArgs = json.loads(element.get("appArgs"))
-        print(element.get("tsnArgs"))
-        tsnArgs = json.loads(element.get("tsnArgs"))
 
 
 class DdsHost(Host):

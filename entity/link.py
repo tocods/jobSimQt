@@ -9,12 +9,16 @@ class Link:
         self.error_rate = 0
 
         self.endpoint1 = endpoint1  # 连接一端
+        self.endpoint1port = 0
         self.endpoint2 = endpoint2  # 连接另一端
+        self.endpoint2port = 0
         self.type = type
 
     def applyAttr(self, data):
         self.link_bandwidth = data["link_bandwidth"]
         self.error_rate = data["error_rate"]
+        self.endpoint1port = data["endpoint1port"]
+        self.endpoint2port = data["endpoint2port"]
 
     def set_name(self, name):
         # TODO: 检查名字是否符合omnet规范

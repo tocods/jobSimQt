@@ -2,6 +2,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QWidget,
     QTreeWidgetItem,
     QMenu,
+    QComboBox
 )
 from qdarktheme.qtpy.QtCore import Qt
 from entity.host import *
@@ -57,22 +58,34 @@ class NetworkEditorWindow(QWidget):
         self.ui.switchSet.clear()
         self.ui.linkSet.clear()
 
-        self.hostPhysics = DictEditor(["name", "ip", "mac", "packet_size", "packet_interval"], {}, False)
+        self.hostPhysics = DictEditor(
+            ["name", "ip", "mac", "packet_size", "packet_interval"], {}, False
+        )
         self.ui.hostSet.addTab(self.hostPhysics, "物理层")
         self.hostApp = HostNetargsAppEditorApp("", True)
         self.ui.hostSet.addTab(self.hostApp, "协议层")
         self.hostMiddleware = HostNetargsAppEditorMiddleware("", True)
         self.ui.hostSet.addTab(self.hostMiddleware, "中间件层")
 
-        self.linkEditor = DictEditor(["link_bandwidth", "error_rate"], {}, False)
+        self.linkEditor = DictEditor(
+            [
+                "link_bandwidth",
+                "error_rate",
+                "endpoint1",
+                "endpoint1port",
+                "endpoint2",
+                "endpoint2port",
+            ],
+            {},
+            False,
+        )
         self.ui.linkSet.addTab(self.linkEditor, "链路速率")
 
-        self.switchEditor = DictEditor(["name", "transmission_rate"], {}, False)
+        self.switchEditor = DictEditor(["name", "transmission_rate_list"], {}, False)
         self.ui.switchSet.addTab(self.switchEditor, "交换机")
         self.tsnQueue = JsonArrayEditor(
             "",
             {
-                
                 "display-name": "default",
                 "offset": "0ms",
                 "durations": "[1ms, 10ms]",
@@ -251,7 +264,7 @@ class NetworkEditorWindow(QWidget):
         self.hostApp.setData(hostItem.hostAttr.appArgs.copy())
         self.hostMiddleware.setData(hostItem.hostAttr.appArgs.copy())
         return
-    
+
     def selectHostApp(self, hostItem: HostGraphicItem):
         return
 
@@ -267,7 +280,7 @@ class NetworkEditorWindow(QWidget):
         self.curLinkItem = linkItem
         self.linkEditor.setDict(linkItem.getLinkAttr())
         return
-    
+
     def changeHostName(self, name):
         data = self.hostPhysics.getDict()
         data["name"] = name
@@ -282,7 +295,7 @@ class NetworkEditorWindow(QWidget):
         data = self.hostPhysics.getDict()
         tmp = sysSim.hosts[self.curHostItem.hostAttr.name]
         sysSim.hosts.pop(self.curHostItem.hostAttr.name)
-        sysSim.hosts[data["name"]] =  tmp
+        sysSim.hosts[data["name"]] = tmp
         sysSim.hosts[data["name"]].name = data["name"]
         for name in sysSim.jobs:
             job = sysSim.jobs[name]
@@ -303,8 +316,6 @@ class NetworkEditorWindow(QWidget):
         self.update_tree_view()
 
         return
-    
-
 
     def applySwitch(self):
         data = self.switchEditor.getDict()
@@ -493,6 +504,8 @@ class NetworkEditorWindow(QWidget):
             edge.linkAttr.type = element.get("type")
             edge.linkAttr.link_bandwidth = element.get("link_bandwidth")
             edge.linkAttr.error_rate = element.get("error_rate")
+            edge.linkAttr.endpoint1port = element.get("endpoint1port")
+            edge.linkAttr.endpoint2port = element.get("endpoint2port")
 
         # Load all links
         for link_element in links_element.findall("Link"):

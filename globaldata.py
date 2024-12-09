@@ -87,7 +87,7 @@ networkGlobalConfig = {
     },
     "common": {
         "queueTypename": "DropTailQueue",
-        "queuePacketCapacity": "20",
+        "queuePacketCapacity": "100",
         "TsnQueue": []
     },
 }
@@ -193,6 +193,8 @@ def create_xml():
 
         link_element.set("link_bandwidth", str(link_item.linkAttr.link_bandwidth))
         link_element.set("error_rate", str(link_item.linkAttr.error_rate))
+        link_element.set("endpoint1port", str(link_item.linkAttr.endpoint1port))
+        link_element.set("endpoint2port", str(link_item.linkAttr.endpoint2port))
     globalSettingElement = ET.SubElement(root, "GlobalSetting")
     globalSettingElement.set("content", json.dumps(networkGlobalConfig))
 

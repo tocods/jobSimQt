@@ -26,5 +26,6 @@ CHINESE_KEYS = {
     "endpoint1": "端点1",
     "endpoint2": "端点2",
     "transmission_rate": "传输速率(Mbps)",
+    "transmission_rate_list": "传输速率(Mbps)",
     "error_rate": "错误率"
 }
