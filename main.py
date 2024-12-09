@@ -1362,6 +1362,6 @@ if __name__ == "__main__":
     # QDir.addSearchPath("icons", f"{get_project_root_path().as_posix()}/widget_gallery/ui/svg")
     win = JobSimQt()
     win.menuBar().setNativeMenuBar(False)
-    app.setStyleSheet(qdarktheme.load_stylesheet())
+    app.setStyleSheet(qdarktheme.load_stylesheet("light"))
     win.show()
     app.exec()
