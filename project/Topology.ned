@@ -97,15 +97,15 @@ network TargetNetwork extends WiredNetworkBase
         udp_tcp40: StandardHost {
         }
         switch: EthernetSwitch {
-        }
+              gates:                   ethg[9];        }
         switch2: EthernetSwitch {
-        }
+              gates:                   ethg[9];        }
         switch3: EthernetSwitch {
-        }
+              gates:                   ethg[9];        }
         switch4: EthernetSwitch {
-        }
+              gates:                   ethg[9];        }
         switch5: EthernetSwitch {
-        }
+              gates:                   ethg[8];        }
     connections:
         udp_tcp.ethg++ <--> { datarate=100Mbps; per=0;} <--> switch.ethg++;
         udp_tcp2.ethg++ <--> { datarate=100Mbps; per=0;} <--> switch.ethg++;

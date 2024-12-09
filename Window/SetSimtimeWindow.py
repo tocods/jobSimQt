@@ -41,6 +41,7 @@ class SetSimtimeWindow(QDialog):
         time = float(self.time_input.text())
         project_path = globaldata.currentProjectInfo.path
         print(f"开始仿真\n 仿真时间:{time}")
+        globaldata.calculate_link_port()
 
         self.generateNED()
         self.generateINI(time)
@@ -78,6 +79,7 @@ class SetSimtimeWindow(QDialog):
             for host in globaldata.hostList:
                 host.hostAttr.generateNED(f)
             for switch in globaldata.switchList:
+                print(switch)
                 switch.switchAttr.generateNED(f)
 
             f.write("    connections:\n")

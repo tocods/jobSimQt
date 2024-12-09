@@ -518,5 +518,5 @@ class NetworkEditorWindow(QWidget):
         )
 
         print("Network loaded from XML!")
-
+        globaldata.calculate_link_port()
         self.update_tree_view()

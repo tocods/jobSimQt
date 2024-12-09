@@ -51,11 +51,11 @@
     </Hosts>
     <Switches>
         <NormalSwitches>
-            <NormalSwitch name="switch" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="-177.0" graphic_pos_y="40.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
-            <NormalSwitch name="switch2" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="75.0" graphic_pos_y="78.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
-            <NormalSwitch name="switch3" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="326.0" graphic_pos_y="110.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
-            <NormalSwitch name="switch4" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="600.0" graphic_pos_y="-35.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
-            <NormalSwitch name="switch5" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" graphic_pos_x="528.0" graphic_pos_y="556.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
+            <NormalSwitch name="switch" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" transmission_rate_list="100,100,100,100,100,100,100,100" graphic_pos_x="-177.0" graphic_pos_y="40.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
+            <NormalSwitch name="switch2" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" transmission_rate_list="100,100,130,100,100,100,100,100" graphic_pos_x="75.0" graphic_pos_y="78.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
+            <NormalSwitch name="switch3" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" transmission_rate_list="100,100,100,100,100,100,100,100" graphic_pos_x="326.0" graphic_pos_y="110.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
+            <NormalSwitch name="switch4" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" transmission_rate_list="100,100,100,100,100,100,100,100" graphic_pos_x="600.0" graphic_pos_y="-35.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
+            <NormalSwitch name="switch5" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" transmission_rate_list="100,100,100,100,100,100,100,100" graphic_pos_x="528.0" graphic_pos_y="556.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
         </NormalSwitches>
         <UdpSwitches/>
         <TcpSwitches/>
@@ -64,50 +64,50 @@
         <DdsSwitches/>
     </Switches>
     <Links>
-        <Link name="Link" type="Eth100M" endpoint1="udp_tcp" endpoint2="switch" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link2" type="Eth100M" endpoint1="udp_tcp2" endpoint2="switch" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link3" type="Eth100M" endpoint1="udp_tcp3" endpoint2="switch" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link4" type="Eth100M" endpoint1="udp_tcp4" endpoint2="switch" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link5" type="Eth100M" endpoint1="udp_tcp5" endpoint2="switch" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link6" type="Eth100M" endpoint1="udp_tcp6" endpoint2="switch" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link7" type="Eth100M" endpoint1="udp_tcp7" endpoint2="switch" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link8" type="Eth100M" endpoint1="udp_tcp8" endpoint2="switch" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link9" type="Eth100M" endpoint1="udp_tcp9" endpoint2="switch2" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link10" type="Eth100M" endpoint1="udp_tcp10" endpoint2="switch2" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link11" type="Eth100M" endpoint1="udp_tcp11" endpoint2="switch2" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link12" type="Eth100M" endpoint1="udp_tcp12" endpoint2="switch2" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link13" type="Eth100M" endpoint1="udp_tcp13" endpoint2="switch2" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link14" type="Eth100M" endpoint1="udp_tcp14" endpoint2="switch2" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link15" type="Eth100M" endpoint1="udp_tcp15" endpoint2="switch2" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link16" type="Eth100M" endpoint1="udp_tcp16" endpoint2="switch2" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link17" type="Eth100M" endpoint1="udp_tcp17" endpoint2="switch3" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link18" type="Eth100M" endpoint1="udp_tcp18" endpoint2="switch3" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link19" type="Eth100M" endpoint1="udp_tcp19" endpoint2="switch3" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link20" type="Eth100M" endpoint1="udp_tcp20" endpoint2="switch3" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link21" type="Eth100M" endpoint1="udp_tcp22" endpoint2="switch3" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link22" type="Eth100M" endpoint1="udp_tcp21" endpoint2="switch3" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link23" type="Eth100M" endpoint1="udp_tcp23" endpoint2="switch3" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link24" type="Eth100M" endpoint1="udp_tcp24" endpoint2="switch3" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link25" type="Eth100M" endpoint1="udp_tcp25" endpoint2="switch4" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link26" type="Eth100M" endpoint1="udp_tcp26" endpoint2="switch4" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link27" type="Eth100M" endpoint1="udp_tcp28" endpoint2="switch4" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link28" type="Eth100M" endpoint1="udp_tcp27" endpoint2="switch4" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link29" type="Eth100M" endpoint1="udp_tcp29" endpoint2="switch4" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link30" type="Eth100M" endpoint1="udp_tcp30" endpoint2="switch4" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link31" type="Eth100M" endpoint1="udp_tcp31" endpoint2="switch4" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link32" type="Eth100M" endpoint1="udp_tcp32" endpoint2="switch4" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link33" type="Eth100M" endpoint1="udp_tcp33" endpoint2="switch5" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link34" type="Eth100M" endpoint1="udp_tcp34" endpoint2="switch5" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link35" type="Eth100M" endpoint1="udp_tcp35" endpoint2="switch5" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link36" type="Eth100M" endpoint1="udp_tcp36" endpoint2="switch5" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link37" type="Eth100M" endpoint1="udp_tcp37" endpoint2="switch5" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link38" type="Eth100M" endpoint1="udp_tcp38" endpoint2="switch5" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link39" type="Eth100M" endpoint1="udp_tcp39" endpoint2="switch5" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link40" type="Eth100M" endpoint1="udp_tcp40" endpoint2="switch5" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link41" type="Eth100M" endpoint1="switch" endpoint2="switch2" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link42" type="Eth100M" endpoint1="switch2" endpoint2="switch3" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link43" type="Eth100M" endpoint1="switch3" endpoint2="switch4" link_bandwidth="100" error_rate="0"/>
-        <Link name="Link44" type="Eth100M" endpoint1="switch4" endpoint2="switch5" link_bandwidth="100" error_rate="0"/>
+        <Link name="Link" type="Eth100M" endpoint1="udp_tcp" endpoint2="switch" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="0"/>
+        <Link name="Link2" type="Eth100M" endpoint1="udp_tcp2" endpoint2="switch" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="1"/>
+        <Link name="Link3" type="Eth100M" endpoint1="udp_tcp3" endpoint2="switch" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="2"/>
+        <Link name="Link4" type="Eth100M" endpoint1="udp_tcp4" endpoint2="switch" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="3"/>
+        <Link name="Link5" type="Eth100M" endpoint1="udp_tcp5" endpoint2="switch" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="4"/>
+        <Link name="Link6" type="Eth100M" endpoint1="udp_tcp6" endpoint2="switch" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="5"/>
+        <Link name="Link7" type="Eth100M" endpoint1="udp_tcp7" endpoint2="switch" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="6"/>
+        <Link name="Link8" type="Eth100M" endpoint1="udp_tcp8" endpoint2="switch" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="7"/>
+        <Link name="Link9" type="Eth100M" endpoint1="udp_tcp9" endpoint2="switch2" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="0"/>
+        <Link name="Link10" type="Eth100M" endpoint1="udp_tcp10" endpoint2="switch2" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="1"/>
+        <Link name="Link11" type="Eth100M" endpoint1="udp_tcp11" endpoint2="switch2" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="2"/>
+        <Link name="Link12" type="Eth100M" endpoint1="udp_tcp12" endpoint2="switch2" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="3"/>
+        <Link name="Link13" type="Eth100M" endpoint1="udp_tcp13" endpoint2="switch2" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="4"/>
+        <Link name="Link14" type="Eth100M" endpoint1="udp_tcp14" endpoint2="switch2" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="5"/>
+        <Link name="Link15" type="Eth100M" endpoint1="udp_tcp15" endpoint2="switch2" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="6"/>
+        <Link name="Link16" type="Eth100M" endpoint1="udp_tcp16" endpoint2="switch2" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="7"/>
+        <Link name="Link17" type="Eth100M" endpoint1="udp_tcp17" endpoint2="switch3" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="0"/>
+        <Link name="Link18" type="Eth100M" endpoint1="udp_tcp18" endpoint2="switch3" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="1"/>
+        <Link name="Link19" type="Eth100M" endpoint1="udp_tcp19" endpoint2="switch3" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="2"/>
+        <Link name="Link20" type="Eth100M" endpoint1="udp_tcp20" endpoint2="switch3" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="3"/>
+        <Link name="Link21" type="Eth100M" endpoint1="udp_tcp22" endpoint2="switch3" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="4"/>
+        <Link name="Link22" type="Eth100M" endpoint1="udp_tcp21" endpoint2="switch3" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="5"/>
+        <Link name="Link23" type="Eth100M" endpoint1="udp_tcp23" endpoint2="switch3" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="6"/>
+        <Link name="Link24" type="Eth100M" endpoint1="udp_tcp24" endpoint2="switch3" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="7"/>
+        <Link name="Link25" type="Eth100M" endpoint1="udp_tcp25" endpoint2="switch4" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="0"/>
+        <Link name="Link26" type="Eth100M" endpoint1="udp_tcp26" endpoint2="switch4" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="1"/>
+        <Link name="Link27" type="Eth100M" endpoint1="udp_tcp28" endpoint2="switch4" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="2"/>
+        <Link name="Link28" type="Eth100M" endpoint1="udp_tcp27" endpoint2="switch4" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="3"/>
+        <Link name="Link29" type="Eth100M" endpoint1="udp_tcp29" endpoint2="switch4" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="4"/>
+        <Link name="Link30" type="Eth100M" endpoint1="udp_tcp30" endpoint2="switch4" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="5"/>
+        <Link name="Link31" type="Eth100M" endpoint1="udp_tcp31" endpoint2="switch4" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="6"/>
+        <Link name="Link32" type="Eth100M" endpoint1="udp_tcp32" endpoint2="switch4" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="7"/>
+        <Link name="Link33" type="Eth100M" endpoint1="udp_tcp33" endpoint2="switch5" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="0"/>
+        <Link name="Link34" type="Eth100M" endpoint1="udp_tcp34" endpoint2="switch5" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="1"/>
+        <Link name="Link35" type="Eth100M" endpoint1="udp_tcp35" endpoint2="switch5" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="2"/>
+        <Link name="Link36" type="Eth100M" endpoint1="udp_tcp36" endpoint2="switch5" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="3"/>
+        <Link name="Link37" type="Eth100M" endpoint1="udp_tcp37" endpoint2="switch5" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="4"/>
+        <Link name="Link38" type="Eth100M" endpoint1="udp_tcp38" endpoint2="switch5" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="5"/>
+        <Link name="Link39" type="Eth100M" endpoint1="udp_tcp39" endpoint2="switch5" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="6"/>
+        <Link name="Link40" type="Eth100M" endpoint1="udp_tcp40" endpoint2="switch5" link_bandwidth="100" error_rate="0" endpoint1port="None" endpoint2port="7"/>
+        <Link name="Link41" type="Eth100M" endpoint1="switch" endpoint2="switch2" link_bandwidth="100" error_rate="0" endpoint1port="8" endpoint2port="None"/>
+        <Link name="Link42" type="Eth100M" endpoint1="switch2" endpoint2="switch3" link_bandwidth="100" error_rate="0" endpoint1port="8" endpoint2port="None"/>
+        <Link name="Link43" type="Eth100M" endpoint1="switch3" endpoint2="switch4" link_bandwidth="100" error_rate="0" endpoint1port="8" endpoint2port="None"/>
+        <Link name="Link44" type="Eth100M" endpoint1="switch4" endpoint2="switch5" link_bandwidth="100" error_rate="0" endpoint1port="8" endpoint2port="None"/>
     </Links>
     <GlobalSetting content="{&quot;Tcp&quot;: {&quot;forwarding&quot;: &quot;false&quot;, &quot;retryTimeout&quot;: &quot;1s&quot;, &quot;retryCount&quot;: &quot;3&quot;, &quot;cacheTimeout&quot;: &quot;100s&quot;, &quot;tcpAlgorithmClass&quot;: &quot;TcpReno&quot;}, &quot;Rdma&quot;: {&quot;connectionType&quot;: &quot;RELIABLE_CONNECTION&quot;, &quot;maxSendQueueSize&quot;: &quot;256&quot;, &quot;maxRecvQueueSize&quot;: &quot;256&quot;, &quot;windowSize&quot;: &quot;100&quot;, &quot;retransmitTimeout&quot;: &quot;20ms&quot;, &quot;rateLimit&quot;: &quot;1e9&quot;, &quot;wq&quot;: &quot;0.002&quot;, &quot;minth&quot;: &quot;5&quot;, &quot;maxth&quot;: &quot;50&quot;, &quot;maxp&quot;: &quot;0.02&quot;, &quot;pkrate&quot;: &quot;150&quot;}, &quot;common&quot;: {&quot;queueTypename&quot;: &quot;DropTailQueue&quot;, &quot;queuePacketCapacity&quot;: &quot;100&quot;, &quot;TsnQueue&quot;: []}}"/>
 </Network>

@@ -1,9 +1,9 @@
-file 137885 1733626613                                          
+file 139680 1733726312                                          
 version 3
-run General-0-20241208-10:56:52-13196
+run General-0-20241209-14:38:31-27712
 attr configname General
-attr datetime 20241208-10:56:52
-attr datetimef 20241208-105652
+attr datetime 20241209-14:38:31
+attr datetimef 20241209-143831
 attr experiment General
 attr inifile D:/jobSimQt/project/Parameters.ini
 attr iterationvars ""
@@ -11,7 +11,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network TargetNetwork
-attr processid 13196
+attr processid 27712
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -137,10 +137,54 @@ config *.udp_tcp38.numApps 0
 config *.udp_tcp39.numApps 0
 config *.udp_tcp40.numApps 0
 config *.switch.eth[*].bitrate 100Mbps
+config *.switch.eth[0].bitrate 100Mbps
+config *.switch.eth[1].bitrate 100Mbps
+config *.switch.eth[2].bitrate 100Mbps
+config *.switch.eth[3].bitrate 100Mbps
+config *.switch.eth[4].bitrate 100Mbps
+config *.switch.eth[5].bitrate 100Mbps
+config *.switch.eth[6].bitrate 100Mbps
+config *.switch.eth[7].bitrate 100Mbps
+config *.switch.eth[8].bitrate 100Mbps
 config *.switch2.eth[*].bitrate 100Mbps
+config *.switch2.eth[0].bitrate 100Mbps
+config *.switch2.eth[1].bitrate 100Mbps
+config *.switch2.eth[2].bitrate 130Mbps
+config *.switch2.eth[3].bitrate 100Mbps
+config *.switch2.eth[4].bitrate 100Mbps
+config *.switch2.eth[5].bitrate 100Mbps
+config *.switch2.eth[6].bitrate 100Mbps
+config *.switch2.eth[7].bitrate 100Mbps
+config *.switch2.eth[8].bitrate 100Mbps
 config *.switch3.eth[*].bitrate 100Mbps
+config *.switch3.eth[0].bitrate 100Mbps
+config *.switch3.eth[1].bitrate 100Mbps
+config *.switch3.eth[2].bitrate 100Mbps
+config *.switch3.eth[3].bitrate 100Mbps
+config *.switch3.eth[4].bitrate 100Mbps
+config *.switch3.eth[5].bitrate 100Mbps
+config *.switch3.eth[6].bitrate 100Mbps
+config *.switch3.eth[7].bitrate 100Mbps
+config *.switch3.eth[8].bitrate 100Mbps
 config *.switch4.eth[*].bitrate 100Mbps
+config *.switch4.eth[0].bitrate 100Mbps
+config *.switch4.eth[1].bitrate 100Mbps
+config *.switch4.eth[2].bitrate 100Mbps
+config *.switch4.eth[3].bitrate 100Mbps
+config *.switch4.eth[4].bitrate 100Mbps
+config *.switch4.eth[5].bitrate 100Mbps
+config *.switch4.eth[6].bitrate 100Mbps
+config *.switch4.eth[7].bitrate 100Mbps
+config *.switch4.eth[8].bitrate 100Mbps
 config *.switch5.eth[*].bitrate 100Mbps
+config *.switch5.eth[0].bitrate 100Mbps
+config *.switch5.eth[1].bitrate 100Mbps
+config *.switch5.eth[2].bitrate 100Mbps
+config *.switch5.eth[3].bitrate 100Mbps
+config *.switch5.eth[4].bitrate 100Mbps
+config *.switch5.eth[5].bitrate 100Mbps
+config *.switch5.eth[6].bitrate 100Mbps
+config *.switch5.eth[7].bitrate 100Mbps
 
 vector 0 TargetNetwork.udp_tcp.eth[0].macLayer.queue 615.udp_tcp.eth[0].macLayer.queue ETV
 vector 1 TargetNetwork.udp_tcp9.eth[0].macLayer.queue 615.udp_tcp9.eth[0].macLayer.queue ETV
@@ -162,24 +206,24 @@ vector 16 TargetNetwork.udp_tcp30.app[0].sink default30 ETV
 vector 17 TargetNetwork.udp_tcp30.app[0].sink default30_loss ETV
 vector 18 TargetNetwork.udp_tcp34.app[0].sink default34 ETV
 vector 19 TargetNetwork.udp_tcp34.app[0].sink default34_loss ETV
-0	10522 7884 119 15985 0 1.494006179891 296 0 0.01 1.48 0.0148
-1	18406 8359 120 15838 0 1.485992665857 314 0 0.01 1.57 0.0157
-2	26765 7837 121 16006 0 1.494582440647 294 0 0.01 1.47 0.0147
-3	34602 8352 122 15893 0 1.489890783523 314 0 0.01 1.57 0.0157
-4	42954 7935 123 15943 0 1.491794854431 298 0 0.01 1.49 0.0149
-5	50889 7902 144 15990 0.00008432 1.494090499891 296 0 0.01 1.48 0.0148
-6	58791 8377 145 15843 0.00008432 1.486076985857 314 0 0.01 1.57 0.0157
-7	67168 7855 146 16011 0.00008432 1.494666760647 294 0 0.01 1.47 0.0147
-8	75023 8371 147 15906 0.00008432 1.489975103523 314 0 0.01 1.57 0.0157
-9	83394 7953 148 15948 0.00008432 1.491879174431 298 0 0.01 1.49 0.0149
-10	91347 5213 189 15998 0.00016864 1.494174819891 148 0.00016864 0.000206854595 0.024996934595 4.2233879146726e-06
-11	96560 3877 189 15998 0.00016864 1.494174819891 148 0 0 0 0
-12	100437 5523 190 15851 0.00016864 1.486161305857 157 0.00016864 0.00016864 0.02647648 4.4649935872e-06
-13	105960 4110 190 15851 0.00016864 1.486161305857 157 0 0 0 0
-14	110070 5181 191 16019 0.00016864 1.494751080647 147 0.00016864 0.000253366481 0.024874806481 4.2163542152943e-06
-15	115251 3854 191 16019 0.00016864 1.494751080647 147 0 0 0 0
-16	119105 5524 192 15914 0.00016864 1.490059423523 157 0.00016864 0.000213356787 0.026521196787 4.482075256159e-06
-17	124629 4107 192 15914 0.00016864 1.490059423523 157 0 0 0 0
-18	128736 5244 193 15962 0.00016864 1.491963494431 149 0.00016864 0.00016864 0.02512736 4.2374779904e-06
-19	133980 3903 193 15962 0.00016864 1.491963494431 149 0 0 0 0
+0	12317 7884 119 15985 0 1.494006179891 296 0 0.01 1.48 0.0148
+1	20201 8359 120 15838 0 1.485992665857 314 0 0.01 1.57 0.0157
+2	28560 7837 121 16006 0 1.494582440647 294 0 0.01 1.47 0.0147
+3	36397 8352 122 15893 0 1.489890783523 314 0 0.01 1.57 0.0157
+4	44749 7935 123 15943 0 1.491794854431 298 0 0.01 1.49 0.0149
+5	52684 7902 144 15990 0.00008432 1.494090499891 296 0 0.01 1.48 0.0148
+6	60586 8377 145 15843 0.00008432 1.486076985857 314 0 0.01 1.57 0.0157
+7	68963 7855 146 16011 0.00008432 1.494666760647 294 0 0.01 1.47 0.0147
+8	76818 8371 147 15906 0.00008432 1.489975103523 314 0 0.01 1.57 0.0157
+9	85189 7953 148 15948 0.00008432 1.491879174431 298 0 0.01 1.49 0.0149
+10	93142 5213 189 15998 0.00016864 1.494174819891 148 0.00016864 0.000206854595 0.024996934595 4.2233879146726e-06
+11	98355 3877 189 15998 0.00016864 1.494174819891 148 0 0 0 0
+12	102232 5523 190 15851 0.00016864 1.486161305857 157 0.00016864 0.00016864 0.02647648 4.4649935872e-06
+13	107755 4110 190 15851 0.00016864 1.486161305857 157 0 0 0 0
+14	111865 5181 191 16019 0.00016864 1.494751080647 147 0.00016864 0.000253366481 0.024874806481 4.2163542152943e-06
+15	117046 3854 191 16019 0.00016864 1.494751080647 147 0 0 0 0
+16	120900 5524 192 15914 0.00016864 1.490059423523 157 0.00016864 0.000213356787 0.026521196787 4.482075256159e-06
+17	126424 4107 192 15914 0.00016864 1.490059423523 157 0 0 0 0
+18	130531 5244 193 15962 0.00016864 1.491963494431 149 0.00016864 0.00016864 0.02512736 4.2374779904e-06
+19	135775 3903 193 15962 0.00016864 1.491963494431 149 0 0 0 0
 

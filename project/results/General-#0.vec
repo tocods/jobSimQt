@@ -1,8 +1,8 @@
 version 3
-run General-0-20241208-10:56:52-13196
+run General-0-20241209-14:38:31-27712
 attr configname General
-attr datetime 20241208-10:56:52
-attr datetimef 20241208-105652
+attr datetime 20241209-14:38:31
+attr datetimef 20241209-143831
 attr experiment General
 attr inifile D:/jobSimQt/project/Parameters.ini
 attr iterationvars ""
@@ -10,7 +10,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network TargetNetwork
-attr processid 13196
+attr processid 27712
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -136,10 +136,54 @@ config *.udp_tcp38.numApps 0
 config *.udp_tcp39.numApps 0
 config *.udp_tcp40.numApps 0
 config *.switch.eth[*].bitrate 100Mbps
+config *.switch.eth[0].bitrate 100Mbps
+config *.switch.eth[1].bitrate 100Mbps
+config *.switch.eth[2].bitrate 100Mbps
+config *.switch.eth[3].bitrate 100Mbps
+config *.switch.eth[4].bitrate 100Mbps
+config *.switch.eth[5].bitrate 100Mbps
+config *.switch.eth[6].bitrate 100Mbps
+config *.switch.eth[7].bitrate 100Mbps
+config *.switch.eth[8].bitrate 100Mbps
 config *.switch2.eth[*].bitrate 100Mbps
+config *.switch2.eth[0].bitrate 100Mbps
+config *.switch2.eth[1].bitrate 100Mbps
+config *.switch2.eth[2].bitrate 130Mbps
+config *.switch2.eth[3].bitrate 100Mbps
+config *.switch2.eth[4].bitrate 100Mbps
+config *.switch2.eth[5].bitrate 100Mbps
+config *.switch2.eth[6].bitrate 100Mbps
+config *.switch2.eth[7].bitrate 100Mbps
+config *.switch2.eth[8].bitrate 100Mbps
 config *.switch3.eth[*].bitrate 100Mbps
+config *.switch3.eth[0].bitrate 100Mbps
+config *.switch3.eth[1].bitrate 100Mbps
+config *.switch3.eth[2].bitrate 100Mbps
+config *.switch3.eth[3].bitrate 100Mbps
+config *.switch3.eth[4].bitrate 100Mbps
+config *.switch3.eth[5].bitrate 100Mbps
+config *.switch3.eth[6].bitrate 100Mbps
+config *.switch3.eth[7].bitrate 100Mbps
+config *.switch3.eth[8].bitrate 100Mbps
 config *.switch4.eth[*].bitrate 100Mbps
+config *.switch4.eth[0].bitrate 100Mbps
+config *.switch4.eth[1].bitrate 100Mbps
+config *.switch4.eth[2].bitrate 100Mbps
+config *.switch4.eth[3].bitrate 100Mbps
+config *.switch4.eth[4].bitrate 100Mbps
+config *.switch4.eth[5].bitrate 100Mbps
+config *.switch4.eth[6].bitrate 100Mbps
+config *.switch4.eth[7].bitrate 100Mbps
+config *.switch4.eth[8].bitrate 100Mbps
 config *.switch5.eth[*].bitrate 100Mbps
+config *.switch5.eth[0].bitrate 100Mbps
+config *.switch5.eth[1].bitrate 100Mbps
+config *.switch5.eth[2].bitrate 100Mbps
+config *.switch5.eth[3].bitrate 100Mbps
+config *.switch5.eth[4].bitrate 100Mbps
+config *.switch5.eth[5].bitrate 100Mbps
+config *.switch5.eth[6].bitrate 100Mbps
+config *.switch5.eth[7].bitrate 100Mbps
 
 vector 0 TargetNetwork.udp_tcp.eth[0].macLayer.queue 615.udp_tcp.eth[0].macLayer.queue ETV
 vector 1 TargetNetwork.udp_tcp9.eth[0].macLayer.queue 615.udp_tcp9.eth[0].macLayer.queue ETV
