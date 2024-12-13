@@ -1,5 +1,7 @@
+D:/project1/dds
 D:/jobSimQt/project
+D:/project1/tsn
+D:/project1/tcp
+D:/project1/udp
+D:/project1/project10
 D:/project1/project9
-
-D:/jobSimQt/newP
-D:/gpuworkflowsim/src/test/Test1a/CPUTest/input

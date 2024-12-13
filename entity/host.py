@@ -9,7 +9,7 @@ class Host(NetworkDevice):
         super().__init__(name, host_type)
         self.numApps = 0
         self.appArgs = []
-        self.ip = "0.0.0.0"
+        self.ip = f"192.168.0.{len(globaldata.hostList)}"
         self.mac = "00:1A:2B:3C:4D:5E"
         self.packet_size = "100"
         self.packet_interval = "100"

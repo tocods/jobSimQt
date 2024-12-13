@@ -292,6 +292,8 @@ class NetworkEditorWindow(QWidget):
         self.update_tree_view()
 
     def applyHost(self):
+        if self.curHostItem == None:
+            return
         data = self.hostPhysics.getDict()
         tmp = sysSim.hosts[self.curHostItem.hostAttr.name]
         sysSim.hosts.pop(self.curHostItem.hostAttr.name)
@@ -318,6 +320,8 @@ class NetworkEditorWindow(QWidget):
         return
 
     def applySwitch(self):
+        if self.curSwitchItem == None:
+            return
         data = self.switchEditor.getDict()
         self.curSwitchItem.setName(data["name"])
         self.curSwitchItem.switchAttr.applyAttr(data)
@@ -330,6 +334,8 @@ class NetworkEditorWindow(QWidget):
         return
 
     def applyLink(self):
+        if self.curLinkItem == None:
+            return
         data = self.linkEditor.getDict()
         self.curLinkItem.edge_wrap.linkAttr.applyAttr(data)
         self.linkEditor.setDict(self.curLinkItem.getLinkAttr())
