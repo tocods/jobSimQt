@@ -50,7 +50,7 @@ class Host(NetworkDevice):
             appArg = self.appArgs[index]
             if appArg["typename"] == "UdpApp615":
                 self.generateINIUdp(f, index)
-            if appArg["typename"] == "TcpSessionApp":
+            if appArg["typename"] == "TcpClientApp":
                 self.generateINITcpSource(f, index)
             if appArg["typename"] == "TcpSinkApp":
                 self.generateINITcpSink(f, index)
@@ -101,17 +101,15 @@ class Host(NetworkDevice):
     def generateINITcpSource(self, f, index):
         appArg = self.appArgs[index]
         f.write(f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n')
-        f.write(f'*.{self.name}.app[{index}].sendBytes = {appArg["sendBytes"]}\n')
-        f.write(f"*.{self.name}.app[{index}].active = true\n")
-        f.write(f'*.{self.name}.app[{index}].localPort = {appArg["localPort"]}\n')
         f.write(
-            f'*.{self.name}.app[{index}].connectAddress = "{appArg["connectAddress"]}"\n'
+            f'*.{self.name}.app[{index}].io.connectAddress = "{appArg["connectAddress"]}"\n'
         )
-        f.write(f'*.{self.name}.app[{index}].connectPort = {appArg["connectPort"]}\n')
-        f.write(f"*.{self.name}.app[{index}].tOpen = 0s\n")
-        f.write(f"*.{self.name}.app[{index}].tSend = 0s\n")
-        f.write(f"*.{self.name}.app[{index}].tClose = 0s\n")
-        f.write(f'*.{self.name}.app[{index}].sendScript = ""\n')
+        f.write(f'*.{self.name}.app[{index}].io.connectPort = {appArg["connectPort"]}\n')
+        f.write(f'*.{self.name}.app[{index}].source.packetLength = {appArg["packetLength"]}\n')
+        f.write(f'*.{self.name}.app[{index}].source.productionInterval = {appArg["productionInterval"]}\n')
+        f.write(f'*.{self.name}.app[{index}].source.periodX = {appArg["periodX"]}\n')
+        f.write(f'*.{self.name}.app[{index}].source.activeX = {appArg["activeX"]}\n')
+
 
     def generateINITcpSink(self, f, index):
         appArg = self.appArgs[index]
@@ -195,7 +193,7 @@ class NormalHost(Host):
             appArg = self.appArgs[index]
             if appArg["typename"] == "UdpApp615":
                 self.generateINIUdp(f, index)
-            if appArg["typename"] == "TcpSessionApp":
+            if appArg["typename"] == "TcpClientApp":
                 self.generateINITcpSource(f, index)
             if appArg["typename"] == "TcpSinkApp":
                 self.generateINITcpSink(f, index)

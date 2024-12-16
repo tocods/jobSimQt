@@ -104,8 +104,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -118,8 +118,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -132,8 +132,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -146,8 +146,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -160,8 +160,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -174,8 +174,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -188,8 +188,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -202,8 +202,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -216,8 +216,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -230,8 +230,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -244,8 +244,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -258,8 +258,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -272,8 +272,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -286,8 +286,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -300,8 +300,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -314,8 +314,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -328,8 +328,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -342,8 +342,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -356,8 +356,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -370,8 +370,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -384,8 +384,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -398,8 +398,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -412,8 +412,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -426,8 +426,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -440,8 +440,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -454,8 +454,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -468,8 +468,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -482,8 +482,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -496,8 +496,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -518,28 +518,14 @@
         "ifMaster": false
     },
     {
-        "name": "udp_tcp",
-        "video_card_infos": [],
-        "cpu_infos": [
-            {
-                "cores": 2,
-                "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
-            }
-        ],
-        "ram": 4,
-        "ifMaster": false
-    },
-    {
         "name": "udp_tcp4",
         "video_card_infos": [],
         "cpu_infos": [
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -552,8 +538,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -566,8 +552,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -580,8 +566,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -594,8 +580,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -608,8 +594,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -622,8 +608,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -636,8 +622,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -650,8 +636,8 @@
             {
                 "cores": 2,
                 "mips": 10,
-                "int_mips": 10,
-                "matrix_mips": 10
+                "int_mips": null,
+                "matrix_mips": null
             }
         ],
         "ram": 4,
@@ -694,6 +680,20 @@
                 "mips": 10,
                 "int_mips": null,
                 "matrix_mips": null
+            }
+        ],
+        "ram": 4,
+        "ifMaster": false
+    },
+    {
+        "name": "udp_tcp",
+        "video_card_infos": [],
+        "cpu_infos": [
+            {
+                "cores": 2,
+                "mips": 10,
+                "int_mips": 10,
+                "matrix_mips": 10
             }
         ],
         "ram": 4,
