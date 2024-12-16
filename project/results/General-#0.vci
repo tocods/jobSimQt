@@ -1,9 +1,9 @@
-file 49994 1734331847                                           
+file 58487 1734332924                                           
 version 3
-run General-0-20241216-14:50:47-22084
+run General-0-20241216-15:08:44-16072
 attr configname General
-attr datetime 20241216-14:50:47
-attr datetimef 20241216-145047
+attr datetime 20241216-15:08:44
+attr datetimef 20241216-150844
 attr experiment General
 attr inifile D:/jobSimQt/project/Parameters.ini
 attr iterationvars ""
@@ -11,7 +11,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network TargetNetwork
-attr processid 22084
+attr processid 16072
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -46,7 +46,7 @@ config *.udp_tcp.app[0].typename TcpClientApp
 config *.udp_tcp.app[0].io.connectAddress "\"udp_tcp2\""
 config *.udp_tcp.app[0].io.connectPort 1000
 config *.udp_tcp.app[0].source.packetLength 1000B
-config *.udp_tcp.app[0].source.productionInterval 1ms
+config *.udp_tcp.app[0].source.productionInterval exponential(1ms)
 config *.udp_tcp.app[0].source.periodX [50ms,100ms,100ms,100ms,10ms]
 config *.udp_tcp.app[0].source.activeX [10ms,50ms,60ms,40ms,10ms]
 config *.udp_tcp2.numApps 1
@@ -64,11 +64,11 @@ vector 3 TargetNetwork.switch.eth[0].macLayer.queue 615.switch.eth[0].macLayer.q
 vector 4 TargetNetwork.udp_tcp2.tcp.conn-0 default.TcpReceiveQueue ETV
 vector 5 TargetNetwork.udp_tcp2.app[0] default ETV
 vector 6 TargetNetwork.udp_tcp2.app[0] default_loss ETV
-0	2790 5891 10 6135 0 0.359 342 0 0.01 1.71 0.0171
-1	8681 7633 15 6140 0.00000576 0.35908528 342 0 0.01 1.71 0.0171
-2	16314 7631 24 6150 0.00001152 0.35917056 342 0 0.01 1.71 0.0171
-3	23945 7637 31 6157 0.00001728 0.35917632 342 0 0.01 1.71 0.0171
-4	31582 9800 55 6146 0.0001936 0.35917056 340 0 0.015259021896696 2.5940337224384 0.039582417371456
-5	41382 5070 61 6147 0.0001936 0.35917056 170 0.00017056 0.00017056 0.0289952 4.945421312e-06
-6	46452 3540 61 6147 0.0001936 0.35917056 170 0 0 0 0
+0	2803 8707 10 6063 0 0.359909177444 338 0 0.01 1.69 0.0169
+1	11510 8773 15 6068 0.00000576 0.359994457444 338 0 0.01 1.69 0.0169
+2	20283 8771 24 6079 0.00001152 0.360079737444 338 0 0.01 1.69 0.0169
+3	29054 8775 31 6086 0.00001728 0.360085497444 338 0 0.01 1.69 0.0169
+4	37829 10918 55 6075 0.0001936 0.360079737444 336 0 0.022156099794003 2.563515678645 0.039497299341141
+5	48747 5625 61 6076 0.0001936 0.360079737444 168 9.824e-05 0.000268953573 0.028680153573 4.9424266740295e-06
+6	54372 4113 61 6076 0.0001936 0.360079737444 168 0 0 0 0
 

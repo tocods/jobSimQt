@@ -106,7 +106,7 @@ class Host(NetworkDevice):
         )
         f.write(f'*.{self.name}.app[{index}].io.connectPort = {appArg["connectPort"]}\n')
         f.write(f'*.{self.name}.app[{index}].source.packetLength = {appArg["packetLength"]}\n')
-        f.write(f'*.{self.name}.app[{index}].source.productionInterval = {appArg["productionInterval"]}\n')
+        f.write(f'*.{self.name}.app[{index}].source.productionInterval = exponential({appArg["productionInterval"]})\n')
         f.write(f'*.{self.name}.app[{index}].source.periodX = {appArg["periodX"]}\n')
         f.write(f'*.{self.name}.app[{index}].source.activeX = {appArg["activeX"]}\n')
 

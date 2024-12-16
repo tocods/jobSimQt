@@ -1,8 +1,8 @@
 version 3
-run General-0-20241216-14:50:47-22084
+run General-0-20241216-15:08:44-16072
 attr configname General
-attr datetime 20241216-14:50:47
-attr datetimef 20241216-145047
+attr datetime 20241216-15:08:44
+attr datetimef 20241216-150844
 attr experiment General
 attr inifile D:/jobSimQt/project/Parameters.ini
 attr iterationvars ""
@@ -10,7 +10,7 @@ attr iterationvarsd ""
 attr iterationvarsf ""
 attr measurement ""
 attr network TargetNetwork
-attr processid 22084
+attr processid 16072
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -45,7 +45,7 @@ config *.udp_tcp.app[0].typename TcpClientApp
 config *.udp_tcp.app[0].io.connectAddress "\"udp_tcp2\""
 config *.udp_tcp.app[0].io.connectPort 1000
 config *.udp_tcp.app[0].source.packetLength 1000B
-config *.udp_tcp.app[0].source.productionInterval 1ms
+config *.udp_tcp.app[0].source.productionInterval exponential(1ms)
 config *.udp_tcp.app[0].source.periodX [50ms,100ms,100ms,100ms,10ms]
 config *.udp_tcp.app[0].source.activeX [10ms,50ms,60ms,40ms,10ms]
 config *.udp_tcp2.numApps 1
@@ -1128,7 +1128,7 @@ par TargetNetwork.udp_tcp.app[0].source clockModule "\"\""
 par TargetNetwork.udp_tcp.app[0].source initialProductionOffset -1s
 attr mutable ""
 attr unit s
-par TargetNetwork.udp_tcp.app[0].source productionInterval 0.001s
+par TargetNetwork.udp_tcp.app[0].source productionInterval exponential(1ms)
 attr unit s
 par TargetNetwork.udp_tcp.app[0].source scheduleForAbsoluteTime true
 par TargetNetwork.udp_tcp.app[0].source periodX "[50ms, 100ms, 100ms, 100ms, 10ms]"
@@ -1478,7 +1478,7 @@ attr unit s
 par TargetNetwork.udp_tcp2.app[0] stopOperationTimeout 2s
 attr unit s
 par TargetNetwork.udp_tcp2.app[0] flowName "\"default\""
-scalar TargetNetwork.udp_tcp2.app[0] bytesRcvd 170000
+scalar TargetNetwork.udp_tcp2.app[0] bytesRcvd 168000
 par TargetNetwork.udp_tcp2.at typename "\"inet.common.MessageDispatcher\""
 par TargetNetwork.udp_tcp2.at displayStringTextFormat "\"processed %p pk (%l)\""
 par TargetNetwork.udp_tcp2.at forwardServiceRegistration true
@@ -1539,7 +1539,7 @@ par TargetNetwork.switch.bridging displayStringTextFormat "\"proc: %p\\ndisc: %d
 scalar TargetNetwork.switch.bridging "processed frames" 0
 scalar TargetNetwork.switch.bridging "discarded frames" 0
 scalar TargetNetwork.switch.bridging "number of received BPDUs from STP module" 0
-scalar TargetNetwork.switch.bridging "number of received frames from network (including BPDUs)" 342
+scalar TargetNetwork.switch.bridging "number of received frames from network (including BPDUs)" 338
 scalar TargetNetwork.switch.bridging "number of dropped frames (including BPDUs)" 0
 scalar TargetNetwork.switch.bridging "number of delivered BPDUs to the STP module" 0
 scalar TargetNetwork.switch.bridging "number of dispatched BPDU frames to the network" 0
