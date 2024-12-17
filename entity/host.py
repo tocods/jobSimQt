@@ -9,7 +9,7 @@ class Host(NetworkDevice):
         super().__init__(name, host_type)
         self.numApps = 0
         self.appArgs = []
-        self.ip = "0.0.0.0"
+        self.ip = f"192.168.0.{len(globaldata.hostList)}"
         self.mac = "00:1A:2B:3C:4D:5E"
         self.packet_size = "100"
         self.packet_interval = "100"
@@ -38,12 +38,19 @@ class Host(NetworkDevice):
         self.packet_interval = data["packet_interval"]
 
     def generateINI(self, f):
-        f.write(f"*.{self.name}.numApps = {len(self.appArgs)}\n")
+        tmp = self.appArgs.copy()
+        nonTsnAppList = []
+        for index, app in enumerate(self.appArgs):
+            if app["typename"] != "TSN":
+                nonTsnAppList.append(app)
+        self.numApps = len(nonTsnAppList)
+        self.appArgs = nonTsnAppList
+        f.write(f"*.{self.name}.numApps = {self.numApps}\n")
         for index in range(0, len(self.appArgs)):
             appArg = self.appArgs[index]
             if appArg["typename"] == "UdpApp615":
                 self.generateINIUdp(f, index)
-            if appArg["typename"] == "TcpSessionApp":
+            if appArg["typename"] == "TcpClientApp":
                 self.generateINITcpSource(f, index)
             if appArg["typename"] == "TcpSinkApp":
                 self.generateINITcpSink(f, index)
@@ -52,6 +59,8 @@ class Host(NetworkDevice):
             if appArg["typename"] == "DDSSubscribeApp":
                 self.generateINIDdsSink(f, index)
             f.write("\n")
+        
+        self.appArgs = tmp
 
     def getNumber(self, s: str):
         i = 0
@@ -92,17 +101,15 @@ class Host(NetworkDevice):
     def generateINITcpSource(self, f, index):
         appArg = self.appArgs[index]
         f.write(f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n')
-        f.write(f'*.{self.name}.app[{index}].sendBytes = {appArg["sendBytes"]}\n')
-        f.write(f"*.{self.name}.app[{index}].active = true\n")
-        f.write(f'*.{self.name}.app[{index}].localPort = {appArg["localPort"]}\n')
         f.write(
-            f'*.{self.name}.app[{index}].connectAddress = "{appArg["connectAddress"]}"\n'
+            f'*.{self.name}.app[{index}].io.connectAddress = "{appArg["connectAddress"]}"\n'
         )
-        f.write(f'*.{self.name}.app[{index}].connectPort = {appArg["connectPort"]}\n')
-        f.write(f"*.{self.name}.app[{index}].tOpen = 0s\n")
-        f.write(f"*.{self.name}.app[{index}].tSend = 0s\n")
-        f.write(f"*.{self.name}.app[{index}].tClose = 0s\n")
-        f.write(f'*.{self.name}.app[{index}].sendScript = ""\n')
+        f.write(f'*.{self.name}.app[{index}].io.connectPort = {appArg["connectPort"]}\n')
+        f.write(f'*.{self.name}.app[{index}].source.packetLength = {appArg["packetLength"]}\n')
+        f.write(f'*.{self.name}.app[{index}].source.productionInterval = exponential({appArg["productionInterval"]})\n')
+        f.write(f'*.{self.name}.app[{index}].source.periodX = {appArg["periodX"]}\n')
+        f.write(f'*.{self.name}.app[{index}].source.activeX = {appArg["activeX"]}\n')
+
 
     def generateINITcpSink(self, f, index):
         appArg = self.appArgs[index]
@@ -186,7 +193,7 @@ class NormalHost(Host):
             appArg = self.appArgs[index]
             if appArg["typename"] == "UdpApp615":
                 self.generateINIUdp(f, index)
-            if appArg["typename"] == "TcpSessionApp":
+            if appArg["typename"] == "TcpClientApp":
                 self.generateINITcpSource(f, index)
             if appArg["typename"] == "TcpSinkApp":
                 self.generateINITcpSink(f, index)
@@ -335,8 +342,6 @@ class TsnHost(Host):
         self.numApps = int(element.get("numApps"))
         print(element.get("appArgs"))
         self.appArgs = json.loads(element.get("appArgs"))
-        print(element.get("tsnArgs"))
-        tsnArgs = json.loads(element.get("tsnArgs"))
 
 
 class DdsHost(Host):

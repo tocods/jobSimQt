@@ -7,6 +7,8 @@ CHINESE_KEYS = {
     "destAddress": "目标地址（名称）",
     "destPort": "目标端口",
     "sendBytes": "发送长度",
+    "productionInterval": "发送间隔",
+    "packetLength": "发送长度",
     "localPort": "本机端口",
     "connectAddress": "目标地址（名称）",
     "connectPort": "目标端口",
@@ -26,5 +28,6 @@ CHINESE_KEYS = {
     "endpoint1": "端点1",
     "endpoint2": "端点2",
     "transmission_rate": "传输速率(Mbps)",
+    "transmission_rate_list": "传输速率(Mbps)",
     "error_rate": "错误率"
 }

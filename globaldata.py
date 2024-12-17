@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 from xml.dom import minidom
 import entity.host
 from entity.switch import *
+from entity.link import *
 
 from PySide6.QtGui import QFont
 
@@ -21,8 +22,8 @@ hostList = []
 
 global faultList
 """ switchList的元素类型为: SwitchGraphicItem """
-switchList = []
-linkList = []
+switchList: list = []
+linkList: list = []
 faultList = []
 
 global duration
@@ -87,7 +88,7 @@ networkGlobalConfig = {
     },
     "common": {
         "queueTypename": "DropTailQueue",
-        "queuePacketCapacity": "20",
+        "queuePacketCapacity": "500",
         "TsnQueue": []
     },
 }
@@ -97,7 +98,17 @@ def readPath():
         for line in fp:
             targetPath.append(line.strip("\n"))
 
-
+def calculate_link_port():
+    for s in switchList:
+        s.switchAttr.cur_port = 0
+    for l in linkList:
+        if l.linkAttr.endpoint1 in switchList:
+            l.linkAttr.endpoint1port = l.linkAttr.endpoint1.switchAttr.cur_port
+            l.linkAttr.endpoint1.switchAttr.cur_port += 1
+        elif l.linkAttr.endpoint2 in switchList:
+            l.linkAttr.endpoint2port = l.linkAttr.endpoint2.switchAttr.cur_port
+            l.linkAttr.endpoint2.switchAttr.cur_port += 1
+    
 def create_xml():
     # Create the root of the XML tree
     root = ET.Element("Network")
@@ -193,6 +204,8 @@ def create_xml():
 
         link_element.set("link_bandwidth", str(link_item.linkAttr.link_bandwidth))
         link_element.set("error_rate", str(link_item.linkAttr.error_rate))
+        link_element.set("endpoint1port", str(link_item.linkAttr.endpoint1port))
+        link_element.set("endpoint2port", str(link_item.linkAttr.endpoint2port))
     globalSettingElement = ET.SubElement(root, "GlobalSetting")
     globalSettingElement.set("content", json.dumps(networkGlobalConfig))
 

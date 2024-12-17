@@ -344,6 +344,8 @@ class GraphicView(QGraphicsView):
                 else:
                     self.drag_start_item = None
 
+        globaldata.calculate_link_port()
+
     def deleteItem(self):
         # 删除键
         item = self.item_clicked

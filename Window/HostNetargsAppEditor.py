@@ -16,11 +16,13 @@ DEFAULT_SOURCE = {
         "destPort": "",
     },
     "tcp": {
-        "typename": "TcpSessionApp",
-        "sendBytes": "1000MiB",
-        "localPort": "",
+        "typename": "TcpClientApp",
+        "productionInterval": "1ms",
+        "packetLength": "1000B",
         "connectAddress": "",
         "connectPort": "",
+        "periodX": "[50ms,100ms,100ms,100ms,10ms]",
+        "activeX": "[10ms,50ms,60ms,40ms,10ms]"
     },
     "rdma": {
         "typename": "Rocev2App",
@@ -38,7 +40,9 @@ DEFAULT_SOURCE = {
         "destPort": "",
         "packetLength": "5000B",
         "productionInterval": "200ms",
-        "historyCacheLength": "10"
+        "historyCacheLength": "10",
+        "periodX": "[50ms,100ms,100ms,100ms,10ms]",
+        "activeX": "[10ms,50ms,60ms,40ms,10ms]"
     },
 }
 DEFAULT_SINK = {
@@ -150,7 +154,6 @@ class HostNetargsAppEditorApp(HostNetargsAppEditor):
                 "typename": "TSN",
                 "stream": "default",
                 "packetFilter": "expr(udp.destPort == 1000)",
-                "pcp": "0",
             },
         )
         }
