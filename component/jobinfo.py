@@ -272,7 +272,7 @@ class Ui_JobInfo(object):
         self.label_6.setText(QCoreApplication.translate("JobInfo", u"\u57fa\u672c\u4fe1\u606f", None))
         self.label.setText(QCoreApplication.translate("JobInfo", u"\u4efb\u52a1\u540d:", None))
         self.label_2.setText(QCoreApplication.translate("JobInfo", u"\u9700\u6c42\u5185\u5b58:", None))
-        self.label_3.setText(QCoreApplication.translate("JobInfo", u"GB", None))
+        self.label_3.setText(QCoreApplication.translate("JobInfo", u"MB", None))
         self.label_4.setText(QCoreApplication.translate("JobInfo", u"\u5468\u671f:", None))
         self.label_5.setText(QCoreApplication.translate("JobInfo", u"s", None))
         self.label_15.setText(QCoreApplication.translate("JobInfo", u"\u622a\u6b62:", None))

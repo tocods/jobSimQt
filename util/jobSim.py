@@ -120,6 +120,7 @@ class JobInfo:
         self.host = ""
         self.ifManager = False
         self.ifInMaster = False
+        self.deadline = period
         
     def getFLOPS(self) -> float:
         FLOPS = 0
@@ -466,6 +467,7 @@ class ParseUtil:
                     video_card_info.gpu_infos.append(gpu_info)
                 video_card_info.pcie_bw = video_card["pcie_bw"]
                 host_info.video_card_infos.append(video_card_info)
+            host_info.ifMaster = host["ifMaster"]
             hosts.append(host_info)
         return hosts
     
@@ -480,6 +482,7 @@ class ParseUtil:
             job_info.host = job["host"]
             job_info.name = job["name"]
             job_info.period = job["period"]
+            job_info.setDeadline(job["deadline"])
             cpu_task = CPUTaskInfo()
             cpu_task.ram = job["cpu_task"]["ram"]
             cpu_task.pes_number = job["cpu_task"]["pes_number"]
@@ -547,11 +550,20 @@ class jobSim:
         print("addHostItem")
         print(item.hostAttr.name)
         # 创建一个所有属性都为0的HostInfo对象
-        self.hosts[item.hostAttr.name] = HostInfo(item.hostAttr.name, [], [CPUInfo(2, 10, 10, 10)], 4)
-        jobManager = JobInfo("系统管理软件", -1, CPUTaskInfo(4, 100), None)
-        jobManager.setHost(item.hostAttr.name)
-        jobManager.ifManager = True
-        self.manager[item.hostAttr.name] = jobManager
+        if item.hostAttr.name not in self.hosts:
+            self.hosts[item.hostAttr.name] = HostInfo(item.hostAttr.name, [], [CPUInfo(2, 10, 10, 10)], 4)
+            jobManager = JobInfo("系统管理软件", -1, CPUTaskInfo(4, 100), None)
+            jobManager.setHost(item.hostAttr.name)
+            jobManager.ifManager = True
+            self.manager[item.hostAttr.name] = jobManager
+        else:
+            jobManager = JobInfo("系统管理软件", -1, CPUTaskInfo(4, 100), None)
+            jobManager.setHost(item.hostAttr.name)
+            jobManager.ifManager = True
+            if self.hosts[item.hostAttr.name].ifMaster:
+                jobManager.ifInMaster = True
+                jobManager.name = "系统管理软件(主)"
+            self.manager[item.hostAttr.name] = jobManager
         self.onlyCPU[item] = onlyCPU
 
     def setScreenSize(self, sizes):

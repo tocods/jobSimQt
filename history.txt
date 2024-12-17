@@ -1,3 +1,5 @@
 D:/jobSimQt/project
+D:/jobSimQt/test
 D:/jobSimQt/newP
+D:/jobSimQt/新建文件夹
 D:/gpuworkflowsim/src/test/Test1a/CPUTest/input

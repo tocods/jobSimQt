@@ -18,6 +18,7 @@ from qdarktheme.qtpy.QtWidgets import (
     QTableWidget,
     QComboBox,
 )
+import copy
 import numpy as np
 from scipy import stats
 import os
@@ -28,16 +29,18 @@ from util.table import NumericDelegate
 from item import GraphicItem, HostGraphicItem, SwitchGraphicItem
 from edge import Edge, GraphicEdge
 from HostInfoForm import HostInfoForm
-from HostInfoForm import HostInfoForm
+from managermaster import Ui_ManagerMaster
 from util.jobSim import sysSim, HostInfo, JobInfo, CPUInfo, GPUInfo, VideoCardInfo, GPUTaskInfo, CPUTaskInfo, FaultGenerator, tranFromC2E, tranFromE2C
 from entity.host import *
 from entity.switch import *
 from jobSimPainter import Painter, XmlParser
 import random
+from scene import GraphicScene
+from MasterScene import MasterScene
 
 class GraphicView(QGraphicsView):
 
-    def __init__(self, graphic_scene, parent=None):
+    def __init__(self, graphic_scene: GraphicScene, parent=None):
         super().__init__(parent)
         self.master = False
         self.jobSim = sysSim
@@ -168,6 +171,13 @@ class GraphicView(QGraphicsView):
     # 在画布上添加连接
     def createGraphicLink(self, endpoint1, endpoint2):
         new_edge = Edge(self.gr_scene, endpoint1, endpoint2)
+        # 保存连接线
+        new_edge.store()
+
+        return new_edge
+    
+    def createGraphicLinkForManager(self, endpoint1, endpoint2):
+        new_edge = Edge(self.master_scene, endpoint1, endpoint2)
         # 保存连接线
         new_edge.store()
 
@@ -763,6 +773,9 @@ class GraphicView(QGraphicsView):
         reg_ex =  QRegularExpression("[0-9]+")
         validator = QRegularExpressionValidator(reg_ex, self.jobInfoPage.period)
         self.jobInfoPage.period.setValidator(validator)
+        self.jobInfoPage.lineEdit.setText(str(job.deadline))
+        validator = QRegularExpressionValidator(reg_ex, self.jobInfoPage.lineEdit)
+        self.jobInfoPage.lineEdit.setValidator(validator)
         # self.jobInfoPage.corenum.setValue(job.cpu_task.pes_number)
         # self.jobInfoPage.cpuflops.setText(str(job.cpu_task.length))
         # reg_ex =  QRegularExpression("[0-9]+")
@@ -1046,10 +1059,15 @@ class GraphicView(QGraphicsView):
             QMessageBox.information(self, "错误", "任务周期不能为空")
             self.__initJobInfo(self.nowJob)
             return
+        if self.jobInfoPage.lineEdit.text() == "":
+            QMessageBox.information(self, "错误", "任务截止时间不能为空")
+            self.__initJobInfo(self.nowJob)
+            return
         name_before = self.nowJob.name
         self.nowJob.name = self.jobInfoPage.jobName.text()
         self.nowJob.cpu_task.ram = self.jobInfoPage.ram.text()
         self.nowJob.period = self.jobInfoPage.period.text()
+        self.nowJob.deadline = self.jobInfoPage.lineEdit.text()
         # self.nowJob.cpu_task.pes_number = self.jobInfoPage.corenum.value()
         # self.nowJob.cpu_task.length = self.jobInfoPage.cpuflops.text()
         # self.nowJob.gpu_task = None
@@ -1077,7 +1095,6 @@ class GraphicView(QGraphicsView):
                 combox = self.jobInfoPage.gputable.cellWidget(i, 4)
                 cpuTask = GPUTaskInfo.Kernel(0, int(self.jobInfoPage.gputable.item(i, 2).text()), int(self.jobInfoPage.gputable.item(i, 3).text()), 0, 0, 0, 'CPU', combox.currentText())
                 kernels.append(cpuTask)
-                continue
             else:
                 if int(self.jobInfoPage.gputable.item(i, 2).text()) == 0:
                     QMessageBox.information(self, "错误", "第" + n + "个内核的线程块数不能为0")
@@ -1092,7 +1109,10 @@ class GraphicView(QGraphicsView):
                 # request_gddram_total += int(self.jobInfoPage.gputable.item(i + 1, 4).text())
                 # task_input_size_total += int(self.jobInfoPage.gputable.item(i + 1, 5).text())
                 # task_output_size_total += int(self.jobInfoPage.gputable.item(i + 1, 6).text())
-                kernel = GPUTaskInfo.Kernel(int(self.jobInfoPage.gputable.item(i, 2).text()), int(self.jobInfoPage.gputable.item(i, 3).text()), int(self.jobInfoPage.gputable.item(i, 4).text()), int(self.jobInfoPage.gputable.item(i, 5).text()), int(self.jobInfoPage.gputable.item(i, 6).text()), int(self.jobInfoPage.gputable.item(i, 7).text()), 'GPU', combox.currentText())
+                kernel = GPUTaskInfo.Kernel(int(self.jobInfoPage.gputable.item(i, 2).text()), int(self.jobInfoPage.gputable.item(i, 3).text()), 
+                                            int(self.jobInfoPage.gputable.item(i, 4).text()), int(self.jobInfoPage.gputable.item(i, 5).text()), 
+                                            int(self.jobInfoPage.gputable.item(i, 6).text()), int(self.jobInfoPage.gputable.item(i, 7).text()), 
+                                            'GPU', combox.currentText())
                 kernels.append(kernel)
         self.nowJob.gpu_task = GPUTaskInfo(kernels, request_gddram_total, task_input_size_total, task_output_size_total)
         self.__initJobInfo(self.nowJob)
@@ -1419,7 +1439,21 @@ class GraphicView(QGraphicsView):
                     if softwareName == "系统管理软件":
                         return
                     if softwareName == "系统管理软件(主)":
-                        os.popen(f"{globaldata.targetPath[3]} {sysSim.path} 1")
+                        #os.popen(f"{globaldata.targetPath[3]} {sysSim.path} 1")
+                        self.managerMaster = QWidget()
+                        self.managerMasterUI = Ui_ManagerMaster()
+                        self.managerMasterUI.setupUi(self.managerMaster)
+                        self.managerMaster.setWindowIcon(QIcon("img/仿真.png"))
+                       # self.managerMasterUI.pushButton.setIcon(QIcon("img/运行仿真.png"))
+                        self.master_scene = MasterScene(self, self.managerMasterUI.graphicsView)
+                        self.master_scene.printNet()
+                        self.managerMasterUI.graphicsView.setScene(self.master_scene)
+                        self.managerMasterUI.graphicsView.setTreeWidget(self.managerMasterUI.treeWidget)
+                        self.managerMasterUI.graphicsView.setJobTab(self.managerMasterUI.tableWidget)
+                        self.managerMasterUI.graphicsView.setRebuildRecordTable(self.managerMasterUI.tableWidget_2)
+                        self.managerMasterUI.graphicsView.parseOutputFiles()
+                        self.managerMasterUI.graphicsView.connectRunButton(self)
+                        self.managerMaster.show()
                         return
                     self.sJMain = QWidget()
                     self.sJMain.setWindowTitle("设置软件属性")

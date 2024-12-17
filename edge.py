@@ -12,7 +12,7 @@ import globaldata
 # 线条的包装类
 class Edge:
 
-    def __init__(self, scene, start_item, end_item): # 场景、开始图元、结束图元
+    def __init__(self, scene, start_item, end_item, ifAppendGlobal=True): # 场景、开始图元、结束图元
         super().__init__()
         self.scene = scene
         self.start_item = start_item
@@ -25,7 +25,8 @@ class Edge:
         # 连接属性
         self.linkAttr = Link(start_item, end_item, "Eth100M")
         # 添加到全局变量中
-        globaldata.linkList.append(self)
+        if ifAppendGlobal:
+            globaldata.linkList.append(self)
 
         # 移到图片正中间
         if self.start_item is not None:
