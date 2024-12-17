@@ -672,7 +672,7 @@
         "ifMaster": false
     },
     {
-        "name": "udp_tcp",
+        "name": "udp_tcp2",
         "video_card_infos": [],
         "cpu_infos": [
             {
@@ -686,7 +686,7 @@
         "ifMaster": false
     },
     {
-        "name": "udp_tcp2",
+        "name": "udp_tcp",
         "video_card_infos": [],
         "cpu_infos": [
             {

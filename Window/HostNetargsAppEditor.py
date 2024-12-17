@@ -40,7 +40,9 @@ DEFAULT_SOURCE = {
         "destPort": "",
         "packetLength": "5000B",
         "productionInterval": "200ms",
-        "historyCacheLength": "10"
+        "historyCacheLength": "10",
+        "periodX": "[50ms,100ms,100ms,100ms,10ms]",
+        "activeX": "[10ms,50ms,60ms,40ms,10ms]"
     },
 }
 DEFAULT_SINK = {
