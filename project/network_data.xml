@@ -2,8 +2,8 @@
 <Network>
     <Hosts>
         <NormalHosts>
-            <NormalHost name="udp_tcp" type="StandardHost" ip="192.168.0.1" mac="00:1A:2B:3C:4D:5E" packet_size="100" packet_interval="100" total_traffic="1000" numApps="1" appArgs="[{&quot;typename&quot;: &quot;TcpClientApp&quot;, &quot;productionInterval&quot;: &quot;1ms&quot;, &quot;packetLength&quot;: &quot;1000B&quot;, &quot;connectAddress&quot;: &quot;udp_tcp2&quot;, &quot;connectPort&quot;: &quot;1000&quot;, &quot;periodX&quot;: &quot;[50ms,100ms,100ms,100ms,10ms]&quot;, &quot;activeX&quot;: &quot;[10ms,50ms,60ms,40ms,10ms]&quot;}]" only_cpu="True" graphic_pos_x="-20.0" graphic_pos_y="36.0" graphic_image="img/Normal_CPU_Host.png" graphic_width="100" graphic_height="100"/>
-            <NormalHost name="udp_tcp2" type="StandardHost" ip="192.168.0.2" mac="00:1A:2B:3C:4D:5E" packet_size="100" packet_interval="100" total_traffic="1000" numApps="2" appArgs="[{&quot;typename&quot;: &quot;TcpSinkApp&quot;, &quot;localPort&quot;: &quot;1000&quot;, &quot;flowName&quot;: &quot;default&quot;}]" only_cpu="True" graphic_pos_x="352.0" graphic_pos_y="336.0" graphic_image="img/Normal_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+            <NormalHost name="udp_tcp" type="StandardHost" ip="192.168.0.1" mac="00:1A:2B:3C:4D:5E" packet_size="1000" packet_interval="2000" total_traffic="1000" numApps="1" appArgs="[{&quot;typename&quot;: &quot;TcpClientApp&quot;, &quot;productionInterval&quot;: &quot;1ms&quot;, &quot;packetLength&quot;: &quot;1000B&quot;, &quot;connectAddress&quot;: &quot;udp_tcp2&quot;, &quot;connectPort&quot;: &quot;1000&quot;, &quot;periodX&quot;: &quot;[50ms,100ms,100ms,100ms,10ms]&quot;, &quot;activeX&quot;: &quot;[10ms,50ms,60ms,40ms,10ms]&quot;}]" only_cpu="True" graphic_pos_x="-20.0" graphic_pos_y="36.0" graphic_image="img/Normal_CPU_Host.png" graphic_width="100" graphic_height="100"/>
+            <NormalHost name="udp_tcp2" type="StandardHost" ip="192.168.0.2" mac="00:1A:2B:3C:4D:5E" packet_size="10000" packet_interval="10000" total_traffic="1000" numApps="2" appArgs="[{&quot;typename&quot;: &quot;TcpSinkApp&quot;, &quot;localPort&quot;: &quot;1000&quot;, &quot;flowName&quot;: &quot;default&quot;}]" only_cpu="True" graphic_pos_x="352.0" graphic_pos_y="336.0" graphic_image="img/Normal_CPU_Host.png" graphic_width="100" graphic_height="100"/>
         </NormalHosts>
         <UdpHosts/>
         <TcpHosts/>
@@ -13,7 +13,7 @@
     </Hosts>
     <Switches>
         <NormalSwitches>
-            <NormalSwitch name="switch" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" transmission_rate_list="100,100,100,100,100,100,100,100" graphic_pos_x="149.0" graphic_pos_y="229.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
+            <NormalSwitch name="switch" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" transmission_rate_list="100,100,100,100,100,100,100,100" graphic_pos_x="153.0" graphic_pos_y="229.0" graphic_image="img/Normal_Switch.png" graphic_width="100" graphic_height="100"/>
         </NormalSwitches>
         <UdpSwitches/>
         <TcpSwitches/>

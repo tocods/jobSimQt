@@ -88,7 +88,7 @@ networkGlobalConfig = {
     },
     "common": {
         "queueTypename": "DropTailQueue",
-        "queuePacketCapacity": "100",
+        "queuePacketCapacity": "500",
         "TsnQueue": []
     },
 }
