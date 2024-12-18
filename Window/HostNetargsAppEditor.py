@@ -14,6 +14,8 @@ DEFAULT_SOURCE = {
         "productionInterval": "100us",
         "destAddress": "",
         "destPort": "",
+        "periodX": "[50ms,100ms,100ms,100ms,10ms]",
+        "activeX": "[10ms,50ms,60ms,40ms,10ms]"
     },
     "tcp": {
         "typename": "TcpClientApp",

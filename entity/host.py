@@ -86,6 +86,9 @@ class Host(NetworkDevice):
             )
             f.write(f'*.{self.name}.app[{index}].io.destPort = {appArg["destPort"]}\n')
             f.write(f'*.{self.name}.app[{index}].sink.typename = ""\n')
+            f.write(f'*.{self.name}.app[{index}].source.periodX = {appArg["periodX"]}\n')
+            f.write(f'*.{self.name}.app[{index}].source.activeX = {appArg["activeX"]}\n')
+
         else:
             f.write(f'*.{self.name}.app[{index}].typename = "{appArg["typename"]}"\n')
 
