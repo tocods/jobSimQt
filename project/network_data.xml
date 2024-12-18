@@ -18,12 +18,14 @@
         <UdpSwitches/>
         <TcpSwitches/>
         <RdmaSwitches/>
-        <TsnSwitches/>
+        <TsnSwitches>
+            <TsnSwitch name="tsn_switch" type="EthernetSwitch" num_ports="1" transmission_rate="100" port_buffer_size="100" tsn_queue="[]" graphic_pos_x="211.0" graphic_pos_y="187.0" graphic_image="img/TSN_Switch.png" graphic_width="100" graphic_height="100"/>
+        </TsnSwitches>
         <DdsSwitches/>
     </Switches>
     <Links>
         <Link name="Link" type="Eth100M" endpoint1="udp_tcp" endpoint2="switch" link_bandwidth="100" error_rate="0.1"/>
         <Link name="Link2" type="Eth100M" endpoint1="udp_tcp2" endpoint2="switch" link_bandwidth="100" error_rate="0"/>
     </Links>
-    <GlobalSetting content="{&quot;Tcp&quot;: {&quot;forwarding&quot;: &quot;false&quot;, &quot;retryTimeout&quot;: &quot;1s&quot;, &quot;retryCount&quot;: &quot;3&quot;, &quot;cacheTimeout&quot;: &quot;100s&quot;, &quot;tcpAlgorithmClass&quot;: &quot;TcpReno&quot;}, &quot;Rdma&quot;: {&quot;connectionType&quot;: &quot;RELIABLE_CONNECTION&quot;, &quot;maxSendQueueSize&quot;: &quot;256&quot;, &quot;maxRecvQueueSize&quot;: &quot;256&quot;, &quot;windowSize&quot;: &quot;100&quot;, &quot;retransmitTimeout&quot;: &quot;20ms&quot;, &quot;rateLimit&quot;: &quot;1e9&quot;}, &quot;common&quot;: {&quot;queueTypename&quot;: &quot;DropTailQueue&quot;, &quot;queuePacketCapacity&quot;: &quot;20&quot;, &quot;TsnQueue&quot;: []}}"/>
+    <GlobalSetting content="{&quot;Tcp&quot;: {&quot;forwarding&quot;: &quot;false&quot;, &quot;retryTimeout&quot;: &quot;1s&quot;, &quot;retryCount&quot;: &quot;3&quot;, &quot;cacheTimeout&quot;: &quot;100s&quot;, &quot;tcpAlgorithmClass&quot;: &quot;TcpReno&quot;}, &quot;Rdma&quot;: {&quot;connectionType&quot;: &quot;RELIABLE_CONNECTION&quot;, &quot;maxSendQueueSize&quot;: &quot;256&quot;, &quot;maxRecvQueueSize&quot;: &quot;256&quot;, &quot;windowSize&quot;: &quot;100&quot;, &quot;retransmitTimeout&quot;: &quot;20ms&quot;, &quot;rateLimit&quot;: &quot;1e9&quot;, &quot;wq&quot;: &quot;0.002&quot;, &quot;minth&quot;: &quot;5&quot;, &quot;maxth&quot;: &quot;50&quot;, &quot;maxp&quot;: &quot;0.02&quot;, &quot;pkrate&quot;: &quot;150&quot;}, &quot;common&quot;: {&quot;queueTypename&quot;: &quot;DropTailQueue&quot;, &quot;queuePacketCapacity&quot;: &quot;20&quot;, &quot;TsnQueue&quot;: []}}"/>
 </Network>

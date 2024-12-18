@@ -60,6 +60,18 @@ class FaultRecord:
         self.isSuccessRebuild = isSuccessRebuild
         self.redundancyBefore = redundancyBefore
         self.redundancyAfter = redundancyAfter
+        self.hardware = ""
+        self.ifEmpty = "False"
+        self.cals = {}
+
+    def setHardware(self, hardware):
+        self.hardware = hardware
+
+    def setIfEmpty(self, ifEmpty):
+        self.ifEmpty = ifEmpty
+
+    def addCal(self, calName, calValue):
+        self.cals[calName] = calValue
     
     def print(self):
         table_data = [
@@ -202,6 +214,98 @@ class ClusterRecord:
     def print(self):
         for hostRecord in self.hostRecords:
             hostRecord.print()
+class HostFaultRecord:
+    def __init__(self, host, faultRecords):
+        self.host = host
+        self.faultRecords = faultRecords
+        self.hostFaultRecords = []
+        self.cursor = -1
+
+    def appendFaultRecord(self, faultRecord: FaultRecord):
+        self.hostFaultRecords.append(faultRecord)
+
+    def getFaultRecord(self):
+        self.cursor += 1
+        if self.cursor >= len(self.faultRecords):
+            return None
+        faultRecord = self.faultRecords[self.cursor]
+        return self.cursor
+    
+    def resetCursor(self):
+        self.cursor = 0
+
+class ClusterFaultRecord:
+    def __init__(self, time, hostFaultRecords: list[HostFaultRecord]):
+        self.totalTime = time
+        self.hostFaultRecords = hostFaultRecords
+
+    def getFaultRecord(self, host):
+        for hostFaultRecord in self.hostFaultRecords:
+            if hostFaultRecord.host == host:
+                faultRecord = hostFaultRecord.getFaultRecord()
+                if faultRecord != None:
+                    return faultRecord
+        return None
+    
+    def culculateReliability(self, record: FaultRecord):
+        if record.type != '主机宕机':
+            return 0
+        runtimeBefore = float(record.time)
+        runtimeAfter = self.totalTime - float(record.time)
+        faultTimeBefore = 0
+        faultTimeAfter = 0
+        for hostFaultRecord in self.hostFaultRecords:
+            if hostFaultRecord.host == record.object:
+                i = 0
+                index = 0
+                for faultRocrd in hostFaultRecord.hostFaultRecords:
+                    if faultRocrd.time == record.time:
+                        index = i
+                        break
+                    i += 1
+                i = 0
+                for faultTime in hostFaultRecord.faultRecords:
+                    if i < index:
+                        faultTimeBefore += faultTime
+                    else:
+                        faultTimeAfter += faultTime
+                    i += 1
+        ret = []
+        print(faultTimeBefore)
+        print(runtimeBefore)
+        print(faultTimeAfter)
+        print(runtimeAfter)
+        if runtimeBefore == 0:
+            ret.append(0)
+        else:
+            ret.append(faultTimeBefore / runtimeBefore)
+        if runtimeAfter == 0:
+            ret.append(0)
+        else:
+            ret.append(faultTimeAfter / runtimeAfter)
+        return ret
+    
+    def resetCursors(self):
+        for hostFaultRecord in self.hostFaultRecords:
+            hostFaultRecord.resetCursor()
+
+class TopoHost:
+    def __init__(self):
+        self.name = ""
+        self.softwares = []
+
+class Topo:
+    def __init__(self):
+        self.time = "0.0"
+        self.hosts = []
+        
+
+class Topos:
+    def __init__(self):
+        self.topos = []
+
+    def addTopo(self, topo: Topo):
+        self.topos.append(topo)
 
 class XmlParser:
     def __init__(self, file):
@@ -227,6 +331,14 @@ class XmlParser:
         for faultRecordElement in self.root.findall('faultRecord'):
             faultRecord = FaultRecord(faultRecordElement.attrib['time'], faultRecordElement.attrib['object'], faultRecordElement.attrib['isFalseAlarm'],
                                       faultRecordElement.attrib['type'], faultRecordElement.attrib['isSuccessRebuild'], faultRecordElement.attrib['redundancyBefore'], faultRecordElement.attrib['redundancyAfter'])
+            faultRecord.setHardware(faultRecordElement.attrib['faultType'])
+            faultRecord.setIfEmpty(faultRecordElement.attrib['ifEmpty'])
+            for calElement in faultRecordElement.findall('host'):
+                name = calElement.attrib['name']
+                cals = []
+                for cal in calElement.findall('cal'):
+                    cals.append(cal.attrib['cal'])
+                faultRecord.addCal(name, cals)
             faultRecordList.append(faultRecord)
         return faultRecordList
     
@@ -254,6 +366,38 @@ class XmlParser:
         for hostRecord in hostRecords.values():
             clusterRecord.addHostRecord(hostRecord)
         return clusterRecord
+    
+    def parseClusterFaultRecord(self, faulRecords: list[FaultRecord]):
+        hostFaultRecords = []
+        time = float(self.root.find("Run").attrib['time'])
+        print("parse " + time.__str__())
+        for hostRecords in self.root.findall('Hosts'): 
+            for hostRecord in hostRecords.findall('Host'):
+                name = hostRecord.attrib['name']
+                faultRecords = []
+                for faultRecordElement in hostRecord.findall('failTime'):
+                    faultRecords.append(float(faultRecordElement.attrib['time']))
+                hostFaultRecord = HostFaultRecord(name, faultRecords)
+                for faultRecord in faulRecords:
+                    if faultRecord.object == name:
+                        hostFaultRecord.appendFaultRecord(faultRecord)
+                hostFaultRecords.append(hostFaultRecord)
+        clusterFaultRecord = ClusterFaultRecord(time, hostFaultRecords)
+        return clusterFaultRecord
+    
+    def parseTopo(self):
+        ret = Topos()
+        for topoElement in self.root.findall('Topo'):
+            topo = Topo()
+            topo.time = topoElement.attrib['time']
+            for hostElement in topoElement.findall('Host'):
+                host = TopoHost()
+                host.name = hostElement.attrib['name']
+                for softwareElement in hostElement.findall('Software'):
+                    host.softwares.append(softwareElement.attrib['name'])
+                topo.hosts.append(host)
+            ret.addTopo(topo)
+        return ret
     
 class Painter():
     def __init__(self, clusterRecord, jobRecords, faultRecords):
@@ -346,6 +490,23 @@ class Painter():
             chart.axisY().setTitleText('利用率')
         return chart
     
+    def tableHostCPUUtilization(self, hostName, startTime, endTime):
+        hostRecord = None
+        for h in self.clusterRecord.hostRecords:
+            if h.hostName == hostName:
+                hostRecord = h
+                break
+        if hostRecord == None:
+            print('No host record found')
+            return
+        hostUtilizations = hostRecord.getHostUtilizationByTimeRange(startTime, endTime)
+        table_data = []
+        for hostUtilization in hostUtilizations:
+            table_data.append([hostUtilization.time, hostUtilization.cpuUtilization])
+        table = AsciiTable(table_data)
+        print(table.table)
+        return table_data
+    
 
     def plotHostRamUtilization(self, hostName, startTime, endTime, ifY= True):
         hostRecord = None
@@ -383,6 +544,22 @@ class Painter():
             chart.axisY().setTitleText('利用率')
         return chart
     
+    def tableHostRamUtilization(self, hostName, startTime, endTime):
+        hostRecord = None
+        for h in self.clusterRecord.hostRecords:
+            if h.hostName == hostName:
+                hostRecord = h
+                break
+        if hostRecord == None:
+            print('No host record found')
+            return
+        hostUtilizations = hostRecord.getHostUtilizationByTimeRange(startTime, endTime)
+        table_data = []
+        for hostUtilization in hostUtilizations:
+            table_data.append([hostUtilization.time, hostUtilization.ramUtilization])
+        table = AsciiTable(table_data)
+        print(table.table)
+        return table_data
 
     '''
     Plot GPU utilization of a host
@@ -465,6 +642,51 @@ class Painter():
             if ifY:
                 chart.axisY().setTitleText('利用率')
             return chart
+        
+    def tableGpuUtilization(self, hostName, gpu, startTime, endTime):
+        hostRecord = None
+        chart = QChart()
+        for h in self.clusterRecord.hostRecords:
+            if h.hostName == hostName:
+                hostRecord = h
+                break
+        if hostRecord == None:
+            print('No host record found')
+            # QMessageBox.information(self, '', '主机不存在')
+            return chart
+        if gpu != -1:
+            gpuUtilizationList = hostRecord.getGpuUilizationListByTimeRange(gpu, startTime, endTime)
+            timeList = []
+            seriesGPU = []
+            for hostUtilization in hostRecord.hostUtilizations:
+                if float(hostUtilization.time) >= startTime and float(hostUtilization.time) <= endTime:
+                    timeList.append(hostUtilization.time)
+            for i in range(len(timeList)):
+                seriesGPU.append([float(timeList[i]), float(gpuUtilizationList[i])])
+            if len(gpuUtilizationList) == 0:
+                print('No GPU utilization record found')
+                # QMessageBox.information(self, '', '主机不包含GPU')
+                return seriesGPU
+            return seriesGPU
+        
+        else:
+            gpus = len(hostRecord.hostUtilizations[0].gpuUtilizations)
+            if gpus == 0:
+                print('No GPU utilization record found')
+                #QMessageBox.information(self, '', '主机不包含GPU')
+                return []
+            table_data = []
+            for i in range(gpus):
+                gpuUtilizationList = hostRecord.getGpuUilizationListByTimeRange(str(i), startTime, endTime)
+                timeList = []
+                for hostUtilization in hostRecord.hostUtilizations:
+                    if float(hostUtilization.time) >= startTime and float(hostUtilization.time) <= endTime:
+                        timeList.append(hostUtilization.time)
+                seriesGPU = []
+                for i in range(len(timeList)):
+                    seriesGPU.append([float(timeList[i]), float(gpuUtilizationList[i])])
+                table_data.append(seriesGPU)
+            return table_data
         
 
     def plotJobDuration(self, jobName):

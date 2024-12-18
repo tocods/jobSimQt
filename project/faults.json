@@ -1,1 +1,13 @@
-[]
+[
+    {
+        "mttf_type": "Normal",
+        "mttf_scale": 10.0,
+        "mttf_shape": 10.0,
+        "mttr_type": "Normal",
+        "mttr_scale": 10.0,
+        "mttr_shape": 10.0,
+        "name": "\u6545\u969c_321",
+        "aim": "udp_tcp",
+        "type": "CPU"
+    }
+]

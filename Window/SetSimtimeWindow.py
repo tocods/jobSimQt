@@ -8,10 +8,12 @@ from qdarktheme.qtpy.QtWidgets import (
     QPushButton,
     QMessageBox,
 )
+import json
 from qdarktheme.qtpy.QtGui import QIcon
 import globaldata
 from item import HostGraphicItem
 import project
+import subprocess
 
 
 class SetSimtimeWindow(QDialog):
@@ -57,12 +59,37 @@ class SetSimtimeWindow(QDialog):
             if not ifHasMaster:
                 q = QMessageBox.information(self, "提示", "请至少设置一个主机为主节点", QMessageBox.Yes)
                 return
-            omnetpp_src = "D:/omnetpp-6.0/samples/inet4.5/src"
-            command = f"omnet_tools\\opp_run.exe -r 0 -m -u Cmdenv -c General -n {project_path};{omnetpp_src}; -l {omnetpp_src}/INET {project_path}/Parameters.ini"
-            print(command)
-            exit_code = os.system(command)
-            print(f"仿真完毕 exit_code:{exit_code}")
-            os.popen(f"{globaldata.targetPath[3]} {project.projectPath} 0")
+            # omnetpp_src = "D:/omnetpp-6.0/samples/inet4.5/src"
+            # command = f"omnet_tools\\opp_run.exe -r 0 -m -u Cmdenv -c General -n {project_path};{omnetpp_src}; -l {omnetpp_src}/INET {project_path}/Parameters.ini"
+            # print(command)
+            # exit_code = os.system(command)
+            # print(f"仿真完毕 exit_code:{exit_code}")
+            # os.popen(f"{globaldata.targetPath[3]} {project.projectPath} 0")
+            # self._ui.action_enable.setEnabled(True)
+            # self._ui.action_disable.setEnabled(False)
+            hosts_json = json.dumps([host.__dict__ for host in self.sysSim.hosts.values()], indent=4, default=lambda o: o.__dict__)
+            with open(project.projectPath + "/hosts.json", 'w') as write_f:
+                write_f.write(hosts_json)
+            jobs_json = json.dumps([job.__dict__ for job in self.sysSim.jobs.values()], indent=4, default=lambda o: o.__dict__)
+            with open(project.projectPath + "/jobs.json",'w') as write_f:
+                write_f.write(jobs_json)
+            fault_json = json.dumps([fault.__dict__ for fault in self.sysSim.faults.values()], indent=4, default=lambda o: o.__dict__)
+            with open(project.projectPath + "/faults.json", 'w') as write_f:
+                write_f.write(fault_json)
+            if self.sysSim.hosts == {}:
+                QMessageBox.information(self, "", "未设置主机信息") 
+                return
+            if self.sysSim.jobs == {}:
+                QMessageBox.information(self, "", "未设置任务信息")
+                return
+            execute = globaldata.targetPath[2] + " " + project.projectPath + "/OutputFiles " + project.projectPath + "/hosts.json " + project.projectPath + "/jobs.json " + project.projectPath + "/faults.json " + str(0) + " " + str(time)
+            print(execute)
+            popen = subprocess.Popen(execute, shell=True, stdout=subprocess.PIPE,  universal_newlines=True, stderr=subprocess.STDOUT)
+            out,err = popen.communicate()
+            # print('std_out: ' + out)
+            #将日志信息显示在文本框中
+            if "任务群总完成时间" in out:
+                QMessageBox.information(self, "提示", "仿真完成")
         else:
             omnetpp_src = "/Users/shi/omnetpp_new/samples/inet4.5/src"
             command = f"opp_run -r 0 -m -u Cmdenv -c General -n {project_path}:{omnetpp_src} -l {omnetpp_src}/INET {project_path}/Parameters.ini"

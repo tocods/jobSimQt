@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jobRun>
+  <Hosts>
+    <Host name="udp_tcp2" />
+    <Host name="udp_tcp3" />
+    <Host name="udp_tcp">
+      <failTime time="9.29" />
+      <failTime time="10.08" />
+      <failTime time="8.75" />
+      <failTime time="10.29" />
+    </Host>
+  </Hosts>
+  <Run time="100" />
+</jobRun>
