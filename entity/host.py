@@ -137,6 +137,9 @@ class Host(NetworkDevice):
         f.write(
             f'*.{self.name}.app[{index}].source.productionInterval = exponential({appArg["productionInterval"]})\n'
         )
+        f.write(f'*.{self.name}.app[{index}].source.periodX = {appArg["periodX"]}\n')
+        f.write(f'*.{self.name}.app[{index}].source.activeX = {appArg["activeX"]}\n')
+
         f.write(f'*.{self.name}.app[{index}].sink.typename = ""\n')
 
     def generateINIDdsSink(self, f, index):
