@@ -121,6 +121,8 @@ class JobInfo:
         self.ifManager = False
         self.ifInMaster = False
         self.deadline = period
+        self.appArgs = []
+        self.middlewareArgs = []
         
     def getFLOPS(self) -> float:
         FLOPS = 0
@@ -511,6 +513,8 @@ class ParseUtil:
                 kernel_info.calcuType = kernel["calcuType"]
                 gpu_task.kernels.append(kernel_info)
             job_info.gpu_task = gpu_task
+            job_info.appArgs = job["appArgs"]
+            job_info.middlewareArgs = job["middlewareArgs"]
             jobs.append(job_info)
         return jobs
     

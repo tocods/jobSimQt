@@ -387,9 +387,9 @@ class GraphicView(QGraphicsView):
         self.jobInfoPage.setupUi(self.sJ)
         #self.sJ.setGeometry(screen_size.width() * 0.3, screen_size.width() * 0.3, screen_size.width() * 0.5, screen_size.height() * 0.5)
         self.sJTab.addTab(self.sJ, "计算信息")
-        self.hostApp = HostNetargsAppEditorApp("", True)
+        self.hostApp = HostNetargsAppEditorApp([], True)
         self.sJTab.addTab(self.hostApp, "网络流")
-        self.hostMiddleware = HostNetargsAppEditorMiddleware("", True)
+        self.hostMiddleware = HostNetargsAppEditorMiddleware([], True)
         self.sJTab.addTab(self.hostMiddleware, "网络中间件")
 
         r = random.randint(0, 10000)
@@ -800,6 +800,9 @@ class GraphicView(QGraphicsView):
             self.jobInfoPage.host.setCurrentText(job.host)
         else:
             self.jobInfoPage.host.setCurrentText("不指定")
+
+        self.hostApp.setData(job.appArgs)
+        self.hostMiddleware.setData(job.middlewareArgs)
        
 
     def _initKernelTable(self, kernel_num, gpu_task):
@@ -1117,6 +1120,8 @@ class GraphicView(QGraphicsView):
                                             'GPU', combox.currentText())
                 kernels.append(kernel)
         self.nowJob.gpu_task = GPUTaskInfo(kernels, request_gddram_total, task_input_size_total, task_output_size_total)
+        self.nowJob.appArgs = self.hostApp.get_json_data()
+        self.nowJob.middlewareArgs = self.hostMiddleware.get_json_data()
         self.__initJobInfo(self.nowJob)
         sysSim.jobs.pop(name_before)
         sysSim.jobs[self.nowJob.name] = self.nowJob

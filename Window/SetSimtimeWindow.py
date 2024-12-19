@@ -14,7 +14,7 @@ import globaldata
 from item import HostGraphicItem
 import project
 import subprocess
-
+from util.jobSim import sysSim
 
 class SetSimtimeWindow(QDialog):
 
@@ -45,6 +45,7 @@ class SetSimtimeWindow(QDialog):
         print(f"开始仿真\n 仿真时间:{time}")
         globaldata.calculate_link_port()
 
+        self.applyAppToHost()
         self.generateNED()
         self.generateINI(time)
         os_type = platform.system()
@@ -151,6 +152,29 @@ class SetSimtimeWindow(QDialog):
         f.write(f"network TargetNetwork extends WiredNetworkBase\n")
         f.write(f'{"{"}\n')
         f.write("    submodules:\n")
+
+    def applyAppToHost(self):
+        # 把sysSim.jobs里面的网络应用参数写入globaldata
+        index = {}
+
+        # 先把原有的清空
+        for i, host in enumerate(globaldata.hostList):
+            host.hostAttr.appArgs = []
+            index[host.hostAttr.name] = i
+
+        # 遍历sysSim.jobs
+        for jobName in sysSim.jobs:
+            job = sysSim.jobs[jobName]
+            # 网络层应用参数
+            for app in job.appArgs:
+                # TODO 如果发送目标是不可用的状态就不添加发送端
+                i = index[job.host]
+                globaldata.hostList[i].hostAttr.appArgs.append(app)
+            # 中间件层参数
+            for app in job.middlewareArgs:
+                # TODO 如果发送目标是不可用的状态就不添加发送端
+                i = index[job.host]
+                globaldata.hostList[i].hostAttr.appArgs.append(app)
 
     def generateINI(self, time):
         with open(

@@ -62,7 +62,7 @@ class NetworkEditorWindow(QWidget):
             ["name", "ip", "mac", "packet_size", "packet_interval"], {}, False
         )
         self.ui.hostSet.addTab(self.hostPhysics, "物理层")
-        self.hostApp = HostNetargsAppEditorApp("", True)
+        self.hostApp = HostNetargsAppEditorApp([], True)
         self.ui.hostSet.addTab(self.hostApp, "协议层")
         self.hostMiddleware = HostNetargsAppEditorMiddleware("", True)
         self.ui.hostSet.addTab(self.hostMiddleware, "中间件层")
