@@ -1,6 +1,6 @@
 [
     {
-        "name": "\u8f6f\u4ef6_3930",
+        "name": "\u8f6f\u4ef6_9803",
         "period": "10",
         "cpu_task": {
             "ram": "100",
@@ -19,52 +19,27 @@
                     "task_output_size": 0,
                     "type": "\u6d6e\u70b9",
                     "calcuType": 0
-                },
-                {
-                    "block_num": 0,
-                    "thread_num": 1,
-                    "thread_length": 10,
-                    "hardware": "CPU",
-                    "requested_gddram_size": 0,
-                    "task_input_size": 0,
-                    "task_output_size": 0,
-                    "type": "\u6d6e\u70b9",
-                    "calcuType": 0
-                },
-                {
-                    "block_num": 10,
-                    "thread_num": 10,
-                    "thread_length": 100,
-                    "hardware": "GPU",
-                    "requested_gddram_size": 100,
-                    "task_input_size": 200,
-                    "task_output_size": 100,
-                    "type": "\u6d6e\u70b9",
-                    "calcuType": 0
-                },
-                {
-                    "block_num": 0,
-                    "thread_num": 1,
-                    "thread_length": 10,
-                    "hardware": "CPU",
-                    "requested_gddram_size": 0,
-                    "task_input_size": 0,
-                    "task_output_size": 0,
-                    "type": "\u6d6e\u70b9",
-                    "calcuType": 0
                 }
             ],
             "requested_gddram_size": 0,
             "task_input_size": 0,
             "task_output_size": 0
         },
-        "host": "UDP1",
+        "host": "udp_tcp2",
         "ifManager": false,
         "ifInMaster": false,
-        "deadline": "5"
+        "deadline": "5",
+        "appArgs": [
+            {
+                "typename": "UdpApp615",
+                "localPort": "1000",
+                "flowName": "default"
+            }
+        ],
+        "middlewareArgs": []
     },
     {
-        "name": "\u8f6f\u4ef6_3931",
+        "name": "\u8f6f\u4ef6_3930",
         "period": "10",
         "cpu_task": {
             "ram": "100",
@@ -125,6 +100,18 @@
         "host": "udp_tcp",
         "ifManager": false,
         "ifInMaster": false,
-        "deadline": "5"
+        "deadline": "5",
+        "appArgs": [
+            {
+                "typename": "UdpApp615",
+                "packetLength": "1000B",
+                "productionInterval": "100us",
+                "destAddress": "udp_tcp2",
+                "destPort": "1000",
+                "periodX": "[50ms,100ms,100ms,100ms,10ms]",
+                "activeX": "[10ms,50ms,60ms,40ms,10ms]"
+            }
+        ],
+        "middlewareArgs": []
     }
 ]

@@ -697,6 +697,6 @@
             }
         ],
         "ram": 4,
-        "ifMaster": false
+        "ifMaster": true
     }
 ]

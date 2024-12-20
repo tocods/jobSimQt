@@ -15,6 +15,13 @@ from item import HostGraphicItem
 import project
 import subprocess
 from util.jobSim import sysSim
+import xml.etree.ElementTree as ET
+
+class Topo:
+    def __init__(self):
+        self.time = 0.0
+        self.hosts = {}
+        self.activeHosts = []
 
 class SetSimtimeWindow(QDialog):
 
@@ -22,6 +29,7 @@ class SetSimtimeWindow(QDialog):
         QDialog.__init__(self)
         layout = QFormLayout()
         self.sysSim = sysSim
+        self.topoList: list[Topo] = []
         self.time_input = QLineEdit()
         self.time_input.setText("1.5")
         self.type_combo = QComboBox()
@@ -45,58 +53,88 @@ class SetSimtimeWindow(QDialog):
         print(f"开始仿真\n 仿真时间:{time}")
         globaldata.calculate_link_port()
 
-        self.applyAppToHost()
-        self.generateNED()
-        self.generateINI(time)
         os_type = platform.system()
         print(project_path)
-        if os_type == "Windows":
-            ifHasMaster = False
-            for host in self.sysSim.hosts:
-                h = self.sysSim.hosts[host]
-                if h.ifMaster == True:
-                    ifHasMaster = True
-                    break
-            if not ifHasMaster:
-                q = QMessageBox.information(self, "提示", "请至少设置一个主机为主节点", QMessageBox.Yes)
-                return
+        ifHasMaster = False
+        for host in self.sysSim.hosts:
+            h = self.sysSim.hosts[host]
+            if h.ifMaster == True:
+                ifHasMaster = True
+                break
+        if not ifHasMaster:
+            q = QMessageBox.information(self, "提示", "请至少设置一个主机为主节点", QMessageBox.Yes)
+            return
+
+        os.popen(f"{globaldata.targetPath[3]} {project.projectPath} 0")
+        # self._ui.action_enable.setEnabled(True)
+        # self._ui.action_disable.setEnabled(False)
+        hosts_json = json.dumps([host.__dict__ for host in self.sysSim.hosts.values()], indent=4, default=lambda o: o.__dict__)
+        with open(project.projectPath + "/hosts.json", 'w') as write_f:
+            write_f.write(hosts_json)
+        jobs_json = json.dumps([job.__dict__ for job in self.sysSim.jobs.values()], indent=4, default=lambda o: o.__dict__)
+        with open(project.projectPath + "/jobs.json",'w') as write_f:
+            write_f.write(jobs_json)
+        fault_json = json.dumps([fault.__dict__ for fault in self.sysSim.faults.values()], indent=4, default=lambda o: o.__dict__)
+        with open(project.projectPath + "/faults.json", 'w') as write_f:
+            write_f.write(fault_json)
+        if self.sysSim.hosts == {}:
+            QMessageBox.information(self, "", "未设置主机信息") 
+            return
+        if self.sysSim.jobs == {}:
+            QMessageBox.information(self, "", "未设置任务信息")
+            return
+        execute = globaldata.targetPath[2] + " " + project.projectPath + "/OutputFiles " + project.projectPath + "/hosts.json " + project.projectPath + "/jobs.json " + project.projectPath + "/faults.json " + str(0) + " " + str(time)
+        print(execute)
+        # popen = subprocess.Popen(execute, shell=True, stdout=subprocess.PIPE,  universal_newlines=True, stderr=subprocess.STDOUT)
+        # out,err = popen.communicate()
+        # print('std_out: ' + out)
+        #将日志信息显示在文本框中
+        # if "任务群总完成时间" in out:
+        #     QMessageBox.information(self, "提示", "仿真完成")
+        self.readTopoChange()
+        for i, topo in enumerate(self.topoList):
+            if topo.time >= time:
+                break
+            startTime = topo.time
+            endTime = 0.0
+            if i == len(self.topoList) - 1:
+                endTime = time
+            else:
+                endTime = self.topoList[i + 1].time
+            self.applyAppToHost(i, endTime - startTime)
+            self.generateNED()
+            self.generateINI(time)
             omnetpp_src = "D:/omnetpp-6.0/samples/inet4.5/src"
             command = f"omnet_tools\\opp_run.exe -r 0 -m -u Cmdenv -c General -n {project_path};{omnetpp_src}; -l {omnetpp_src}/INET {project_path}/Parameters.ini"
             print(command)
             exit_code = os.system(command)
             print(f"仿真完毕 exit_code:{exit_code}")
-            os.popen(f"{globaldata.targetPath[3]} {project.projectPath} 0")
-            # self._ui.action_enable.setEnabled(True)
-            # self._ui.action_disable.setEnabled(False)
-            hosts_json = json.dumps([host.__dict__ for host in self.sysSim.hosts.values()], indent=4, default=lambda o: o.__dict__)
-            with open(project.projectPath + "/hosts.json", 'w') as write_f:
-                write_f.write(hosts_json)
-            jobs_json = json.dumps([job.__dict__ for job in self.sysSim.jobs.values()], indent=4, default=lambda o: o.__dict__)
-            with open(project.projectPath + "/jobs.json",'w') as write_f:
-                write_f.write(jobs_json)
-            fault_json = json.dumps([fault.__dict__ for fault in self.sysSim.faults.values()], indent=4, default=lambda o: o.__dict__)
-            with open(project.projectPath + "/faults.json", 'w') as write_f:
-                write_f.write(fault_json)
-            if self.sysSim.hosts == {}:
-                QMessageBox.information(self, "", "未设置主机信息") 
-                return
-            if self.sysSim.jobs == {}:
-                QMessageBox.information(self, "", "未设置任务信息")
-                return
-            execute = globaldata.targetPath[2] + " " + project.projectPath + "/OutputFiles " + project.projectPath + "/hosts.json " + project.projectPath + "/jobs.json " + project.projectPath + "/faults.json " + str(0) + " " + str(time)
-            print(execute)
-            popen = subprocess.Popen(execute, shell=True, stdout=subprocess.PIPE,  universal_newlines=True, stderr=subprocess.STDOUT)
-            # out,err = popen.communicate()
-            # print('std_out: ' + out)
-            #将日志信息显示在文本框中
-            # if "任务群总完成时间" in out:
-            #     QMessageBox.information(self, "提示", "仿真完成")
-        else:
-            omnetpp_src = "/Users/shi/omnetpp_new/samples/inet4.5/src"
-            command = f"opp_run -r 0 -m -u Cmdenv -c General -n {project_path}:{omnetpp_src} -l {omnetpp_src}/INET {project_path}/Parameters.ini"
-            exit_code = os.system(command)
-            print(f"仿真完毕 exit_code:{exit_code}")
         self.hide()
+
+    def readTopoChange(self):
+        print("read topo")
+        self.topoList = []
+        tree = ET.parse(
+            os.path.join(globaldata.currentProjectInfo.path, "OutputFiles", "topoChange.xml")
+        )
+        root = tree.getroot()
+        topoList = root.findall("Topo")
+        for t in topoList:
+            topo = Topo()
+            topo.time = float(t.get("time"))
+            hosts = t.findall("Host")
+            for host in hosts:
+                hostName = host.get("name")
+                topo.hosts[hostName] = []
+                softwareList = host.findall("Software")
+                # TODO
+                topo.activeHosts.append(hostName)
+                for software in softwareList:
+                    topo.hosts[hostName].append(software.get("name"))
+            self.topoList.append(topo)
+            print(topo.hosts)
+                
+
 
     # 在当前工程（globaldata.currentProjectInfo.path）中生成.ned文件
     def generateNED(self):
@@ -153,7 +191,7 @@ class SetSimtimeWindow(QDialog):
         f.write(f'{"{"}\n')
         f.write("    submodules:\n")
 
-    def applyAppToHost(self):
+    def applyAppToHost(self, i, time):
         # 把sysSim.jobs里面的网络应用参数写入globaldata
         index = {}
 
@@ -163,18 +201,22 @@ class SetSimtimeWindow(QDialog):
             index[host.hostAttr.name] = i
 
         # 遍历sysSim.jobs
-        for jobName in sysSim.jobs:
-            job = sysSim.jobs[jobName]
-            # 网络层应用参数
-            for app in job.appArgs:
-                # TODO 如果发送目标是不可用的状态就不添加发送端
-                i = index[job.host]
-                globaldata.hostList[i].hostAttr.appArgs.append(app)
-            # 中间件层参数
-            for app in job.middlewareArgs:
-                # TODO 如果发送目标是不可用的状态就不添加发送端
-                i = index[job.host]
-                globaldata.hostList[i].hostAttr.appArgs.append(app)
+        for hostName in self.topoList[i].hosts:
+            print(hostName)
+            jobNameList = self.topoList[i].hosts[hostName]
+            for jobName in jobNameList:
+                job = sysSim.jobs[jobName]
+                # 网络层应用参数
+                print(job.appArgs)
+                for app in job.appArgs:
+                    # TODO 如果发送目标是不可用的状态就不添加发送端
+                    i = index[job.host]
+                    globaldata.hostList[i].hostAttr.appArgs.append(app)
+                # 中间件层参数
+                for app in job.middlewareArgs:
+                    # TODO 如果发送目标是不可用的状态就不添加发送端
+                    i = index[job.host]
+                    globaldata.hostList[i].hostAttr.appArgs.append(app)
 
     def generateINI(self, time):
         with open(
